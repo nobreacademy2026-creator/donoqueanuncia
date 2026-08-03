@@ -1,24 +1,133 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { QUESTIONS, calculatePillars, calculateScore, type Answers } from "@/lib/quiz-data";
+import { trackEvent } from "@/lib/tracking";
+import { QuizProgress } from "@/components/quiz/QuizProgress";
+import { QuizIntro } from "@/components/quiz/QuizIntro";
+import { QuestionStep } from "@/components/quiz/QuestionStep";
+import { AnalyzingStep } from "@/components/quiz/AnalyzingStep";
+import { ResultStep } from "@/components/quiz/ResultStep";
+import { LeadForm, type Lead } from "@/components/quiz/LeadForm";
+import { SalesPage } from "@/components/sales/SalesPage";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "Dono que Anuncia — Diagnóstico gratuito de anúncios | Nobre Academy";
+const DESCRIPTION =
+  "Descubra em 2 minutos por que seus anúncios não trazem clientes. Faça o diagnóstico gratuito da Nobre Academy e receba um plano personalizado para o seu negócio.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: "Dono que Anuncia",
+          description: DESCRIPTION,
+          provider: { "@type": "Organization", name: "Nobre Academy" },
+        }),
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+type Stage = "intro" | "quiz" | "analyzing" | "result" | "sales";
+
 function Index() {
+  const [stage, setStage] = useState<Stage>("intro");
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [lead, setLead] = useState<Lead | null>(null);
+
+  const score = useMemo(() => calculateScore(answers), [answers]);
+  const pillars = useMemo(() => calculatePillars(answers, score), [answers, score]);
+
+  const progress =
+    stage === "intro" ? 0 : stage === "quiz" ? (step / QUESTIONS.length) * 100 : 100;
+
+  function handleSelect(value: string) {
+    const question = QUESTIONS[step]!;
+    setAnswers((prev) => ({ ...prev, [question.id]: value }));
+    trackEvent("quiz_resposta", { pergunta: question.id, resposta: value });
+    setTimeout(() => {
+      if (step + 1 >= QUESTIONS.length) {
+        setStage("analyzing");
+        trackEvent("quiz_concluido");
+      } else {
+        setStep(step + 1);
+      }
+    }, 220);
+  }
+
+  function handleBack() {
+    if (step === 0) setStage("intro");
+    else setStep(step - 1);
+  }
+
+  if (stage === "sales") {
+    return (
+      <div className="min-h-screen bg-background">
+        <SalesPage firstName={lead?.nome.split(" ")[0]} />
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur">
+        <div className="mx-auto max-w-2xl px-5 py-4">
+          <QuizProgress value={progress} />
+        </div>
+      </div>
+
+      <div className="mx-auto flex min-h-[80vh] max-w-3xl items-center justify-center px-5 py-10">
+        {stage === "intro" ? (
+          <QuizIntro
+            onStart={() => {
+              trackEvent("quiz_iniciado");
+              setStage("quiz");
+            }}
+          />
+        ) : null}
+
+        {stage === "quiz" ? (
+          <QuestionStep
+            question={QUESTIONS[step]!}
+            index={step}
+            total={QUESTIONS.length}
+            {...(answers[QUESTIONS[step]!.id] ? { selected: answers[QUESTIONS[step]!.id] } : {})}
+            onSelect={handleSelect}
+            onBack={handleBack}
+          />
+        ) : null}
+
+        {stage === "analyzing" ? <AnalyzingStep onDone={() => setStage("result")} /> : null}
+
+        {stage === "result" ? (
+          <div className="w-full">
+            <ResultStep score={score} pillars={pillars} />
+            <LeadForm
+              score={score}
+              onSubmit={(data) => {
+                setLead(data);
+                setStage("sales");
+                window.scrollTo({ top: 0 });
+              }}
+            />
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
