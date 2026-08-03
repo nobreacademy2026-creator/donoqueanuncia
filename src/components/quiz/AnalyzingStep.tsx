@@ -25,6 +25,7 @@ export function AnalyzingStep({ onDone }: { onDone: () => void }) {
       const t = setTimeout(onDone, 900);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [progress, step, onDone]);
 
   return (

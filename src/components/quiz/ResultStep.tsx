@@ -1,0 +1,88 @@
+import { useEffect, useState } from "react";
+import { Bar, BarChart, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { TrendingUp } from "lucide-react";
+
+type Props = {
+  score: number;
+  pillars: { pilar: string; valor: number }[];
+};
+
+export function ResultStep({ score, pillars }: Props) {
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += 1;
+      setDisplay(current);
+      if (current >= score) clearInterval(interval);
+    }, 18);
+    return () => clearInterval(interval);
+  }, [score]);
+
+  const circumference = 2 * Math.PI * 54;
+
+  return (
+    <div className="animate-rise-in mx-auto w-full max-w-2xl">
+      <h2 className="text-center text-3xl font-semibold tracking-tight sm:text-4xl">Seu resultado</h2>
+
+      <div className="surface-card mt-8 rounded-3xl p-8 text-center">
+        <p className="text-sm font-medium tracking-wide text-muted-foreground uppercase">Nível atual</p>
+        <div className="relative mx-auto mt-5 h-32 w-32">
+          <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--secondary)" strokeWidth="10" />
+            <circle
+              cx="60"
+              cy="60"
+              r="54"
+              fill="none"
+              stroke="var(--primary)"
+              strokeWidth="10"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference - (circumference * display) / 100}
+            />
+          </svg>
+          <span className="absolute inset-0 grid place-items-center text-3xl font-bold">{display}%</span>
+        </div>
+
+        <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-muted-foreground">
+          Seu maior problema <strong className="text-foreground">não é o orçamento</strong> dos seus
+          anúncios — é a <strong className="text-foreground">estratégia</strong> por trás deles. Pequenas
+          mudanças no criativo, na segmentação e na oferta podem aumentar significativamente seus
+          resultados sem investir um real a mais.
+        </p>
+      </div>
+
+      <div className="surface-card mt-6 rounded-3xl p-6 sm:p-8">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-primary" />
+          <h3 className="text-lg font-semibold">Diagnóstico por pilar</h3>
+        </div>
+        <div className="mt-6 h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={pillars} layout="vertical" margin={{ left: 8, right: 16 }}>
+              <XAxis type="number" domain={[0, 100]} hide />
+              <YAxis
+                dataKey="pilar"
+                type="category"
+                axisLine={false}
+                tickLine={false}
+                width={96}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 13 }}
+              />
+              <Bar dataKey="valor" radius={[8, 8, 8, 8]} barSize={22} label={{ position: "right", fill: "var(--foreground)", fontSize: 12, formatter: (v: number) => `${v}%` }}>
+                {pillars.map((p) => (
+                  <Cell
+                    key={p.pilar}
+                    fill={p.valor < 50 ? "var(--primary)" : "var(--primary-glow)"}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+}
