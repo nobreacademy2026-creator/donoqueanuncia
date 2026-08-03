@@ -79,7 +79,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function SalesPage({ firstName }: { firstName?: string }) {
+export function SalesPage({ firstName }: { firstName?: string | undefined }) {
   return (
     <main className="animate-rise-in pb-24">
       <section className="mx-auto max-w-3xl px-5 pt-16 text-center">
