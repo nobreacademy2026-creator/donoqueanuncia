@@ -87,6 +87,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { property: "og:title", content: "Dono que Anuncia | Nobre Academy" },
+      { name: "twitter:title", content: "Dono que Anuncia | Nobre Academy" },
+      { property: "og:description", content: "Diagnóstico gratuito de anúncios para donos de pequenos negócios." },
+      { name: "twitter:description", content: "Diagnóstico gratuito de anúncios para donos de pequenos negócios." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/10452a8a-bb5e-4b03-9f43-de930a12e968/id-preview-5c69c31e--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app-1785852577933.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/10452a8a-bb5e-4b03-9f43-de930a12e968/id-preview-5c69c31e--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app-1785852577933.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
