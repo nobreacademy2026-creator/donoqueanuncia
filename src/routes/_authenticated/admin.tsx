@@ -370,10 +370,10 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
                 onChange={(e) => setFilterStage(e.target.value)}
                 className={`bg-transparent text-xs focus:outline-none font-bold ${theme === "dark" ? "text-white" : "text-zinc-900"}`}
               >
-                <option value="all" className="bg-zinc-900">Todas Etapas</option>
-                <option value="intro" className="bg-zinc-900">Intro</option>
-                <option value="quiz" className="bg-zinc-900">Quiz</option>
-                <option value="vendas" className="bg-zinc-900">Página de Vendas</option>
+                <option value="all" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Todas Etapas</option>
+                <option value="intro" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Intro</option>
+                <option value="quiz" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Quiz</option>
+                <option value="vendas" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Página de Vendas</option>
               </select>
             </div>
 
