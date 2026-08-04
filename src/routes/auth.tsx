@@ -1,9 +1,8 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { checkAdminRole } from "@/lib/auth.functions";
-
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -14,35 +13,21 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-
   const [checkingSession, setCheckingSession] = useState(true);
 
-  // Verificação automática de sessão ao carregar a página
   useEffect(() => {
     const checkSession = async () => {
       try {
-        console.log("Checking session...");
         const { data: { session } } = await supabase.auth.getSession();
-        
         if (session) {
-          console.log("Session found for:", session.user.email);
-          
-          console.log("Verificando permissões de admin via server function...");
           const data = await checkAdminRole();
-
-          
           if (data && data.hasAdmin) {
-            console.log("Admin confirmado em /auth, redirecionando para /admin");
             window.location.replace("/admin");
             return;
-          } else {
-            console.log("Acesso negado ou não é admin:", data?.error);
           }
-        } else {
-          console.log("No active session found.");
         }
       } catch (err) {
-        console.error("Error in checkSession:", err);
+        console.error("Auth check failed:", err);
       } finally {
         setCheckingSession(false);
       }
@@ -51,77 +36,35 @@ function AuthPage() {
   }, []);
 
   const handleAuth = async (e: React.FormEvent) => {
-
     e.preventDefault();
     setLoading(true);
     
     try {
       if (isSignUp) {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-
+        const { error } = await supabase.auth.signUp({ email, password });
         if (error) {
-          if (error.message.includes("Password should be")) {
-            toast.error("A senha deve ter pelo menos 6 caracteres.");
-          } else if (error.message.includes("User already registered")) {
-            toast.error("Este e-mail já está cadastrado.");
-          } else {
-            toast.error("Erro ao cadastrar: " + error.message);
-          }
+          toast.error(error.message);
         } else {
-          toast.success("Cadastro realizado com sucesso! Você já pode entrar.");
+          toast.success("Cadastro realizado! Verifique seu e-mail.");
           setIsSignUp(false);
         }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
-          console.error("Erro de login:", error);
-          if (error.message.includes("Invalid login credentials")) {
-            toast.error("E-mail ou senha incorretos.");
-          } else if (error.message.includes("Email not confirmed")) {
-            toast.error("Por favor, confirme seu e-mail antes de entrar.");
-          } else if (error.message.includes("Failed to fetch")) {
-            toast.error("Erro de conexão. Verifique sua internet.");
-          } else {
-            toast.error(`Erro (${error.status || '?' }): ${error.message}`);
-          }
+          toast.error("E-mail ou senha incorretos.");
         } else {
-          // Após login bem-sucedido, verificar se o usuário tem o papel de admin antes de redirecionar
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            console.log("Login bem-sucedido, verificando permissões via API...");
-            
-            const data = await checkAdminRole();
-
-
-            if (!data || !data.hasAdmin) {
-              console.warn("Usuário logado sem permissão de admin:", data?.error);
-              toast.error("Acesso negado: Você não tem permissão de administrador.");
-              await supabase.auth.signOut();
-              setLoading(false);
-              return;
-            }
-
-            console.log("Admin validado via API, redirecionando...");
-            toast.success("Bem-vindo, Administrador!");
-            
-            setTimeout(() => {
-              window.location.replace("/admin");
-            }, 300);
+          const data = await checkAdminRole();
+          if (!data || !data.hasAdmin) {
+            toast.error("Acesso negado: Você não é um administrador.");
+            await supabase.auth.signOut();
+          } else {
+            toast.success("Bem-vindo!");
+            setTimeout(() => window.location.replace("/admin"), 100);
           }
         }
-
-
       }
     } catch (err) {
-      console.error("Erro inesperado:", err);
-      toast.error("Ocorreu um erro inesperado. Tente novamente.");
+      toast.error("Ocorreu um erro inesperado.");
     } finally {
       setLoading(false);
     }
@@ -136,41 +79,40 @@ function AuthPage() {
   }
 
   return (
-
     <div className="flex min-h-screen items-center justify-center bg-white px-5">
-      <div className="w-full max-w-[360px] space-y-8 rounded-none bg-black p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+      <div className="w-full max-w-[360px] space-y-8 bg-black p-10 shadow-2xl">
         <div className="text-center">
-          <h2 className="text-2xl font-black tracking-tight text-white">Admin Nobre</h2>
-          <p className="mt-1 text-xs font-medium text-white/50 uppercase tracking-[0.2em]">
+          <h2 className="text-2xl font-black text-white">Admin Nobre</h2>
+          <p className="mt-1 text-[10px] font-medium text-white/50 uppercase tracking-widest">
             {isSignUp ? "Criar Conta" : "Painel de Controle"}
           </p>
         </div>
         <form onSubmit={handleAuth} className="mt-10 space-y-6">
           <div className="space-y-1.5">
-            <label className="ml-0 text-[10px] font-black uppercase tracking-widest text-[#ff0000]/80">E-mail</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-red-500">E-mail</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-none border-none bg-white px-6 py-4 text-sm text-black transition-all placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/20"
+              className="w-full bg-white px-6 py-4 text-sm text-black focus:outline-none"
               placeholder="seu@email.com"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="ml-0 text-[10px] font-black uppercase tracking-widest text-[#ff0000]/80">Senha</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-red-500">Senha</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-none border-none bg-white px-6 py-4 text-sm text-black transition-all placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/20"
+              className="w-full bg-white px-6 py-4 text-sm text-black focus:outline-none"
               placeholder="••••••••"
             />
           </div>
           <button
             disabled={loading}
-            className="w-full rounded-none bg-[#ff0000] py-4.5 text-[11px] font-black tracking-[0.2em] text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+            className="w-full bg-red-600 py-4.5 text-[11px] font-black tracking-widest text-white hover:opacity-90 disabled:opacity-50"
           >
             {loading ? "PROCESSANDO..." : isSignUp ? "CRIAR CONTA" : "ENTRAR NO PAINEL"}
           </button>
@@ -178,7 +120,7 @@ function AuthPage() {
           <button
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-center text-[10px] font-bold text-white/40 uppercase tracking-widest hover:text-white transition-colors"
+            className="w-full text-[10px] font-bold text-white/40 uppercase tracking-widest hover:text-white"
           >
             {isSignUp ? "Já tenho conta? Entrar" : "Não tem conta? Cadastrar"}
           </button>
