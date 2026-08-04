@@ -619,10 +619,12 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
               </div>
               {item.id === 'audio' && (
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase text-zinc-500">Arquivo de Áudio (MP3)</label>
+                  <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Arquivo de Áudio (MP3)</label>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 rounded-lg bg-zinc-800 px-3 py-2 text-[10px] font-mono text-zinc-400">testemunho_aluno_01.mp3</div>
-                    <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                    <div className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border ${
+                      theme === "dark" ? "bg-zinc-800 text-zinc-400 border-white/5" : "bg-zinc-50 text-zinc-600 border-zinc-200"
+                    }`}>testemunho_aluno_01.mp3</div>
+                    <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                       <Music className="h-3 w-3" /> Subir Novo
                     </button>
                   </div>
