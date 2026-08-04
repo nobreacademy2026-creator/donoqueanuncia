@@ -278,7 +278,7 @@ export function SalesPage() {
             <p className="text-sm font-black text-green-600 animate-bounce">
               Clica no link e aproveita o desconto 👇
             </p>
-            <CTAButton label="Garantir meu desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-green-600 hover:bg-green-700" />
+            <CTAButton label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#00a34c] hover:bg-[#008f42] border-b-4 border-[#006b31] active:border-b-0 active:translate-y-1" />
           </div>
           
           <p className="mt-6 text-xs text-muted-foreground/60">
