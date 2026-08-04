@@ -5,12 +5,16 @@ export const checkAdminRole = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     try {
-      const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
       const userId = context.userId;
+      console.log(`[checkAdminRole] Checking admin for userId: ${userId}`);
 
       if (!userId) {
+        console.log('[checkAdminRole] No userId in context');
         return { hasAdmin: false };
       }
+
+      const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+
 
       const { data: roles, error } = await (supabaseAdmin
         .from('user_roles' as any)
