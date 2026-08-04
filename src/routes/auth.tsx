@@ -24,9 +24,11 @@ function AuthPage() {
       });
 
       if (error) {
+        console.error("Erro no cadastro:", error);
         toast.error("Erro ao cadastrar: " + error.message);
       } else {
-        toast.success("Cadastro realizado! Verifique seu e-mail ou faça login.");
+        console.log("Cadastro sucesso:", data);
+        toast.success("Cadastro realizado com sucesso! Você já pode entrar.");
         setIsSignUp(false);
       }
     } else {
