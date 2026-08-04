@@ -351,7 +351,11 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
                 placeholder="Buscar lead ou origem..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-black/20 pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-64"
+                className={`w-full rounded-xl border pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-64 transition-all ${
+                  theme === "dark" 
+                  ? "border-white/10 bg-black/20 text-white" 
+                  : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                }`}
               />
             </div>
             
