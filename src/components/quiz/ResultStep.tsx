@@ -141,8 +141,8 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                     </div>
                   </div>
                   <div className="text-left leading-tight">
-                    <p className="font-bold text-sm">gordogrillpb</p>
-                    <p className="text-[10px] text-zinc-500">Gordo Grill / Casa de Carne</p>
+                    <p className="font-bold text-sm">premium_grill_sp</p>
+                    <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
                   </div>
                 </div>
                 <div className="p-4 text-left">
