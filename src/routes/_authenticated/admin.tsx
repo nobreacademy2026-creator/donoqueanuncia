@@ -666,6 +666,36 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     { id: 'sales', title: 'Página de Vendas (Final)', type: 'página' },
   ]);
 
+  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
+
+  const updateStep = (id: string, patch: { title?: string; image?: string }) => {
+    const current = readDraft();
+    const next: FunnelDraft = {
+      ...current,
+      steps: { ...current.steps, [id]: { ...current.steps[id], ...patch } },
+    };
+    if (id === 'sales') {
+      next.sales = {
+        ...next.sales,
+        ...(patch.title ? { videoHeadline: patch.title } : {}),
+        ...(patch.image ? { videoThumb: patch.image } : {}),
+      };
+    }
+    setDraft(next);
+    writeDraft(next);
+  };
+
+  const handleUpload = (id: string, file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 3_000_000) {
+      toast.error("Arquivo muito grande para a prévia (máx. 3MB).");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => updateStep(id, { image: String(reader.result) });
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -706,24 +736,55 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
             </div>
 
             <div className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}>
+              <div className="space-y-2 sm:col-span-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Texto / Título exibido</label>
+                <input
+                  type="text"
+                  value={draft.steps[item.id]?.title ?? ""}
+                  placeholder="Deixe vazio para manter o texto atual da página"
+                  onChange={(e) => updateStep(item.id, { title: e.target.value })}
+                  className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                    theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                  }`}
+                />
+              </div>
               <div className="space-y-2">
                 <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
                   {item.id === 'sales' ? 'Vídeo da Oferta (VSL)' : 'Imagem/Background'}
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className={`h-12 w-20 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
-                     {item.id === 'sales' ? (
+                  <div className={`h-12 w-20 shrink-0 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
+                     {draft.steps[item.id]?.image ? (
+                       <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
+                     ) : item.id === 'sales' ? (
                        <div className="flex h-full w-full items-center justify-center bg-black/20">
                          <Video className="h-5 w-5 text-zinc-500" />
                        </div>
                      ) : (
-                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
+                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" alt="" />
                      )}
                   </div>
-                  <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                    {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />} 
-                    {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
-                  </button>
+                  <div className="flex-1 space-y-2">
+                    <input
+                      type="text"
+                      placeholder={item.id === 'sales' ? "URL do vídeo/thumb" : "URL da imagem"}
+                      value={draft.steps[item.id]?.image?.startsWith("data:") ? "" : (draft.steps[item.id]?.image ?? "")}
+                      onChange={(e) => updateStep(item.id, { image: e.target.value })}
+                      className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                        theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                      }`}
+                    />
+                    <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                      {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />}
+                      {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
+                      <input
+                        type="file"
+                        accept={item.id === 'sales' ? "video/*,image/*" : "image/*"}
+                        className="hidden"
+                        onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
               {item.id === 'audio' && (
