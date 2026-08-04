@@ -145,7 +145,7 @@ function AdminDashboard() {
           </aside>
 
 
-          <main className="flex-1">
+          <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "" : "w-full"}`}>
             <div className={`surface-card rounded-[2rem] p-8 border transition-all ${
               theme === "dark" 
               ? "border-white/10 bg-zinc-900" 
