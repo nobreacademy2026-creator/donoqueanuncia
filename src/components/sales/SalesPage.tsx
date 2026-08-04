@@ -122,8 +122,8 @@ export function SalesPage() {
 
       {/* Top Banner */}
       <div className="bg-primary/10 border-b border-primary/20 py-3 text-center mt-12 sm:mt-0">
-        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
-          ⚡ OPORTUNIDADE ÚNICA: VAISER A PAGINA DA PROMOÇÃO
+        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm flex items-center justify-center gap-2">
+          <Zap className="h-4 w-4 fill-current" /> OPORTUNIDADE ÚNICA: VAISER A PAGINA DA PROMOÇÃO
         </p>
       </div>
 
