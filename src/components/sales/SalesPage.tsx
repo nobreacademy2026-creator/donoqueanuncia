@@ -111,16 +111,16 @@ export function SalesPage() {
 
   return (
     <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
-      {/* Top Banner with Countdown */}
-      <div className="bg-red-600 border-b-2 border-white/20 py-4 text-center sticky top-0 z-50 shadow-xl">
-        <div className="mx-auto flex max-w-5xl items-center justify-center gap-4 px-4">
-          <p className="hidden text-sm font-black tracking-widest text-white uppercase sm:flex items-center gap-2">
-            <Timer className="h-5 w-5 animate-pulse" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO AGORA
+      {/* Countdown Timer Static Banner */}
+      <div className="bg-red-600 text-white py-4 text-center sticky top-0 z-50 shadow-xl border-b-2 border-white/20">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-6">
+          <p className="text-[10px] font-black tracking-[0.2em] text-white/90 uppercase sm:text-xs flex items-center gap-2">
+            <Timer className="h-4 w-4 animate-pulse text-white" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO
           </p>
-          <div className="bg-white text-red-600 px-6 py-2 rounded-full shadow-lg flex items-center gap-3 border-2 border-red-100">
+          <div className="bg-white text-red-600 px-6 py-2 rounded-full shadow-lg flex items-center gap-3 border-2 border-red-50 transform sm:scale-110">
             <Clock className="h-5 w-5 animate-pulse" />
-            <span className="text-xs font-black uppercase tracking-tighter">Oferta expira em:</span>
-            <span className="text-2xl font-black font-mono tabular-nums leading-none">{formatTime(timeLeft)}</span>
+            <span className="text-[10px] font-black uppercase tracking-tighter">Oferta expira em:</span>
+            <span className="text-2xl font-black font-mono tabular-nums leading-none tracking-tight">{formatTime(timeLeft)}</span>
           </div>
         </div>
       </div>
