@@ -54,12 +54,37 @@ function AuthPage() {
             toast.error(`Erro (${error.status || '?' }): ${error.message}`);
           }
         } else {
-          toast.success("Bem-vindo de volta!");
-          // Pequeno delay para garantir que o Supabase persistiu a sessão antes do redirect
-          setTimeout(() => {
-            window.location.href = "/admin";
-          }, 300);
+          // Após login bem-sucedido, verificar se o usuário tem o papel de admin antes de redirecionar
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data: roleData, error: roleError } = await supabase
+              .from("user_roles" as any)
+              .select("role")
+              .eq("user_id", user.id)
+              .eq("role", "admin")
+              .maybeSingle();
+
+            if (roleError) {
+              console.error("Erro ao verificar permissão:", roleError);
+              toast.error("Erro técnico ao verificar suas permissões.");
+              setLoading(false);
+              return;
+            }
+
+            if (!roleData) {
+              toast.error("Acesso negado: Você não tem permissão de administrador.");
+              await supabase.auth.signOut();
+              setLoading(false);
+              return;
+            }
+
+            toast.success("Bem-vindo, Administrador!");
+            setTimeout(() => {
+              window.location.href = "/admin";
+            }, 500);
+          }
         }
+
 
       }
     } catch (err) {
