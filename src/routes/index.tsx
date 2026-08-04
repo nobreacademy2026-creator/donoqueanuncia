@@ -79,23 +79,21 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 selection:bg-primary selection:text-white">
-      {stage !== "sales" && (
-        <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-zinc-100">
-          <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-between">
-            <div className="flex-1 max-w-md">
-              <QuizProgress value={progress} />
-            </div>
-            {stage === "intro" && (
-              <a 
-                href="/auth" 
-                className="ml-4 text-[10px] font-medium uppercase tracking-widest text-zinc-300 hover:text-primary transition-colors"
-              >
-                Admin
-              </a>
-            )}
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-zinc-100">
+        <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-between">
+          <div className="flex-1 max-w-md">
+            <QuizProgress value={progress} />
           </div>
+          {stage === "intro" && (
+            <a 
+              href="/auth" 
+              className="ml-4 text-[10px] font-medium uppercase tracking-widest text-zinc-300 hover:text-primary transition-colors"
+            >
+              Admin
+            </a>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="mx-auto flex min-h-[80vh] max-w-3xl items-start justify-center px-5 pt-0 pb-6">
         {stage === "intro" ? (
