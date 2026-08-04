@@ -21,14 +21,18 @@ export const Route = createFileRoute("/_authenticated")({
       try {
         console.log("Verificando permissões de admin via API...");
         
-        const res = await fetch('/api/public/check-auth', {
+        // Use absolute URL to avoid relative path issues during SSR/CSR transitions
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : process.env['VITE_APP_URL'] || '';
+        const apiUrl = `${baseUrl}/api/public/check-auth`;
+
+        const res = await fetch(apiUrl, {
           headers: {
             'Authorization': `Bearer ${session.access_token}`
           }
         });
 
         if (!res.ok) {
-          console.error("Erro na verificação de admin:", res.status);
+          console.error("Erro na verificação de admin (API status):", res.status);
           throw redirect({ to: "/" });
         }
 
@@ -41,7 +45,7 @@ export const Route = createFileRoute("/_authenticated")({
         
         console.log("Acesso admin concedido");
       } catch (e: any) {
-        if (e && e.to) throw e;
+        if (e && (e.to || e.isRedirect)) throw e;
         console.error("Exceção na verificação de admin:", e);
         throw redirect({ to: "/" });
       }
