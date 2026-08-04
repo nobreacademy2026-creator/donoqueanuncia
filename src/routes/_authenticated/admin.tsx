@@ -605,14 +605,14 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
               </div>
             </div>
 
-            <div className="mt-4 grid gap-4 border-t border-white/5 pt-4 sm:grid-cols-2">
+            <div className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}>
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase text-zinc-500">Imagem/Background</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Imagem/Background</label>
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-20 rounded-lg bg-zinc-800 border border-white/5 overflow-hidden">
+                  <div className={`h-12 w-20 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
                      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
                   </div>
-                  <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                  <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                     <ImageIcon className="h-3 w-3" /> Alterar Upload
                   </button>
                 </div>
