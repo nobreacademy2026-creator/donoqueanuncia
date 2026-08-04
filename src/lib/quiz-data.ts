@@ -96,9 +96,9 @@ export function calculateScore(answers: Answers) {
 export function calculatePillars(answers: Answers, score: number) {
   const jitter = (n: number) => Math.max(15, Math.min(95, Math.round(score + n)));
   return [
-    { pilar: "Criativo", valor: jitter(answers["dor_2"] === "perda" ? -15 : 5) },
-    { pilar: "Segmentação", valor: jitter(answers["dor"] === "qualificacao" ? -10 : 8) },
-    { pilar: "Oferta", valor: jitter(answers["motivacao"] === "escala" ? 10 : -5) },
-    { pilar: "Estratégia", valor: jitter(answers["perfil"] === "sim" ? 12 : -18) },
+    { pilar: "Criativo", valor: jitter(answers["dor"] === "resultado" ? -15 : 5) },
+    { pilar: "Segmentação", valor: jitter(answers["objetivo"] === "clientes" ? -10 : 8) },
+    { pilar: "Oferta", valor: jitter(answers["como"] === "impulsiono" ? -20 : 10) },
+    { pilar: "Estratégia", valor: jitter(answers["anuncia"] === "nao" ? -25 : 12) },
   ];
 }
