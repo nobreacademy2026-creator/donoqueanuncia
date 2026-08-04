@@ -429,7 +429,7 @@ function StatCard({ label, value, icon: Icon, color }: any) {
   );
 }
 
-function ConfigSection() {
+function ConfigSection({ theme }: { theme: "dark" | "light" }) {
   const [checkoutUrl, setCheckoutUrl] = useState("https://pay.kiwify.com.br/...");
 
   const handleSave = () => {
