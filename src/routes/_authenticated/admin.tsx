@@ -297,8 +297,8 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
               funnelData.map((item, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex justify-between text-xs font-medium">
-                    <span className="text-zinc-400">{item.step}</span>
-                    <span className="text-zinc-100">{item.count} <span className="text-zinc-500">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
+                    <span className={`font-bold uppercase tracking-widest text-[10px] ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{item.step}</span>
+                    <span className={`font-black ${theme === "dark" ? "text-zinc-100" : "text-zinc-900"}`}>{item.count} <span className="text-zinc-500 font-medium">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
                   </div>
                   <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
                     <div 
