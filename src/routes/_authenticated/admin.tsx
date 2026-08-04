@@ -570,13 +570,13 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-xl font-semibold">Conteúdo e Mídia</h3>
-          <p className="text-sm text-muted-foreground">Gerencie imagens, textos e áudios de cada etapa.</p>
+          <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Conteúdo e Mídia</h3>
+          <p className={`text-sm font-medium ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Gerencie imagens, textos e áudios do quiz.</p>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-lg bg-primary/20 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/30">
-          <Plus className="h-3 w-3" /> NOVA ETAPA
+        <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest">
+          <Plus className="h-4 w-4" /> Nova Etapa
         </button>
       </div>
 
