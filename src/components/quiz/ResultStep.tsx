@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bar, BarChart, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { TrendingUp, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 type Props = {
   score: number;
