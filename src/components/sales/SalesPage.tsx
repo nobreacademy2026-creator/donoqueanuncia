@@ -271,11 +271,11 @@ export function SalesPage() {
       <section className="mx-auto mt-24 max-w-2xl px-5 text-center">
         <div className="surface-card relative overflow-hidden rounded-[2.5rem] border-2 border-zinc-200 bg-white p-10 shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-2 bg-black"></div>
-          <div className="mb-8 flex justify-center">
+          <div className="mb-4 flex justify-center">
             <img 
               src="https://img.freepik.com/vector-premium/oferta-relampago-etiqueta-venda-relampago_624938-1036.jpg" 
               alt="Oferta Relâmpago" 
-              className="h-24 object-contain"
+              className="h-28 object-contain"
             />
           </div>
           
