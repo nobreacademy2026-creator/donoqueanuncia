@@ -118,30 +118,93 @@ function AnalyticsSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStage, setFilterStage] = useState("all");
   const [filterSource, setFilterSource] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
   
   const [funnelData, setFunnelData] = useState([
-    { step: "Início Quiz", count: 1240, drop: 0 },
-    { step: "Pergunta 1 (Dor)", count: 1100, drop: 11 },
-    { step: "Pergunta 2 (Motivacao)", count: 950, drop: 14 },
-    { step: "Objeção (Minions)", count: 820, drop: 13 },
-    { step: "Checklist Benefícios", count: 750, drop: 9 },
-    { step: "Depoimento (Áudio)", count: 680, drop: 9 },
-    { step: "Nicho (Instagram)", count: 590, drop: 13 },
-    { step: "Página de Vendas", count: 520, drop: 12 },
-    { step: "Checkout", count: 89, drop: 83 },
+    { step: "Início Quiz", count: 0, drop: 0 },
+    { step: "Pergunta 1 (Dor)", count: 0, drop: 0 },
+    { step: "Pergunta 2 (Motivacao)", count: 0, drop: 0 },
+    { step: "Objeção (Minions)", count: 0, drop: 0 },
+    { step: "Checklist Benefícios", count: 0, drop: 0 },
+    { step: "Depoimento (Áudio)", count: 0, drop: 0 },
+    { step: "Nicho (Instagram)", count: 0, drop: 0 },
+    { step: "Página de Vendas", count: 0, drop: 0 },
+    { step: "Checkout", count: 0, drop: 0 },
   ]);
 
-  const [leads, setLeads] = useState([
-    { id: 1, event: "clique_checkout", details: "Botão de oferta principal", date: "2026-08-04 10:30", stage: "Vendas", source: "Facebook Ads" },
-    { id: 2, event: "clique_vendas", details: "Redirecionamento para página de vendas", date: "2026-08-04 09:15", stage: "Vendas", source: "Instagram" },
-    { id: 3, event: "quiz_concluido", details: "Pontuação: 85", date: "2026-08-04 08:45", stage: "Nicho", source: "Google Search" },
-    { id: 4, event: "quiz_resposta", details: "Pergunta: dor", date: "2026-08-04 08:30", stage: "Quiz", source: "Facebook Ads" },
-    { id: 5, event: "quiz_iniciado", details: "Visitante novo", date: "2026-08-04 08:10", stage: "Intro", source: "Direto" },
-    { id: 6, event: "clique_checkout", details: "Botão de oferta principal", date: "2026-08-03 23:50", stage: "Vendas", source: "Instagram" },
-  ]);
+  const [leads, setLeads] = useState<any[]>([]);
 
   useEffect(() => {
-    setStats({ access: 1240, completion: 520, checkout: 89, videoViews: 410 });
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        // Buscar eventos reais do banco de dados
+        const { data: events, error } = await supabase
+          .from('analytics_events')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (events && events.length > 0) {
+          // Processar estatísticas
+          const accessCount = events.filter(e => e.event_name === 'quiz_iniciado').length;
+          const completionCount = events.filter(e => e.event_name === 'quiz_concluido').length;
+          const checkoutCount = events.filter(e => e.event_name === 'checkout_iniciado').length;
+          const videoCount = events.filter(e => e.event_name === 'clique_video').length; // Supondo este nome de evento
+
+          setStats({
+            access: accessCount,
+            completion: completionCount,
+            checkout: checkoutCount,
+            videoViews: videoCount
+          });
+
+          // Processar leads
+          const formattedLeads = events.map(e => ({
+            id: e.id,
+            event: e.event_name,
+            details: JSON.stringify(e.payload),
+            date: new Date(e.created_at || '').toLocaleString('pt-BR'),
+            stage: (e.payload as any)?.stage || 'N/A',
+            source: (e.payload as any)?.source || 'Direto'
+          }));
+          setLeads(formattedLeads);
+
+          // Processar funil (simplificado para demonstração com dados reais)
+          const steps = [
+            { name: "Início Quiz", event: "quiz_iniciado" },
+            { name: "Pergunta 1 (Dor)", event: "quiz_resposta", filter: (p: any) => p.pergunta === 'dor' },
+            { name: "Pergunta 2 (Motivacao)", event: "quiz_resposta", filter: (p: any) => p.pergunta === 'motivacao' },
+            { name: "Página de Vendas", event: "clique_vendas" },
+            { name: "Checkout", event: "checkout_iniciado" },
+          ];
+
+          const newFunnel = steps.map((s, i) => {
+            const count = events.filter(e => 
+              e.event_name === s.event && (!s.filter || s.filter(e.payload))
+            ).length;
+            
+            let drop = 0;
+            if (i > 0) {
+              const prevCount = events.filter(e => 
+                e.event_name === steps[i-1].event && (!steps[i-1].filter || steps[i-1].filter(e.payload))
+              ).length;
+              drop = prevCount > 0 ? Math.round((1 - count / prevCount) * 100) : 0;
+            }
+
+            return { step: s.name, count, drop };
+          });
+          setFunnelData(newFunnel as any);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar dados reais:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
   const filteredLeads = leads.filter(lead => {
