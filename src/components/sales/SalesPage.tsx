@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { CHECKOUT_URL, trackCheckoutClick, whatsappLink } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
+import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 
 const BENEFITS = [
   { icon: Megaphone, title: "Anúncios que vendem", text: "Crie campanhas que trazem clientes reais, não apenas curtidas." },
@@ -266,8 +267,19 @@ export function SalesPage() {
         </div>
       </Section>
 
+      {/* Anniversary Badge */}
+      <section className="mx-auto mt-20 flex justify-center px-5">
+        <div className="relative group transition-transform hover:scale-110">
+          <img 
+            src={anniversaryAsset.url} 
+            alt="1st Year Anniversary Celebration" 
+            className="h-32 object-contain drop-shadow-[0_0_15px_rgba(190,155,0,0.3)]"
+          />
+        </div>
+      </section>
+
       {/* Final Offer */}
-      <section className="mx-auto mt-24 max-w-2xl px-5 text-center">
+      <section className="mx-auto mt-16 max-w-2xl px-5 text-center">
         <div className="surface-card relative overflow-hidden rounded-[2.5rem] border-2 border-zinc-200 bg-white p-10 shadow-2xl">
           <div className="absolute top-0 left-0 right-0 h-2 bg-black"></div>
           <div className="mb-4 flex justify-center">
