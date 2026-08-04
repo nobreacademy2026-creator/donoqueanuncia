@@ -417,14 +417,18 @@ function EventRow({ event, details, date }: any) {
   );
 }
 
-function StatCard({ label, value, icon: Icon, color }: any) {
+function StatCard({ label, value, icon: Icon, color, theme }: any) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
+    <div className={`rounded-2xl border transition-all ${
+      theme === "dark" 
+      ? "border-white/10 bg-zinc-900/80" 
+      : "border-zinc-200 bg-white shadow-sm"
+    } p-6`}>
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-400 font-medium uppercase tracking-wider">{label}</p>
-        <Icon className={`h-5 w-5 ${color} opacity-80`} />
+        <p className={`text-sm font-medium uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>{label}</p>
+        <Icon className={`h-5 w-5 ${color} ${theme === "dark" ? "opacity-80" : "opacity-100"}`} />
       </div>
-      <p className="mt-2 text-3xl font-bold text-white">{value}</p>
+      <p className={`mt-2 text-3xl font-black ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>{value}</p>
     </div>
   );
 }
