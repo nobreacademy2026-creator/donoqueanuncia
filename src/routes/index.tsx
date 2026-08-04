@@ -117,14 +117,17 @@ function Index() {
         {stage === "result" ? (
           <div className="w-full">
             <ResultStep score={score} pillars={pillars} />
-            <LeadForm
-              score={score}
-              onSubmit={(data) => {
-                setLead(data);
-                setStage("sales");
-                window.scrollTo({ top: 0 });
-              }}
-            />
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => {
+                  setStage("sales");
+                  window.scrollTo({ top: 0 });
+                }}
+                className="gradient-primary glow-primary inline-flex items-center gap-2 rounded-2xl px-12 py-5 text-lg font-bold text-primary-foreground transition-transform duration-200 hover:scale-[1.03]"
+              >
+                Ver Meu Plano de Ação Completo
+              </button>
+            </div>
           </div>
         ) : null}
       </div>
