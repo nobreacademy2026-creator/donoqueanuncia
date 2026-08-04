@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Bar, BarChart, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, CheckCircle2 } from "lucide-react";
 
 type Props = {
   score: number;
@@ -26,7 +26,7 @@ export function ResultStep({ score, pillars }: Props) {
     <div className="animate-rise-in mx-auto w-full max-w-2xl">
       <h2 className="text-center text-3xl font-semibold tracking-tight sm:text-4xl">Seu resultado</h2>
 
-      <div className="surface-card mt-8 rounded-3xl p-8 text-center">
+      <div className="surface-card mt-8 rounded-3xl p-8 text-center bg-zinc-50 border-zinc-100 shadow-sm">
         <p className="text-sm font-medium tracking-wide text-muted-foreground uppercase">Nível atual</p>
         <div className="relative mx-auto mt-5 h-32 w-32">
           <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
@@ -54,7 +54,7 @@ export function ResultStep({ score, pillars }: Props) {
         </p>
       </div>
 
-      <div className="surface-card mt-6 rounded-3xl p-6 sm:p-8">
+      <div className="surface-card mt-6 rounded-3xl p-6 sm:p-8 bg-zinc-50 border-zinc-100 shadow-sm">
         <div className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />
           <h3 className="text-lg font-semibold">Diagnóstico por pilar</h3>
@@ -81,6 +81,35 @@ export function ResultStep({ score, pillars }: Props) {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Flow 3 — Quebra de Objeção Content */}
+      <div className="mt-12 space-y-8 text-center">
+        <div className="mx-auto aspect-[16/9] w-full max-w-md overflow-hidden rounded-3xl bg-zinc-100 border border-zinc-200 shadow-inner flex items-center justify-center text-muted-foreground">
+          [Imagem/GIF de Transição]
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl sm:text-2xl font-bold leading-tight">
+            Vão te oferecer milhares de “fórmulas mágicas”, mas o que realmente vai{" "}
+            <span className="text-primary underline decoration-primary/30">destravar suas vendas</span> é:
+          </h3>
+          
+          <ul className="grid gap-3 text-left max-w-lg mx-auto mt-6">
+            {[
+              "Fazer anúncios do jeito certo (mesmo começando do zero)",
+              "Aparecer todos os dias para pessoas da sua cidade",
+              "Saber exatamente o que fazer quando o anúncio não vende",
+              "Atrair clientes prontos para comprar.",
+              "Usar uma estrutura validada, que investe pouco e te faz vender todos os dias.",
+            ].map((text, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm sm:text-base font-medium">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-green-500" />
+                <span>{text}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
