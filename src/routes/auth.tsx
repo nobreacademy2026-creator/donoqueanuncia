@@ -21,27 +21,23 @@ function AuthPage() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
-          console.log("Sessão detectada, verificando admin...");
-          const { data: roleData, error } = await supabase
-            .from("user_roles" as any)
-            .select("role")
-            .eq("user_id", session.user.id)
-            .eq("role", "admin")
-            .maybeSingle();
+          console.log("Sessão detectada, verificando admin via server...");
+          
+          const res = await fetch('/api/public/check-auth', {
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`
+            }
+          });
 
-          if (error) {
-            console.error("Erro ao verificar papel de admin no checkSession:", error);
-            setCheckingSession(false);
-            return;
+          if (res.ok) {
+            const data = await res.json();
+            if (data.hasAdmin) {
+              console.log("Admin confirmado, redirecionando...");
+              window.location.href = "/admin";
+              return;
+            }
           }
-
-          if (roleData) {
-            console.log("Admin confirmado, redirecionando...");
-            window.location.href = "/admin";
-            return;
-          } else {
-            console.log("Usuário logado mas não é admin.");
-          }
+          console.log("Usuário logado mas não é admin.");
         }
       } catch (err) {
         console.error("Erro na verificação de sessão:", err);
