@@ -111,20 +111,18 @@ export function SalesPage() {
 
   return (
     <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
-      {/* Countdown Timer Floating */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-2 sm:p-4 pointer-events-none">
-        <div className="bg-red-600 text-white px-4 py-2 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white animate-bounce pointer-events-auto">
-          <Clock className="h-4 w-4 animate-pulse" />
-          <span className="text-xs font-black uppercase tracking-tighter">Oferta expira em:</span>
-          <span className="text-lg font-black font-mono tabular-nums">{formatTime(timeLeft)}</span>
+      {/* Top Banner with Countdown */}
+      <div className="bg-red-600 border-b-2 border-white/20 py-4 text-center sticky top-0 z-50 shadow-xl">
+        <div className="mx-auto flex max-w-5xl items-center justify-center gap-4 px-4">
+          <p className="hidden text-sm font-black tracking-widest text-white uppercase sm:flex items-center gap-2">
+            <Timer className="h-5 w-5 animate-pulse" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO AGORA
+          </p>
+          <div className="bg-white text-red-600 px-6 py-2 rounded-full shadow-lg flex items-center gap-3 border-2 border-red-100">
+            <Clock className="h-5 w-5 animate-pulse" />
+            <span className="text-xs font-black uppercase tracking-tighter">Oferta expira em:</span>
+            <span className="text-2xl font-black font-mono tabular-nums leading-none">{formatTime(timeLeft)}</span>
+          </div>
         </div>
-      </div>
-
-      {/* Top Banner */}
-      <div className="bg-primary/10 border-b border-primary/20 py-3 text-center mt-12 sm:mt-0">
-        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm flex items-center justify-center gap-2">
-          <Timer className="h-4 w-4 animate-pulse" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO AGORA
-        </p>
       </div>
 
       {/* Hero / Video Section */}
