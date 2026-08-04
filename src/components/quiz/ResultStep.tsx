@@ -25,35 +25,6 @@ export function ResultStep({ score, pillars }: Props) {
 
   return (
     <div className="animate-rise-in mx-auto w-full max-w-2xl">
-      <h2 className="text-center text-3xl font-semibold tracking-tight sm:text-4xl">Seu resultado</h2>
-
-      <div className="surface-card mt-8 rounded-3xl p-8 text-center bg-zinc-50 border-zinc-100 shadow-sm">
-        <p className="text-sm font-medium tracking-wide text-muted-foreground uppercase">Nível atual</p>
-        <div className="relative mx-auto mt-5 h-32 w-32">
-          <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
-            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--secondary)" strokeWidth="10" />
-            <circle
-              cx="60"
-              cy="60"
-              r="54"
-              fill="none"
-              stroke="var(--primary)"
-              strokeWidth="10"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - (circumference * display) / 100}
-            />
-          </svg>
-          <span className="absolute inset-0 grid place-items-center text-3xl font-bold">{display}%</span>
-        </div>
-
-        <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-muted-foreground">
-          Seu maior problema <strong className="text-foreground">não é o orçamento</strong> dos seus
-          anúncios — é a <strong className="text-foreground">estratégia</strong> por trás deles. Pequenas
-          mudanças no criativo, na segmentação e na oferta podem aumentar significativamente seus
-          resultados sem investir um real a mais.
-        </p>
-      </div>
 
 
 
