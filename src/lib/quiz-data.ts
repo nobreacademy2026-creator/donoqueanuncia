@@ -88,10 +88,11 @@ export function calculateScore(answers: Answers) {
 
 export function calculatePillars(answers: Answers, score: number) {
   const jitter = (n: number) => Math.max(15, Math.min(95, Math.round(score + n)));
+  const obj = answers["objetivo"];
   return [
-    { pilar: "Criativo", valor: jitter(answers["dor_1"] === "configuracao" ? -15 : -5) },
-    { pilar: "Segmentação", valor: jitter(answers["motivacao_1"] === "escala" ? 10 : -8) },
-    { pilar: "Oferta", valor: jitter(answers["dor_1"] === "qualificacao" ? -20 : -4) },
-    { pilar: "Estratégia", valor: jitter(answers["motivacao_2"] === "automatizacao" ? 15 : -12) },
+    { pilar: "Criativo", valor: jitter(obj === "paradas" ? -15 : -6) },
+    { pilar: "Segmentação", valor: jitter(obj === "clientes" ? -10 : -5) },
+    { pilar: "Oferta", valor: jitter(answers["desanima"] === "resultado" ? -20 : -4) },
+    { pilar: "Estratégia", valor: jitter(answers["como"] === "gerenciador" ? 2 : -18) },
   ];
 }
