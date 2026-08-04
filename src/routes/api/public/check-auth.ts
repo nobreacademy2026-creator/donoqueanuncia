@@ -46,11 +46,11 @@ export const Route = createFileRoute('/api/public/check-auth')({
           
           console.log('[API/check-auth] User ID:', userId);
           
-          const { data: roles, error: roleError } = await supabaseAdmin
+          const { data: roles, error: roleError } = await (supabaseAdmin
             .from('user_roles')
             .select('role')
             .eq('user_id', userId)
-            .eq('role', 'admin');
+            .eq('role', 'admin') as any);
             
           if (roleError) {
             console.error('[API/check-auth] Database error:', roleError);
