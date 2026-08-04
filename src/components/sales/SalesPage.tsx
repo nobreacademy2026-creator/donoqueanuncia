@@ -5,6 +5,7 @@ import {
   ChevronDown,
   Megaphone,
   MessageCircle,
+  Play,
   ShieldCheck,
   Star,
   Target,
@@ -12,7 +13,7 @@ import {
   Wallet,
   Zap,
 } from "lucide-react";
-import { CHECKOUT_URL, trackCheckoutClick } from "@/lib/tracking";
+import { CHECKOUT_URL, trackCheckoutClick, whatsappLink } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
 
 const BENEFITS = [
@@ -23,12 +24,14 @@ const BENEFITS = [
 ];
 
 const LEARN = [
-  "Estrutura de campanha do zero no Gerenciador de Anúncios",
-  "Como escrever criativos e copys que param o dedo",
-  "Segmentação prática por bairro, interesse e comportamento",
-  "Construção de oferta irresistível para o seu segmento",
-  "Métricas que importam: CPL, CPA, ROAS sem complicação",
-  "Rotina semanal de otimização em 30 minutos",
+  "Passo a passo para criar anúncios no gerenciador e no turbinar do jeito certo.",
+  "Como fazer anúncios pelo celular e computador de um jeito simples.",
+  "Estruturas validadas para atrair novos clientes todos os dias.",
+  "Aulas práticas e objetivas.",
+  "Como lotar seu WhatsApp de clientes.",
+  "Como ganhar seguidores qualificados.",
+  "Como vender pelo seu site.",
+  "Ferramentas para aumentar o faturamento e organizar seu negócio.",
 ];
 
 const FOR_WHO = [
@@ -42,6 +45,13 @@ const DIFFERENTIALS = [
   { icon: Zap, title: "Direto ao ponto", text: "Aulas curtas e práticas, feitas para quem tem pouco tempo." },
   { icon: Users, title: "Para o dono, não para agência", text: "Linguagem simples, sem termos técnicos desnecessários." },
   { icon: Award, title: "Método testado", text: "Aplicado em centenas de pequenos negócios no Brasil." },
+];
+
+const BONUS = [
+  "Suporte e grupo de alunos para tirar dúvidas.",
+  "Ideias infinitas de anúncios pro seu negócio.",
+  "Todas as aulas adicionais durante o ano.",
+  "Tudo pensado para você impulsionar as vendas do seu negócio usando a Internet.",
 ];
 
 const TESTIMONIALS = [
@@ -58,22 +68,22 @@ const FAQ = [
   { q: "E se eu não gostar?", a: "Você tem 7 dias de garantia incondicional. Basta pedir o reembolso e devolvemos 100% do valor." },
 ];
 
-function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA" }: { label?: string }) {
+function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = "" }: { label?: string; className?: string }) {
   return (
     <a
       href={CHECKOUT_URL}
       onClick={() => trackCheckoutClick({ origem: "pagina_vendas" })}
-      className="gradient-primary glow-primary inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-primary-foreground transition-transform duration-200 hover:scale-[1.02] sm:text-base"
+      className={`gradient-primary glow-primary inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-primary-foreground transition-transform duration-200 hover:scale-[1.02] sm:text-base ${className}`}
     >
       {label}
     </a>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) {
   return (
-    <section className="mx-auto mt-20 w-full max-w-5xl px-5">
-      <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
+    <section className={`mx-auto mt-20 w-full max-w-5xl px-5 ${className}`}>
+      <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
       <div className="mt-8">{children}</div>
     </section>
   );
@@ -81,171 +91,202 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function SalesPage() {
   return (
-    <main className="animate-rise-in pb-24">
-      {/* Top Banner / Auto Top */}
+    <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-primary selection:text-white">
+      {/* Top Banner */}
       <div className="bg-primary/10 border-b border-primary/20 py-3 text-center">
         <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
           ⚡ OPORTUNIDADE ÚNICA: VAISER A PAGINA DA PROMOÇÃO
         </p>
       </div>
 
+      {/* Hero / Solution */}
       <section className="mx-auto max-w-3xl px-5 pt-16 text-center">
         <h1 className="mt-4 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
-          Aprenda o método que ensina empresários a anunciar e{" "}
-          <span className="text-gradient-primary">conquistar clientes todos os dias.</span>
+          Na <span className="text-primary">STARFLIX</span> eu vou te mostrar:
         </h1>
-        <p className="mt-5 text-base text-muted-foreground sm:text-lg">
-          Mesmo que você nunca tenha criado um anúncio.
-        </p>
         
-        <div className="surface-card mt-8 rounded-3xl border-primary/20 p-8 text-center sm:p-10">
-          <p className="text-sm font-bold tracking-widest text-muted-foreground uppercase opacity-60">
-            OFERTA EXCLUSIVA
-          </p>
-          <div className="mt-4 flex flex-col items-center justify-center gap-2">
-            <span className="text-xl text-muted-foreground line-through opacity-50">De R$ 399,00</span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold">Por apenas</span>
-              <span className="text-5xl font-black text-primary">R$ 197,00</span>
+        {/* Product Mockup Placeholder */}
+        <div className="surface-card mt-10 aspect-video w-full overflow-hidden rounded-3xl border-primary/10 bg-zinc-50 shadow-xl">
+          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+            Mockup do Produto / Banner
+          </div>
+        </div>
+
+        <ul className="mt-10 grid gap-3 text-left sm:grid-cols-2">
+          {LEARN.map((item) => (
+            <li key={item} className="flex items-start gap-3 rounded-2xl bg-zinc-50 px-5 py-4 shadow-sm border border-zinc-100">
+              <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <span className="text-sm font-medium">{item}</span>
+            </li>
+          ))}
+        </ul>
+        
+        <p className="mt-8 text-base font-medium text-muted-foreground">
+          Tudo pensado para você impulsionar as vendas do seu negócio usando a Internet.
+        </p>
+
+        <div className="mt-10">
+          <CTAButton label="É DISSO QUE EU PRECISO" className="bg-green-600 hover:bg-green-700 shadow-green-600/20" />
+        </div>
+      </section>
+
+      {/* Audio Proof */}
+      <Section title="Clique no áudio e escute o que meu aluno disse 😱" className="max-w-3xl">
+        <div className="surface-card rounded-3xl p-6 shadow-lg border-primary/5 flex items-center gap-4 bg-zinc-50">
+          <button className="h-12 w-12 rounded-full bg-green-500 flex items-center justify-center text-white shadow-lg">
+            <Play className="h-6 w-6 fill-current" />
+          </button>
+          <div className="flex-1">
+            <div className="h-1.5 w-full bg-zinc-200 rounded-full overflow-hidden">
+              <div className="h-full w-1/3 bg-green-500" />
+            </div>
+            <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+              <span>0:45</span>
+              <span>2:14</span>
             </div>
           </div>
-          <div className="mt-8">
-            <CTAButton label="QUERO APROVEITAR O DESCONTO E IR PARA O CHECKOUT" />
+        </div>
+        <p className="mt-6 text-center text-lg font-medium leading-relaxed">
+          De R$ 10 mil para mais de R$ 100 mil por mês, o método <span className="text-primary">STARFLIX</span> funciona e o próximo pode ser VOCÊ.
+        </p>
+        <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
+          <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
+            Foto/Prova Social do Aluno
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            *Pagamento único, acesso imediato e vitalício.
+        </div>
+        <div className="mt-8 text-center">
+          <CTAButton label="Eu quero isso também" className="bg-green-600 hover:bg-green-700" />
+        </div>
+      </Section>
+
+      {/* Nicho Proof (Carousel Placeholder) */}
+      <Section title="SERÁ QUE FUNCIONA PRO SEU NICHO?">
+        <p className="text-center text-muted-foreground -mt-4 mb-8">
+          Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje vendem muito 👇
+        </p>
+        <div className="flex gap-4 overflow-x-auto pb-4 px-2 no-scrollbar">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="min-w-[280px] aspect-[4/5] rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm flex items-center justify-center text-muted-foreground">
+              Print de Resultado {i}
+            </div>
+          ))}
+        </div>
+        <p className="mt-8 text-center text-base font-medium">
+          São tantos que eu não consigo colocar todos aqui... Quer ser o próximo a vender muito também?
+        </p>
+        <div className="mt-8 text-center">
+          <CTAButton label="QUERO VENDER MUITO 🤩" className="bg-green-600 hover:bg-green-700" />
+        </div>
+      </Section>
+
+      {/* Video Close */}
+      <Section title="ASSISTA ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:" className="max-w-4xl">
+        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl">
+          <div className="flex h-full w-full items-center justify-center text-white/50">
+            Player de Vídeo (Vimeo/YT)
+          </div>
+        </div>
+        <div className="mt-10 text-center space-y-4">
+          <h3 className="text-2xl font-bold">Você está pronto!</h3>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Em menos de 24hrs, você já pode estar fazendo anúncios do jeito certo, atraindo novos clientes e vendendo muito mais do que já vende hoje.
+          </p>
+          <p className="text-muted-foreground max-w-2xl mx-auto italic">
+            Tudo isso com estratégias testadas e validadas por centenas de alunos que venderam pela internet.
+          </p>
+          <div className="pt-6">
+            <CTAButton label="Quero garantir essa oportunidade" className="bg-green-600 hover:bg-green-700 px-12" />
+          </div>
+        </div>
+      </Section>
+
+      {/* Objective */}
+      <div className="mx-auto mt-20 max-w-2xl px-5 text-center">
+        <div className="bg-primary/5 border border-primary/10 rounded-3xl p-8">
+          <h3 className="text-xl font-bold mb-4">🎯 Seu Objetivo:</h3>
+          <p className="text-lg leading-relaxed italic">
+            "Hoje você vai começar a fazer anúncios que realmente trazem clientes, usando as estratégias que eu aplico pra vender todo dia!"
+          </p>
+        </div>
+      </div>
+
+      {/* Bonus Card */}
+      <Section title="🎁 Bônus que você recebe na STARFLIX:">
+        <div className="bg-green-50 border border-green-100 rounded-3xl p-8 shadow-sm max-w-2xl mx-auto">
+          <ul className="space-y-4">
+            {BONUS.map((item, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="text-xl shrink-0">🎁</span>
+                <span className="text-base font-medium">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+
+      {/* Final Offer */}
+      <section className="mx-auto mt-24 max-w-2xl px-5 text-center">
+        <div className="surface-card relative overflow-hidden rounded-[2.5rem] border-2 border-primary/20 bg-zinc-50 p-10 shadow-2xl">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-primary px-6 py-2 rounded-b-2xl shadow-lg">
+             <span className="text-xs font-black text-white tracking-[0.2em] uppercase">⚡ OFERTA RELÂMPAGO</span>
+          </div>
+          
+          <div className="mt-6 flex flex-col items-center gap-2">
+            <span className="text-xl text-zinc-400 line-through">De R$ 497,00</span>
+            <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest">POR APENAS</span>
+            <div className="flex flex-col items-center">
+              <span className="text-7xl font-black text-primary leading-tight">R$ 197,00</span>
+              <span className="text-xl font-bold text-zinc-900 mt-1">NO PIX</span>
+            </div>
+            <p className="text-lg font-medium text-muted-foreground mt-2">
+              Ou 12x de R$ 20,35 no cartão
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+              55% de DESCONTO para os próximos 50 alunos
+            </div>
+            <p className="text-sm font-medium text-muted-foreground">
+              Clica no link e aproveita o desconto 👇
+            </p>
+            <CTAButton label="Garantir meu desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-green-600 hover:bg-green-700" />
+          </div>
+          
+          <p className="mt-6 text-xs text-muted-foreground/60">
+            Acesso imediato • Pagamento seguro • Vitalício
           </p>
         </div>
       </section>
 
-      <Section title="Benefícios do curso">
-        <div className="grid gap-4 sm:grid-cols-2">
-          {BENEFITS.map((b) => (
-            <div key={b.title} className="surface-card rounded-2xl p-6">
-              <b.icon className="h-6 w-6 text-primary" />
-              <h3 className="mt-4 text-lg font-semibold">{b.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{b.text}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="O que você vai aprender">
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {LEARN.map((item) => (
-            <li key={item} className="surface-card flex items-start gap-3 rounded-2xl px-5 py-4">
-              <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <span className="text-sm">{item}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section title="Para quem é">
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {FOR_WHO.map((item) => (
-            <li key={item} className="surface-card flex items-start gap-3 rounded-2xl px-5 py-4">
-              <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <span className="text-sm">{item}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section title="Diferenciais">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {DIFFERENTIALS.map((d) => (
-            <div key={d.title} className="surface-card rounded-2xl p-6">
-              <d.icon className="h-6 w-6 text-primary" />
-              <h3 className="mt-4 text-base font-semibold">{d.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{d.text}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Sobre o professor">
-        <div className="surface-card grid gap-6 rounded-3xl p-6 sm:grid-cols-[200px_minmax(0,1fr)] sm:p-8">
-          <img
-            src={professorImg}
-            alt="Rogério Nobre, professor do curso Dono que Anuncia"
-            loading="lazy"
-            className="h-48 w-full rounded-2xl object-cover sm:h-52"
-          />
-          <div className="min-w-0">
-            <h3 className="text-xl font-semibold">Rogério Nobre</h3>
-            <p className="mt-1 text-sm text-primary">Fundador da Nobre Academy</p>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Especialista em tráfego pago para pequenos negócios, Rogério já ajudou centenas de
-              empresários a transformar anúncios em clientes reais. Sua missão é simples: tirar o dono do
-              negócio da dependência de agências e colocar o controle das vendas nas mãos de quem mais
-              se importa com o resultado.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      <Section title="Depoimentos">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <div key={i} className="surface-card rounded-2xl p-6">
-              <div className="flex gap-1">
-                {Array.from({ length: 5 }).map((_, s) => (
-                  <Star key={s} className="h-4 w-4 fill-current text-primary" />
-                ))}
-              </div>
-              <p className="mt-4 text-sm text-muted-foreground">{t.text}</p>
-              <p className="mt-5 text-sm font-semibold">{t.name}</p>
-              <p className="text-xs text-muted-foreground">{t.role}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Garantia">
-        <div className="surface-card flex flex-col items-start gap-4 rounded-3xl p-8 sm:flex-row sm:items-center">
-          <ShieldCheck className="h-10 w-10 shrink-0 text-primary" />
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            <strong className="text-foreground">7 dias de garantia incondicional.</strong> Assista às
-            aulas, aplique o método e, se por qualquer motivo você achar que não é para você, devolvemos
-            100% do seu investimento. O risco é todo nosso.
-          </p>
-        </div>
-      </Section>
-
+      {/* WhatsApp Support */}
+      <section className="mx-auto mt-20 max-w-2xl px-5 text-center">
+        <h3 className="text-xl font-bold mb-6">AINDA ESTÁ COM DÚVIDAS?</h3>
+        <a 
+          href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-3 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 py-5 transition-transform hover:scale-105 shadow-lg shadow-orange-500/20"
+        >
+          <MessageCircle className="h-6 w-6" />
+          Fale comigo no WhatsApp
+        </a>
+      </section>
+      
+      {/* FAQ */}
       <Section title="Perguntas frequentes">
-        <div className="grid gap-3">
+        <div className="grid gap-3 max-w-3xl mx-auto">
           {FAQ.map((item) => (
-            <details key={item.q} className="surface-card group rounded-2xl px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium">
+            <details key={item.q} className="surface-card group rounded-2xl px-5 py-4 border border-zinc-100 shadow-sm bg-zinc-50">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold">
                 {item.q}
                 <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
               </summary>
-              <p className="mt-3 text-sm text-muted-foreground">{item.a}</p>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
             </details>
           ))}
         </div>
       </Section>
-
-      <section className="mx-auto mt-24 max-w-3xl px-5 text-center">
-        <h2 className="text-2xl font-semibold tracking-tight sm:text-4xl">
-          Seus concorrentes já estão anunciando. <span className="text-gradient-primary">E você?</span>
-        </h2>
-        <p className="mt-4 text-base text-muted-foreground">
-          Assista ao vídeo abaixo e veja como começar hoje mesmo.
-        </p>
-
-        {/* Video Placeholder */}
-        <div className="mt-10 aspect-video w-full overflow-hidden rounded-3xl bg-muted ring-1 ring-white/10">
-          <div className="flex h-full w-full items-center justify-center bg-zinc-900/50">
-            <p className="text-sm text-muted-foreground">Vídeo de vendas aqui</p>
-          </div>
-        </div>
-
-        <div className="mt-12">
-          <CTAButton label="IR PARA O CHECKOUT E GARANTIR MINHA VAGA" />
-        </div>
-      </section>
     </main>
   );
 }
