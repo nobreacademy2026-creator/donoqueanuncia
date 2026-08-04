@@ -70,8 +70,8 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-sm">casadocapacete_ro</p>
-                  <p className="text-xs text-zinc-500">Casa dos Capacetes</p>
+                  <p className="font-bold text-sm">loja_ficticia_exemplo</p>
+                  <p className="text-xs text-zinc-500">Nome da Empresa Fictícia</p>
                 </div>
               </div>
               <div className="flex justify-around p-3 text-center border-b border-zinc-100">
@@ -89,13 +89,13 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                 </div>
               </div>
               <div className="p-4 text-left text-xs space-y-1">
-                <p className="font-bold">Casa dos Capacetes</p>
-                <p>Empreendedor(a)</p>
-                <p>•Envio para todo Brasil 🇧🇷 🚚</p>
-                <p>•Manutenção em capacete 🪖</p>
-                <p>•Higienização de Capacete 🫧</p>
-                <p>•instalação de Interfones 🎧 ... <span className="text-zinc-400">mais</span></p>
-                <p className="text-blue-900">Av.amazonas 3621 agenor de Carvalho, Porto Velho</p>
+                <p className="font-bold">Nome da Empresa Fictícia</p>
+                <p>Segmento de Atuação</p>
+                <p>•Destaque do negócio 01 🚀</p>
+                <p>•Informação relevante 02 📈</p>
+                <p>•Benefício do cliente 03 🤝</p>
+                <p>•Atendimento para todo o Brasil 🇧🇷 ... <span className="text-zinc-400">mais</span></p>
+                <p className="text-blue-900">Rua Exemplo Aleatório, 123 - Bairro Fictício, São Paulo</p>
                 <p className="text-blue-900 flex items-center gap-1">
                    <span className="inline-block rotate-45">🔗</span> wa.me/message/6CHAELMQMCH... <span className="text-zinc-400">e outros 2 links</span>
                 </p>
