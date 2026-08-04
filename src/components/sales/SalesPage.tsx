@@ -101,14 +101,14 @@ export function SalesPage() {
       {/* Hero / Solution */}
       <section className="mx-auto max-w-3xl px-5 pt-16 text-center">
         <h1 className="mt-4 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
-          Na <span className="text-primary">STARFLIX</span> eu vou te mostrar:
+          No método <span className="text-primary">DONO QUE ANUNCIA</span> eu vou te mostrar:
         </h1>
         
         {/* Product Mockup Placeholder */}
         <div className="surface-card mt-10 aspect-video w-full overflow-hidden rounded-3xl border-primary/10 bg-zinc-50 shadow-xl group">
           <img 
             src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" 
-            alt="Interface do curso STARFLIX"
+            alt="Interface do curso DONO QUE ANUNCIA"
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>
@@ -164,7 +164,7 @@ export function SalesPage() {
           </div>
         </div>
         <p className="mt-8 text-center text-xl font-bold leading-relaxed text-zinc-800">
-          O método <span className="text-primary font-black">STARFLIX</span> é a sua ponte para o próximo nível.
+          O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte para o próximo nível.
         </p>
         <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
           <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
@@ -241,7 +241,7 @@ export function SalesPage() {
       </div>
 
       {/* Bonus Card */}
-      <Section title="🎁 Bônus que você recebe na STARFLIX:">
+      <Section title="🎁 Bônus que você recebe no DONO QUE ANUNCIA:">
         <div className="bg-green-50 border border-green-100 rounded-3xl p-8 shadow-sm max-w-2xl mx-auto">
           <ul className="space-y-4">
             {BONUS.map((item, i) => (
