@@ -131,7 +131,7 @@ export function SalesPage() {
         </div>
 
         <div className="mt-10">
-          <CTAButton label="Quero garantir essa Oportunidade" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20 px-12 py-6 text-xl rounded-2xl" />
+          <CTAButton label="Quero garantir essa Oportunidade" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20 px-12 py-6 text-xl rounded-2xl animate-pulse-green" />
         </div>
       </section>
 
