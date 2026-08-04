@@ -53,7 +53,7 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
             >
               <div
                 className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors ${
-                  active ? "bg-primary border-primary" : "border-zinc-700"
+                  active ? "bg-[#22c55e] border-[#22c55e]" : "border-zinc-700"
                 }`}
               >
                 {active ? <Check className="h-3.5 w-3.5 text-white" /> : null}
