@@ -91,35 +91,37 @@ function AuthPage() {
           }
         } else {
           // Após login bem-sucedido, verificar se o usuário tem o papel de admin antes de redirecionar
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            console.log("Login bem-sucedido, verificando permissões para:", user.email);
-            const { data: roleData, error: roleError } = await supabase
-              .from("user_roles" as any)
-              .select("role")
-              .eq("user_id", user.id)
-              .eq("role", "admin")
-              .maybeSingle();
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            console.log("Login bem-sucedido, verificando permissões via API...");
+            
+            const res = await fetch('/api/public/check-auth', {
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`
+              }
+            });
 
-            if (roleError) {
-              console.error("Erro ao verificar permissão pós-login:", roleError);
-              toast.error("Erro técnico ao verificar suas permissões.");
+            if (!res.ok) {
+              const errText = await res.text();
+              console.error("Erro na verificação de permissão API:", errText);
+              toast.error("Erro ao validar permissões.");
               setLoading(false);
               return;
             }
 
-            if (!roleData) {
-              console.warn("Usuário logado tentou acessar admin sem permissão:", user.email);
+            const data = await res.json();
+
+            if (!data.hasAdmin) {
+              console.warn("Usuário logado sem permissão de admin");
               toast.error("Acesso negado: Você não tem permissão de administrador.");
               await supabase.auth.signOut();
               setLoading(false);
               return;
             }
 
-            console.log("Admin validado, redirecionando para /admin");
+            console.log("Admin validado via API, redirecionando...");
             toast.success("Bem-vindo, Administrador!");
             
-            // Usando redirecionamento forçado para garantir limpeza de estado
             setTimeout(() => {
               window.location.href = "/admin";
             }, 800);
