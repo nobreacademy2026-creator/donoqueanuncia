@@ -12,7 +12,6 @@ import {
   Users,
   Wallet,
   Zap,
-  CheckCircle2,
 } from "lucide-react";
 import { CHECKOUT_URL, trackCheckoutClick, whatsappLink } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
