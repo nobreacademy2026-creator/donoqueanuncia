@@ -7,7 +7,7 @@ import { QuizIntro } from "@/components/quiz/QuizIntro";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
 import { AnalyzingStep } from "@/components/quiz/AnalyzingStep";
 import { ResultStep } from "@/components/quiz/ResultStep";
-import { LeadForm, type Lead } from "@/components/quiz/LeadForm";
+
 import { SalesPage } from "@/components/sales/SalesPage";
 
 const TITLE = "Dono que Anuncia — Diagnóstico gratuito de anúncios | Nobre Academy";
