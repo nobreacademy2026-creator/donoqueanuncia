@@ -48,12 +48,16 @@ function AuthPage() {
             toast.error("E-mail ou senha incorretos.");
           } else if (error.message.includes("Email not confirmed")) {
             toast.error("Por favor, confirme seu e-mail antes de entrar.");
+          } else if (error.message.includes("Failed to fetch")) {
+            toast.error("Erro de conexão. Verifique sua internet.");
           } else {
-            toast.error("Erro ao entrar: " + error.message);
+            toast.error(`Erro (${error.status || '?' }): ${error.message}`);
           }
         } else {
           toast.success("Bem-vindo de volta!");
           window.location.href = "/admin";
+          // Forçar recarga após um pequeno delay se o redirecionamento do router falhar
+          setTimeout(() => { window.location.reload(); }, 500);
         }
       }
     } catch (err) {
