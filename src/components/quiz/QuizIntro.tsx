@@ -1,11 +1,20 @@
-import { ArrowRight, ShieldCheck, Timer, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, Timer } from "lucide-react";
+import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export function QuizIntro({ onStart }: { onStart: () => void }) {
   return (
     <div className="animate-rise-in mx-auto max-w-2xl text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-4 py-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-        <Sparkles className="h-3.5 w-3.5 text-primary" /> Nobre Academy
-      </span>
+      <div className="mb-8 flex flex-col items-center gap-4">
+        <img 
+          src={logoAsset.url} 
+          alt="Dono que Anuncia" 
+          className="h-16 w-auto object-contain sm:h-20"
+        />
+        <span className="text-sm font-bold tracking-widest text-muted-foreground uppercase">
+          Nobre Academy
+        </span>
+      </div>
+
       <h1 className="mt-6 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
         Descubra em apenas 2 minutos por que seus anúncios{" "}
         <span className="text-gradient-primary">não estão trazendo clientes.</span>
@@ -24,7 +33,7 @@ export function QuizIntro({ onStart }: { onStart: () => void }) {
           <Timer className="h-4 w-4 text-primary" /> 7 perguntas rápidas
         </span>
         <span className="inline-flex items-center gap-2">
-          <ShieldCheck className="h-4 w-4 text-primary" /> 100% gratuito
+          <ShieldCheck className="h-4 w-4 text-primary" /> 100% online
         </span>
       </div>
     </div>
