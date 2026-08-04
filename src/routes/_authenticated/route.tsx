@@ -19,35 +19,40 @@ export const Route = createFileRoute("/_authenticated")({
     // 2. Se for uma rota de admin, verificar permissão
     if (location.pathname.startsWith("/admin")) {
       try {
-        console.log("Verificando permissões de admin via API...");
+        console.log("Verificando permissões de admin localmente...");
         
-        // Use absolute URL to avoid relative path issues during SSR/CSR transitions
+        // Verificação rápida no cliente se possível, ou via fetch
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw redirect({ to: "/auth" });
+
         const baseUrl = typeof window !== 'undefined' ? window.location.origin : process.env['VITE_APP_URL'] || '';
         const apiUrl = `${baseUrl}/api/public/check-auth`;
 
+        console.log("Chamando API de validação:", apiUrl);
         const res = await fetch(apiUrl, {
           headers: {
-            'Authorization': `Bearer ${session.access_token}`
+            'Authorization': `Bearer ${session.access_token}`,
+            'Cache-Control': 'no-cache'
           }
         });
 
         if (!res.ok) {
-          console.error("Erro na verificação de admin (API status):", res.status);
-          throw redirect({ to: "/" });
+          const errorData = await res.json().catch(() => ({}));
+          console.error("Erro na API de admin:", res.status, errorData);
+          throw redirect({ to: "/auth" });
         }
 
         const data = await res.json();
-        
         if (!data.hasAdmin) {
-          console.warn("Acesso negado: Usuário não possui papel de admin");
+          console.warn("Usuário não é admin:", user.email);
           throw redirect({ to: "/" });
         }
         
-        console.log("Acesso admin concedido");
+        console.log("Acesso admin confirmado para:", user.email);
       } catch (e: any) {
         if (e && (e.to || e.isRedirect)) throw e;
-        console.error("Exceção na verificação de admin:", e);
-        throw redirect({ to: "/" });
+        console.error("Falha crítica na proteção de rota admin:", e);
+        throw redirect({ to: "/auth" });
       }
     }
   },

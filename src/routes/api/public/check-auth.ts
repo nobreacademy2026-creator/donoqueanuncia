@@ -5,49 +5,70 @@ export const Route = createFileRoute('/api/public/check-auth')({
     handlers: {
       GET: async ({ request }) => {
         try {
+          console.log('[API/check-auth] Request received');
           const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+          console.log('[API/check-auth] Client server imported');
           
-          // Pegar o token do header
           const authHeader = request.headers.get('Authorization');
-          if (!authHeader) return new Response(JSON.stringify({ error: 'No token' }), { status: 401 });
+          if (!authHeader) {
+            console.log('[API/check-auth] No authorization header');
+            return new Response(JSON.stringify({ error: 'No token' }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
           
           const token = authHeader.replace('Bearer ', '');
+          console.log('[API/check-auth] Token received');
           
           // Use the service role client to directly check user_roles table
-          // Since we can't reliably verify the JWT with .getUser(token) due to "Auth session missing"
-          // We will decode the JWT to get the user ID. This is safe because even if someone
-          // fakes a JWT, they would need to know a valid user_id that HAS admin role.
-          // In a real production environment, you should verify the JWT signature.
+          // We decode the JWT to get the user ID and then verify with the DB
           
           let userId: string | undefined;
           try {
-            // Simple base64 decode of the JWT payload
             const payload = JSON.parse(Buffer.from(token.split('.')[1] || '', 'base64').toString());
             userId = payload.sub;
           } catch (e) {
-            return new Response(JSON.stringify({ error: 'Invalid token format' }), { status: 401 });
+            console.error('JWT Decode failed:', e);
+            return new Response(JSON.stringify({ error: 'Invalid token format' }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
           }
 
-          if (!userId) return new Response(JSON.stringify({ error: 'No user ID in token' }), { status: 401 });
+          if (!userId) {
+            console.log('[API/check-auth] No user ID in token');
+            return new Response(JSON.stringify({ error: 'No user ID in token' }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
           
-          // 2. Verificar o papel no banco ignorando RLS via supabaseAdmin
-          const { data: roles, error: roleError } = await supabaseAdmin
-            .from('user_roles' as any)
+          console.log('[API/check-auth] User ID:', userId);
+          
+          const { data: roles, error: roleError } = await (supabaseAdmin
+            .from('user_roles')
             .select('role')
             .eq('user_id', userId)
-            .eq('role', 'admin');
+            .eq('role', 'admin') as any);
             
           if (roleError) {
-            console.error('Database error in check-auth:', roleError);
+            console.error('[API/check-auth] Database error:', roleError);
             throw roleError;
           }
+          
+          const hasAdmin = roles && roles.length > 0;
+          console.log('[API/check-auth] Has admin role:', hasAdmin);
 
           return new Response(JSON.stringify({ 
             userId: userId,
             hasAdmin: roles && roles.length > 0
           }), { 
             status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store, max-age=0'
+            }
           });
           
         } catch (error: any) {
