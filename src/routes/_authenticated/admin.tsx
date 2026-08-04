@@ -108,20 +108,20 @@ function AnalyticsSection() {
       </div>
 
       <div className="mt-10">
-        <h3 className="text-lg font-semibold mb-4">Leads Recentes</h3>
+        <h3 className="text-lg font-semibold mb-4">Eventos Recentes</h3>
         <div className="overflow-hidden rounded-xl border border-white/10">
           <table className="w-full text-left text-sm">
             <thead className="bg-white/5">
               <tr>
-                <th className="px-4 py-3 font-medium">Nome</th>
-                <th className="px-4 py-3 font-medium">WhatsApp</th>
-                <th className="px-4 py-3 font-medium">E-mail</th>
+                <th className="px-4 py-3 font-medium">Evento</th>
+                <th className="px-4 py-3 font-medium">Detalhes</th>
                 <th className="px-4 py-3 font-medium">Data</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              <LeadRow name="João Silva" whatsapp="(11) 99999-9999" email="joao@email.com" date="Há 2 horas" />
-              <LeadRow name="Maria Santos" whatsapp="(21) 98888-8888" email="maria@email.com" date="Há 5 horas" />
+              <EventRow event="clique_vendas" details="Redirecionamento para página de vendas" date="Há 2 horas" />
+              <EventRow event="clique_checkout" details="Botão de oferta principal" date="Há 5 horas" />
+              <EventRow event="quiz_concluido" details="Pontuação: 85" date="Há 6 horas" />
             </tbody>
           </table>
         </div>
