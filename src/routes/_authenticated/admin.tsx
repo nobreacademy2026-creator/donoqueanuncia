@@ -147,11 +147,11 @@ function AdminDashboard() {
           </aside>
 
 
-          <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "" : "w-full"}`}>
-            <div className={`surface-card rounded-[2rem] p-8 border transition-all ${
+          <main className={`flex-1 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? "" : "w-full lg:max-w-none"}`}>
+            <div className={`surface-card rounded-[2.5rem] p-10 border transition-all duration-500 ${
               theme === "dark" 
-              ? "border-white/10 bg-zinc-900" 
-              : "border-zinc-200 bg-white shadow-xl shadow-zinc-200/50"
+              ? "border-white/10 bg-zinc-900 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]" 
+              : "border-zinc-200 bg-white shadow-2xl shadow-zinc-200/50"
             }`}>
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
               {activeTab === "config" && <ConfigSection theme={theme} />}
