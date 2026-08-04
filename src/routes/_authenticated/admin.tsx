@@ -510,38 +510,50 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
 function TrackingSection({ theme }: { theme: "dark" | "light" }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Pixels e Scripts de Rastreamento</h3>
+      <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Pixels e Rastreamento</h3>
       
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">ID Meta Pixel</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>ID Meta Pixel</label>
         <input 
           type="text" 
           placeholder="Ex: 1234567890"
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">ID Google Analytics (G-XXX)</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>ID Google Analytics (G-XXX)</label>
         <input 
           type="text" 
           placeholder="Ex: G-ABC123DEF"
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">Scripts Adicionais (Head)</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Scripts Adicionais (Head)</label>
         <textarea 
           rows={5}
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
           placeholder="<!-- Scripts extras aqui -->"
         />
       </div>
 
-      <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-bold text-primary-foreground hover:opacity-90">
+      <button className="inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm">
         <Save className="h-4 w-4" />
-        ATUALIZAR TRACKING
+        Atualizar Tracking
       </button>
     </div>
   );
