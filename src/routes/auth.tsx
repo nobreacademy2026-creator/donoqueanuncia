@@ -32,36 +32,38 @@ function AuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#808080] px-5">
-      <div className="w-full max-w-md space-y-8 rounded-[40px] bg-[#919191] p-10 shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-white px-5">
+      <div className="w-full max-w-[380px] space-y-6 rounded-[32px] bg-black p-8 shadow-2xl">
         <div className="text-center">
-          <h2 className="text-4xl font-black text-white drop-shadow-sm">Admin Nobre</h2>
-          <p className="mt-2 text-lg font-medium text-white/90">Entre para gerenciar seu funil</p>
+          <h2 className="text-2xl font-black text-white">Admin Nobre</h2>
+          <p className="mt-1 text-sm font-medium text-white/70">Entre para gerenciar seu funil</p>
         </div>
-        <form onSubmit={handleLogin} className="mt-10 space-y-6">
-          <div className="space-y-2">
-            <label className="ml-1 text-base font-bold text-zinc-800">E-mail</label>
+        <form onSubmit={handleLogin} className="mt-8 space-y-5">
+          <div className="space-y-1.5">
+            <label className="ml-1 text-xs font-bold uppercase tracking-wider text-[#ff0000]">E-mail</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-[20px] border-none bg-[#757575] px-6 py-4 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full rounded-2xl border-none bg-white px-5 py-3.5 text-black placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#ff0000]/50"
+              placeholder="seu@email.com"
             />
           </div>
-          <div className="space-y-2">
-            <label className="ml-1 text-base font-bold text-zinc-800">Senha</label>
+          <div className="space-y-1.5">
+            <label className="ml-1 text-xs font-bold uppercase tracking-wider text-[#ff0000]">Senha</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-[20px] border-none bg-[#757575] px-6 py-4 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full rounded-2xl border-none bg-white px-5 py-3.5 text-black placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#ff0000]/50"
+              placeholder="••••••••"
             />
           </div>
           <button
             disabled={loading}
-            className="w-full rounded-[25px] bg-[#e60012] py-5 text-lg font-black tracking-wider text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+            className="w-full rounded-2xl bg-[#ff0000] py-4 text-sm font-black tracking-widest text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? "ENTRANDO..." : "ENTRAR NO PAINEL"}
           </button>
