@@ -127,10 +127,10 @@ function AdminDashboard() {
 
 
           <main className="flex-1">
-            <div className={`surface-card rounded-[2.5rem] p-8 border transition-all shadow-2xl ${
+            <div className={`surface-card rounded-[2rem] p-8 border transition-all ${
               theme === "dark" 
-              ? "border-white/10 bg-zinc-900 shadow-black/50" 
-              : "border-zinc-200 bg-white shadow-zinc-200/50"
+              ? "border-white/10 bg-zinc-900" 
+              : "border-zinc-200 bg-white shadow-xl shadow-zinc-200/50"
             }`}>
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
               {activeTab === "config" && <ConfigSection theme={theme} />}
