@@ -29,12 +29,12 @@ function AuthPage() {
           const { checkAdminRole } = await import("@/lib/auth.functions");
           const data = await checkAdminRole();
           
-          if (data.hasAdmin) {
+          if (data && data.hasAdmin) {
             console.log("Admin confirmado em /auth, redirecionando para /admin");
             window.location.replace("/admin");
             return;
           } else {
-            console.log("Not an admin, staying on auth page.");
+            console.log("Acesso negado ou não é admin:", data?.error);
           }
         } else {
           console.log("No active session found.");
@@ -98,8 +98,8 @@ function AuthPage() {
             const { checkAdminRole } = await import("@/lib/auth.functions");
             const data = await checkAdminRole();
 
-            if (!data.hasAdmin) {
-              console.warn("Usuário logado sem permissão de admin");
+            if (!data || !data.hasAdmin) {
+              console.warn("Usuário logado sem permissão de admin:", data?.error);
               toast.error("Acesso negado: Você não tem permissão de administrador.");
               await supabase.auth.signOut();
               setLoading(false);
