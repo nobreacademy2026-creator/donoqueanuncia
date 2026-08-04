@@ -470,7 +470,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
   );
 }
 
-function TrackingSection() {
+function TrackingSection({ theme }: { theme: "dark" | "light" }) {
   return (
     <div className="space-y-6">
       <h3 className="text-xl font-semibold">Pixels e Scripts de Rastreamento</h3>
