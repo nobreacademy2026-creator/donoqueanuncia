@@ -34,7 +34,7 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white p-6">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl pt-4">
         <header className="mb-10 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Painel Administrativo</h1>
