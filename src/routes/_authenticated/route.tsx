@@ -14,6 +14,7 @@ export const Route = createFileRoute("/_authenticated")({
 
     // 2. Verificar sessão no cliente
     const { data: { session } } = await supabase.auth.getSession();
+    console.log("[Auth] Session check result:", !!session);
     
     if (!session) {
       console.log("[Auth] Sem sessão no cliente, redirecionando para login");
