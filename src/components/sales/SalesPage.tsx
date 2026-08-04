@@ -126,7 +126,7 @@ export function SalesPage() {
       </div>
 
       {/* Hero / Video Section */}
-      <section className="mx-auto max-w-4xl px-5 pt-16 text-center">
+      <section className="mx-auto max-w-4xl px-5 pt-12 text-center">
         <h2 className="text-2xl font-black text-red-600 uppercase mb-8 sm:text-3xl leading-tight">
           ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:
         </h2>
