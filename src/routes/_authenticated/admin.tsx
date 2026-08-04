@@ -300,7 +300,7 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
                     <span className={`font-bold uppercase tracking-widest text-[10px] ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{item.step}</span>
                     <span className={`font-black ${theme === "dark" ? "text-zinc-100" : "text-zinc-900"}`}>{item.count} <span className="text-zinc-500 font-medium">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
                   </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className={`h-2.5 w-full rounded-full overflow-hidden ${theme === "dark" ? "bg-white/5" : "bg-zinc-100"}`}>
                     <div 
                       className="h-full bg-primary" 
                       style={{ width: `${stats.access > 0 ? (item.count / stats.access) * 100 : 0}%` }}
