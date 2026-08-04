@@ -197,3 +197,7 @@
 @utility animate-pulse-green {
   animation: pulse-green 2s infinite;
 }
+
+#lovable-badge {
+  display: none !important;
+}
