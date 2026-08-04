@@ -35,9 +35,7 @@ export const Route = createFileRoute("/_authenticated")({
         const data = await checkAdminRole();
 
         if (!data || !data.hasAdmin) {
-          console.warn("[Auth] Usuário não é admin ou dados inválidos");
-          // Em vez de redirecionar para /, vamos para /auth para forçar novo login se necessário
-          // ou apenas mostrar que não tem acesso.
+          console.warn("[Auth] Usuário não é admin ou erro na validação:", data?.error);
           throw redirect({ to: "/auth" });
         }
         
