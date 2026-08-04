@@ -98,21 +98,61 @@ export function SalesPage() {
         </p>
       </div>
 
-      {/* Hero / Solution */}
-      <section className="mx-auto max-w-3xl px-5 pt-16 text-center">
-        <h1 className="mt-4 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
-          No método <span className="text-primary">DONO QUE ANUNCIA</span> eu vou te mostrar:
-        </h1>
-        
-        {/* Product Mockup Placeholder */}
-        <div className="surface-card mt-10 aspect-video w-full overflow-hidden rounded-3xl border-primary/10 bg-zinc-50 shadow-xl group">
+      {/* Hero / Video Section */}
+      <section className="mx-auto max-w-4xl px-5 pt-16 text-center">
+        <h2 className="text-2xl font-black text-red-600 uppercase mb-8 sm:text-3xl leading-tight">
+          ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:
+        </h2>
+
+        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group mb-10">
           <img 
-            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" 
-            alt="Interface do curso DONO QUE ANUNCIA"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200" 
+            alt="Vídeo explicativo DONO QUE ANUNCIA"
+            className="h-full w-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
           />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+            <div className="h-20 w-20 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl mb-4 group-hover:scale-110 transition-transform">
+              <Play className="h-10 w-10 fill-current ml-1" />
+            </div>
+            <span className="font-bold text-lg tracking-widest uppercase">Ver aula exclusiva</span>
+          </div>
         </div>
 
+        <div className="space-y-6">
+          <h3 className="text-3xl font-black text-zinc-900 leading-tight">Você está pronto!</h3>
+          <p className="text-lg text-zinc-800 leading-relaxed max-w-2xl mx-auto">
+            Em <span className="text-red-600 font-bold">menos de 24hrs</span>, você já pode <span className="text-red-600 font-bold">estar fazendo anúncios</span> do jeito certo, atraindo novos clientes e vendendo muito mais do que já vende hoje.
+          </p>
+          <div className="bg-yellow-400 p-2 rounded-lg inline-block transform -rotate-1">
+            <p className="text-sm font-black text-zinc-900 uppercase">
+              Tudo isso com estratégias testadas e validadas por centenas de alunos que estão vendendo todos os dias!
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <CTAButton label="Quero garantir essa Oportunidade" className="bg-green-600 hover:bg-green-700 shadow-green-600/20 px-12 py-6 text-xl" />
+        </div>
+      </section>
+
+      {/* Objective */}
+      <div className="mx-auto mt-20 max-w-2xl px-5 text-center">
+        <div className="rounded-3xl p-8 border border-zinc-100 bg-white">
+          <h3 className="text-xl font-black mb-4 flex items-center justify-center gap-2 uppercase">
+            🎯 Seu Objetivo:
+          </h3>
+          <p className="text-lg leading-relaxed text-zinc-800 font-medium">
+            Hoje você vai começar a fazer anúncios que realmente trazem clientes, <span className="text-red-600 font-bold italic">usando as estratégias que eu aplico pra vender todo dia!</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Hero / Solution Content (Moved down) */}
+      <section className="mx-auto max-w-3xl px-5 mt-20 text-center">
+        <h2 className="text-3xl leading-tight font-black tracking-tight sm:text-4xl uppercase">
+          No método <span className="text-primary">DONO QUE ANUNCIA</span> eu vou te mostrar:
+        </h2>
+        
         <ul className="mt-10 grid gap-3 text-left sm:grid-cols-2">
           {LEARN.map((item) => (
             <li key={item} className="flex items-start gap-3 rounded-2xl bg-zinc-50 px-5 py-4 shadow-sm border border-zinc-100">
@@ -121,14 +161,6 @@ export function SalesPage() {
             </li>
           ))}
         </ul>
-        
-        <p className="mt-8 text-base font-medium text-muted-foreground">
-          Tudo pensado para você impulsionar as vendas do seu negócio usando a Internet.
-        </p>
-
-        <div className="mt-10">
-          <CTAButton label="É DISSO QUE EU PRECISO" className="bg-green-600 hover:bg-green-700 shadow-green-600/20" />
-        </div>
       </section>
 
       {/* Audio Proof */}
@@ -201,34 +233,6 @@ export function SalesPage() {
         </div>
       </Section>
 
-      {/* Video Close */}
-      <Section title="ASSISTA ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:" className="max-w-4xl">
-        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group">
-          <img 
-            src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200" 
-            alt="Aula do curso"
-            className="h-full w-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-            <div className="h-20 w-20 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl mb-4 group-hover:scale-110 transition-transform">
-              <Play className="h-10 w-10 fill-current ml-1" />
-            </div>
-            <span className="font-bold text-lg tracking-widest uppercase">Ver aula exclusiva</span>
-          </div>
-        </div>
-        <div className="mt-10 text-center space-y-4">
-          <h3 className="text-2xl font-bold">Você está pronto!</h3>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Em menos de 24hrs, você já pode estar fazendo anúncios do jeito certo, atraindo novos clientes e vendendo muito mais do que já vende hoje.
-          </p>
-          <p className="text-muted-foreground max-w-2xl mx-auto italic">
-            Tudo isso com estratégias testadas e validadas por centenas de alunos que venderam pela internet.
-          </p>
-          <div className="pt-6">
-            <CTAButton label="Quero garantir essa oportunidade" className="bg-green-600 hover:bg-green-700 px-12" />
-          </div>
-        </div>
-      </Section>
 
       {/* Objective */}
       <div className="mx-auto mt-20 max-w-2xl px-5 text-center">
