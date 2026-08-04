@@ -592,11 +592,14 @@ function TrackingSection({ theme }: { theme: "dark" | "light" }) {
 
 function ContentSection({ theme }: { theme: "dark" | "light" }) {
   const [questions, setQuestions] = useState([
-    { id: 'dor', title: 'Na hora de fazer seus anúncios patrocinados...', type: 'pergunta' },
-    { id: 'motivacao', title: 'Porque você sente que precisa fazer anúncios?', type: 'pergunta' },
-    { id: 'objecao', title: 'Quebra de Objeção (Minions)', type: 'etapa' },
-    { id: 'audio', title: 'Depoimento do Aluno (Áudio)', type: 'etapa' },
-    { id: 'niche', title: 'Validação de Nicho (Instagram)', type: 'etapa' },
+    { id: 'intro', title: 'Página Inicial (Intro)', type: 'página' },
+    { id: 'dor', title: 'Pergunta: Dor do Cliente', type: 'pergunta' },
+    { id: 'motivacao', title: 'Pergunta: Motivação', type: 'pergunta' },
+    { id: 'objecao', title: 'Página: Quebra de Objeção', type: 'etapa' },
+    { id: 'beneficios', title: 'Página: Checklist de Benefícios', type: 'etapa' },
+    { id: 'audio', title: 'Depoimento do Aluno', type: 'etapa' },
+    { id: 'niche', title: 'Validação de Nicho', type: 'etapa' },
+    { id: 'sales', title: 'Página de Vendas (Final)', type: 'página' },
   ]);
 
   return (
@@ -623,7 +626,9 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
                   theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
                 }`}>
-                  {item.id === 'audio' ? <Music className="h-5 w-5" /> : <ImageIcon className="h-5 w-5" />}
+                  {item.id === 'audio' ? <Music className="h-5 w-5" /> : 
+                   item.id === 'sales' ? <Video className="h-5 w-5" /> : 
+                   <ImageIcon className="h-5 w-5" />}
                 </div>
                 <div>
                   <h4 className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}>{item.title}</h4>
@@ -638,13 +643,22 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
 
             <div className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}>
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Imagem/Background</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
+                  {item.id === 'sales' ? 'Vídeo da Oferta (VSL)' : 'Imagem/Background'}
+                </label>
                 <div className="flex items-center gap-3">
                   <div className={`h-12 w-20 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
-                     <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
+                     {item.id === 'sales' ? (
+                       <div className="flex h-full w-full items-center justify-center bg-black/20">
+                         <Video className="h-5 w-5 text-zinc-500" />
+                       </div>
+                     ) : (
+                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
+                     )}
                   </div>
                   <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                    <ImageIcon className="h-3 w-3" /> Alterar Upload
+                    {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />} 
+                    {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
                   </button>
                 </div>
               </div>
