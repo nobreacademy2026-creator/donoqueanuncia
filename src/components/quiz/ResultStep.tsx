@@ -59,7 +59,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
 
           <div className="space-y-6">
             <p className="text-lg font-bold text-red-600 sm:text-xl leading-snug">
-              De R$ 10 mil para mais de R$ 100 mil por mês, o método <span className="bg-black text-white px-2 py-0.5 rounded">STARFLIX</span> funciona e o próximo pode ser VOCÊ.
+              De R$ 10 mil para mais de R$ 100 mil por mês, o método <span className="bg-black text-white px-2 py-0.5 rounded">DONO QUE ANUNCIA</span> funciona e o próximo pode ser VOCÊ.
             </p>
 
             <div className="mx-auto max-w-sm overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-md">
