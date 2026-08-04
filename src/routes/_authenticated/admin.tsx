@@ -324,9 +324,9 @@ function AnalyticsSection() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-white/10">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-white/5">
+            <div className="overflow-hidden rounded-xl border border-white/10 bg-zinc-900/50">
+          <table className="w-full text-left text-sm text-zinc-300">
+            <thead className="bg-white/5 text-zinc-400">
               <tr>
                 <th className="px-4 py-3 font-medium">Evento</th>
                 <th className="px-4 py-3 font-medium">Etapa</th>
@@ -340,13 +340,13 @@ function AnalyticsSection() {
                 <tr key={lead.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-4 py-3 font-mono text-xs text-primary">{lead.event}</td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase">
+                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase text-zinc-300">
                       {lead.stage}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-xs text-zinc-400">{lead.source}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{lead.details}</td>
-                  <td className="px-4 py-3 text-xs flex items-center gap-1">
+                  <td className="px-4 py-3 text-zinc-500 max-w-xs truncate">{lead.details}</td>
+                  <td className="px-4 py-3 text-xs flex items-center gap-1 text-zinc-400">
                     <Calendar className="h-3 w-3 text-zinc-500" />
                     {lead.date}
                   </td>
@@ -354,7 +354,7 @@ function AnalyticsSection() {
               ))}
               {filteredLeads.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={5} className="px-4 py-10 text-center text-zinc-500">
                     Nenhum lead encontrado com os filtros aplicados.
                   </td>
                 </tr>
