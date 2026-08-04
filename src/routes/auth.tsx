@@ -16,27 +16,41 @@ function AuthPage() {
   const [checkingSession, setCheckingSession] = useState(true);
 
   // Verificação automática de sessão ao carregar a página
-  useState(() => {
+  useEffect(() => {
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // Se já tem sessão, tenta validar admin e redirecionar
-        const { data: roleData } = await supabase
-          .from("user_roles" as any)
-          .select("role")
-          .eq("user_id", session.user.id)
-          .eq("role", "admin")
-          .maybeSingle();
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          console.log("Sessão detectada, verificando admin...");
+          const { data: roleData, error } = await supabase
+            .from("user_roles" as any)
+            .select("role")
+            .eq("user_id", session.user.id)
+            .eq("role", "admin")
+            .maybeSingle();
 
-        if (roleData) {
-          window.location.href = "/admin";
-          return;
+          if (error) {
+            console.error("Erro ao verificar papel de admin no checkSession:", error);
+            setCheckingSession(false);
+            return;
+          }
+
+          if (roleData) {
+            console.log("Admin confirmado, redirecionando...");
+            window.location.href = "/admin";
+            return;
+          } else {
+            console.log("Usuário logado mas não é admin.");
+          }
         }
+      } catch (err) {
+        console.error("Erro na verificação de sessão:", err);
+      } finally {
+        setCheckingSession(false);
       }
-      setCheckingSession(false);
     };
     checkSession();
-  });
+  }, []);
 
   const handleAuth = async (e: React.FormEvent) => {
 
