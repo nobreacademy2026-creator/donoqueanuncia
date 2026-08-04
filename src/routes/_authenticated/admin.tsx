@@ -524,6 +524,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
 
   const handleSave = async () => {
     publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
+    publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     setSaving(true);
     try {
       await publishDraft(readDraft());
