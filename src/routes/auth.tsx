@@ -30,7 +30,7 @@ function AuthPage() {
           const data = await checkAdminRole();
           
           if (data.hasAdmin) {
-            console.log("Admin confirmado, redirecionando para /admin");
+            console.log("Admin confirmado em /auth, redirecionando para /admin");
             window.location.replace("/admin");
             return;
           } else {
