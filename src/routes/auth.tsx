@@ -55,10 +55,12 @@ function AuthPage() {
           }
         } else {
           toast.success("Bem-vindo de volta!");
-          window.location.href = "/admin";
-          // Forçar recarga após um pequeno delay se o redirecionamento do router falhar
-          setTimeout(() => { window.location.reload(); }, 500);
+          // Pequeno delay para garantir que o Supabase persistiu a sessão antes do redirect
+          setTimeout(() => {
+            window.location.href = "/admin";
+          }, 300);
         }
+
       }
     } catch (err) {
       console.error("Erro inesperado:", err);

@@ -16,18 +16,23 @@ export const Route = createFileRoute("/_authenticated")({
 
     // Use a generic query to check admin role if the route is /admin
     if (location.pathname.startsWith("/admin")) {
-      const { data: roles } = await supabase
+      const { data: roles, error } = await supabase
         .from("user_roles" as any)
         .select("role")
         .eq("user_id", session.user.id)
         .eq("role", "admin")
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        console.error("Erro ao verificar papel de admin:", error);
+      }
 
       if (!roles) {
-        // Not an admin, redirect to home
+        console.log("Usuário não tem papel de admin, redirecionando para home");
         throw redirect({ to: "/" });
       }
     }
+
   },
   component: () => <Outlet />,
 });
