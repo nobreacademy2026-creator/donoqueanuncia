@@ -123,7 +123,7 @@ export function SalesPage() {
           <p className="text-lg text-zinc-800 leading-relaxed max-w-2xl mx-auto">
             Em <span className="text-red-600 font-bold">menos de 24hrs</span>, você já pode <span className="text-red-600 font-bold">estar fazendo anúncios</span> do jeito certo, atraindo novos clientes e vendendo muito mais do que já vende hoje.
           </p>
-          <div className="bg-yellow-400 p-2 rounded-lg inline-block transform -rotate-1">
+          <div className="bg-yellow-400 p-4 rounded-2xl inline-block">
             <p className="text-sm font-black text-zinc-900 uppercase">
               Tudo isso com estratégias testadas e validadas por centenas de alunos que estão vendendo todos os dias!
             </p>
