@@ -359,12 +359,16 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
               />
             </div>
             
-            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2">
+            <div className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition-all ${
+              theme === "dark" 
+              ? "border-white/10 bg-black/20" 
+              : "border-zinc-200 bg-zinc-50"
+            }`}>
               <Filter className="h-4 w-4 text-muted-foreground" />
               <select 
                 value={filterStage}
                 onChange={(e) => setFilterStage(e.target.value)}
-                className="bg-transparent text-xs text-white focus:outline-none"
+                className={`bg-transparent text-xs focus:outline-none font-bold ${theme === "dark" ? "text-white" : "text-zinc-900"}`}
               >
                 <option value="all" className="bg-zinc-900">Todas Etapas</option>
                 <option value="intro" className="bg-zinc-900">Intro</option>
