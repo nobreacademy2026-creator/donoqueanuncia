@@ -7,7 +7,6 @@ import { QuizIntro } from "@/components/quiz/QuizIntro";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
 import { AnalyzingStep } from "@/components/quiz/AnalyzingStep";
 import { ResultStep } from "@/components/quiz/ResultStep";
-
 import { SalesPage } from "@/components/sales/SalesPage";
 
 const TITLE = "Dono que Anuncia — Diagnóstico gratuito de anúncios | Nobre Academy";
@@ -48,7 +47,6 @@ function Index() {
   const [stage, setStage] = useState<Stage>("intro");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  
 
   const score = useMemo(() => calculateScore(answers), [answers]);
   const pillars = useMemo(() => calculatePillars(answers, score), [answers, score]);
