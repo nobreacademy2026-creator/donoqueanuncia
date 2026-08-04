@@ -48,7 +48,10 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
 
             <div className="mt-8 flex justify-center">
               <button
-                onClick={onNext}
+                onClick={() => {
+                  import("@/lib/tracking").then(m => m.trackEvent("clique_solucao_preciso"));
+                  onNext();
+                }}
                 className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20 uppercase"
               >
                 É disso que eu preciso
