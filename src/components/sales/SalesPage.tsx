@@ -251,7 +251,8 @@ export function SalesPage() {
 
       {/* Final Offer */}
       <section className="mx-auto mt-24 max-w-2xl px-5 text-center">
-        <div className="surface-card relative overflow-hidden rounded-[2.5rem] border-2 border-primary/20 bg-zinc-50 p-10 shadow-2xl">
+        <div className="surface-card relative overflow-hidden rounded-[2.5rem] border-2 border-zinc-200 bg-white p-10 shadow-2xl">
+          <div className="absolute top-0 left-0 right-0 h-2 bg-black"></div>
           <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-primary px-6 py-2 rounded-b-2xl shadow-lg">
              <span className="text-xs font-black text-white tracking-[0.2em] uppercase">⚡ OFERTA RELÂMPAGO</span>
           </div>
