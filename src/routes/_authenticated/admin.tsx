@@ -34,22 +34,55 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth" });
+  };
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === "dark" ? "light" : "dark");
+  };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-6">
+    <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
       <div className="mx-auto max-w-7xl pt-4">
-        <header className="mb-10 flex items-center justify-between">
+        <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Painel Administrativo</h1>
-            <p className="text-zinc-400 mt-1">Gerencie seu funil Dono que Anuncia</p>
+            <h1 className="text-3xl font-black tracking-tight uppercase">Dashboard Premium</h1>
+            <p className={`${theme === "dark" ? "text-zinc-400" : "text-zinc-500"} mt-1 font-medium`}>Gerencie seu funil Dono que Anuncia</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button 
+              onClick={toggleTheme}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
+                theme === "dark" 
+                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white" 
+                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-sm"
+              }`}
+              title={theme === "dark" ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
+            >
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <button 
               onClick={() => window.open("/", "_blank")}
-              className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition-all ${
+                theme === "dark"
+                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white"
+                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-sm"
+              }`}
             >
               <Layout className="h-4 w-4" />
-              Ver Landing Page
+              Landing Page
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 shadow-lg shadow-red-600/20"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair
             </button>
           </div>
         </header>
