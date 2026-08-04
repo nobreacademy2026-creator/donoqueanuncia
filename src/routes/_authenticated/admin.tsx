@@ -163,6 +163,12 @@ function AdminDashboard() {
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
               {activeTab === "content" && <ContentSection theme={theme} />}
             </div>
+
+            {(activeTab === "content" || activeTab === "config") && (
+              <div className="mt-8">
+                <LivePreview theme={theme} />
+              </div>
+            )}
           </main>
           {isSidebarOpen && (
             <div 
@@ -503,11 +509,19 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
 }
 
 function ConfigSection({ theme }: { theme: "dark" | "light" }) {
-  const [checkoutUrl, setCheckoutUrl] = useState("https://pay.kiwify.com.br/...");
-  const [promoPrice, setPromoPrice] = useState("R$ 197,00");
-  const [fullPrice, setFullPrice] = useState("R$ 497,00");
+  const initial = readDraft();
+  const [checkoutUrl, setCheckoutUrl] = useState(initial.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
+  const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
+  const [fullPrice, setFullPrice] = useState(initial.sales.fullPrice ?? "R$ 497,00");
+  const [vslUrl, setVslUrl] = useState(initial.sales.vslUrl ?? "");
+
+  const publish = (patch: Partial<FunnelDraft["sales"]>) => {
+    const current = readDraft();
+    writeDraft({ ...current, sales: { ...current.sales, ...patch } });
+  };
 
   const handleSave = () => {
+    publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     toast.success("Dados da Página de Vendas atualizados!");
   };
 
@@ -524,7 +538,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             value={checkoutUrl}
-            onChange={(e) => setCheckoutUrl(e.target.value)}
+            onChange={(e) => { setCheckoutUrl(e.target.value); publish({ checkoutUrl: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -538,6 +552,8 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             placeholder="https://..."
+            value={vslUrl}
+            onChange={(e) => { setVslUrl(e.target.value); publish({ vslUrl: e.target.value, videoThumb: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -551,7 +567,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             value={fullPrice}
-            onChange={(e) => setFullPrice(e.target.value)}
+            onChange={(e) => { setFullPrice(e.target.value); publish({ fullPrice: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -565,7 +581,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             value={promoPrice}
-            onChange={(e) => setPromoPrice(e.target.value)}
+            onChange={(e) => { setPromoPrice(e.target.value); publish({ promoPrice: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
