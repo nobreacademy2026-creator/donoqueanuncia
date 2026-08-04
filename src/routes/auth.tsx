@@ -63,7 +63,7 @@ function AuthPage() {
           </div>
           <button
             disabled={loading}
-            className="w-full rounded-full bg-[#ff0000] py-4.5 text-[11px] font-black tracking-[0.2em] text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+            className="w-full rounded-none bg-[#ff0000] py-4.5 text-[11px] font-black tracking-[0.2em] text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? "ENTRANDO..." : "ENTRAR NO PAINEL"}
           </button>
