@@ -592,11 +592,14 @@ function TrackingSection({ theme }: { theme: "dark" | "light" }) {
 
 function ContentSection({ theme }: { theme: "dark" | "light" }) {
   const [questions, setQuestions] = useState([
-    { id: 'dor', title: 'Na hora de fazer seus anúncios patrocinados...', type: 'pergunta' },
-    { id: 'motivacao', title: 'Porque você sente que precisa fazer anúncios?', type: 'pergunta' },
-    { id: 'objecao', title: 'Quebra de Objeção (Minions)', type: 'etapa' },
-    { id: 'audio', title: 'Depoimento do Aluno (Áudio)', type: 'etapa' },
-    { id: 'niche', title: 'Validação de Nicho (Instagram)', type: 'etapa' },
+    { id: 'intro', title: 'Página Inicial (Intro)', type: 'página' },
+    { id: 'dor', title: 'Pergunta: Dor do Cliente', type: 'pergunta' },
+    { id: 'motivacao', title: 'Pergunta: Motivação', type: 'pergunta' },
+    { id: 'objecao', title: 'Página: Quebra de Objeção', type: 'etapa' },
+    { id: 'beneficios', title: 'Página: Checklist de Benefícios', type: 'etapa' },
+    { id: 'audio', title: 'Depoimento do Aluno', type: 'etapa' },
+    { id: 'niche', title: 'Validação de Nicho', type: 'etapa' },
+    { id: 'sales', title: 'Página de Vendas (Final)', type: 'página' },
   ]);
 
   return (
