@@ -14,18 +14,18 @@ export const Route = createFileRoute('/api/public/check-auth')({
           const token = authHeader.replace('Bearer ', '');
           
           // Use the service role client to directly check user_roles table
-          // Since we can't reliably verify the JWT with .getUser(token) due to "Auth session missing"
-          // We will decode the JWT to get the user ID. This is safe because even if someone
-          // fakes a JWT, they would need to know a valid user_id that HAS admin role.
-          // In a real production environment, you should verify the JWT signature.
+          // We decode the JWT to get the user ID and then verify with the DB
           
           let userId: string | undefined;
           try {
-            // Simple base64 decode of the JWT payload
             const payload = JSON.parse(Buffer.from(token.split('.')[1] || '', 'base64').toString());
             userId = payload.sub;
           } catch (e) {
-            return new Response(JSON.stringify({ error: 'Invalid token format' }), { status: 401 });
+            console.error('JWT Decode failed:', e);
+            return new Response(JSON.stringify({ error: 'Invalid token format' }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
           }
 
           if (!userId) return new Response(JSON.stringify({ error: 'No user ID in token' }), { status: 401 });

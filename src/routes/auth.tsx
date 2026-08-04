@@ -40,7 +40,7 @@ function AuthPage() {
             console.log("API check-auth response:", data);
             if (data.hasAdmin) {
               console.log("Admin confirmed, redirecting to /admin");
-              window.location.href = "/admin";
+              window.location.replace("/admin");
               return;
             } else {
               console.log("Not an admin, staying on auth page.");
@@ -136,8 +136,8 @@ function AuthPage() {
             toast.success("Bem-vindo, Administrador!");
             
             setTimeout(() => {
-              window.location.href = "/admin";
-            }, 800);
+              window.location.replace("/admin");
+            }, 500);
           }
         }
 
