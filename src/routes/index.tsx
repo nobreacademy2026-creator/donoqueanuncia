@@ -114,18 +114,12 @@ function Index() {
 
         {stage === "result" ? (
           <div className="w-full">
-            <ResultStep />
-            <div className="mt-12 flex justify-center">
-              <button
-                onClick={() => {
-                  setStage("sales");
-                  window.scrollTo({ top: 0 });
-                }}
-                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20"
-              >
-                Vou dominar isso agora
-              </button>
-            </div>
+            <ResultStep 
+              onNext={() => {
+                setStage("sales");
+                window.scrollTo({ top: 0 });
+              }} 
+            />
           </div>
         ) : null}
       </div>
