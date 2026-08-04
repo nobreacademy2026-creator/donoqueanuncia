@@ -78,7 +78,7 @@ function Index() {
   if (stage === "sales") {
     return (
       <div className="min-h-screen bg-background">
-        <SalesPage firstName={lead?.nome.split(" ")[0]} />
+        <SalesPage />
       </div>
     );
   }
