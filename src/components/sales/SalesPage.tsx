@@ -317,9 +317,8 @@ export function SalesPage() {
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 py-5 transition-transform hover:scale-105 shadow-lg shadow-orange-500/20"
+          className="inline-flex items-center gap-3 rounded-2xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-black px-12 py-5 transition-transform hover:scale-105 shadow-lg shadow-yellow-500/20 uppercase"
         >
-          <MessageCircle className="h-6 w-6" />
           Fale comigo no WhatsApp
         </a>
       </section>
