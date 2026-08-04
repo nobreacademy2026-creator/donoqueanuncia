@@ -49,14 +49,27 @@ function AdminDashboard() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
-      <div className="mx-auto max-w-7xl pt-4">
+      <div className="mx-auto max-w-[1600px] pt-4">
         <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-current opacity-90 transition-all">
-          <div>
-            <h1 className={`text-4xl font-black tracking-tighter uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Dashboard Premium</h1>
-            <p className={`${theme === "dark" ? "text-zinc-500" : "text-zinc-600"} mt-1 font-bold flex items-center gap-2`}>
-              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              Gestão do Funil Dono que Anuncia
-            </p>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
+                theme === "dark" 
+                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white" 
+                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-sm"
+              }`}
+              title={isSidebarOpen ? "Recolher Menu" : "Expandir Menu"}
+            >
+              <Layout className={`h-5 w-5 transition-transform duration-300 ${isSidebarOpen ? "" : "rotate-90"}`} />
+            </button>
+            <div>
+              <h1 className={`text-4xl font-black tracking-tighter uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Dashboard Premium</h1>
+              <p className={`${theme === "dark" ? "text-zinc-500" : "text-zinc-600"} mt-1 font-bold flex items-center gap-2`}>
+                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                Gestão do Funil Dono que Anuncia
+              </p>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <button 
