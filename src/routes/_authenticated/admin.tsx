@@ -284,7 +284,7 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-              <div className={`surface-card rounded-[2rem] border transition-all p-6 ${
+              <div className={`surface-card rounded-[2rem] border transition-all p-8 ${
                 theme === "dark" 
                 ? "border-white/10 bg-zinc-900/80" 
                 : "border-zinc-200 bg-white shadow-sm"
