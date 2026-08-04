@@ -153,7 +153,7 @@ function NavButton({ active, onClick, icon: Icon, label }: any) {
   );
 }
 
-function AnalyticsSection() {
+function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
   const [stats, setStats] = useState({ access: 0, completion: 0, checkout: 0, videoViews: 0 });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStage, setFilterStage] = useState("all");
