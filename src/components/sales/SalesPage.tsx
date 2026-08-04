@@ -24,14 +24,13 @@ const BENEFITS = [
 ];
 
 const LEARN = [
-  "Passo a passo para criar anúncios no gerenciador e no turbinar do jeito certo.",
+  "O passo a passo para criar anúncios no turbinar e gerenciador do jeito certo.",
   "Como fazer anúncios pelo celular e computador de um jeito simples.",
-  "Estruturas validadas para atrair novos clientes todos os dias.",
-  "Aulas práticas e objetivas.",
-  "Como lotar seu WhatsApp de clientes.",
-  "Como ganhar seguidores qualificados.",
-  "Como vender pelo seu site.",
-  "Ferramentas para aumentar o faturamento e organizar seu negócio.",
+  "Como aparecer para pessoas da sua cidade ou região.",
+  "Aulas práticas e objetivas para donos de negócio.",
+  "Como lotar seu WhatsApp de clientes qualificados.",
+  "Como ganhar seguidores que compram de você.",
+  "Ferramentas para aumentar o faturamento do seu negócio.",
 ];
 
 const FOR_WHO = [
@@ -263,7 +262,7 @@ export function SalesPage() {
           </div>
           
           <div className="mt-6 flex flex-col items-center gap-2">
-            <span className="text-xl text-zinc-400 line-through">De R$ 497,00</span>
+            <span className="text-xl text-zinc-400 line-through">De R$ 399,00</span>
             <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest">POR APENAS</span>
             <div className="flex flex-col items-center">
               <span className="text-7xl font-black text-primary leading-tight">R$ 197,00</span>
