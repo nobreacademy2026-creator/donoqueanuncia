@@ -17,32 +17,51 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     
-    if (isSignUp) {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+    try {
+      if (isSignUp) {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
 
-      if (error) {
-        toast.error("Erro ao cadastrar: " + error.message);
+        if (error) {
+          if (error.message.includes("Password should be")) {
+            toast.error("A senha deve ter pelo menos 6 caracteres.");
+          } else if (error.message.includes("User already registered")) {
+            toast.error("Este e-mail já está cadastrado.");
+          } else {
+            toast.error("Erro ao cadastrar: " + error.message);
+          }
+        } else {
+          toast.success("Cadastro realizado com sucesso! Você já pode entrar.");
+          setIsSignUp(false);
+        }
       } else {
-        toast.success("Cadastro realizado com sucesso! Você já pode entrar.");
-        setIsSignUp(false);
-      }
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      if (error) {
-        toast.error("Erro ao entrar: " + error.message);
-      } else {
-        toast.success("Bem-vindo de volta!");
-        window.location.href = "/admin";
+        if (error) {
+          console.error("Erro de login:", error);
+          if (error.message.includes("Invalid login credentials")) {
+            toast.error("E-mail ou senha incorretos.");
+          } else if (error.message.includes("Email not confirmed")) {
+            toast.error("Por favor, confirme seu e-mail antes de entrar.");
+          } else {
+            toast.error("Erro ao entrar: " + error.message);
+          }
+        } else {
+          toast.success("Bem-vindo de volta!");
+          window.location.href = "/admin";
+        }
       }
+    } catch (err) {
+      console.error("Erro inesperado:", err);
+      toast.error("Ocorreu um erro inesperado. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
