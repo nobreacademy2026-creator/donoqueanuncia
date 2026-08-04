@@ -258,8 +258,8 @@ export function SalesPage() {
           
           <div className="mt-6 flex flex-col items-center gap-2">
             <span className="text-xl text-zinc-400 line-through">De R$ 497,00</span>
-            <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest">POR APENAS</span>
-            <div className="flex flex-col items-center">
+            <span className="text-red-600 font-black text-2xl uppercase">POR APENAS</span>
+            <div className="flex flex-col items-center bg-white border-2 border-[#22c55e] rounded-3xl p-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] transform scale-110 my-4">
               <span className="text-7xl font-black text-[#22c55e] leading-tight">R$ 197,00</span>
               <span className="text-xl font-bold text-zinc-900 mt-1">NO PIX</span>
             </div>
