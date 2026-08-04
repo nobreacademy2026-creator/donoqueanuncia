@@ -104,15 +104,17 @@ function AdminDashboard() {
           </div>
         </header>
 
-        <div className="flex flex-col gap-8 lg:flex-row items-start">
-          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all duration-500 ease-in-out overflow-hidden ${
-            isSidebarOpen ? "opacity-100 translate-x-0" : "lg:w-0 lg:p-0 lg:border-0 opacity-0 -translate-x-10 pointer-events-none"
+        <div className="flex flex-col gap-8 lg:flex-row items-start relative">
+          <aside className={`fixed lg:sticky top-0 lg:top-6 left-0 h-screen lg:h-auto z-50 lg:z-0 shrink-0 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden border-r lg:border rounded-r-2xl lg:rounded-2xl ${
+            isSidebarOpen 
+            ? "w-[280px] p-6 lg:p-4 opacity-100 translate-x-0" 
+            : "w-0 p-0 opacity-0 -translate-x-full lg:translate-x-0 lg:border-0 lg:opacity-0 pointer-events-none"
           } ${
             theme === "dark" 
-            ? "border-white/10 bg-zinc-900/50" 
-            : "border-zinc-200 bg-white shadow-sm"
+            ? "border-white/10 bg-zinc-900/95 backdrop-blur-xl lg:bg-zinc-900/50" 
+            : "border-zinc-200 bg-white shadow-2xl lg:shadow-sm"
           }`}>
-            <nav className="flex flex-col gap-1 w-56">
+            <nav className="flex flex-col gap-2 w-[232px]">
               <NavButton 
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
