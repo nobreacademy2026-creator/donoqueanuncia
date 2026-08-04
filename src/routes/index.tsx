@@ -73,7 +73,7 @@ function Index() {
     else setStep(step - 1);
   }
 
-  if (stage === ("sales" as Stage)) {
+  if (stage === ("sales" as any)) {
     return <SalesPage />;
   }
 
