@@ -82,6 +82,13 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export function SalesPage({ firstName }: { firstName?: string | undefined }) {
   return (
     <main className="animate-rise-in pb-24">
+      {/* Top Banner / Auto Top */}
+      <div className="bg-primary/10 border-b border-primary/20 py-3 text-center">
+        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
+          ⚡ OPORTUNIDADE ÚNICA: {firstName || "DONO"}, SEU DIAGNÓSTICO ESTÁ PRONTO!
+        </p>
+      </div>
+
       <section className="mx-auto max-w-3xl px-5 pt-16 text-center">
         {firstName ? (
           <p className="text-sm font-medium tracking-wide text-primary uppercase">
@@ -108,7 +115,7 @@ export function SalesPage({ firstName }: { firstName?: string | undefined }) {
             </div>
           </div>
           <div className="mt-8">
-            <CTAButton label="QUERO APROVEITAR O DESCONTO E COMEÇAR AGORA" />
+            <CTAButton label="QUERO APROVEITAR O DESCONTO E IR PARA O CHECKOUT" />
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
             *Pagamento único, acesso imediato e vitalício.
@@ -230,10 +237,18 @@ export function SalesPage({ firstName }: { firstName?: string | undefined }) {
           Seus concorrentes já estão anunciando. <span className="text-gradient-primary">E você?</span>
         </h2>
         <p className="mt-4 text-base text-muted-foreground">
-          Comece hoje e tenha clientes chegando todos os dias no seu negócio.
+          Assista ao vídeo abaixo e veja como começar hoje mesmo.
         </p>
-        <div className="mt-8">
-          <CTAButton />
+
+        {/* Video Placeholder */}
+        <div className="mt-10 aspect-video w-full overflow-hidden rounded-3xl bg-muted ring-1 ring-white/10">
+          <div className="flex h-full w-full items-center justify-center bg-zinc-900/50">
+            <p className="text-sm text-muted-foreground">Vídeo de vendas aqui</p>
+          </div>
+        </div>
+
+        <div className="mt-12">
+          <CTAButton label="IR PARA O CHECKOUT E GARANTIR MINHA VAGA" />
         </div>
       </section>
     </main>
