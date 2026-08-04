@@ -582,15 +582,21 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
 
       <div className="space-y-4">
         {questions.map((item) => (
-          <div key={item.id} className="group flex flex-col rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:border-primary/30">
+          <div key={item.id} className={`group flex flex-col rounded-2xl border transition-all p-4 ${
+            theme === "dark"
+            ? "border-white/5 bg-white/5 hover:border-primary/30"
+            : "border-zinc-200 bg-white hover:border-primary/30 shadow-sm"
+          }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-800 text-zinc-400">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
+                  theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
+                }`}>
                   {item.id === 'audio' ? <Music className="h-5 w-5" /> : <ImageIcon className="h-5 w-5" />}
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold">{item.title}</h4>
-                  <span className="text-[10px] uppercase tracking-widest text-zinc-500">{item.type} • ID: {item.id}</span>
+                  <h4 className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}>{item.title}</h4>
+                  <span className={`text-[10px] uppercase tracking-widest font-bold ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{item.type} • ID: {item.id}</span>
                 </div>
               </div>
               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
