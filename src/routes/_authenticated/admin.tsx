@@ -130,13 +130,12 @@ function AnalyticsSection() {
   );
 }
 
-function LeadRow({ name, whatsapp, email, date }: any) {
+function EventRow({ event, details, date }: any) {
   return (
     <tr>
-      <td className="px-4 py-3">{name}</td>
-      <td className="px-4 py-3">{whatsapp}</td>
-      <td className="px-4 py-3">{email}</td>
-      <td className="px-4 py-3">{date}</td>
+      <td className="px-4 py-3 font-mono text-xs text-primary">{event}</td>
+      <td className="px-4 py-3 text-muted-foreground">{details}</td>
+      <td className="px-4 py-3 text-xs">{date}</td>
     </tr>
   );
 }
