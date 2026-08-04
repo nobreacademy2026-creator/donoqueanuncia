@@ -38,7 +38,7 @@ function AdminDashboard() {
         <header className="mb-10 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Painel Administrativo</h1>
-            <p className="text-muted-foreground mt-1">Gerencie seu funil Nobre Academy</p>
+            <p className="text-zinc-400 mt-1">Gerencie seu funil Dono que Anuncia</p>
           </div>
           <div className="flex gap-3">
             <button 
