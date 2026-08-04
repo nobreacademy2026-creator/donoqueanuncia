@@ -308,13 +308,21 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
         </div>
 
         <div className="space-y-6">
-          <h3 className="text-lg font-semibold mb-4">Ações do Admin</h3>
+          <h3 className={`text-lg font-black mb-4 uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Ações do Admin</h3>
           <div className="grid gap-3">
-             <button className="flex items-center justify-between rounded-xl bg-zinc-900/50 p-4 text-sm text-zinc-300 border border-white/5 hover:bg-white/5 hover:text-white transition-all">
+             <button className={`flex items-center justify-between rounded-2xl p-4 text-sm font-bold border transition-all ${
+               theme === "dark"
+               ? "bg-zinc-900/50 text-zinc-300 border-white/5 hover:bg-white/5 hover:text-white"
+               : "bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm"
+             }`}>
                 <span className="flex items-center gap-3"><ImageIcon className="h-4 w-4" /> Exportar Leads</span>
                 <ChevronRight className="h-4 w-4 text-zinc-500" />
              </button>
-             <button className="flex items-center justify-between rounded-xl bg-zinc-900/50 p-4 text-sm text-zinc-300 border border-white/5 hover:bg-white/5 hover:text-white transition-all">
+             <button className={`flex items-center justify-between rounded-2xl p-4 text-sm font-bold border transition-all ${
+               theme === "dark"
+               ? "bg-zinc-900/50 text-zinc-300 border-white/5 hover:bg-white/5 hover:text-white"
+               : "bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm"
+             }`}>
                 <span className="flex items-center gap-3"><BarChart3 className="h-4 w-4" /> Relatório Completo</span>
                 <ChevronRight className="h-4 w-4 text-zinc-500" />
              </button>
