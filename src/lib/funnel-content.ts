@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export type FunnelDraft = {
   steps: Record<string, { title?: string; image?: string; audio?: string; options?: string[] }>;
@@ -15,6 +16,27 @@ export type FunnelDraft = {
 export const EMPTY_DRAFT: FunnelDraft = { steps: {}, sales: {} };
 export const DRAFT_KEY = "dqa_funnel_draft";
 export const DRAFT_EVENT = "dqa:funnel-draft";
+export const CONFIG_KEY = "funnel_content";
+
+/** Persist the current content to the database (published version). */
+export async function publishDraft(draft: FunnelDraft) {
+  const { error } = await supabase
+    .from("quiz_config")
+    .upsert({ key: CONFIG_KEY, value: draft as any, updated_at: new Date().toISOString() }, { onConflict: "key" });
+  if (error) throw error;
+}
+
+/** Load the published content from the database. */
+export async function loadPublished(): Promise<FunnelDraft | null> {
+  const { data, error } = await supabase
+    .from("quiz_config")
+    .select("value")
+    .eq("key", CONFIG_KEY)
+    .maybeSingle();
+  if (error || !data?.value) return null;
+  const parsed = data.value as FunnelDraft;
+  return { steps: parsed.steps ?? {}, sales: parsed.sales ?? {} };
+}
 
 export function readDraft(): FunnelDraft {
   if (typeof window === "undefined") return EMPTY_DRAFT;
@@ -41,13 +63,21 @@ export function writeDraft(draft: FunnelDraft) {
   });
 }
 
-/** Live draft content — only applied inside the admin preview (?preview=1). */
+/** Live draft inside the admin preview (?preview=1); published content otherwise. */
 export function useFunnelDraft(): FunnelDraft {
   const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("preview") !== "1") return;
+    if (params.get("preview") !== "1") {
+      let active = true;
+      loadPublished().then((published) => {
+        if (active && published) setDraft(published);
+      });
+      return () => {
+        active = false;
+      };
+    }
 
     setDraft(readDraft());
 
