@@ -73,7 +73,6 @@ export const QUESTIONS: Question[] = [
   {
     id: "tempo_empresa",
     title: "Há quanto tempo sua empresa existe?",
-    image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&q=80&w=800",
     image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Menos de 1 ano", value: "menos_1", score: 50 },
