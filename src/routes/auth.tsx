@@ -97,6 +97,7 @@ function AuthPage() {
           // Após login bem-sucedido, verificar se o usuário tem o papel de admin antes de redirecionar
           const { data: { user } } = await supabase.auth.getUser();
           if (user) {
+            console.log("Login bem-sucedido, verificando permissões para:", user.email);
             const { data: roleData, error: roleError } = await supabase
               .from("user_roles" as any)
               .select("role")
@@ -105,23 +106,27 @@ function AuthPage() {
               .maybeSingle();
 
             if (roleError) {
-              console.error("Erro ao verificar permissão:", roleError);
+              console.error("Erro ao verificar permissão pós-login:", roleError);
               toast.error("Erro técnico ao verificar suas permissões.");
               setLoading(false);
               return;
             }
 
             if (!roleData) {
+              console.warn("Usuário logado tentou acessar admin sem permissão:", user.email);
               toast.error("Acesso negado: Você não tem permissão de administrador.");
               await supabase.auth.signOut();
               setLoading(false);
               return;
             }
 
+            console.log("Admin validado, redirecionando para /admin");
             toast.success("Bem-vindo, Administrador!");
+            
+            // Usando redirecionamento forçado para garantir limpeza de estado
             setTimeout(() => {
               window.location.href = "/admin";
-            }, 500);
+            }, 800);
           }
         }
 
