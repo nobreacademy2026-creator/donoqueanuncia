@@ -33,7 +33,7 @@ function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-zinc-950 text-white p-6">
       <div className="mx-auto max-w-7xl">
         <header className="mb-10 flex items-center justify-between">
           <div>
