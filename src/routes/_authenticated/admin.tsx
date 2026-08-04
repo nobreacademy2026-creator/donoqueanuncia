@@ -126,14 +126,14 @@ function AdminDashboard() {
                 active={activeTab === "content"} 
                 onClick={() => setActiveTab("content")}
                 icon={Layout}
-                label="Conteúdo do Quiz"
+                label="Conteúdo do Funil"
                 theme={theme}
               />
               <NavButton 
                 active={activeTab === "config"} 
                 onClick={() => setActiveTab("config")}
                 icon={Settings}
-                label="Configurações Funil"
+                label="Página de Vendas"
                 theme={theme}
               />
               <NavButton 
