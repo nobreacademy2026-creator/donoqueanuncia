@@ -88,7 +88,11 @@ function AdminDashboard() {
         </header>
 
         <div className="flex flex-col gap-8 lg:flex-row">
-          <aside className="w-full shrink-0 lg:w-64">
+          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all ${
+            theme === "dark" 
+            ? "border-white/10 bg-zinc-900/50" 
+            : "border-zinc-200 bg-white shadow-sm"
+          }`}>
             <nav className="flex flex-col gap-1">
               <NavButton 
                 active={activeTab === "analytics"} 
