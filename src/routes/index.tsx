@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { QUESTIONS, calculatePillars, calculateScore, type Answers } from "@/lib/quiz-data";
 import { trackEvent } from "@/lib/tracking";
 import { useFunnelDraft } from "@/lib/funnel-content";
@@ -54,18 +54,34 @@ function Index() {
     () =>
       QUESTIONS.map((q) => {
         const override = draft.steps[q.id];
-        return override
-          ? { ...q, ...(override.title ? { title: override.title } : {}), ...(override.image ? { image: override.image } : {}) }
-          : q;
+        if (!override) return q;
+        return {
+          ...q,
+          ...(override.title ? { title: override.title } : {}),
+          ...(override.image ? { image: override.image } : {}),
+          options: q.options.map((option, i) => {
+            const label = override.options?.[i];
+            return label ? { ...option, label } : option;
+          }),
+        };
       }),
     [draft],
   );
+
+  // Mantém o passo válido caso as perguntas mudem durante a edição ao vivo
+  useEffect(() => {
+    if (step > questions.length - 1) setStep(Math.max(0, questions.length - 1));
+  }, [questions.length, step]);
 
   const score = useMemo(() => calculateScore(answers), [answers]);
   const pillars = useMemo(() => calculatePillars(answers, score), [answers, score]);
 
   const progress =
-    stage === "intro" ? 0 : stage === "quiz" ? (step / questions.length) * 100 : 100;
+    stage === "intro"
+      ? 0
+      : stage === "quiz"
+        ? ((step + (answers[questions[step]!.id] ? 1 : 0)) / questions.length) * 100
+        : 100;
 
   function handleSelect(value: string) {
     const question = questions[step]!;
