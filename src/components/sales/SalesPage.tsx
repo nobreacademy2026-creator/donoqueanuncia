@@ -235,17 +235,25 @@ export function SalesPage() {
 
 
 
-      {/* Bonus Card */}
       <Section title="🎁 Bônus que você recebe no DONO QUE ANUNCIA:">
-        <div className="bg-green-50 border border-green-100 rounded-3xl p-8 shadow-sm max-w-2xl mx-auto">
+        <div className="bg-[#e6fcf0] border border-[#22c55e]/20 rounded-3xl p-8 shadow-sm max-w-2xl mx-auto">
           <ul className="space-y-4">
             {BONUS.map((item, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span className="text-xl shrink-0">🎁</span>
-                <span className="text-base font-medium">{item}</span>
+                <span className="text-base font-medium text-zinc-900">
+                  {/* Destacar partes específicas conforme a imagem se necessário */}
+                  {item.includes("Suporte") ? <><strong>Suporte</strong> e <strong>grupo de alunos</strong> para tirar dúvidas.</> : 
+                   item.includes("Ideias infinitas") ? <><strong>Ideias infinitas</strong> de anúncios pro seu negócio.</> :
+                   item.includes("aulas adicionadas") ? <>Todas as <strong>aulas adicionadas</strong> durante o ano você <strong>não pagará</strong> nada.</> :
+                   item}
+                </span>
               </li>
             ))}
           </ul>
+          <p className="mt-6 text-sm text-zinc-700 font-medium">
+            Tudo pensado para você <strong>Impulsionar as vendas</strong> do seu negócio usando a Internet.
+          </p>
         </div>
       </Section>
 
