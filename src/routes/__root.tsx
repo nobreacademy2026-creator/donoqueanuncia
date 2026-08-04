@@ -125,8 +125,8 @@ function RootShell({ children }: { children: ReactNode }) {
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-              if (window.fbq && import.meta.env.VITE_META_PIXEL_ID) {
-                fbq('init', import.meta.env.VITE_META_PIXEL_ID);
+              if (window.fbq && import.meta.env['VITE_META_PIXEL_ID']) {
+                fbq('init', import.meta.env['VITE_META_PIXEL_ID']);
                 fbq('track', 'PageView');
               }
             `,
@@ -135,7 +135,7 @@ function RootShell({ children }: { children: ReactNode }) {
         {/* Global site tag (gtag.js) - Google Analytics */}
         <script
           async
-          src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.VITE_GA4_ID}`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env['VITE_GA4_ID']}`}
         />
         <script
           dangerouslySetInnerHTML={{
@@ -143,8 +143,8 @@ function RootShell({ children }: { children: ReactNode }) {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              if (import.meta.env.VITE_GA4_ID) {
-                gtag('config', import.meta.env.VITE_GA4_ID);
+              if (import.meta.env['VITE_GA4_ID']) {
+                gtag('config', import.meta.env['VITE_GA4_ID']);
               }
             `,
           }}
