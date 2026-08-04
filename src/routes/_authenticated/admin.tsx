@@ -95,24 +95,28 @@ function AdminDashboard() {
                 onClick={() => setActiveTab("analytics")}
                 icon={BarChart3}
                 label="Analytics & Métricas"
+                theme={theme}
               />
               <NavButton 
                 active={activeTab === "content"} 
                 onClick={() => setActiveTab("content")}
                 icon={Layout}
                 label="Conteúdo do Quiz"
+                theme={theme}
               />
               <NavButton 
                 active={activeTab === "config"} 
                 onClick={() => setActiveTab("config")}
                 icon={Settings}
                 label="Configurações Funil"
+                theme={theme}
               />
               <NavButton 
                 active={activeTab === "tracking"} 
                 onClick={() => setActiveTab("tracking")}
                 icon={Code}
                 label="Pixels & Tracking"
+                theme={theme}
               />
             </nav>
           </aside>
