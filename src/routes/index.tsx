@@ -73,12 +73,8 @@ function Index() {
     else setStep(step - 1);
   }
 
-  if (stage === "sales") {
-    return (
-      <div className="min-h-screen bg-white">
-        <SalesPage />
-      </div>
-    );
+  if (stage === ("sales" as any)) {
+    return <SalesPage />;
   }
 
   return (

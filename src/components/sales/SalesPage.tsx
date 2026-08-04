@@ -111,24 +111,22 @@ export function SalesPage() {
 
   return (
     <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
-      {/* Countdown Timer Floating */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-2 sm:p-4 pointer-events-none">
-        <div className="bg-red-600 text-white px-4 py-2 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white animate-bounce pointer-events-auto">
-          <Clock className="h-4 w-4 animate-pulse" />
-          <span className="text-xs font-black uppercase tracking-tighter">Oferta expira em:</span>
-          <span className="text-lg font-black font-mono tabular-nums">{formatTime(timeLeft)}</span>
+      {/* Countdown Timer Static Banner */}
+      <div className="bg-red-600 text-white py-4 text-center sticky top-0 z-50 shadow-xl border-b-2 border-white/20">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-6">
+          <p className="text-[10px] font-black tracking-[0.2em] text-white/90 uppercase sm:text-xs flex items-center gap-2">
+            <Timer className="h-4 w-4 animate-pulse text-white" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO
+          </p>
+          <div className="bg-white text-red-600 px-6 py-2 rounded-full shadow-lg flex items-center gap-3 border-2 border-red-50 transform sm:scale-110">
+            <Clock className="h-5 w-5 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-tighter">Oferta expira em:</span>
+            <span className="text-2xl font-black font-mono tabular-nums leading-none tracking-tight">{formatTime(timeLeft)}</span>
+          </div>
         </div>
       </div>
 
-      {/* Top Banner */}
-      <div className="bg-primary/10 border-b border-primary/20 py-3 text-center mt-12 sm:mt-0">
-        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm flex items-center justify-center gap-2">
-          <Timer className="h-4 w-4 animate-pulse" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO AGORA
-        </p>
-      </div>
-
       {/* Hero / Video Section */}
-      <section className="mx-auto max-w-4xl px-5 pt-16 text-center">
+      <section className="mx-auto max-w-4xl px-5 pt-8 text-center">
         <h2 className="text-2xl font-black text-red-600 uppercase mb-8 sm:text-3xl leading-tight">
           ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:
         </h2>
