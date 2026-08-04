@@ -1,15 +1,15 @@
 import { CheckCircle2 } from "lucide-react";
-import minionsAsset from "@/assets/minions-blah.png.asset.json";
+
 
 export function ResultStep() {
   return (
     <div className="animate-rise-in mx-auto w-full max-w-2xl">
       {/* Quebra de Objeção Content */}
-      <div className="mt-12 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
+      <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
         <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
           <img 
-            src={minionsAsset.url} 
-            alt="Blah Blah Blah"
+            src="https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800" 
+            alt="Fictitious representative"
             className="h-full w-full object-cover"
           />
         </div>
