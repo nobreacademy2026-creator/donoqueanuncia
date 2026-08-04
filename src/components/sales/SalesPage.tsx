@@ -79,22 +79,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function SalesPage({ firstName }: { firstName?: string | undefined }) {
+export function SalesPage() {
   return (
     <main className="animate-rise-in pb-24">
       {/* Top Banner / Auto Top */}
       <div className="bg-primary/10 border-b border-primary/20 py-3 text-center">
         <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
-          ⚡ OPORTUNIDADE ÚNICA: {firstName || "DONO"}, SEU DIAGNÓSTICO ESTÁ PRONTO!
+          ⚡ OPORTUNIDADE ÚNICA: SEU DIAGNÓSTICO ESTÁ PRONTO!
         </p>
       </div>
 
       <section className="mx-auto max-w-3xl px-5 pt-16 text-center">
-        {firstName ? (
-          <p className="text-sm font-medium tracking-wide text-primary uppercase">
-            {firstName}, seu plano está a caminho
-          </p>
-        ) : null}
         <h1 className="mt-4 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
           Aprenda o método que ensina empresários a anunciar e{" "}
           <span className="text-gradient-primary">conquistar clientes todos os dias.</span>
