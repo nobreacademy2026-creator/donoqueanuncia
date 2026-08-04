@@ -5,13 +5,21 @@ export const Route = createFileRoute('/api/public/check-auth')({
     handlers: {
       GET: async ({ request }) => {
         try {
+          console.log('[API/check-auth] Request received');
           const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+          console.log('[API/check-auth] Client server imported');
           
-          // Pegar o token do header
           const authHeader = request.headers.get('Authorization');
-          if (!authHeader) return new Response(JSON.stringify({ error: 'No token' }), { status: 401 });
+          if (!authHeader) {
+            console.log('[API/check-auth] No authorization header');
+            return new Response(JSON.stringify({ error: 'No token' }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
           
           const token = authHeader.replace('Bearer ', '');
+          console.log('[API/check-auth] Token received');
           
           // Use the service role client to directly check user_roles table
           // We decode the JWT to get the user ID and then verify with the DB
