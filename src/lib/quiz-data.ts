@@ -31,6 +31,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "como",
     title: "Como você anuncia?",
+    image: "https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Impulsiono publicações", value: "impulsiono", score: 45 },
       { label: "Gerenciador de Anúncios", value: "gerenciador", score: 82 },
@@ -41,6 +42,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "objetivo",
     title: "Qual seu maior objetivo?",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Mais clientes", value: "clientes", score: 65 },
       { label: "Mais vendas", value: "vendas", score: 68 },
@@ -71,6 +73,8 @@ export const QUESTIONS: Question[] = [
   {
     id: "tempo_empresa",
     title: "Há quanto tempo sua empresa existe?",
+    image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Menos de 1 ano", value: "menos_1", score: 50 },
       { label: "1 a 3 anos", value: "1_3", score: 65 },
