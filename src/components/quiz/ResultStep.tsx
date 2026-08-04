@@ -86,9 +86,9 @@ export function ResultStep({ score, pillars }: Props) {
 
 
 
-      {/* Flow 3 — Quebra de Objeção Content */}
-      <div className="mt-12 space-y-8 text-center">
-        <div className="mx-auto aspect-[16/9] w-full max-w-md overflow-hidden rounded-3xl bg-zinc-100 border border-zinc-200 shadow-inner">
+      {/* Quebra de Objeção Content */}
+      <div className="mt-12 space-y-8 text-center bg-zinc-50 border border-zinc-100 rounded-3xl p-8 shadow-sm">
+        <div className="mx-auto aspect-video w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200">
           <img 
             src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800" 
             alt="Transição estratégica"
@@ -99,7 +99,7 @@ export function ResultStep({ score, pillars }: Props) {
         <div className="space-y-4">
           <h3 className="text-xl sm:text-2xl font-bold leading-tight">
             Vão te oferecer milhares de “fórmulas mágicas”, mas o que realmente vai{" "}
-            <span className="text-primary underline decoration-primary/30">destravar suas vendas</span> é:
+            <span className="text-primary">destravar suas vendas</span> é:
           </h3>
           
           <ul className="grid gap-3 text-left max-w-lg mx-auto mt-6">
