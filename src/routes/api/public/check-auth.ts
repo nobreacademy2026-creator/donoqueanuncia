@@ -36,6 +36,14 @@ export const Route = createFileRoute('/api/public/check-auth')({
             });
           }
 
+          if (!userId) {
+            console.log('[API/check-auth] No user ID in token');
+            return new Response(JSON.stringify({ error: 'No user ID in token' }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+          
           console.log('[API/check-auth] User ID:', userId);
           
           const { data: roles, error: roleError } = await supabaseAdmin
