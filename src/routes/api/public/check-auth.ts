@@ -13,9 +13,17 @@ export const Route = createFileRoute('/api/public/check-auth')({
           
           const token = authHeader.replace('Bearer ', '');
           
-          // 1. Verificar o token e pegar o user
+          // Use client.server helper which handles opaque keys correctly if applicable
+          // but here we need to verify the JWT session token
           const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-          if (authError || !user) return new Response('Invalid token', { status: 401 });
+          
+          if (authError || !user) {
+            console.error('Auth error in check-auth:', authError);
+            return new Response(JSON.stringify({ error: 'Invalid token', details: authError }), { 
+              status: 401,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
           
           // 2. Verificar o papel no banco ignorando RLS via supabaseAdmin
           const { data: roles, error: roleError } = await supabaseAdmin
