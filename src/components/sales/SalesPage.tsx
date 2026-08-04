@@ -198,9 +198,20 @@ export function SalesPage() {
         <p className="mt-8 text-center text-xl font-bold leading-relaxed text-zinc-800">
           O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte para o próximo nível.
         </p>
-        <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
-          <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
-            Foto/Prova Social do Aluno
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 max-w-2xl mx-auto">
+          <div className="aspect-[9/16] rounded-3xl overflow-hidden shadow-xl border border-zinc-100 bg-white p-2">
+            <img 
+              src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=400" 
+              alt="Resultado WhatsApp 1" 
+              className="h-full w-full object-cover rounded-2xl"
+            />
+          </div>
+          <div className="aspect-[9/16] rounded-3xl overflow-hidden shadow-xl border border-zinc-100 bg-white p-2">
+            <img 
+              src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&q=80&w=400" 
+              alt="Resultado WhatsApp 2" 
+              className="h-full w-full object-cover rounded-2xl"
+            />
           </div>
         </div>
         <div className="mt-8 text-center">
@@ -213,10 +224,15 @@ export function SalesPage() {
         <p className="text-center text-muted-foreground -mt-4 mb-8">
           Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje vendem muito 👇
         </p>
-        <div className="flex gap-4 overflow-x-auto pb-4 px-2 no-scrollbar">
-          {[1,2,3,4].map(i => (
-            <div key={i} className="min-w-[280px] aspect-[4/5] rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm flex items-center justify-center text-muted-foreground">
-              Print de Resultado {i}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 pb-4 px-2">
+          {[
+            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1551288562-f982599849bb?auto=format&fit=crop&q=80&w=400"
+          ].map((url, i) => (
+            <div key={i} className="aspect-[3/4] rounded-2xl bg-white border border-zinc-100 shadow-md overflow-hidden p-1">
+              <img src={url} alt={`Resultado ${i + 1}`} className="h-full w-full object-cover rounded-xl" />
             </div>
           ))}
         </div>
