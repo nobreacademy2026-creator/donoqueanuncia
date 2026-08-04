@@ -156,7 +156,7 @@ export function SalesPage() {
         <ul className="mt-10 grid gap-3 text-left sm:grid-cols-2">
           {LEARN.map((item) => (
             <li key={item} className="flex items-start gap-3 rounded-2xl bg-zinc-50 px-5 py-4 shadow-sm border border-zinc-100">
-              <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#22c55e]" />
               <span className="text-sm font-medium">{item}</span>
             </li>
           ))}
