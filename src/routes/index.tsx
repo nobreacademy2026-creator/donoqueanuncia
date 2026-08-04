@@ -121,7 +121,7 @@ function Index() {
                   setStage("sales");
                   window.scrollTo({ top: 0 });
                 }}
-                className="bg-primary hover:bg-red-600 glow-primary inline-flex items-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-transform duration-200 hover:scale-[1.03] shadow-lg shadow-primary/20"
+                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20"
               >
                 Vou dominar isso agora
               </button>
