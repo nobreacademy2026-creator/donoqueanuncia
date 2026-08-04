@@ -25,29 +25,16 @@ function AuthPage() {
         if (session) {
           console.log("Session found for:", session.user.email);
           
-          // Use absolute path for fetch to be safer
-          const apiUrl = `${window.location.origin}/api/public/check-auth`;
-          console.log("Calling check-auth API at:", apiUrl);
+          console.log("Verificando permissões de admin via server function...");
+          const { checkAdminRole } = await import("@/lib/auth.functions");
+          const data = await checkAdminRole();
           
-          const res = await fetch(apiUrl, {
-            headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-              'Cache-Control': 'no-cache'
-            }
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            console.log("API check-auth response:", data);
-            if (data.hasAdmin) {
-              console.log("Admin confirmed, redirecting to /admin");
-              window.location.replace("/admin");
-              return;
-            } else {
-              console.log("Not an admin, staying on auth page.");
-            }
+          if (data.hasAdmin) {
+            console.log("Admin confirmado, redirecionando para /admin");
+            window.location.replace("/admin");
+            return;
           } else {
-            console.error("API check-auth failed with status:", res.status);
+            console.log("Not an admin, staying on auth page.");
           }
         } else {
           console.log("No active session found.");
@@ -108,22 +95,8 @@ function AuthPage() {
           if (session) {
             console.log("Login bem-sucedido, verificando permissões via API...");
             
-            const apiUrl = `${window.location.origin}/api/public/check-auth`;
-            const res = await fetch(apiUrl, {
-              headers: {
-                'Authorization': `Bearer ${session.access_token}`
-              }
-            });
-
-            if (!res.ok) {
-              const errText = await res.text();
-              console.error("Erro na verificação de permissão API:", errText);
-              toast.error("Erro ao validar permissões.");
-              setLoading(false);
-              return;
-            }
-
-            const data = await res.json();
+            const { checkAdminRole } = await import("@/lib/auth.functions");
+            const data = await checkAdminRole();
 
             if (!data.hasAdmin) {
               console.warn("Usuário logado sem permissão de admin");
