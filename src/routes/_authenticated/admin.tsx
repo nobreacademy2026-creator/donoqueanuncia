@@ -17,7 +17,11 @@ import {
   Plus,
   Trash2,
   ExternalLink,
-  Target
+  Target,
+  Search,
+  Filter,
+  Calendar,
+  ArrowUpDown
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -111,6 +115,10 @@ function NavButton({ active, onClick, icon: Icon, label }: any) {
 
 function AnalyticsSection() {
   const [stats, setStats] = useState({ access: 0, completion: 0, checkout: 0, videoViews: 0 });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStage, setFilterStage] = useState("all");
+  const [filterSource, setFilterSource] = useState("all");
+  
   const [funnelData, setFunnelData] = useState([
     { step: "Início Quiz", count: 1240, drop: 0 },
     { step: "Pergunta 1 (Dor)", count: 1100, drop: 11 },
@@ -123,10 +131,27 @@ function AnalyticsSection() {
     { step: "Checkout", count: 89, drop: 83 },
   ]);
 
+  const [leads, setLeads] = useState([
+    { id: 1, event: "clique_checkout", details: "Botão de oferta principal", date: "2026-08-04 10:30", stage: "Vendas", source: "Facebook Ads" },
+    { id: 2, event: "clique_vendas", details: "Redirecionamento para página de vendas", date: "2026-08-04 09:15", stage: "Vendas", source: "Instagram" },
+    { id: 3, event: "quiz_concluido", details: "Pontuação: 85", date: "2026-08-04 08:45", stage: "Nicho", source: "Google Search" },
+    { id: 4, event: "quiz_resposta", details: "Pergunta: dor", date: "2026-08-04 08:30", stage: "Quiz", source: "Facebook Ads" },
+    { id: 5, event: "quiz_iniciado", details: "Visitante novo", date: "2026-08-04 08:10", stage: "Intro", source: "Direto" },
+    { id: 6, event: "clique_checkout", details: "Botão de oferta principal", date: "2026-08-03 23:50", stage: "Vendas", source: "Instagram" },
+  ]);
+
   useEffect(() => {
     setStats({ access: 1240, completion: 520, checkout: 89, videoViews: 410 });
   }, []);
 
+  const filteredLeads = leads.filter(lead => {
+    const matchesSearch = lead.details.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          lead.event.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          lead.source.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStage = filterStage === "all" || lead.stage.toLowerCase() === filterStage.toLowerCase();
+    const matchesSource = filterSource === "all" || lead.source.toLowerCase() === filterSource.toLowerCase();
+    return matchesSearch && matchesStage && matchesSource;
+  });
 
   return (
     <div className="space-y-8">
@@ -181,22 +206,87 @@ function AnalyticsSection() {
         </div>
       </div>
 
+      <div className="mt-10 space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h3 className="text-lg font-semibold">Leads e Eventos</h3>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input 
+                type="text"
+                placeholder="Buscar lead ou origem..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-xl border border-white/10 bg-black/20 pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-64"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <select 
+                value={filterStage}
+                onChange={(e) => setFilterStage(e.target.value)}
+                className="bg-transparent text-xs text-white focus:outline-none"
+              >
+                <option value="all" className="bg-zinc-900">Todas Etapas</option>
+                <option value="intro" className="bg-zinc-900">Intro</option>
+                <option value="quiz" className="bg-zinc-900">Quiz</option>
+                <option value="vendas" className="bg-zinc-900">Página de Vendas</option>
+              </select>
+            </div>
 
-      <div className="mt-10">
-        <h3 className="text-lg font-semibold mb-4">Eventos Recentes</h3>
+            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2">
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <select 
+                value={filterSource}
+                onChange={(e) => setFilterSource(e.target.value)}
+                className="bg-transparent text-xs text-white focus:outline-none"
+              >
+                <option value="all" className="bg-zinc-900">Todas Origens</option>
+                <option value="facebook ads" className="bg-zinc-900">Facebook Ads</option>
+                <option value="instagram" className="bg-zinc-900">Instagram</option>
+                <option value="google search" className="bg-zinc-900">Google Search</option>
+                <option value="direto" className="bg-zinc-900">Direto</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div className="overflow-hidden rounded-xl border border-white/10">
           <table className="w-full text-left text-sm">
             <thead className="bg-white/5">
               <tr>
                 <th className="px-4 py-3 font-medium">Evento</th>
+                <th className="px-4 py-3 font-medium">Etapa</th>
+                <th className="px-4 py-3 font-medium">Origem</th>
                 <th className="px-4 py-3 font-medium">Detalhes</th>
                 <th className="px-4 py-3 font-medium">Data</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              <EventRow event="clique_vendas" details="Redirecionamento para página de vendas" date="Há 2 horas" />
-              <EventRow event="clique_checkout" details="Botão de oferta principal" date="Há 5 horas" />
-              <EventRow event="quiz_concluido" details="Pontuação: 85" date="Há 6 horas" />
+              {filteredLeads.map((lead) => (
+                <tr key={lead.id} className="hover:bg-white/5 transition-colors">
+                  <td className="px-4 py-3 font-mono text-xs text-primary">{lead.event}</td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase">
+                      {lead.stage}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-zinc-400">{lead.source}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{lead.details}</td>
+                  <td className="px-4 py-3 text-xs flex items-center gap-1">
+                    <Calendar className="h-3 w-3 text-zinc-500" />
+                    {lead.date}
+                  </td>
+                </tr>
+              ))}
+              {filteredLeads.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
+                    Nenhum lead encontrado com os filtros aplicados.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
