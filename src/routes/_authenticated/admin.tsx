@@ -232,25 +232,29 @@ function AnalyticsSection() {
             Funil de Conversão (Drop-off)
           </h3>
           <div className="space-y-4">
-            {funnelData.map((item, idx) => (
-              <div key={idx} className="space-y-1">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="text-muted-foreground">{item.step}</span>
-                  <span>{item.count} <span className="text-zinc-500">({Math.round(item.count/stats.access * 100)}%)</span></span>
-                </div>
-                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-primary" 
-                    style={{ width: `${(item.count / stats.access) * 100}%` }}
-                  />
-                </div>
-                {idx < funnelData.length - 1 && (
-                  <div className="text-[10px] text-red-500 font-bold ml-2">
-                    ↓ -{item.drop}% abandono
+            {isLoading ? (
+              <div className="py-10 text-center text-muted-foreground">Carregando dados...</div>
+            ) : (
+              funnelData.map((item, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-zinc-400">{item.step}</span>
+                    <span className="text-zinc-100">{item.count} <span className="text-zinc-500">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
                   </div>
-                )}
-              </div>
-            ))}
+                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary" 
+                      style={{ width: `${stats.access > 0 ? (item.count / stats.access) * 100 : 0}%` }}
+                    />
+                  </div>
+                  {idx < funnelData.length - 1 && item.drop > 0 && (
+                    <div className="text-[10px] text-red-500 font-bold ml-2">
+                      ↓ -{item.drop}% abandono
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
 
