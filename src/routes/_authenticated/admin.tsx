@@ -231,11 +231,11 @@ function AnalyticsSection() {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        <div className="surface-card rounded-2xl border border-white/5 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Target className="h-5 w-5 text-primary" />
-            Funil de Conversão (Drop-off)
-          </h3>
+              <div className="surface-card rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
+                <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-white">
+                  <Target className="h-5 w-5 text-primary" />
+                  Funil de Conversão (Dados Reais)
+                </h3>
           <div className="space-y-4">
             {isLoading ? (
               <div className="py-10 text-center text-muted-foreground">Carregando dados...</div>
