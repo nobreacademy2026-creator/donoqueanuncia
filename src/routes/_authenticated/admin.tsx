@@ -176,16 +176,16 @@ function NavButton({ active, onClick, icon: Icon, label, theme }: any) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
+      className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-bold transition-all duration-300 ${
         active 
-          ? "bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]" 
+          ? "bg-primary text-white shadow-[0_8px_20px_-6px_rgba(var(--primary-rgb),0.5)] scale-[1.02]" 
           : theme === "dark"
             ? "text-zinc-400 hover:bg-white/5 hover:text-white"
             : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >
-      <Icon className="h-5 w-5" />
-      {label}
+      <Icon className={`h-5 w-5 transition-transform duration-300 ${active ? "scale-110" : ""}`} />
+      <span className="truncate">{label}</span>
     </button>
   );
 }
