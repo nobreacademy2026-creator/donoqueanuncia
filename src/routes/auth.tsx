@@ -2,6 +2,8 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { checkAdminRole } from "@/lib/auth.functions";
+
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
