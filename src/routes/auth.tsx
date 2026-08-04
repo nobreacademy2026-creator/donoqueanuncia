@@ -33,7 +33,7 @@ function AuthPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-5">
-      <div className="w-full max-w-[360px] space-y-8 rounded-[40px] bg-black p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+      <div className="w-full max-w-[360px] space-y-8 rounded-none bg-black p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
         <div className="text-center">
           <h2 className="text-2xl font-black tracking-tight text-white">Admin Nobre</h2>
           <p className="mt-1 text-xs font-medium text-white/50 uppercase tracking-[0.2em]">Painel de Controle</p>
