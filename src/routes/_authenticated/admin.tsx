@@ -8,7 +8,16 @@ import {
   MousePointer2, 
   Layout,
   Save,
-  Code
+  Code,
+  Image as ImageIcon,
+  Music,
+  Video,
+  ChevronRight,
+  ChevronDown,
+  Plus,
+  Trash2,
+  ExternalLink,
+  Target
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking">("analytics");
+  const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -45,13 +54,19 @@ function AdminDashboard() {
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
                 icon={BarChart3}
-                label="Analytics & Cliques"
+                label="Analytics & Métricas"
+              />
+              <NavButton 
+                active={activeTab === "content"} 
+                onClick={() => setActiveTab("content")}
+                icon={Layout}
+                label="Conteúdo do Quiz"
               />
               <NavButton 
                 active={activeTab === "config"} 
                 onClick={() => setActiveTab("config")}
                 icon={Settings}
-                label="Configurações Quiz"
+                label="Configurações Funil"
               />
               <NavButton 
                 active={activeTab === "tracking"} 
@@ -62,14 +77,17 @@ function AdminDashboard() {
             </nav>
           </aside>
 
+
           <main className="flex-1">
             <div className="surface-card rounded-3xl p-8 border-white/5 bg-zinc-900/50 backdrop-blur-sm">
               {activeTab === "analytics" && <AnalyticsSection />}
               {activeTab === "config" && <ConfigSection />}
               {activeTab === "tracking" && <TrackingSection />}
+              {activeTab === "content" && <ContentSection />}
             </div>
           </main>
         </div>
+
       </div>
     </div>
   );
@@ -92,20 +110,77 @@ function NavButton({ active, onClick, icon: Icon, label }: any) {
 }
 
 function AnalyticsSection() {
-  const [stats, setStats] = useState({ access: 0, leads: 0, checkout: 0 });
+  const [stats, setStats] = useState({ access: 0, completion: 0, checkout: 0, videoViews: 0 });
+  const [funnelData, setFunnelData] = useState([
+    { step: "Início Quiz", count: 1240, drop: 0 },
+    { step: "Pergunta 1 (Dor)", count: 1100, drop: 11 },
+    { step: "Pergunta 2 (Motivacao)", count: 950, drop: 14 },
+    { step: "Objeção (Minions)", count: 820, drop: 13 },
+    { step: "Checklist Benefícios", count: 750, drop: 9 },
+    { step: "Depoimento (Áudio)", count: 680, drop: 9 },
+    { step: "Nicho (Instagram)", count: 590, drop: 13 },
+    { step: "Página de Vendas", count: 520, drop: 12 },
+    { step: "Checkout", count: 89, drop: 83 },
+  ]);
 
   useEffect(() => {
-    // Mock loading stats - in real app would query analytics_events
-    setStats({ access: 1240, leads: 432, checkout: 89 });
+    setStats({ access: 1240, completion: 520, checkout: 89, videoViews: 410 });
   }, []);
+
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <StatCard label="Acessos Totais" value={stats.access} icon={Users} color="text-blue-500" />
-        <StatCard label="Cliques Resultado" value={stats.leads} icon={MousePointer2} color="text-green-500" />
+        <StatCard label="Finalizaram Quiz" value={stats.completion} icon={MousePointer2} color="text-green-500" />
+        <StatCard label="Cliques Vídeo" value={stats.videoViews} icon={Video} color="text-purple-500" />
         <StatCard label="Cliques Checkout" value={stats.checkout} icon={BarChart3} color="text-red-500" />
       </div>
+
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="surface-card rounded-2xl border border-white/5 bg-white/5 p-6">
+          <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+            <Target className="h-5 w-5 text-primary" />
+            Funil de Conversão (Drop-off)
+          </h3>
+          <div className="space-y-4">
+            {funnelData.map((item, idx) => (
+              <div key={idx} className="space-y-1">
+                <div className="flex justify-between text-xs font-medium">
+                  <span className="text-muted-foreground">{item.step}</span>
+                  <span>{item.count} <span className="text-zinc-500">({Math.round(item.count/stats.access * 100)}%)</span></span>
+                </div>
+                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-primary" 
+                    style={{ width: `${(item.count / stats.access) * 100}%` }}
+                  />
+                </div>
+                {idx < funnelData.length - 1 && (
+                  <div className="text-[10px] text-red-500 font-bold ml-2">
+                    ↓ -{item.drop}% abandono
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold mb-4">Ações do Admin</h3>
+          <div className="grid gap-3">
+             <button className="flex items-center justify-between rounded-xl bg-white/5 p-4 text-sm hover:bg-white/10 transition-colors">
+                <span className="flex items-center gap-3"><ImageIcon className="h-4 w-4" /> Exportar Leads</span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+             </button>
+             <button className="flex items-center justify-between rounded-xl bg-white/5 p-4 text-sm hover:bg-white/10 transition-colors">
+                <span className="flex items-center gap-3"><BarChart3 className="h-4 w-4" /> Relatório Completo</span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+             </button>
+          </div>
+        </div>
+      </div>
+
 
       <div className="mt-10">
         <h3 className="text-lg font-semibold mb-4">Eventos Recentes</h3>
