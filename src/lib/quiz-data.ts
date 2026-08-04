@@ -7,25 +7,57 @@ export type Question = {
 
 export const QUESTIONS: Question[] = [
   {
-    id: "dor",
+    id: "dor_1",
     title: "O que mais te impede de vender todos os dias usando anúncios hoje?",
     image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Não sei configurar as ferramentas.", value: "configuracao", score: 30 },
       { label: "Meus anúncios não trazem clientes qualificados.", value: "qualificacao", score: 45 },
-      { label: "Sinto que estou jogando dinheiro fora.", value: "dinheiro", score: 35 },
-      { label: "Não tenho tempo para gerenciar.", value: "tempo", score: 50 },
     ],
   },
   {
-    id: "motivacao",
+    id: "dor_2",
+    title: "Qual é o seu maior medo ao investir em tráfego pago?",
+    image: "https://images.unsplash.com/photo-1554224155-16974a4ea2bf?auto=format&fit=crop&q=80&w=800",
+    options: [
+      { label: "Gastar dinheiro e não ter retorno.", value: "perda", score: 35 },
+      { label: "Ficar dependente de agências.", value: "dependencia", score: 50 },
+    ],
+  },
+  {
+    id: "motivacao_1",
     title: "Qual é o seu maior objetivo com o tráfego pago hoje?",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Escalar meu faturamento atual.", value: "escala", score: 85 },
       { label: "Parar de depender de indicações.", value: "independencia", score: 75 },
-      { label: "Criar uma máquina de vendas automática.", value: "automatizacao", score: 90 },
-      { label: "Apenas começar do jeito certo.", value: "comecar", score: 60 },
+    ],
+  },
+  {
+    id: "motivacao_2",
+    title: "Como você imagina seu negócio daqui a 6 meses?",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
+    options: [
+      { label: "Com uma máquina de vendas automática.", value: "automatizacao", score: 90 },
+      { label: "Com mais seguidores e marca forte.", value: "branding", score: 65 },
+    ],
+  },
+  {
+    id: "perfil_1",
+    title: "Atualmente, você já faz algum tipo de anúncio?",
+    image: "https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800",
+    options: [
+      { label: "Sim, eu mesmo faço ou tenho agência.", value: "sim", score: 70 },
+      { label: "Não, ainda não comecei.", value: "nao", score: 40 },
+    ],
+  },
+  {
+    id: "perfil_2",
+    title: "Quanto você estaria disposto a investir para escalar?",
+    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800",
+    options: [
+      { label: "Menos de R$ 1.000 / mês", value: "baixo", score: 50 },
+      { label: "Acima de R$ 1.000 / mês", value: "alto", score: 80 },
     ],
   },
 ];
