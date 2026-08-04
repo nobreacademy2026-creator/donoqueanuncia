@@ -234,15 +234,6 @@ export function SalesPage() {
       </Section>
 
 
-      {/* Objective */}
-      <div className="mx-auto mt-20 max-w-2xl px-5 text-center">
-        <div className="bg-primary/5 border border-primary/10 rounded-3xl p-8">
-          <h3 className="text-xl font-bold mb-4">🎯 Seu Objetivo:</h3>
-          <p className="text-lg leading-relaxed italic">
-            "Hoje você vai começar a fazer anúncios que realmente trazem clientes, usando as estratégias que eu aplico pra vender todo dia!"
-          </p>
-        </div>
-      </div>
 
       {/* Bonus Card */}
       <Section title="🎁 Bônus que você recebe no DONO QUE ANUNCIA:">
@@ -266,10 +257,10 @@ export function SalesPage() {
           </div>
           
           <div className="mt-6 flex flex-col items-center gap-2">
-            <span className="text-xl text-zinc-400 line-through">De R$ 399,00</span>
+            <span className="text-xl text-zinc-400 line-through">De R$ 497,00</span>
             <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest">POR APENAS</span>
             <div className="flex flex-col items-center">
-              <span className="text-7xl font-black text-primary leading-tight">R$ 197,00</span>
+              <span className="text-7xl font-black text-[#22c55e] leading-tight">R$ 197,00</span>
               <span className="text-xl font-bold text-zinc-900 mt-1">NO PIX</span>
             </div>
             <p className="text-lg font-medium text-muted-foreground mt-2">
