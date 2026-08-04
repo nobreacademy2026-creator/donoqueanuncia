@@ -1,6 +1,7 @@
 export type Question = {
   id: string;
   title: string;
+  image?: string;
   options: { label: string; value: string; score: number }[];
 };
 
@@ -8,6 +9,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "segmento",
     title: "Qual é o seu segmento?",
+    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Loja Física", value: "loja_fisica", score: 60 },
       { label: "Loja Online", value: "loja_online", score: 70 },
@@ -20,6 +22,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "anuncia",
     title: "Você anuncia atualmente?",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Sim", value: "sim", score: 78 },
       { label: "Não", value: "nao", score: 40 },
