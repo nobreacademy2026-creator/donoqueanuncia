@@ -28,8 +28,8 @@ function AuthPage() {
           console.log("Session found for:", session.user.email);
           
           console.log("Verificando permissões de admin via server function...");
-          const { checkAdminRole } = await import("@/lib/auth.functions");
           const data = await checkAdminRole();
+
           
           if (data && data.hasAdmin) {
             console.log("Admin confirmado em /auth, redirecionando para /admin");
@@ -97,8 +97,8 @@ function AuthPage() {
           if (session) {
             console.log("Login bem-sucedido, verificando permissões via API...");
             
-            const { checkAdminRole } = await import("@/lib/auth.functions");
             const data = await checkAdminRole();
+
 
             if (!data || !data.hasAdmin) {
               console.warn("Usuário logado sem permissão de admin:", data?.error);
