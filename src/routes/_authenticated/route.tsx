@@ -19,39 +19,23 @@ export const Route = createFileRoute("/_authenticated")({
     // 2. Se for uma rota de admin, verificar permissão
     if (location.pathname.startsWith("/admin")) {
       try {
-        console.log("Verificando permissões de admin localmente...");
+        console.log("Verificando permissões de admin via server function...");
         
-        // Verificação rápida no cliente se possível, ou via fetch
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) throw redirect({ to: "/auth" });
+        const { checkAdminRole } = await import("@/lib/auth.functions");
+        const data = await checkAdminRole();
 
-        const baseUrl = typeof window !== 'undefined' ? window.location.origin : process.env['VITE_APP_URL'] || '';
-        const apiUrl = `${baseUrl}/api/public/check-auth`;
-
-        console.log("Chamando API de validação:", apiUrl);
-        const res = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Cache-Control': 'no-cache'
-          }
-        });
-
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({}));
-          console.error("Erro na API de admin:", res.status, errorData);
-          throw redirect({ to: "/auth" });
-        }
-
-        const data = await res.json();
         if (!data.hasAdmin) {
-          console.warn("Usuário não é admin:", user.email);
+          console.warn("Usuário não é admin");
           throw redirect({ to: "/" });
         }
         
-        console.log("Acesso admin confirmado para:", user.email);
+        console.log("Acesso admin confirmado");
       } catch (e: any) {
         if (e && (e.to || e.isRedirect)) throw e;
-        console.error("Falha crítica na proteção de rota admin:", e);
+        
+        // Se falhar por não estar autenticado (401), o middleware do serverFn vai lançar um erro
+        // que podemos capturar aqui.
+        console.error("Falha na proteção de rota admin:", e);
         throw redirect({ to: "/auth" });
       }
     }
