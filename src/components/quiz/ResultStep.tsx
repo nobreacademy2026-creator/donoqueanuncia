@@ -70,8 +70,8 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-sm">loja_ficticia_exemplo</p>
-                  <p className="text-xs text-zinc-500">Nome da Empresa Fictícia</p>
+                   <p className="font-bold text-sm">taju.intima</p>
+                   <p className="text-xs text-zinc-500">Taju Íntima</p>
                 </div>
               </div>
               <div className="flex justify-around p-3 text-center border-b border-zinc-100">
@@ -89,8 +89,8 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                 </div>
               </div>
               <div className="p-4 text-left text-xs space-y-1">
-                <p className="font-bold">Nome da Empresa Fictícia</p>
-                <p>Segmento de Atuação</p>
+                 <p className="font-bold">Taju Íntima</p>
+                 <p>Moda Íntima e Acessórios</p>
                 <p>•Destaque do negócio 01 🚀</p>
                 <p>•Informação relevante 02 📈</p>
                 <p>•Benefício do cliente 03 🤝</p>
