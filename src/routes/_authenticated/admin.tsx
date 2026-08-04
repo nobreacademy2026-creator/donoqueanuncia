@@ -45,7 +45,7 @@ function AdminDashboard() {
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
                 icon={BarChart3}
-                label="Analytics & Leads"
+                label="Analytics & Cliques"
               />
               <NavButton 
                 active={activeTab === "config"} 
