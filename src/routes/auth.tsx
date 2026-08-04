@@ -32,38 +32,38 @@ function AuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-5">
-      <div className="w-full max-w-md space-y-8 rounded-3xl border border-white/5 bg-zinc-900/50 p-10 backdrop-blur-sm">
+    <div className="flex min-h-screen items-center justify-center bg-[#808080] px-5">
+      <div className="w-full max-w-md space-y-8 rounded-[40px] bg-[#919191] p-10 shadow-2xl">
         <div className="text-center">
-          <h2 className="text-3xl font-bold">Admin Nobre</h2>
-          <p className="mt-2 text-muted-foreground">Entre para gerenciar seu funil</p>
+          <h2 className="text-4xl font-black text-white drop-shadow-sm">Admin Nobre</h2>
+          <p className="mt-2 text-lg font-medium text-white/90">Entre para gerenciar seu funil</p>
         </div>
-        <form onSubmit={handleLogin} className="mt-8 space-y-4">
+        <form onSubmit={handleLogin} className="mt-10 space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium">E-mail</label>
+            <label className="ml-1 text-base font-bold text-zinc-800">E-mail</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full rounded-[20px] border-none bg-[#757575] px-6 py-4 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Senha</label>
+            <label className="ml-1 text-base font-bold text-zinc-800">Senha</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full rounded-[20px] border-none bg-[#757575] px-6 py-4 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
           <button
             disabled={loading}
-            className="w-full rounded-xl bg-primary py-4 font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+            className="w-full rounded-[25px] bg-[#e60012] py-5 text-lg font-black tracking-wider text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
           >
-            {loading ? "Entrando..." : "ENTRAR NO PAINEL"}
+            {loading ? "ENTRANDO..." : "ENTRAR NO PAINEL"}
           </button>
         </form>
       </div>
