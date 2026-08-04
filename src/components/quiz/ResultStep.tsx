@@ -141,8 +141,8 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                     </div>
                   </div>
                   <div className="text-left leading-tight">
-                    <p className="font-bold text-sm">gordogrillpb</p>
-                    <p className="text-[10px] text-zinc-500">Gordo Grill / Casa de Carne</p>
+                    <p className="font-bold text-sm">premium_grill_sp</p>
+                    <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
                   </div>
                 </div>
                 <div className="p-4 text-left">
@@ -151,8 +151,8 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                     <div><p className="font-bold text-sm">1.584</p><p className="text-[9px] text-zinc-400 uppercase">seguidores</p></div>
                     <div><p className="font-bold text-sm">264</p><p className="text-[9px] text-zinc-400 uppercase">seguindo</p></div>
                   </div>
-                  <p className="text-xs font-medium mb-1">Delivery de Carnes em João Pessoa 🥩 🍖</p>
-                  <p className="text-xs mb-3">Quando tudo estiver fechado o Gordo te salva 🤝 ✨</p>
+                  <p className="text-xs font-medium mb-1">Delivery de Carnes em São Paulo 🥩 🍖</p>
+                  <p className="text-xs mb-3">O melhor corte da cidade agora na sua casa 🤝 ✨</p>
                   <button className="w-full bg-blue-500 text-white rounded-md py-1.5 text-xs font-bold">Seguir de volta</button>
                 </div>
                 <div className="bg-zinc-50 p-3 text-left">
