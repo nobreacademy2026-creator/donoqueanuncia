@@ -106,10 +106,12 @@ export function SalesPage() {
         </h1>
         
         {/* Product Mockup Placeholder */}
-        <div className="surface-card mt-10 aspect-video w-full overflow-hidden rounded-3xl border-primary/10 bg-zinc-50 shadow-xl">
-          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-            Mockup do Produto / Banner
-          </div>
+        <div className="surface-card mt-10 aspect-video w-full overflow-hidden rounded-3xl border-primary/10 bg-zinc-50 shadow-xl group">
+          <img 
+            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" 
+            alt="Interface do curso STARFLIX"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
         </div>
 
         <ul className="mt-10 grid gap-3 text-left sm:grid-cols-2">
@@ -187,9 +189,14 @@ export function SalesPage() {
             </div>
           ))}
         </div>
-        <p className="mt-8 text-center text-base font-medium">
-          São tantos que eu não consigo colocar todos aqui... Quer ser o próximo a vender muito também?
-        </p>
+        <div className="mt-8 text-center bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem]">
+          <p className="text-xl font-bold text-zinc-800">
+            "Não importa o seu nicho, o tráfego pago é o oxigênio de qualquer negócio que quer crescer."
+          </p>
+          <p className="mt-4 text-muted-foreground">
+            Já ajudei centenas de empresários a saírem do zero e atingirem resultados expressivos.
+          </p>
+        </div>
         <div className="mt-8 text-center">
           <CTAButton label="QUERO VENDER MUITO 🤩" className="bg-green-600 hover:bg-green-700" />
         </div>
@@ -197,9 +204,17 @@ export function SalesPage() {
 
       {/* Video Close */}
       <Section title="ASSISTA ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:" className="max-w-4xl">
-        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl">
-          <div className="flex h-full w-full items-center justify-center text-white/50">
-            Player de Vídeo (Vimeo/YT)
+        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group">
+          <img 
+            src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200" 
+            alt="Aula do curso"
+            className="h-full w-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+            <div className="h-20 w-20 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl mb-4 group-hover:scale-110 transition-transform">
+              <Play className="h-10 w-10 fill-current ml-1" />
+            </div>
+            <span className="font-bold text-lg tracking-widest uppercase">Ver aula exclusiva</span>
           </div>
         </div>
         <div className="mt-10 text-center space-y-4">

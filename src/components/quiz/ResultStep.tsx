@@ -86,8 +86,12 @@ export function ResultStep({ score, pillars }: Props) {
 
       {/* Flow 3 — Quebra de Objeção Content */}
       <div className="mt-12 space-y-8 text-center">
-        <div className="mx-auto aspect-[16/9] w-full max-w-md overflow-hidden rounded-3xl bg-zinc-100 border border-zinc-200 shadow-inner flex items-center justify-center text-muted-foreground">
-          [Imagem/GIF de Transição]
+        <div className="mx-auto aspect-[16/9] w-full max-w-md overflow-hidden rounded-3xl bg-zinc-100 border border-zinc-200 shadow-inner">
+          <img 
+            src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800" 
+            alt="Transição estratégica"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="space-y-4">
