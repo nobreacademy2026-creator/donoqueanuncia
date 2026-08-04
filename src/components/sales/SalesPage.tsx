@@ -113,17 +113,15 @@ export function SalesPage() {
     <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
       {/* Countdown Timer Static Banner */}
       <div className="bg-[#ff0000] text-white py-4 text-center sticky top-0 z-50 shadow-xl">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-6">
-          <p className="text-[10px] font-black tracking-[0.2em] text-white uppercase sm:text-xs">
-            OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO
-          </p>
-          <div className="bg-white text-[#ff0000] px-6 py-1.5 rounded-full shadow-lg flex items-center gap-3 border-2 border-white transform sm:scale-110">
-            <Clock className="h-4 w-4" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Oferta expira em:</span>
-            <span className="text-xl font-black font-mono tabular-nums leading-none tracking-tight">{formatTime(timeLeft)}</span>
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-4">
+          <div className="bg-white text-[#ff0000] px-6 py-2 rounded-full shadow-lg flex items-center gap-3 border-2 border-white transform scale-110 sm:scale-125">
+            <Clock className="h-5 w-5" />
+            <span className="text-[10px] font-black uppercase tracking-widest sm:text-xs">Oferta expira em:</span>
+            <span className="text-2xl font-black font-mono tabular-nums leading-none tracking-tight sm:text-3xl">{formatTime(timeLeft)}</span>
           </div>
         </div>
       </div>
+
 
       {/* Hero / Video Section */}
       <section className="mx-auto max-w-4xl px-5 pt-8 text-center">
