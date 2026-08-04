@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -16,27 +16,37 @@ function AuthPage() {
   const [checkingSession, setCheckingSession] = useState(true);
 
   // Verificação automática de sessão ao carregar a página
-  useState(() => {
+  useEffect(() => {
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // Se já tem sessão, tenta validar admin e redirecionar
-        const { data: roleData } = await supabase
-          .from("user_roles" as any)
-          .select("role")
-          .eq("user_id", session.user.id)
-          .eq("role", "admin")
-          .maybeSingle();
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          console.log("Sessão detectada, verificando admin via server...");
+          
+          const res = await fetch('/api/public/check-auth', {
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`
+            }
+          });
 
-        if (roleData) {
-          window.location.href = "/admin";
-          return;
+          if (res.ok) {
+            const data = await res.json();
+            if (data.hasAdmin) {
+              console.log("Admin confirmado, redirecionando...");
+              window.location.href = "/admin";
+              return;
+            }
+          }
+          console.log("Usuário logado mas não é admin.");
         }
+      } catch (err) {
+        console.error("Erro na verificação de sessão:", err);
+      } finally {
+        setCheckingSession(false);
       }
-      setCheckingSession(false);
     };
     checkSession();
-  });
+  }, []);
 
   const handleAuth = async (e: React.FormEvent) => {
 
@@ -81,33 +91,40 @@ function AuthPage() {
           }
         } else {
           // Após login bem-sucedido, verificar se o usuário tem o papel de admin antes de redirecionar
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            const { data: roleData, error: roleError } = await supabase
-              .from("user_roles" as any)
-              .select("role")
-              .eq("user_id", user.id)
-              .eq("role", "admin")
-              .maybeSingle();
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            console.log("Login bem-sucedido, verificando permissões via API...");
+            
+            const res = await fetch('/api/public/check-auth', {
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`
+              }
+            });
 
-            if (roleError) {
-              console.error("Erro ao verificar permissão:", roleError);
-              toast.error("Erro técnico ao verificar suas permissões.");
+            if (!res.ok) {
+              const errText = await res.text();
+              console.error("Erro na verificação de permissão API:", errText);
+              toast.error("Erro ao validar permissões.");
               setLoading(false);
               return;
             }
 
-            if (!roleData) {
+            const data = await res.json();
+
+            if (!data.hasAdmin) {
+              console.warn("Usuário logado sem permissão de admin");
               toast.error("Acesso negado: Você não tem permissão de administrador.");
               await supabase.auth.signOut();
               setLoading(false);
               return;
             }
 
+            console.log("Admin validado via API, redirecionando...");
             toast.success("Bem-vindo, Administrador!");
+            
             setTimeout(() => {
               window.location.href = "/admin";
-            }, 500);
+            }, 800);
           }
         }
 

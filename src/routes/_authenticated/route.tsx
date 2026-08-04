@@ -3,9 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
+    // 1. Verificar sessão
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      console.log("Sem sessão, redirecionando para login");
       throw redirect({
         to: "/auth",
         search: {
@@ -14,25 +16,36 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
 
-    // Use a generic query to check admin role if the route is /admin
+    // 2. Se for uma rota de admin, verificar permissão
     if (location.pathname.startsWith("/admin")) {
-      const { data: roles, error } = await supabase
-        .from("user_roles" as any)
-        .select("role")
-        .eq("user_id", session.user.id)
-        .eq("role", "admin")
-        .maybeSingle();
+      try {
+        console.log("Verificando permissões de admin via API...");
+        
+        const res = await fetch('/api/public/check-auth', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
 
-      if (error) {
-        console.error("Erro ao verificar papel de admin:", error);
-      }
+        if (!res.ok) {
+          console.error("Erro na verificação de admin:", res.status);
+          throw redirect({ to: "/" });
+        }
 
-      if (!roles) {
-        console.log("Usuário não tem papel de admin, redirecionando para home");
+        const data = await res.json();
+        
+        if (!data.hasAdmin) {
+          console.warn("Acesso negado: Usuário não possui papel de admin");
+          throw redirect({ to: "/" });
+        }
+        
+        console.log("Acesso admin concedido");
+      } catch (e: any) {
+        if (e && e.to) throw e;
+        console.error("Exceção na verificação de admin:", e);
         throw redirect({ to: "/" });
       }
     }
-
   },
   component: () => <Outlet />,
 });
