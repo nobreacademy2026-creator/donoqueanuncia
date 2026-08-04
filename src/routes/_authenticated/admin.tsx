@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -21,7 +21,10 @@ import {
   Search,
   Filter,
   Calendar,
-  ArrowUpDown
+  ArrowUpDown,
+  LogOut,
+  Sun,
+  Moon
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -31,63 +34,111 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth" });
+  };
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === "dark" ? "light" : "dark");
+  };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-6">
+    <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
       <div className="mx-auto max-w-7xl pt-4">
-        <header className="mb-10 flex items-center justify-between">
+        <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-current opacity-90 transition-all">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Painel Administrativo</h1>
-            <p className="text-zinc-400 mt-1">Gerencie seu funil Dono que Anuncia</p>
+            <h1 className={`text-4xl font-black tracking-tighter uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Dashboard Premium</h1>
+            <p className={`${theme === "dark" ? "text-zinc-500" : "text-zinc-600"} mt-1 font-bold flex items-center gap-2`}>
+              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              Gestão do Funil Dono que Anuncia
+            </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button 
+              onClick={toggleTheme}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
+                theme === "dark" 
+                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white" 
+                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-sm"
+              }`}
+              title={theme === "dark" ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
+            >
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <button 
               onClick={() => window.open("/", "_blank")}
-              className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition-all ${
+                theme === "dark"
+                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white"
+                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-sm"
+              }`}
             >
               <Layout className="h-4 w-4" />
-              Ver Landing Page
+              Landing Page
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 shadow-lg shadow-red-600/20"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair
             </button>
           </div>
         </header>
 
         <div className="flex flex-col gap-8 lg:flex-row">
-          <aside className="w-full shrink-0 lg:w-64">
+          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all ${
+            theme === "dark" 
+            ? "border-white/10 bg-zinc-900/50" 
+            : "border-zinc-200 bg-white shadow-sm"
+          }`}>
             <nav className="flex flex-col gap-1">
               <NavButton 
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
                 icon={BarChart3}
                 label="Analytics & Métricas"
+                theme={theme}
               />
               <NavButton 
                 active={activeTab === "content"} 
                 onClick={() => setActiveTab("content")}
                 icon={Layout}
                 label="Conteúdo do Quiz"
+                theme={theme}
               />
               <NavButton 
                 active={activeTab === "config"} 
                 onClick={() => setActiveTab("config")}
                 icon={Settings}
                 label="Configurações Funil"
+                theme={theme}
               />
               <NavButton 
                 active={activeTab === "tracking"} 
                 onClick={() => setActiveTab("tracking")}
                 icon={Code}
                 label="Pixels & Tracking"
+                theme={theme}
               />
             </nav>
           </aside>
 
 
           <main className="flex-1">
-            <div className="surface-card rounded-3xl p-8 border border-white/10 bg-zinc-900 shadow-2xl">
-              {activeTab === "analytics" && <AnalyticsSection />}
-              {activeTab === "config" && <ConfigSection />}
-              {activeTab === "tracking" && <TrackingSection />}
-              {activeTab === "content" && <ContentSection />}
+            <div className={`surface-card rounded-[2rem] p-8 border transition-all ${
+              theme === "dark" 
+              ? "border-white/10 bg-zinc-900" 
+              : "border-zinc-200 bg-white shadow-xl shadow-zinc-200/50"
+            }`}>
+              {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
+              {activeTab === "config" && <ConfigSection theme={theme} />}
+              {activeTab === "tracking" && <TrackingSection theme={theme} />}
+              {activeTab === "content" && <ContentSection theme={theme} />}
             </div>
           </main>
         </div>
@@ -97,14 +148,16 @@ function AdminDashboard() {
   );
 }
 
-function NavButton({ active, onClick, icon: Icon, label }: any) {
+function NavButton({ active, onClick, icon: Icon, label, theme }: any) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+      className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
         active 
-          ? "bg-primary text-primary-foreground" 
-          : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+          ? "bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]" 
+          : theme === "dark"
+            ? "text-zinc-400 hover:bg-white/5 hover:text-white"
+            : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >
       <Icon className="h-5 w-5" />
@@ -113,7 +166,7 @@ function NavButton({ active, onClick, icon: Icon, label }: any) {
   );
 }
 
-function AnalyticsSection() {
+function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
   const [stats, setStats] = useState({ access: 0, completion: 0, checkout: 0, videoViews: 0 });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStage, setFilterStage] = useState("all");
@@ -224,17 +277,21 @@ function AnalyticsSection() {
   return (
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Acessos Totais" value={stats.access} icon={Users} color="text-blue-500" />
-        <StatCard label="Finalizaram Quiz" value={stats.completion} icon={MousePointer2} color="text-green-500" />
-        <StatCard label="Cliques Vídeo" value={stats.videoViews} icon={Video} color="text-purple-500" />
-        <StatCard label="Cliques Checkout" value={stats.checkout} icon={BarChart3} color="text-red-500" />
+        <StatCard label="Acessos Totais" value={stats.access} icon={Users} color={theme === "dark" ? "text-blue-400" : "text-blue-600"} theme={theme} />
+        <StatCard label="Finalizados" value={stats.completion} icon={Target} color={theme === "dark" ? "text-green-400" : "text-green-600"} theme={theme} />
+        <StatCard label="Cliques Vídeo" value={stats.videoViews} icon={Video} color={theme === "dark" ? "text-purple-400" : "text-purple-600"} theme={theme} />
+        <StatCard label="Checkouts" value={stats.checkout} icon={BarChart3} color={theme === "dark" ? "text-red-400" : "text-red-600"} theme={theme} />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-              <div className="surface-card rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
-                <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-white">
+              <div className={`surface-card rounded-[2rem] border transition-all p-8 ${
+                theme === "dark" 
+                ? "border-white/10 bg-zinc-900/80" 
+                : "border-zinc-200 bg-white shadow-sm"
+              }`}>
+                <h3 className={`text-lg font-black mb-6 flex items-center gap-2 uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>
                   <Target className="h-5 w-5 text-primary" />
-                  Funil de Conversão (Dados Reais)
+                  Funil de Conversão
                 </h3>
           <div className="space-y-4">
             {isLoading ? (
@@ -243,10 +300,10 @@ function AnalyticsSection() {
               funnelData.map((item, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex justify-between text-xs font-medium">
-                    <span className="text-zinc-400">{item.step}</span>
-                    <span className="text-zinc-100">{item.count} <span className="text-zinc-500">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
+                    <span className={`font-bold uppercase tracking-widest text-[10px] ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{item.step}</span>
+                    <span className={`font-black ${theme === "dark" ? "text-zinc-100" : "text-zinc-900"}`}>{item.count} <span className="text-zinc-500 font-medium">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
                   </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className={`h-2.5 w-full rounded-full overflow-hidden ${theme === "dark" ? "bg-white/5" : "bg-zinc-100"}`}>
                     <div 
                       className="h-full bg-primary" 
                       style={{ width: `${stats.access > 0 ? (item.count / stats.access) * 100 : 0}%` }}
@@ -264,13 +321,21 @@ function AnalyticsSection() {
         </div>
 
         <div className="space-y-6">
-          <h3 className="text-lg font-semibold mb-4">Ações do Admin</h3>
+          <h3 className={`text-lg font-black mb-4 uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Ações do Admin</h3>
           <div className="grid gap-3">
-             <button className="flex items-center justify-between rounded-xl bg-zinc-900/50 p-4 text-sm text-zinc-300 border border-white/5 hover:bg-white/5 hover:text-white transition-all">
+             <button className={`flex items-center justify-between rounded-2xl p-4 text-sm font-bold border transition-all ${
+               theme === "dark"
+               ? "bg-zinc-900/50 text-zinc-300 border-white/5 hover:bg-white/5 hover:text-white"
+               : "bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm"
+             }`}>
                 <span className="flex items-center gap-3"><ImageIcon className="h-4 w-4" /> Exportar Leads</span>
                 <ChevronRight className="h-4 w-4 text-zinc-500" />
              </button>
-             <button className="flex items-center justify-between rounded-xl bg-zinc-900/50 p-4 text-sm text-zinc-300 border border-white/5 hover:bg-white/5 hover:text-white transition-all">
+             <button className={`flex items-center justify-between rounded-2xl p-4 text-sm font-bold border transition-all ${
+               theme === "dark"
+               ? "bg-zinc-900/50 text-zinc-300 border-white/5 hover:bg-white/5 hover:text-white"
+               : "bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50 hover:text-zinc-900 shadow-sm"
+             }`}>
                 <span className="flex items-center gap-3"><BarChart3 className="h-4 w-4" /> Relatório Completo</span>
                 <ChevronRight className="h-4 w-4 text-zinc-500" />
              </button>
@@ -280,7 +345,7 @@ function AnalyticsSection() {
 
       <div className="mt-10 space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="text-lg font-semibold">Leads e Eventos</h3>
+          <h3 className={`text-lg font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Leads e Eventos</h3>
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -289,21 +354,29 @@ function AnalyticsSection() {
                 placeholder="Buscar lead ou origem..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-black/20 pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-64"
+                className={`w-full rounded-xl border pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-64 transition-all ${
+                  theme === "dark" 
+                  ? "border-white/10 bg-black/20 text-white" 
+                  : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                }`}
               />
             </div>
             
-            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2">
+            <div className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition-all ${
+              theme === "dark" 
+              ? "border-white/10 bg-black/20" 
+              : "border-zinc-200 bg-zinc-50"
+            }`}>
               <Filter className="h-4 w-4 text-muted-foreground" />
               <select 
                 value={filterStage}
                 onChange={(e) => setFilterStage(e.target.value)}
-                className="bg-transparent text-xs text-white focus:outline-none"
+                className={`bg-transparent text-xs focus:outline-none font-bold ${theme === "dark" ? "text-white" : "text-zinc-900"}`}
               >
-                <option value="all" className="bg-zinc-900">Todas Etapas</option>
-                <option value="intro" className="bg-zinc-900">Intro</option>
-                <option value="quiz" className="bg-zinc-900">Quiz</option>
-                <option value="vendas" className="bg-zinc-900">Página de Vendas</option>
+                <option value="all" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Todas Etapas</option>
+                <option value="intro" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Intro</option>
+                <option value="quiz" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Quiz</option>
+                <option value="vendas" className={theme === "dark" ? "bg-zinc-900" : "bg-white"}>Página de Vendas</option>
               </select>
             </div>
 
@@ -324,37 +397,44 @@ function AnalyticsSection() {
           </div>
         </div>
 
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-zinc-900/50">
-          <table className="w-full text-left text-sm text-zinc-300">
-            <thead className="bg-white/5 text-zinc-400">
+        <div className={`overflow-hidden rounded-2xl border transition-all ${
+          theme === "dark" 
+          ? "border-white/10 bg-zinc-900/50" 
+          : "border-zinc-200 bg-white shadow-sm"
+        }`}>
+          <table className="w-full text-left text-sm">
+            <thead className={`${theme === "dark" ? "bg-white/5 text-zinc-400" : "bg-zinc-50 text-zinc-500"} font-bold uppercase text-[10px] tracking-widest`}>
               <tr>
-                <th className="px-4 py-3 font-medium">Evento</th>
-                <th className="px-4 py-3 font-medium">Etapa</th>
-                <th className="px-4 py-3 font-medium">Origem</th>
-                <th className="px-4 py-3 font-medium">Detalhes</th>
-                <th className="px-4 py-3 font-medium">Data</th>
+                <th className="px-4 py-4">Evento</th>
+                <th className="px-4 py-4">Etapa</th>
+                <th className="px-4 py-4">Origem</th>
+                <th className="px-4 py-4">Detalhes</th>
+                <th className="px-4 py-4 text-right">Data</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className={`divide-y ${theme === "dark" ? "divide-white/5" : "divide-zinc-100"}`}>
               {filteredLeads.map((lead) => (
-                <tr key={lead.id} className="hover:bg-white/5 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-primary">{lead.event}</td>
-                  <td className="px-4 py-3">
-                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase text-zinc-300">
+                <tr key={lead.id} className="hover:bg-primary/5 transition-colors group">
+                  <td className="px-4 py-4">
+                    <span className="font-mono text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">{lead.event}</span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase ${
+                      theme === "dark" ? "bg-white/10 text-zinc-300" : "bg-zinc-100 text-zinc-600"
+                    }`}>
                       {lead.stage}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-zinc-400">{lead.source}</td>
-                  <td className="px-4 py-3 text-zinc-500 max-w-xs truncate">{lead.details}</td>
-                  <td className="px-4 py-3 text-xs flex items-center gap-1 text-zinc-400">
-                    <Calendar className="h-3 w-3 text-zinc-500" />
+                  <td className={`px-4 py-4 text-xs font-medium ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>{lead.source}</td>
+                  <td className={`px-4 py-4 text-xs max-w-xs truncate ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{lead.details}</td>
+                  <td className={`px-4 py-4 text-xs text-right tabular-nums ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>
                     {lead.date}
                   </td>
                 </tr>
               ))}
               {filteredLeads.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-zinc-500">
+                  <td colSpan={5} className="px-4 py-10 text-center text-zinc-500 font-medium">
                     Nenhum lead encontrado com os filtros aplicados.
                   </td>
                 </tr>
@@ -377,19 +457,23 @@ function EventRow({ event, details, date }: any) {
   );
 }
 
-function StatCard({ label, value, icon: Icon, color }: any) {
+function StatCard({ label, value, icon: Icon, color, theme }: any) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
+    <div className={`rounded-2xl border transition-all ${
+      theme === "dark" 
+      ? "border-white/10 bg-zinc-900/80" 
+      : "border-zinc-200 bg-white shadow-sm"
+    } p-6`}>
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-400 font-medium uppercase tracking-wider">{label}</p>
-        <Icon className={`h-5 w-5 ${color} opacity-80`} />
+        <p className={`text-sm font-medium uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>{label}</p>
+        <Icon className={`h-5 w-5 ${color} ${theme === "dark" ? "opacity-80" : "opacity-100"}`} />
       </div>
-      <p className="mt-2 text-3xl font-bold text-white">{value}</p>
+      <p className={`mt-2 text-3xl font-black ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>{value}</p>
     </div>
   );
 }
 
-function ConfigSection() {
+function ConfigSection({ theme }: { theme: "dark" | "light" }) {
   const [checkoutUrl, setCheckoutUrl] = useState("https://pay.kiwify.com.br/...");
 
   const handleSave = () => {
@@ -398,79 +482,99 @@ function ConfigSection() {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Configurações de Conversão</h3>
+      <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Configurações de Conversão</h3>
       
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">URL de Checkout</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>URL de Checkout</label>
         <input 
           type="text" 
           value={checkoutUrl}
           onChange={(e) => setCheckoutUrl(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
         />
       </div>
 
       <div className="space-y-2 pt-4">
-        <label className="text-sm font-medium text-muted-foreground">Preço Promocional (Texto)</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Preço Promocional (Texto)</label>
         <input 
           type="text" 
           placeholder="R$ 197,00"
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
         />
       </div>
 
       <button 
         onClick={handleSave}
-        className="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-bold text-primary-foreground hover:opacity-90"
+        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm"
       >
         <Save className="h-4 w-4" />
-        SALVAR ALTERAÇÕES
+        Salvar Alterações
       </button>
     </div>
   );
 }
 
-function TrackingSection() {
+function TrackingSection({ theme }: { theme: "dark" | "light" }) {
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Pixels e Scripts de Rastreamento</h3>
+      <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Pixels e Rastreamento</h3>
       
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">ID Meta Pixel</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>ID Meta Pixel</label>
         <input 
           type="text" 
           placeholder="Ex: 1234567890"
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">ID Google Analytics (G-XXX)</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>ID Google Analytics (G-XXX)</label>
         <input 
           type="text" 
           placeholder="Ex: G-ABC123DEF"
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">Scripts Adicionais (Head)</label>
+        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Scripts Adicionais (Head)</label>
         <textarea 
           rows={5}
-          className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className={`w-full rounded-2xl border px-4 py-4 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+            theme === "dark"
+            ? "border-white/10 bg-black/40 text-white"
+            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+          }`}
           placeholder="<!-- Scripts extras aqui -->"
         />
       </div>
 
-      <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-bold text-primary-foreground hover:opacity-90">
+      <button className="inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm">
         <Save className="h-4 w-4" />
-        ATUALIZAR TRACKING
+        Atualizar Tracking
       </button>
     </div>
   );
 }
 
-function ContentSection() {
+function ContentSection({ theme }: { theme: "dark" | "light" }) {
   const [questions, setQuestions] = useState([
     { id: 'dor', title: 'Na hora de fazer seus anúncios patrocinados...', type: 'pergunta' },
     { id: 'motivacao', title: 'Porque você sente que precisa fazer anúncios?', type: 'pergunta' },
@@ -481,27 +585,33 @@ function ContentSection() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-xl font-semibold">Conteúdo e Mídia</h3>
-          <p className="text-sm text-muted-foreground">Gerencie imagens, textos e áudios de cada etapa.</p>
+          <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Conteúdo e Mídia</h3>
+          <p className={`text-sm font-medium ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Gerencie imagens, textos e áudios do quiz.</p>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-lg bg-primary/20 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/30">
-          <Plus className="h-3 w-3" /> NOVA ETAPA
+        <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest">
+          <Plus className="h-4 w-4" /> Nova Etapa
         </button>
       </div>
 
       <div className="space-y-4">
         {questions.map((item) => (
-          <div key={item.id} className="group flex flex-col rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:border-primary/30">
+          <div key={item.id} className={`group flex flex-col rounded-2xl border transition-all p-4 ${
+            theme === "dark"
+            ? "border-white/5 bg-white/5 hover:border-primary/30"
+            : "border-zinc-200 bg-white hover:border-primary/30 shadow-sm"
+          }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-800 text-zinc-400">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
+                  theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
+                }`}>
                   {item.id === 'audio' ? <Music className="h-5 w-5" /> : <ImageIcon className="h-5 w-5" />}
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold">{item.title}</h4>
-                  <span className="text-[10px] uppercase tracking-widest text-zinc-500">{item.type} • ID: {item.id}</span>
+                  <h4 className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}>{item.title}</h4>
+                  <span className={`text-[10px] uppercase tracking-widest font-bold ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{item.type} • ID: {item.id}</span>
                 </div>
               </div>
               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -510,24 +620,26 @@ function ContentSection() {
               </div>
             </div>
 
-            <div className="mt-4 grid gap-4 border-t border-white/5 pt-4 sm:grid-cols-2">
+            <div className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}>
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase text-zinc-500">Imagem/Background</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Imagem/Background</label>
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-20 rounded-lg bg-zinc-800 border border-white/5 overflow-hidden">
+                  <div className={`h-12 w-20 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
                      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
                   </div>
-                  <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                  <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                     <ImageIcon className="h-3 w-3" /> Alterar Upload
                   </button>
                 </div>
               </div>
               {item.id === 'audio' && (
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase text-zinc-500">Arquivo de Áudio (MP3)</label>
+                  <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Arquivo de Áudio (MP3)</label>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 rounded-lg bg-zinc-800 px-3 py-2 text-[10px] font-mono text-zinc-400">testemunho_aluno_01.mp3</div>
-                    <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                    <div className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border ${
+                      theme === "dark" ? "bg-zinc-800 text-zinc-400 border-white/5" : "bg-zinc-50 text-zinc-600 border-zinc-200"
+                    }`}>testemunho_aluno_01.mp3</div>
+                    <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                       <Music className="h-3 w-3" /> Subir Novo
                     </button>
                   </div>
