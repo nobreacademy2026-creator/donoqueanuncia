@@ -31,7 +31,8 @@ function AuthPage() {
           
           const res = await fetch(apiUrl, {
             headers: {
-              'Authorization': `Bearer ${session.access_token}`
+              'Authorization': `Bearer ${session.access_token}`,
+              'Cache-Control': 'no-cache'
             }
           });
 
@@ -137,7 +138,7 @@ function AuthPage() {
             
             setTimeout(() => {
               window.location.replace("/admin");
-            }, 500);
+            }, 300);
           }
         }
 

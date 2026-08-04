@@ -47,7 +47,10 @@ export const Route = createFileRoute('/api/public/check-auth')({
             hasAdmin: roles && roles.length > 0
           }), { 
             status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store, max-age=0'
+            }
           });
           
         } catch (error: any) {

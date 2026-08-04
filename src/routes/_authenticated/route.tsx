@@ -31,7 +31,8 @@ export const Route = createFileRoute("/_authenticated")({
         console.log("Chamando API de validação:", apiUrl);
         const res = await fetch(apiUrl, {
           headers: {
-            'Authorization': `Bearer ${session.access_token}`
+            'Authorization': `Bearer ${session.access_token}`,
+            'Cache-Control': 'no-cache'
           }
         });
 
