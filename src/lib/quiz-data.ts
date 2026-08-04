@@ -76,9 +76,9 @@ export function calculateScore(answers: Answers) {
 export function calculatePillars(answers: Answers, score: number) {
   const jitter = (n: number) => Math.max(15, Math.min(95, Math.round(score + n)));
   return [
-    { pilar: "Criativo", valor: jitter(answers["dor"] === "dinheiro" ? -15 : -5) },
-    { pilar: "Segmentação", valor: jitter(answers["motivacao"] === "escala" ? 10 : -8) },
-    { pilar: "Oferta", valor: jitter(answers["dor"] === "qualificacao" ? -20 : -4) },
-    { pilar: "Estratégia", valor: jitter(answers["motivacao"] === "automatizacao" ? 15 : -12) },
+    { pilar: "Criativo", valor: jitter(answers["dor_1"] === "configuracao" ? -15 : -5) },
+    { pilar: "Segmentação", valor: jitter(answers["motivacao_1"] === "escala" ? 10 : -8) },
+    { pilar: "Oferta", valor: jitter(answers["dor_1"] === "qualificacao" ? -20 : -4) },
+    { pilar: "Estratégia", valor: jitter(answers["motivacao_2"] === "automatizacao" ? 15 : -12) },
   ];
 }
