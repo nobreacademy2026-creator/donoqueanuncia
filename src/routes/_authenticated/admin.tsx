@@ -376,37 +376,44 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
           </div>
         </div>
 
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-zinc-900/50">
-          <table className="w-full text-left text-sm text-zinc-300">
-            <thead className="bg-white/5 text-zinc-400">
+        <div className={`overflow-hidden rounded-2xl border transition-all ${
+          theme === "dark" 
+          ? "border-white/10 bg-zinc-900/50" 
+          : "border-zinc-200 bg-white shadow-sm"
+        }`}>
+          <table className="w-full text-left text-sm">
+            <thead className={`${theme === "dark" ? "bg-white/5 text-zinc-400" : "bg-zinc-50 text-zinc-500"} font-bold uppercase text-[10px] tracking-widest`}>
               <tr>
-                <th className="px-4 py-3 font-medium">Evento</th>
-                <th className="px-4 py-3 font-medium">Etapa</th>
-                <th className="px-4 py-3 font-medium">Origem</th>
-                <th className="px-4 py-3 font-medium">Detalhes</th>
-                <th className="px-4 py-3 font-medium">Data</th>
+                <th className="px-4 py-4">Evento</th>
+                <th className="px-4 py-4">Etapa</th>
+                <th className="px-4 py-4">Origem</th>
+                <th className="px-4 py-4">Detalhes</th>
+                <th className="px-4 py-4 text-right">Data</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className={`divide-y ${theme === "dark" ? "divide-white/5" : "divide-zinc-100"}`}>
               {filteredLeads.map((lead) => (
-                <tr key={lead.id} className="hover:bg-white/5 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-primary">{lead.event}</td>
-                  <td className="px-4 py-3">
-                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase text-zinc-300">
+                <tr key={lead.id} className="hover:bg-primary/5 transition-colors group">
+                  <td className="px-4 py-4">
+                    <span className="font-mono text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">{lead.event}</span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase ${
+                      theme === "dark" ? "bg-white/10 text-zinc-300" : "bg-zinc-100 text-zinc-600"
+                    }`}>
                       {lead.stage}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-zinc-400">{lead.source}</td>
-                  <td className="px-4 py-3 text-zinc-500 max-w-xs truncate">{lead.details}</td>
-                  <td className="px-4 py-3 text-xs flex items-center gap-1 text-zinc-400">
-                    <Calendar className="h-3 w-3 text-zinc-500" />
+                  <td className={`px-4 py-4 text-xs font-medium ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>{lead.source}</td>
+                  <td className={`px-4 py-4 text-xs max-w-xs truncate ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>{lead.details}</td>
+                  <td className={`px-4 py-4 text-xs text-right tabular-nums ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>
                     {lead.date}
                   </td>
                 </tr>
               ))}
               {filteredLeads.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-zinc-500">
+                  <td colSpan={5} className="px-4 py-10 text-center text-zinc-500 font-medium">
                     Nenhum lead encontrado com os filtros aplicados.
                   </td>
                 </tr>
