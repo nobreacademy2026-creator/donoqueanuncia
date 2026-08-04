@@ -33,12 +33,12 @@ function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="mx-auto max-w-7xl">
+    <div className="min-h-screen bg-zinc-950 text-white p-6">
+      <div className="mx-auto max-w-7xl pt-4">
         <header className="mb-10 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Painel Administrativo</h1>
-            <p className="text-muted-foreground mt-1">Gerencie seu funil Nobre Academy</p>
+            <p className="text-zinc-400 mt-1">Gerencie seu funil Dono que Anuncia</p>
           </div>
           <div className="flex gap-3">
             <button 
@@ -83,7 +83,7 @@ function AdminDashboard() {
 
 
           <main className="flex-1">
-            <div className="surface-card rounded-3xl p-8 border-white/5 bg-zinc-900/50 backdrop-blur-sm">
+            <div className="surface-card rounded-3xl p-8 border border-white/10 bg-zinc-900 shadow-2xl">
               {activeTab === "analytics" && <AnalyticsSection />}
               {activeTab === "config" && <ConfigSection />}
               {activeTab === "tracking" && <TrackingSection />}
@@ -118,30 +118,98 @@ function AnalyticsSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStage, setFilterStage] = useState("all");
   const [filterSource, setFilterSource] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
   
   const [funnelData, setFunnelData] = useState([
-    { step: "Início Quiz", count: 1240, drop: 0 },
-    { step: "Pergunta 1 (Dor)", count: 1100, drop: 11 },
-    { step: "Pergunta 2 (Motivacao)", count: 950, drop: 14 },
-    { step: "Objeção (Minions)", count: 820, drop: 13 },
-    { step: "Checklist Benefícios", count: 750, drop: 9 },
-    { step: "Depoimento (Áudio)", count: 680, drop: 9 },
-    { step: "Nicho (Instagram)", count: 590, drop: 13 },
-    { step: "Página de Vendas", count: 520, drop: 12 },
-    { step: "Checkout", count: 89, drop: 83 },
+    { step: "Início Quiz", count: 0, drop: 0 },
+    { step: "Pergunta 1 (Dor)", count: 0, drop: 0 },
+    { step: "Pergunta 2 (Motivacao)", count: 0, drop: 0 },
+    { step: "Objeção (Minions)", count: 0, drop: 0 },
+    { step: "Checklist Benefícios", count: 0, drop: 0 },
+    { step: "Depoimento (Áudio)", count: 0, drop: 0 },
+    { step: "Nicho (Instagram)", count: 0, drop: 0 },
+    { step: "Página de Vendas", count: 0, drop: 0 },
+    { step: "Checkout", count: 0, drop: 0 },
   ]);
 
-  const [leads, setLeads] = useState([
-    { id: 1, event: "clique_checkout", details: "Botão de oferta principal", date: "2026-08-04 10:30", stage: "Vendas", source: "Facebook Ads" },
-    { id: 2, event: "clique_vendas", details: "Redirecionamento para página de vendas", date: "2026-08-04 09:15", stage: "Vendas", source: "Instagram" },
-    { id: 3, event: "quiz_concluido", details: "Pontuação: 85", date: "2026-08-04 08:45", stage: "Nicho", source: "Google Search" },
-    { id: 4, event: "quiz_resposta", details: "Pergunta: dor", date: "2026-08-04 08:30", stage: "Quiz", source: "Facebook Ads" },
-    { id: 5, event: "quiz_iniciado", details: "Visitante novo", date: "2026-08-04 08:10", stage: "Intro", source: "Direto" },
-    { id: 6, event: "clique_checkout", details: "Botão de oferta principal", date: "2026-08-03 23:50", stage: "Vendas", source: "Instagram" },
-  ]);
+  const [leads, setLeads] = useState<any[]>([]);
 
   useEffect(() => {
-    setStats({ access: 1240, completion: 520, checkout: 89, videoViews: 410 });
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        // Buscar eventos reais do banco de dados
+        const { data: events, error } = await supabase
+          .from('analytics_events')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (events && events.length > 0) {
+          // Processar estatísticas
+          const accessCount = events.filter(e => e.event_name === 'quiz_iniciado').length;
+          const completionCount = events.filter(e => e.event_name === 'quiz_concluido').length;
+          const checkoutCount = events.filter(e => e.event_name === 'checkout_iniciado').length;
+          const videoCount = events.filter(e => e.event_name === 'clique_video').length; // Supondo este nome de evento
+
+          setStats({
+            access: accessCount,
+            completion: completionCount,
+            checkout: checkoutCount,
+            videoViews: videoCount
+          });
+
+          // Processar leads
+          const formattedLeads = events.map(e => ({
+            id: e.id,
+            event: e.event_name,
+            details: JSON.stringify(e.payload),
+            date: new Date(e.created_at || '').toLocaleString('pt-BR'),
+            stage: (e.payload as any)?.stage || 'N/A',
+            source: (e.payload as any)?.source || 'Direto'
+          }));
+          setLeads(formattedLeads);
+
+          // Processar funil (simplificado para demonstração com dados reais)
+          const steps = [
+            { name: "Início Quiz", event: "quiz_iniciado" },
+            { name: "Pergunta 1 (Dor)", event: "quiz_resposta", filter: (p: any) => p.pergunta === 'dor' },
+            { name: "Pergunta 2 (Motivacao)", event: "quiz_resposta", filter: (p: any) => p.pergunta === 'motivacao' },
+            { name: "Página de Vendas", event: "clique_vendas" },
+            { name: "Checkout", event: "checkout_iniciado" },
+          ];
+
+          const newFunnel = steps.map((s, i) => {
+            const currentFilter = s.filter;
+            const count = events.filter(e => 
+              e.event_name === s.event && (!currentFilter || (e.payload && currentFilter(e.payload)))
+            ).length;
+            
+            let drop = 0;
+            if (i > 0) {
+              const prevStep = steps[i-1];
+              if (prevStep) {
+                const prevFilter = prevStep.filter;
+                const prevCount = events.filter(e => 
+                  e.event_name === prevStep.event && (!prevFilter || (e.payload && prevFilter(e.payload)))
+                ).length;
+                drop = prevCount > 0 ? Math.round((1 - count / prevCount) * 100) : 0;
+              }
+            }
+
+            return { step: s.name, count, drop };
+          });
+          setFunnelData(newFunnel as any);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar dados reais:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
   const filteredLeads = leads.filter(lead => {
@@ -163,44 +231,48 @@ function AnalyticsSection() {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        <div className="surface-card rounded-2xl border border-white/5 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Target className="h-5 w-5 text-primary" />
-            Funil de Conversão (Drop-off)
-          </h3>
+              <div className="surface-card rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
+                <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-white">
+                  <Target className="h-5 w-5 text-primary" />
+                  Funil de Conversão (Dados Reais)
+                </h3>
           <div className="space-y-4">
-            {funnelData.map((item, idx) => (
-              <div key={idx} className="space-y-1">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="text-muted-foreground">{item.step}</span>
-                  <span>{item.count} <span className="text-zinc-500">({Math.round(item.count/stats.access * 100)}%)</span></span>
-                </div>
-                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-primary" 
-                    style={{ width: `${(item.count / stats.access) * 100}%` }}
-                  />
-                </div>
-                {idx < funnelData.length - 1 && (
-                  <div className="text-[10px] text-red-500 font-bold ml-2">
-                    ↓ -{item.drop}% abandono
+            {isLoading ? (
+              <div className="py-10 text-center text-muted-foreground">Carregando dados...</div>
+            ) : (
+              funnelData.map((item, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-zinc-400">{item.step}</span>
+                    <span className="text-zinc-100">{item.count} <span className="text-zinc-500">({stats.access > 0 ? Math.round(item.count/stats.access * 100) : 0}%)</span></span>
                   </div>
-                )}
-              </div>
-            ))}
+                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary" 
+                      style={{ width: `${stats.access > 0 ? (item.count / stats.access) * 100 : 0}%` }}
+                    />
+                  </div>
+                  {idx < funnelData.length - 1 && item.drop > 0 && (
+                    <div className="text-[10px] text-red-500 font-bold ml-2">
+                      ↓ -{item.drop}% abandono
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
 
         <div className="space-y-6">
           <h3 className="text-lg font-semibold mb-4">Ações do Admin</h3>
           <div className="grid gap-3">
-             <button className="flex items-center justify-between rounded-xl bg-white/5 p-4 text-sm hover:bg-white/10 transition-colors">
+             <button className="flex items-center justify-between rounded-xl bg-zinc-900/50 p-4 text-sm text-zinc-300 border border-white/5 hover:bg-white/5 hover:text-white transition-all">
                 <span className="flex items-center gap-3"><ImageIcon className="h-4 w-4" /> Exportar Leads</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                <ChevronRight className="h-4 w-4 text-zinc-500" />
              </button>
-             <button className="flex items-center justify-between rounded-xl bg-white/5 p-4 text-sm hover:bg-white/10 transition-colors">
+             <button className="flex items-center justify-between rounded-xl bg-zinc-900/50 p-4 text-sm text-zinc-300 border border-white/5 hover:bg-white/5 hover:text-white transition-all">
                 <span className="flex items-center gap-3"><BarChart3 className="h-4 w-4" /> Relatório Completo</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                <ChevronRight className="h-4 w-4 text-zinc-500" />
              </button>
           </div>
         </div>
@@ -252,9 +324,9 @@ function AnalyticsSection() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-white/10">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-white/5">
+            <div className="overflow-hidden rounded-xl border border-white/10 bg-zinc-900/50">
+          <table className="w-full text-left text-sm text-zinc-300">
+            <thead className="bg-white/5 text-zinc-400">
               <tr>
                 <th className="px-4 py-3 font-medium">Evento</th>
                 <th className="px-4 py-3 font-medium">Etapa</th>
@@ -268,13 +340,13 @@ function AnalyticsSection() {
                 <tr key={lead.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-4 py-3 font-mono text-xs text-primary">{lead.event}</td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase">
+                    <span className="inline-flex rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold uppercase text-zinc-300">
                       {lead.stage}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-xs text-zinc-400">{lead.source}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{lead.details}</td>
-                  <td className="px-4 py-3 text-xs flex items-center gap-1">
+                  <td className="px-4 py-3 text-zinc-500 max-w-xs truncate">{lead.details}</td>
+                  <td className="px-4 py-3 text-xs flex items-center gap-1 text-zinc-400">
                     <Calendar className="h-3 w-3 text-zinc-500" />
                     {lead.date}
                   </td>
@@ -282,7 +354,7 @@ function AnalyticsSection() {
               ))}
               {filteredLeads.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={5} className="px-4 py-10 text-center text-zinc-500">
                     Nenhum lead encontrado com os filtros aplicados.
                   </td>
                 </tr>
@@ -307,12 +379,12 @@ function EventRow({ event, details, date }: any) {
 
 function StatCard({ label, value, icon: Icon, color }: any) {
   return (
-    <div className="rounded-2xl border border-white/5 bg-white/5 p-6">
+    <div className="rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <Icon className={`h-5 w-5 ${color}`} />
+        <p className="text-sm text-zinc-400 font-medium uppercase tracking-wider">{label}</p>
+        <Icon className={`h-5 w-5 ${color} opacity-80`} />
       </div>
-      <p className="mt-2 text-3xl font-bold">{value}</p>
+      <p className="mt-2 text-3xl font-bold text-white">{value}</p>
     </div>
   );
 }
