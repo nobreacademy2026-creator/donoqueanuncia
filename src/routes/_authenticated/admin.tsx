@@ -50,7 +50,7 @@ function AdminDashboard() {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
       <div className="mx-auto max-w-[1600px] pt-4">
-        <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-current opacity-90 transition-all">
+        <header className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-white/5 transition-all">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -104,15 +104,17 @@ function AdminDashboard() {
           </div>
         </header>
 
-        <div className="flex flex-col gap-8 lg:flex-row items-start">
-          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all duration-500 ease-in-out overflow-hidden ${
-            isSidebarOpen ? "opacity-100 translate-x-0" : "lg:w-0 lg:p-0 lg:border-0 opacity-0 -translate-x-10 pointer-events-none"
+        <div className="flex flex-col gap-8 lg:flex-row items-start relative">
+          <aside className={`fixed lg:sticky top-0 lg:top-6 left-0 h-screen lg:h-auto z-50 lg:z-0 shrink-0 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden border-r lg:border rounded-r-2xl lg:rounded-2xl ${
+            isSidebarOpen 
+            ? "w-[280px] p-6 lg:p-4 opacity-100 translate-x-0" 
+            : "w-0 p-0 opacity-0 -translate-x-full lg:translate-x-0 lg:border-0 lg:opacity-0 pointer-events-none"
           } ${
             theme === "dark" 
-            ? "border-white/10 bg-zinc-900/50" 
-            : "border-zinc-200 bg-white shadow-sm"
+            ? "border-white/10 bg-zinc-900/95 backdrop-blur-xl lg:bg-zinc-900/50" 
+            : "border-zinc-200 bg-white shadow-2xl lg:shadow-sm"
           }`}>
-            <nav className="flex flex-col gap-1 w-56">
+            <nav className="flex flex-col gap-2 w-[232px]">
               <NavButton 
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
@@ -145,11 +147,11 @@ function AdminDashboard() {
           </aside>
 
 
-          <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "" : "w-full"}`}>
-            <div className={`surface-card rounded-[2rem] p-8 border transition-all ${
+          <main className={`flex-1 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? "" : "w-full lg:max-w-none"}`}>
+            <div className={`surface-card rounded-[2.5rem] p-10 border transition-all duration-500 ${
               theme === "dark" 
-              ? "border-white/10 bg-zinc-900" 
-              : "border-zinc-200 bg-white shadow-xl shadow-zinc-200/50"
+              ? "border-white/10 bg-zinc-900 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]" 
+              : "border-zinc-200 bg-white shadow-2xl shadow-zinc-200/50"
             }`}>
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
               {activeTab === "config" && <ConfigSection theme={theme} />}
@@ -157,6 +159,12 @@ function AdminDashboard() {
               {activeTab === "content" && <ContentSection theme={theme} />}
             </div>
           </main>
+          {isSidebarOpen && (
+            <div 
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              onClick={() => setIsSidebarOpen(false)}
+            />
+          )}
         </div>
 
       </div>
@@ -168,16 +176,16 @@ function NavButton({ active, onClick, icon: Icon, label, theme }: any) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
+      className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-bold transition-all duration-300 ${
         active 
-          ? "bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]" 
+          ? "bg-primary text-white shadow-[0_8px_20px_-6px_rgba(var(--primary-rgb),0.5)] scale-[1.02]" 
           : theme === "dark"
             ? "text-zinc-400 hover:bg-white/5 hover:text-white"
             : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >
-      <Icon className="h-5 w-5" />
-      {label}
+      <Icon className={`h-5 w-5 transition-transform duration-300 ${active ? "scale-110" : ""}`} />
+      <span className="truncate">{label}</span>
     </button>
   );
 }
