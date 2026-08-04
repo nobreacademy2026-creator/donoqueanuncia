@@ -104,13 +104,15 @@ function AdminDashboard() {
           </div>
         </header>
 
-        <div className="flex flex-col gap-8 lg:flex-row">
-          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all ${
+        <div className="flex flex-col gap-8 lg:flex-row items-start">
+          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all duration-500 ease-in-out overflow-hidden ${
+            isSidebarOpen ? "opacity-100 translate-x-0" : "lg:w-0 lg:p-0 lg:border-0 opacity-0 -translate-x-10 pointer-events-none"
+          } ${
             theme === "dark" 
             ? "border-white/10 bg-zinc-900/50" 
             : "border-zinc-200 bg-white shadow-sm"
           }`}>
-            <nav className="flex flex-col gap-1">
+            <nav className="flex flex-col gap-1 w-56">
               <NavButton 
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
