@@ -271,10 +271,14 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-              <div className="surface-card rounded-2xl border border-white/10 bg-zinc-900/80 p-6">
-                <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-white">
+              <div className={`surface-card rounded-[2rem] border transition-all p-6 ${
+                theme === "dark" 
+                ? "border-white/10 bg-zinc-900/80" 
+                : "border-zinc-200 bg-white shadow-sm"
+              }`}>
+                <h3 className={`text-lg font-black mb-6 flex items-center gap-2 uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>
                   <Target className="h-5 w-5 text-primary" />
-                  Funil de Conversão (Dados Reais)
+                  Funil de Conversão
                 </h3>
           <div className="space-y-4">
             {isLoading ? (
