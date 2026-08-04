@@ -149,8 +149,8 @@ export function SalesPage() {
 
       {/* Hero / Solution Content (Moved down) */}
       <section className="mx-auto max-w-3xl px-5 mt-20 text-center">
-        <h2 className="text-3xl leading-tight font-black tracking-tight sm:text-4xl uppercase">
-          No método <span className="text-primary">DONO QUE ANUNCIA</span> eu vou te mostrar:
+        <h2 className="text-3xl leading-tight font-black tracking-tight sm:text-4xl uppercase text-zinc-900">
+          No método <span className="text-zinc-900">DONO QUE ANUNCIA</span> eu vou te mostrar:
         </h2>
         
         <ul className="mt-10 grid gap-3 text-left sm:grid-cols-2">
