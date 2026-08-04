@@ -307,3 +307,78 @@ function TrackingSection() {
     </div>
   );
 }
+
+function ContentSection() {
+  const [questions, setQuestions] = useState([
+    { id: 'dor', title: 'Na hora de fazer seus anúncios patrocinados...', type: 'pergunta' },
+    { id: 'motivacao', title: 'Porque você sente que precisa fazer anúncios?', type: 'pergunta' },
+    { id: 'objecao', title: 'Quebra de Objeção (Minions)', type: 'etapa' },
+    { id: 'audio', title: 'Depoimento do Aluno (Áudio)', type: 'etapa' },
+    { id: 'niche', title: 'Validação de Nicho (Instagram)', type: 'etapa' },
+  ]);
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-semibold">Conteúdo e Mídia</h3>
+          <p className="text-sm text-muted-foreground">Gerencie imagens, textos e áudios de cada etapa.</p>
+        </div>
+        <button className="inline-flex items-center gap-2 rounded-lg bg-primary/20 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/30">
+          <Plus className="h-3 w-3" /> NOVA ETAPA
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {questions.map((item) => (
+          <div key={item.id} className="group flex flex-col rounded-2xl border border-white/5 bg-white/5 p-4 transition-all hover:border-primary/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-800 text-zinc-400">
+                  {item.id === 'audio' ? <Music className="h-5 w-5" /> : <ImageIcon className="h-5 w-5" />}
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold">{item.title}</h4>
+                  <span className="text-[10px] uppercase tracking-widest text-zinc-500">{item.type} • ID: {item.id}</span>
+                </div>
+              </div>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="p-2 text-zinc-500 hover:text-white"><Settings className="h-4 w-4" /></button>
+                <button className="p-2 text-red-500/50 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-4 border-t border-white/5 pt-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase text-zinc-500">Imagem/Background</label>
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-20 rounded-lg bg-zinc-800 border border-white/5 overflow-hidden">
+                     <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
+                  </div>
+                  <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                    <ImageIcon className="h-3 w-3" /> Alterar Upload
+                  </button>
+                </div>
+              </div>
+              {item.id === 'audio' && (
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase text-zinc-500">Arquivo de Áudio (MP3)</label>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 rounded-lg bg-zinc-800 px-3 py-2 text-[10px] font-mono text-zinc-400">testemunho_aluno_01.mp3</div>
+                    <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                      <Music className="h-3 w-3" /> Subir Novo
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90">
+        <Save className="h-4 w-4" /> Salvar Alterações de Conteúdo
+      </button>
+    </div>
+  );
+}
