@@ -24,9 +24,14 @@ import {
   ArrowUpDown,
   LogOut,
   Sun,
-  Moon
+  Moon,
+  Monitor,
+  Smartphone,
+  RefreshCw,
+  Eye
 } from "lucide-react";
 import { toast } from "sonner";
+import { readDraft, writeDraft, type FunnelDraft } from "@/lib/funnel-content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
@@ -158,6 +163,12 @@ function AdminDashboard() {
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
               {activeTab === "content" && <ContentSection theme={theme} />}
             </div>
+
+            {(activeTab === "content" || activeTab === "config") && (
+              <div className="mt-8">
+                <LivePreview theme={theme} />
+              </div>
+            )}
           </main>
           {isSidebarOpen && (
             <div 
@@ -498,11 +509,19 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
 }
 
 function ConfigSection({ theme }: { theme: "dark" | "light" }) {
-  const [checkoutUrl, setCheckoutUrl] = useState("https://pay.kiwify.com.br/...");
-  const [promoPrice, setPromoPrice] = useState("R$ 197,00");
-  const [fullPrice, setFullPrice] = useState("R$ 497,00");
+  const initial = readDraft();
+  const [checkoutUrl, setCheckoutUrl] = useState(initial.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
+  const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
+  const [fullPrice, setFullPrice] = useState(initial.sales.fullPrice ?? "R$ 497,00");
+  const [vslUrl, setVslUrl] = useState(initial.sales.vslUrl ?? "");
+
+  const publish = (patch: Partial<FunnelDraft["sales"]>) => {
+    const current = readDraft();
+    writeDraft({ ...current, sales: { ...current.sales, ...patch } });
+  };
 
   const handleSave = () => {
+    publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     toast.success("Dados da Página de Vendas atualizados!");
   };
 
@@ -519,7 +538,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             value={checkoutUrl}
-            onChange={(e) => setCheckoutUrl(e.target.value)}
+            onChange={(e) => { setCheckoutUrl(e.target.value); publish({ checkoutUrl: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -533,6 +552,8 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             placeholder="https://..."
+            value={vslUrl}
+            onChange={(e) => { setVslUrl(e.target.value); publish({ vslUrl: e.target.value, videoThumb: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -546,7 +567,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             value={fullPrice}
-            onChange={(e) => setFullPrice(e.target.value)}
+            onChange={(e) => { setFullPrice(e.target.value); publish({ fullPrice: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -560,7 +581,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
           <input 
             type="text" 
             value={promoPrice}
-            onChange={(e) => setPromoPrice(e.target.value)}
+            onChange={(e) => { setPromoPrice(e.target.value); publish({ promoPrice: e.target.value }); }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
               ? "border-white/10 bg-black/40 text-white"
@@ -645,6 +666,36 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     { id: 'sales', title: 'Página de Vendas (Final)', type: 'página' },
   ]);
 
+  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
+
+  const updateStep = (id: string, patch: { title?: string; image?: string }) => {
+    const current = readDraft();
+    const next: FunnelDraft = {
+      ...current,
+      steps: { ...current.steps, [id]: { ...current.steps[id], ...patch } },
+    };
+    if (id === 'sales') {
+      next.sales = {
+        ...next.sales,
+        ...(patch.title ? { videoHeadline: patch.title } : {}),
+        ...(patch.image ? { videoThumb: patch.image } : {}),
+      };
+    }
+    setDraft(next);
+    writeDraft(next);
+  };
+
+  const handleUpload = (id: string, file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 3_000_000) {
+      toast.error("Arquivo muito grande para a prévia (máx. 3MB).");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => updateStep(id, { image: String(reader.result) });
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -685,24 +736,55 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
             </div>
 
             <div className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}>
+              <div className="space-y-2 sm:col-span-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Texto / Título exibido</label>
+                <input
+                  type="text"
+                  value={draft.steps[item.id]?.title ?? ""}
+                  placeholder="Deixe vazio para manter o texto atual da página"
+                  onChange={(e) => updateStep(item.id, { title: e.target.value })}
+                  className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                    theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                  }`}
+                />
+              </div>
               <div className="space-y-2">
                 <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
                   {item.id === 'sales' ? 'Vídeo da Oferta (VSL)' : 'Imagem/Background'}
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className={`h-12 w-20 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
-                     {item.id === 'sales' ? (
+                  <div className={`h-12 w-20 shrink-0 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
+                     {draft.steps[item.id]?.image ? (
+                       <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
+                     ) : item.id === 'sales' ? (
                        <div className="flex h-full w-full items-center justify-center bg-black/20">
                          <Video className="h-5 w-5 text-zinc-500" />
                        </div>
                      ) : (
-                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" />
+                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" alt="" />
                      )}
                   </div>
-                  <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                    {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />} 
-                    {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
-                  </button>
+                  <div className="flex-1 space-y-2">
+                    <input
+                      type="text"
+                      placeholder={item.id === 'sales' ? "URL do vídeo/thumb" : "URL da imagem"}
+                      value={draft.steps[item.id]?.image?.startsWith("data:") ? "" : (draft.steps[item.id]?.image ?? "")}
+                      onChange={(e) => updateStep(item.id, { image: e.target.value })}
+                      className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                        theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                      }`}
+                    />
+                    <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                      {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />}
+                      {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
+                      <input
+                        type="file"
+                        accept={item.id === 'sales' ? "video/*,image/*" : "image/*"}
+                        className="hidden"
+                        onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
               {item.id === 'audio' && (
@@ -726,6 +808,69 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
       <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90">
         <Save className="h-4 w-4" /> Salvar Alterações de Conteúdo
       </button>
+    </div>
+  );
+}
+
+
+function LivePreview({ theme }: { theme: "dark" | "light" }) {
+  const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [nonce, setNonce] = useState(0);
+
+  return (
+    <div className={`sticky top-6 rounded-[2rem] border p-4 transition-all ${
+      theme === "dark" ? "border-white/10 bg-zinc-900/70" : "border-zinc-200 bg-white shadow-xl"
+    }`}>
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Eye className="h-4 w-4 text-primary" />
+          <span className={`text-[11px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-300" : "text-zinc-700"}`}>
+            Prévia ao vivo
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setDevice("desktop")}
+            title="Desktop"
+            className={`rounded-lg p-2 transition-colors ${device === "desktop" ? "bg-primary text-white" : theme === "dark" ? "text-zinc-400 hover:bg-white/10" : "text-zinc-500 hover:bg-zinc-100"}`}
+          >
+            <Monitor className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setDevice("mobile")}
+            title="Mobile"
+            className={`rounded-lg p-2 transition-colors ${device === "mobile" ? "bg-primary text-white" : theme === "dark" ? "text-zinc-400 hover:bg-white/10" : "text-zinc-500 hover:bg-zinc-100"}`}
+          >
+            <Smartphone className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setNonce((n) => n + 1)}
+            title="Recarregar prévia"
+            className={`rounded-lg p-2 transition-colors ${theme === "dark" ? "text-zinc-400 hover:bg-white/10" : "text-zinc-500 hover:bg-zinc-100"}`}
+          >
+            <RefreshCw className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className={`mx-auto overflow-hidden rounded-2xl border ${theme === "dark" ? "border-white/10 bg-black" : "border-zinc-200 bg-zinc-50"} ${device === "mobile" ? "w-[390px] max-w-full" : "w-full"}`}>
+        <iframe
+          key={nonce}
+          data-funnel-preview="true"
+          src="/?preview=1"
+          title="Prévia da Landing Page"
+          onLoad={(e) => {
+            (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
+              { type: "dqa:funnel-draft", draft: readDraft() },
+              window.location.origin,
+            );
+          }}
+          className="h-[720px] w-full bg-white"
+        />
+      </div>
+      <p className={`mt-3 text-center text-[10px] font-bold uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
+        Atualiza automaticamente enquanto você edita
+      </p>
     </div>
   );
 }

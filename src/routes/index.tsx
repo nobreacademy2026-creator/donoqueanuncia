@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { QUESTIONS, calculatePillars, calculateScore, type Answers } from "@/lib/quiz-data";
 import { trackEvent } from "@/lib/tracking";
+import { useFunnelDraft } from "@/lib/funnel-content";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
 import { QuizIntro } from "@/components/quiz/QuizIntro";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
@@ -47,19 +48,31 @@ function Index() {
   const [stage, setStage] = useState<Stage>("intro");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
+  const draft = useFunnelDraft();
+
+  const questions = useMemo(
+    () =>
+      QUESTIONS.map((q) => {
+        const override = draft.steps[q.id];
+        return override
+          ? { ...q, ...(override.title ? { title: override.title } : {}), ...(override.image ? { image: override.image } : {}) }
+          : q;
+      }),
+    [draft],
+  );
 
   const score = useMemo(() => calculateScore(answers), [answers]);
   const pillars = useMemo(() => calculatePillars(answers, score), [answers, score]);
 
   const progress =
-    stage === "intro" ? 0 : stage === "quiz" ? (step / QUESTIONS.length) * 100 : 100;
+    stage === "intro" ? 0 : stage === "quiz" ? (step / questions.length) * 100 : 100;
 
   function handleSelect(value: string) {
-    const question = QUESTIONS[step]!;
+    const question = questions[step]!;
     setAnswers((prev) => ({ ...prev, [question.id]: value }));
     trackEvent("quiz_resposta", { pergunta: question.id, resposta: value });
     setTimeout(() => {
-      if (step + 1 >= QUESTIONS.length) {
+      if (step + 1 >= questions.length) {
         setStage("analyzing");
         trackEvent("quiz_concluido");
       } else {
@@ -74,7 +87,7 @@ function Index() {
   }
 
   if (stage === ("sales" as any)) {
-    return <SalesPage />;
+    return <SalesPage draft={draft.sales} />;
   }
 
   return (
@@ -99,10 +112,10 @@ function Index() {
 
         {stage === "quiz" ? (
           <QuestionStep
-            question={QUESTIONS[step]!}
+            question={questions[step]!}
             index={step}
-            total={QUESTIONS.length}
-            {...(answers[QUESTIONS[step]!.id] ? { selected: answers[QUESTIONS[step]!.id] } : {})}
+            total={questions.length}
+            {...(answers[questions[step]!.id] ? { selected: answers[questions[step]!.id] } : {})}
             onSelect={handleSelect}
             onBack={handleBack}
           />
