@@ -72,7 +72,7 @@ function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = 
     <a
       href={CHECKOUT_URL}
       onClick={() => trackCheckoutClick({ origem: "pagina_vendas" })}
-      className={`gradient-primary glow-primary inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-primary-foreground transition-transform duration-200 hover:scale-[1.02] sm:text-base ${className}`}
+      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-transform duration-200 hover:scale-[1.02] sm:text-base shadow-lg shadow-green-600/20 ${className}`}
     >
       {label}
     </a>
