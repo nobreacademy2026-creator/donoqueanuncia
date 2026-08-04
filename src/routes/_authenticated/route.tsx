@@ -26,26 +26,26 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
 
-    // 2. Se for uma rota de admin, verificar permissão
+    // 3. Se for uma rota de admin, verificar permissão
     if (location.pathname.startsWith("/admin")) {
       try {
-        console.log("Verificando permissões de admin via server function...");
+        console.log("[Auth] Verificando permissões de admin via server function...");
         
         const { checkAdminRole } = await import("@/lib/auth.functions");
         const data = await checkAdminRole();
 
-        if (!data.hasAdmin) {
-          console.warn("Usuário não é admin");
-          throw redirect({ to: "/" });
+        if (!data || !data.hasAdmin) {
+          console.warn("[Auth] Usuário não é admin ou dados inválidos");
+          // Em vez de redirecionar para /, vamos para /auth para forçar novo login se necessário
+          // ou apenas mostrar que não tem acesso.
+          throw redirect({ to: "/auth" });
         }
         
-        console.log("Acesso admin confirmado");
+        console.log("[Auth] Acesso admin confirmado com sucesso");
       } catch (e: any) {
         if (e && (e.to || e.isRedirect)) throw e;
         
-        // Se falhar por não estar autenticado (401), o middleware do serverFn vai lançar um erro
-        // que podemos capturar aqui.
-        console.error("Falha na proteção de rota admin:", e);
+        console.error("[Auth] Falha crítica na proteção de rota admin:", e);
         throw redirect({ to: "/auth" });
       }
     }
