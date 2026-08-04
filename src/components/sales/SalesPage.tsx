@@ -90,7 +90,7 @@ function Section({ title, children, className = "" }: { title: string; children:
 
 export function SalesPage() {
   return (
-    <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-primary selection:text-white">
+    <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
       {/* Top Banner */}
       <div className="bg-primary/10 border-b border-primary/20 py-3 text-center">
         <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
