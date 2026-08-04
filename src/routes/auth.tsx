@@ -24,10 +24,8 @@ function AuthPage() {
       });
 
       if (error) {
-        console.error("Erro no cadastro:", error);
         toast.error("Erro ao cadastrar: " + error.message);
       } else {
-        console.log("Cadastro sucesso:", data);
         toast.success("Cadastro realizado com sucesso! Você já pode entrar.");
         setIsSignUp(false);
       }
