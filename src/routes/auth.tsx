@@ -13,7 +13,33 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
 
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  // Verificação automática de sessão ao carregar a página
+  useState(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        // Se já tem sessão, tenta validar admin e redirecionar
+        const { data: roleData } = await supabase
+          .from("user_roles" as any)
+          .select("role")
+          .eq("user_id", session.user.id)
+          .eq("role", "admin")
+          .maybeSingle();
+
+        if (roleData) {
+          window.location.href = "/admin";
+          return;
+        }
+      }
+      setCheckingSession(false);
+    };
+    checkSession();
+  });
+
   const handleAuth = async (e: React.FormEvent) => {
+
     e.preventDefault();
     setLoading(true);
     
@@ -95,7 +121,16 @@ function AuthPage() {
     }
   };
 
+  if (checkingSession) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-black border-t-transparent"></div>
+      </div>
+    );
+  }
+
   return (
+
     <div className="flex min-h-screen items-center justify-center bg-white px-5">
       <div className="w-full max-w-[360px] space-y-8 rounded-none bg-black p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
         <div className="text-center">
