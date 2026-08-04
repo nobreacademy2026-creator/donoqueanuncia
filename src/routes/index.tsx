@@ -74,11 +74,7 @@ function Index() {
   }
 
   if (stage === "sales") {
-    return (
-      <div className="min-h-screen bg-white">
-        <SalesPage />
-      </div>
-    );
+    return <SalesPage />;
   }
 
   return (
