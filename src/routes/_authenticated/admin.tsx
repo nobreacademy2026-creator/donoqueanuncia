@@ -510,7 +510,7 @@ function TrackingSection({ theme }: { theme: "dark" | "light" }) {
   );
 }
 
-function ContentSection() {
+function ContentSection({ theme }: { theme: "dark" | "light" }) {
   const [questions, setQuestions] = useState([
     { id: 'dor', title: 'Na hora de fazer seus anúncios patrocinados...', type: 'pergunta' },
     { id: 'motivacao', title: 'Porque você sente que precisa fazer anúncios?', type: 'pergunta' },
