@@ -8,7 +8,7 @@ export function QuizIntro({ onStart }: { onStart: () => void }) {
         <img 
           src={logoAsset.url} 
           alt="Dono que Anuncia" 
-          className="h-24 w-auto object-contain sm:h-32"
+          className="h-32 w-auto object-contain sm:h-48"
         />
         <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase opacity-80">
           Nobre Academy
