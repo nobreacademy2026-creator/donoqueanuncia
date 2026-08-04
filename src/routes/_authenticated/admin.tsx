@@ -24,9 +24,14 @@ import {
   ArrowUpDown,
   LogOut,
   Sun,
-  Moon
+  Moon,
+  Monitor,
+  Smartphone,
+  RefreshCw,
+  Eye
 } from "lucide-react";
 import { toast } from "sonner";
+import { readDraft, writeDraft, type FunnelDraft } from "@/lib/funnel-content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
@@ -726,6 +731,69 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
       <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90">
         <Save className="h-4 w-4" /> Salvar Alterações de Conteúdo
       </button>
+    </div>
+  );
+}
+
+
+function LivePreview({ theme }: { theme: "dark" | "light" }) {
+  const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [nonce, setNonce] = useState(0);
+
+  return (
+    <div className={`sticky top-6 rounded-[2rem] border p-4 transition-all ${
+      theme === "dark" ? "border-white/10 bg-zinc-900/70" : "border-zinc-200 bg-white shadow-xl"
+    }`}>
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Eye className="h-4 w-4 text-primary" />
+          <span className={`text-[11px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-300" : "text-zinc-700"}`}>
+            Prévia ao vivo
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setDevice("desktop")}
+            title="Desktop"
+            className={`rounded-lg p-2 transition-colors ${device === "desktop" ? "bg-primary text-white" : theme === "dark" ? "text-zinc-400 hover:bg-white/10" : "text-zinc-500 hover:bg-zinc-100"}`}
+          >
+            <Monitor className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setDevice("mobile")}
+            title="Mobile"
+            className={`rounded-lg p-2 transition-colors ${device === "mobile" ? "bg-primary text-white" : theme === "dark" ? "text-zinc-400 hover:bg-white/10" : "text-zinc-500 hover:bg-zinc-100"}`}
+          >
+            <Smartphone className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setNonce((n) => n + 1)}
+            title="Recarregar prévia"
+            className={`rounded-lg p-2 transition-colors ${theme === "dark" ? "text-zinc-400 hover:bg-white/10" : "text-zinc-500 hover:bg-zinc-100"}`}
+          >
+            <RefreshCw className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className={`mx-auto overflow-hidden rounded-2xl border ${theme === "dark" ? "border-white/10 bg-black" : "border-zinc-200 bg-zinc-50"} ${device === "mobile" ? "w-[390px] max-w-full" : "w-full"}`}>
+        <iframe
+          key={nonce}
+          data-funnel-preview="true"
+          src="/?preview=1"
+          title="Prévia da Landing Page"
+          onLoad={(e) => {
+            (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
+              { type: "dqa:funnel-draft", draft: readDraft() },
+              window.location.origin,
+            );
+          }}
+          className="h-[720px] w-full bg-white"
+        />
+      </div>
+      <p className={`mt-3 text-center text-[10px] font-bold uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
+        Atualiza automaticamente enquanto você edita
+      </p>
     </div>
   );
 }
