@@ -120,18 +120,24 @@ function AnalyticsSection() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              <tr>
-                <td className="px-4 py-3">João Silva</td>
-                <td className="px-4 py-3">(11) 99999-9999</td>
-                <td className="px-4 py-3">joao@email.com</td>
-                <td className="px-4 py-3">Há 2 horas</td>
-              </tr>
-              {/* More rows... */}
+              <LeadRow name="João Silva" whatsapp="(11) 99999-9999" email="joao@email.com" date="Há 2 horas" />
+              <LeadRow name="Maria Santos" whatsapp="(21) 98888-8888" email="maria@email.com" date="Há 5 horas" />
             </tbody>
           </table>
         </div>
       </div>
     </div>
+  );
+}
+
+function LeadRow({ name, whatsapp, email, date }: any) {
+  return (
+    <tr>
+      <td className="px-4 py-3">{name}</td>
+      <td className="px-4 py-3">{whatsapp}</td>
+      <td className="px-4 py-3">{email}</td>
+      <td className="px-4 py-3">{date}</td>
+    </tr>
   );
 }
 

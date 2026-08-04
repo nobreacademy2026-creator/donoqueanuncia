@@ -14,19 +14,18 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
 
-    // Optional: Check for admin role if the route is /admin
+    // Use a generic query to check admin role if the route is /admin
     if (location.pathname.startsWith("/admin")) {
       const { data: roles } = await supabase
-        .from("user_roles")
+        .from("user_roles" as any)
         .select("role")
         .eq("user_id", session.user.id)
         .eq("role", "admin")
         .single();
 
       if (!roles) {
-        // Not an admin, redirect to home or show error
-        // For now, let's just let it pass or redirect to home if you prefer
-        // throw redirect({ to: "/" });
+        // Not an admin, redirect to home
+        throw redirect({ to: "/" });
       }
     }
   },
