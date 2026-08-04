@@ -114,7 +114,7 @@ function Index() {
 
         {stage === "result" ? (
           <div className="w-full">
-            <ResultStep score={score} pillars={pillars} />
+            <ResultStep />
             <div className="mt-12 flex justify-center">
               <button
                 onClick={() => {
