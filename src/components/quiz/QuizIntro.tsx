@@ -3,16 +3,13 @@ import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export function QuizIntro({ onStart }: { onStart: () => void }) {
   return (
-    <div className="animate-rise-in mx-auto max-w-2xl text-center">
-      <div className="mb-8 flex flex-col items-center gap-2">
+    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center">
+      <div className="mb-4 flex flex-col items-center">
         <img 
           src={logoAsset.url} 
           alt="Dono que Anuncia" 
           className="h-32 w-auto object-contain sm:h-48"
         />
-        <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase opacity-80">
-          Nobre Academy
-        </span>
       </div>
 
       <h1 className="mt-6 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
