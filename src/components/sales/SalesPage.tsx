@@ -204,7 +204,7 @@ export function SalesPage() {
           </div>
         </div>
         <div className="mt-8 text-center">
-          <CTAButton label="Eu quero isso também" className="bg-green-600 hover:bg-green-700" />
+          <CTAButton label="Eu quero isso também" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
         </div>
       </Section>
 
@@ -229,7 +229,7 @@ export function SalesPage() {
           </p>
         </div>
         <div className="mt-8 text-center">
-          <CTAButton label="QUERO VENDER MUITO 🤩" className="bg-green-600 hover:bg-green-700" />
+          <CTAButton label="QUERO VENDER MUITO 🤩" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
         </div>
       </Section>
 
