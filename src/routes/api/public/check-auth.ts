@@ -36,19 +36,21 @@ export const Route = createFileRoute('/api/public/check-auth')({
             });
           }
 
-          if (!userId) return new Response(JSON.stringify({ error: 'No user ID in token' }), { status: 401 });
+          console.log('[API/check-auth] User ID:', userId);
           
-          // 2. Verificar o papel no banco ignorando RLS via supabaseAdmin
           const { data: roles, error: roleError } = await supabaseAdmin
-            .from('user_roles' as any)
+            .from('user_roles')
             .select('role')
             .eq('user_id', userId)
             .eq('role', 'admin');
             
           if (roleError) {
-            console.error('Database error in check-auth:', roleError);
+            console.error('[API/check-auth] Database error:', roleError);
             throw roleError;
           }
+          
+          const hasAdmin = roles && roles.length > 0;
+          console.log('[API/check-auth] Has admin role:', hasAdmin);
 
           return new Response(JSON.stringify({ 
             userId: userId,
