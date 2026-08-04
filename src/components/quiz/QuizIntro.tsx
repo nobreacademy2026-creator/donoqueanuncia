@@ -3,17 +3,17 @@ import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export function QuizIntro({ onStart }: { onStart: () => void }) {
   return (
-    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-start text-center pt-2">
-      <div className="mb-6 flex flex-col items-center relative">
+    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-start text-center">
+      <div className="mb-2 flex flex-col items-center relative">
         <div className="absolute inset-0 bg-radial-gradient from-white/20 to-transparent blur-2xl -z-10 h-full w-full transform scale-150"></div>
         <img 
           src={logoAsset.url} 
           alt="Dono que Anuncia" 
-          className="h-32 w-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.1)] filter sm:h-48"
+          className="h-32 w-auto object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.05)] filter sm:h-48"
         />
       </div>
 
-      <h1 className="mt-6 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
+      <h1 className="mt-2 text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
         Descubra em apenas 2 minutos por que seus anúncios{" "}
         <span className="text-gradient-primary">não estão trazendo clientes.</span>
       </h1>

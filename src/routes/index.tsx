@@ -89,7 +89,7 @@ function Index() {
         </div>
       </div>
 
-      <div className="mx-auto flex min-h-[80vh] max-w-3xl items-start justify-center px-5 py-2">
+      <div className="mx-auto flex min-h-[80vh] max-w-3xl items-start justify-center px-5 pt-0 pb-6">
         {stage === "intro" ? (
           <QuizIntro
             onStart={() => {
