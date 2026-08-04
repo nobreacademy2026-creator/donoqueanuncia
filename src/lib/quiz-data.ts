@@ -25,16 +25,6 @@ export const QUESTIONS: Question[] = [
       { label: "Porque quero fazer meu negócio crescer de verdade.", value: "crescer", score: 85 },
     ],
   },
-  {
-    id: "perfil",
-    title: "Qual o seu perfil hoje?",
-    image: "https://images.unsplash.com/photo-1556740734-7f9a2b77098c?auto=format&fit=crop&q=80&w=800",
-    options: [
-      { label: "Sou dono de negócio e quero eu mesmo fazer.", value: "dono", score: 80 },
-      { label: "Sou gestor e quero aprender para prestar serviço.", value: "gestor", score: 70 },
-      { label: "Quero começar um negócio do zero.", value: "comecar_zero", score: 50 },
-    ],
-  },
 ];
 
 export type Answers = Record<string, string>;
@@ -53,7 +43,7 @@ export function calculatePillars(answers: Answers, score: number) {
   return [
     { pilar: "Criativo", valor: jitter(answers["dor"] === "resultado" ? -15 : 5) },
     { pilar: "Segmentação", valor: jitter(answers["motivacao"] === "clientes" ? -10 : 8) },
-    { pilar: "Oferta", valor: jitter(answers["perfil"] === "dono" ? 10 : -5) },
+    { pilar: "Oferta", valor: jitter(answers["motivacao"] === "crescer" ? 10 : -5) },
     { pilar: "Estratégia", valor: jitter(answers["dor"] === "comecar" ? -20 : 12) },
   ];
 }
