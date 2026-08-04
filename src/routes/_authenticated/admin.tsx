@@ -499,40 +499,75 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
 
 function ConfigSection({ theme }: { theme: "dark" | "light" }) {
   const [checkoutUrl, setCheckoutUrl] = useState("https://pay.kiwify.com.br/...");
+  const [promoPrice, setPromoPrice] = useState("R$ 197,00");
+  const [fullPrice, setFullPrice] = useState("R$ 497,00");
 
   const handleSave = () => {
-    toast.success("Configurações salvas com sucesso!");
+    toast.success("Dados da Página de Vendas atualizados!");
   };
 
   return (
-    <div className="space-y-6">
-      <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Configurações de Conversão</h3>
-      
-      <div className="space-y-2">
-        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>URL de Checkout</label>
-        <input 
-          type="text" 
-          value={checkoutUrl}
-          onChange={(e) => setCheckoutUrl(e.target.value)}
-          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
-            theme === "dark"
-            ? "border-white/10 bg-black/40 text-white"
-            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
-          }`}
-        />
+    <div className="space-y-8">
+      <div>
+        <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Página de Vendas & Oferta</h3>
+        <p className={`text-sm font-medium ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Sincronize preços, vídeos e links da oferta final.</p>
       </div>
+      
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div className="space-y-2">
+          <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Link do Checkout (Botões)</label>
+          <input 
+            type="text" 
+            value={checkoutUrl}
+            onChange={(e) => setCheckoutUrl(e.target.value)}
+            className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+              theme === "dark"
+              ? "border-white/10 bg-black/40 text-white"
+              : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+            }`}
+          />
+        </div>
 
-      <div className="space-y-2 pt-4">
-        <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Preço Promocional (Texto)</label>
-        <input 
-          type="text" 
-          placeholder="R$ 197,00"
-          className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
-            theme === "dark"
-            ? "border-white/10 bg-black/40 text-white"
-            : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
-          }`}
-        />
+        <div className="space-y-2">
+          <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Vídeo VSL (URL Youtube/Vimeo)</label>
+          <input 
+            type="text" 
+            placeholder="https://..."
+            className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+              theme === "dark"
+              ? "border-white/10 bg-black/40 text-white"
+              : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+            }`}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Preço Original (R$)</label>
+          <input 
+            type="text" 
+            value={fullPrice}
+            onChange={(e) => setFullPrice(e.target.value)}
+            className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+              theme === "dark"
+              ? "border-white/10 bg-black/40 text-white"
+              : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+            }`}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Preço Oferta (R$)</label>
+          <input 
+            type="text" 
+            value={promoPrice}
+            onChange={(e) => setPromoPrice(e.target.value)}
+            className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+              theme === "dark"
+              ? "border-white/10 bg-black/40 text-white"
+              : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+            }`}
+          />
+        </div>
       </div>
 
       <button 
