@@ -522,8 +522,23 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
 
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    loadPublished().then((published) => {
+      if (!published) return;
+      const local = readDraft();
+      const merged: FunnelDraft = {
+        steps: { ...published.steps, ...local.steps },
+        sales: { ...published.sales, ...local.sales },
+      };
+      writeDraft(merged);
+      setCheckoutUrl(merged.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
+      setPromoPrice(merged.sales.promoPrice ?? "R$ 197,00");
+      setFullPrice(merged.sales.fullPrice ?? "R$ 497,00");
+      setVslUrl(merged.sales.vslUrl ?? "");
+    });
+  }, []);
+
   const handleSave = async () => {
-    publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     setSaving(true);
     try {
