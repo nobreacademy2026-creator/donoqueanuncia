@@ -282,8 +282,8 @@ export function SalesPage() {
             <span className="text-xl text-zinc-400 line-through">De R$ 497,00</span>
             <span className="text-red-600 font-black text-2xl uppercase">POR APENAS</span>
             <div className="flex flex-col items-center bg-white border-2 border-[#22c55e] rounded-3xl p-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] transform scale-110 my-4">
-              <span className="text-7xl font-black text-[#22c55e] leading-tight">R$ 197,00</span>
-              <span className="text-xl font-bold text-zinc-900 mt-1 flex items-center gap-1">NO PIX 💸</span>
+               <span className="text-7xl font-black text-[#22c55e] leading-tight">R$ 197,00</span>
+               <span className="text-xl font-bold text-zinc-900 mt-1 flex items-center gap-1 uppercase">No pix <img src="https://logopng.com.br/logos/pix-106.png" className="h-5 object-contain" alt="Pix" /></span>
             </div>
             <p className="text-lg font-medium text-muted-foreground mt-2">
               Ou 12x de R$ 20,35 no cartão
