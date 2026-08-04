@@ -182,13 +182,14 @@ function AnalyticsSection() {
 
           const newFunnel = steps.map((s, i) => {
             const count = events.filter(e => 
-              e.event_name === s.event && (!s.filter || s.filter(e.payload))
+              e.event_name === s.event && (!s.filter || (e.payload && s.filter(e.payload)))
             ).length;
             
             let drop = 0;
             if (i > 0) {
+              const prevStep = steps[i-1];
               const prevCount = events.filter(e => 
-                e.event_name === steps[i-1].event && (!steps[i-1].filter || steps[i-1].filter(e.payload))
+                e.event_name === prevStep.event && (!prevStep.filter || (e.payload && prevStep.filter(e.payload)))
               ).length;
               drop = prevCount > 0 ? Math.round((1 - count / prevCount) * 100) : 0;
             }
