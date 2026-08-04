@@ -54,6 +54,8 @@ function AuthPage() {
         } else {
           toast.success("Bem-vindo de volta!");
           window.location.href = "/admin";
+          // Forçar recarga após um pequeno delay se o redirecionamento do router falhar
+          setTimeout(() => { window.location.reload(); }, 500);
         }
       }
     } catch (err) {
