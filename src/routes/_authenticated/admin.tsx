@@ -678,6 +678,32 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
   ]);
 
   const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    loadPublished().then((published) => {
+      if (!published) return;
+      const local = readDraft();
+      const merged: FunnelDraft = {
+        steps: { ...published.steps, ...local.steps },
+        sales: { ...published.sales, ...local.sales },
+      };
+      setDraft(merged);
+      writeDraft(merged);
+    });
+  }, []);
+
+  const handleSaveContent = async () => {
+    setSaving(true);
+    try {
+      await publishDraft(readDraft());
+      toast.success("Conteúdo do quiz salvo com sucesso!");
+    } catch (err: any) {
+      toast.error("Erro ao salvar: " + (err?.message ?? "tente novamente"));
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const QUIZ_OPTIONS: Record<string, string[]> = {
     dor: ["Não saber por onde começar.", "Gastar e não ver resultado."],
@@ -856,8 +882,12 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
         ))}
       </div>
 
-      <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90">
-        <Save className="h-4 w-4" /> Salvar Alterações de Conteúdo
+      <button
+        onClick={handleSaveContent}
+        disabled={saving}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-60"
+      >
+        <Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar Alterações de Conteúdo"}
       </button>
     </div>
   );
