@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export type FunnelDraft = {
-  steps: Record<string, { title?: string; image?: string; audio?: string }>;
+  steps: Record<string, { title?: string; image?: string; audio?: string; options?: string[] }>;
   sales: {
     videoHeadline?: string;
     videoThumb?: string;
