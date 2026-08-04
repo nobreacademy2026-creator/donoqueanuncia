@@ -1,34 +1,9 @@
-import { useEffect, useState } from "react";
-import { Bar, BarChart, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { TrendingUp, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import minionsAsset from "@/assets/minions-blah.png.asset.json";
 
-type Props = {
-  score: number;
-  pillars: { pilar: string; valor: number }[];
-};
-
-export function ResultStep({ score, pillars }: Props) {
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      current += 1;
-      setDisplay(current);
-      if (current >= score) clearInterval(interval);
-    }, 18);
-    return () => clearInterval(interval);
-  }, [score]);
-
-  const circumference = 2 * Math.PI * 54;
-
+export function ResultStep() {
   return (
     <div className="animate-rise-in mx-auto w-full max-w-2xl">
-
-
-
-
       {/* Quebra de Objeção Content */}
       <div className="mt-12 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
         <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
