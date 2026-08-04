@@ -100,7 +100,7 @@ export function ResultStep({ score, pillars }: Props) {
         <div className="space-y-4">
           <h3 className="text-xl sm:text-2xl font-bold leading-tight text-zinc-900">
             Vão te oferecer milhares de “fórmulas mágicas”, mas o que realmente vai{" "}
-            <span className="text-primary block sm:inline">destravar suas vendas</span> é:
+            <span className="text-red-600 block sm:inline">destravar suas vendas</span> é:
           </h3>
           
           <ul className="grid gap-4 text-left max-w-lg mx-auto mt-8">
