@@ -26,10 +26,7 @@ export function QuizIntro({ onStart }: { onStart: () => void }) {
       >
         Começar Diagnóstico <ArrowRight className="h-5 w-5" />
       </button>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
-        <span className="inline-flex items-center gap-2">
-          <Timer className="h-4 w-4 text-primary" /> 7 perguntas rápidas
-        </span>
+      <div className="mt-8 flex items-center justify-center text-sm text-muted-foreground">
         <span className="inline-flex items-center gap-2">
           <ShieldCheck className="h-4 w-4 text-primary" /> 100% online
         </span>
