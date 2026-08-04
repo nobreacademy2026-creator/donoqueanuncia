@@ -83,7 +83,7 @@ function AdminDashboard() {
 
 
           <main className="flex-1">
-            <div className="surface-card rounded-3xl p-8 border-white/5 bg-zinc-900/50 backdrop-blur-sm">
+            <div className="surface-card rounded-3xl p-8 border border-white/10 bg-zinc-900 shadow-2xl">
               {activeTab === "analytics" && <AnalyticsSection />}
               {activeTab === "config" && <ConfigSection />}
               {activeTab === "tracking" && <TrackingSection />}
