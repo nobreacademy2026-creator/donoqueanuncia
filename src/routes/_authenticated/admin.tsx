@@ -50,7 +50,7 @@ function AdminDashboard() {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
       <div className="mx-auto max-w-[1600px] pt-4">
-        <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-current opacity-90 transition-all">
+        <header className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-white/5 transition-all">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
