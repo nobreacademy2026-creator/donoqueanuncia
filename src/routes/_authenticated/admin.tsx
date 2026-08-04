@@ -668,6 +668,28 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
 
   const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
 
+  const QUIZ_OPTIONS: Record<string, string[]> = {
+    dor: ["Não saber por onde começar.", "Gastar e não ver resultado."],
+    motivacao: [
+      "Porque preciso de mais clientes todos os dias.",
+      "Porque minhas vendas estão paradas.",
+      "Porque quero fazer meu negócio crescer de verdade.",
+    ],
+  };
+
+  const updateOption = (id: string, index: number, value: string) => {
+    const current = readDraft();
+    const base = current.steps[id]?.options ?? [...(QUIZ_OPTIONS[id] ?? [])];
+    const options = [...base];
+    options[index] = value;
+    const next: FunnelDraft = {
+      ...current,
+      steps: { ...current.steps, [id]: { ...current.steps[id], options } },
+    };
+    setDraft(next);
+    writeDraft(next);
+  };
+
   const updateStep = (id: string, patch: { title?: string; image?: string }) => {
     const current = readDraft();
     const next: FunnelDraft = {
@@ -787,6 +809,24 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                   </div>
                 </div>
               </div>
+              {QUIZ_OPTIONS[item.id] && (
+                <div className="space-y-2 sm:col-span-2">
+                  <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Opções de resposta</label>
+                  <div className="grid gap-2">
+                    {(draft.steps[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
+                      <input
+                        key={i}
+                        type="text"
+                        value={option}
+                        onChange={(e) => updateOption(item.id, i, e.target.value)}
+                        className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                          theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
               {item.id === 'audio' && (
                 <div className="space-y-2">
                   <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Arquivo de Áudio (MP3)</label>
