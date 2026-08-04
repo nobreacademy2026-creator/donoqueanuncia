@@ -19,11 +19,17 @@ function AuthPage() {
   useEffect(() => {
     const checkSession = async () => {
       try {
+        console.log("Checking session...");
         const { data: { session } } = await supabase.auth.getSession();
+        
         if (session) {
-          console.log("Sessão detectada, verificando admin via server...");
+          console.log("Session found for:", session.user.email);
           
-          const res = await fetch('/api/public/check-auth', {
+          // Use absolute path for fetch to be safer
+          const apiUrl = `${window.location.origin}/api/public/check-auth`;
+          console.log("Calling check-auth API at:", apiUrl);
+          
+          const res = await fetch(apiUrl, {
             headers: {
               'Authorization': `Bearer ${session.access_token}`
             }
@@ -31,16 +37,22 @@ function AuthPage() {
 
           if (res.ok) {
             const data = await res.json();
+            console.log("API check-auth response:", data);
             if (data.hasAdmin) {
-              console.log("Admin confirmado, redirecionando...");
+              console.log("Admin confirmed, redirecting to /admin");
               window.location.href = "/admin";
               return;
+            } else {
+              console.log("Not an admin, staying on auth page.");
             }
+          } else {
+            console.error("API check-auth failed with status:", res.status);
           }
-          console.log("Usuário logado mas não é admin.");
+        } else {
+          console.log("No active session found.");
         }
       } catch (err) {
-        console.error("Erro na verificação de sessão:", err);
+        console.error("Error in checkSession:", err);
       } finally {
         setCheckingSession(false);
       }
@@ -95,7 +107,8 @@ function AuthPage() {
           if (session) {
             console.log("Login bem-sucedido, verificando permissões via API...");
             
-            const res = await fetch('/api/public/check-auth', {
+            const apiUrl = `${window.location.origin}/api/public/check-auth`;
+            const res = await fetch(apiUrl, {
               headers: {
                 'Authorization': `Bearer ${session.access_token}`
               }
