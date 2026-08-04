@@ -31,7 +31,7 @@ import {
   Eye
 } from "lucide-react";
 import { toast } from "sonner";
-import { readDraft, writeDraft, type FunnelDraft } from "@/lib/funnel-content";
+import { readDraft, writeDraft, publishDraft, loadPublished, type FunnelDraft } from "@/lib/funnel-content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
@@ -520,9 +520,19 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
     writeDraft({ ...current, sales: { ...current.sales, ...patch } });
   };
 
-  const handleSave = () => {
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
     publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
-    toast.success("Dados da Página de Vendas atualizados!");
+    setSaving(true);
+    try {
+      await publishDraft(readDraft());
+      toast.success("Dados da Página de Vendas salvos!");
+    } catch (err: any) {
+      toast.error("Erro ao salvar: " + (err?.message ?? "tente novamente"));
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -593,10 +603,11 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
 
       <button 
         onClick={handleSave}
+        disabled={saving}
         className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm"
       >
         <Save className="h-4 w-4" />
-        Salvar Alterações
+        {saving ? "Salvando..." : "Salvar Alterações"}
       </button>
     </div>
   );
