@@ -274,10 +274,10 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
   return (
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Acessos Totais" value={stats.access} icon={Users} color="text-blue-500" theme={theme} />
-        <StatCard label="Finalizaram Quiz" value={stats.completion} icon={MousePointer2} color="text-green-500" theme={theme} />
-        <StatCard label="Cliques Vídeo" value={stats.videoViews} icon={Video} color="text-purple-500" theme={theme} />
-        <StatCard label="Cliques Checkout" value={stats.checkout} icon={BarChart3} color="text-red-500" theme={theme} />
+        <StatCard label="Acessos Totais" value={stats.access} icon={Users} color={theme === "dark" ? "text-blue-400" : "text-blue-600"} theme={theme} />
+        <StatCard label="Finalizados" value={stats.completion} icon={Target} color={theme === "dark" ? "text-green-400" : "text-green-600"} theme={theme} />
+        <StatCard label="Cliques Vídeo" value={stats.videoViews} icon={Video} color={theme === "dark" ? "text-purple-400" : "text-purple-600"} theme={theme} />
+        <StatCard label="Checkouts" value={stats.checkout} icon={BarChart3} color={theme === "dark" ? "text-red-400" : "text-red-600"} theme={theme} />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
