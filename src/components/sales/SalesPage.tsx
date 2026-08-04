@@ -132,22 +132,38 @@ export function SalesPage() {
 
       {/* Audio Proof */}
       <Section title="Clique no áudio e escute o que meu aluno disse 😱" className="max-w-3xl">
-        <div className="surface-card rounded-3xl p-6 shadow-lg border-primary/5 flex items-center gap-4 bg-zinc-50">
-          <button className="h-12 w-12 rounded-full bg-green-500 flex items-center justify-center text-white shadow-lg">
-            <Play className="h-6 w-6 fill-current" />
-          </button>
-          <div className="flex-1">
-            <div className="h-1.5 w-full bg-zinc-200 rounded-full overflow-hidden">
-              <div className="h-full w-1/3 bg-green-500" />
-            </div>
-            <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-              <span>0:45</span>
-              <span>2:14</span>
+        <div className="surface-card group relative overflow-hidden rounded-[2.5rem] p-8 shadow-2xl border-2 border-green-100 bg-white transition-all duration-300 hover:shadow-green-200/40">
+          <div className="flex items-center gap-6">
+            <button className="h-20 w-20 flex-shrink-0 rounded-full bg-green-500 flex items-center justify-center text-white shadow-xl shadow-green-500/30 transition-transform active:scale-95 group-hover:scale-105">
+              <Play className="h-10 w-10 fill-current ml-1" />
+            </button>
+            <div className="flex-1 space-y-4">
+              <div className="flex justify-between items-end">
+                <div>
+                  <h4 className="font-bold text-zinc-900 text-lg">Resultado Real</h4>
+                  <p className="text-zinc-500 text-sm font-medium">Aluno do Dono que Anuncia</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-green-600 font-bold text-xl">De R$ 10k → R$ 100k</span>
+                </div>
+              </div>
+              <div className="relative h-3 w-full bg-zinc-100 rounded-full overflow-hidden border border-zinc-50">
+                <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.4)]" />
+                <div className="absolute inset-0 flex items-center justify-around px-4 opacity-20">
+                   {[...Array(12)].map((_, i) => (
+                     <div key={i} className={`w-0.5 bg-zinc-400 ${i % 3 === 0 ? 'h-full' : 'h-1/2'}`} />
+                   ))}
+                </div>
+              </div>
+              <div className="flex justify-between text-xs font-bold text-zinc-400 tracking-tighter">
+                <span>00:45</span>
+                <span>02:14</span>
+              </div>
             </div>
           </div>
         </div>
-        <p className="mt-6 text-center text-lg font-medium leading-relaxed">
-          De R$ 10 mil para mais de R$ 100 mil por mês, o método <span className="text-primary">STARFLIX</span> funciona e o próximo pode ser VOCÊ.
+        <p className="mt-8 text-center text-xl font-bold leading-relaxed text-zinc-800">
+          O método <span className="text-primary font-black">STARFLIX</span> é a sua ponte para o próximo nível.
         </p>
         <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
           <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
