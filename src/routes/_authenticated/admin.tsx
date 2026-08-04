@@ -35,6 +35,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -48,14 +49,27 @@ function AdminDashboard() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
-      <div className="mx-auto max-w-7xl pt-4">
+      <div className="mx-auto max-w-[1600px] pt-4">
         <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-current opacity-90 transition-all">
-          <div>
-            <h1 className={`text-4xl font-black tracking-tighter uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Dashboard Premium</h1>
-            <p className={`${theme === "dark" ? "text-zinc-500" : "text-zinc-600"} mt-1 font-bold flex items-center gap-2`}>
-              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              Gestão do Funil Dono que Anuncia
-            </p>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
+                theme === "dark" 
+                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white" 
+                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-sm"
+              }`}
+              title={isSidebarOpen ? "Recolher Menu" : "Expandir Menu"}
+            >
+              <Layout className={`h-5 w-5 transition-transform duration-300 ${isSidebarOpen ? "" : "rotate-90"}`} />
+            </button>
+            <div>
+              <h1 className={`text-4xl font-black tracking-tighter uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Dashboard Premium</h1>
+              <p className={`${theme === "dark" ? "text-zinc-500" : "text-zinc-600"} mt-1 font-bold flex items-center gap-2`}>
+                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                Gestão do Funil Dono que Anuncia
+              </p>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <button 
@@ -90,13 +104,15 @@ function AdminDashboard() {
           </div>
         </header>
 
-        <div className="flex flex-col gap-8 lg:flex-row">
-          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all ${
+        <div className="flex flex-col gap-8 lg:flex-row items-start">
+          <aside className={`w-full shrink-0 lg:w-64 sticky top-6 self-start rounded-2xl border p-4 transition-all duration-500 ease-in-out overflow-hidden ${
+            isSidebarOpen ? "opacity-100 translate-x-0" : "lg:w-0 lg:p-0 lg:border-0 opacity-0 -translate-x-10 pointer-events-none"
+          } ${
             theme === "dark" 
             ? "border-white/10 bg-zinc-900/50" 
             : "border-zinc-200 bg-white shadow-sm"
           }`}>
-            <nav className="flex flex-col gap-1">
+            <nav className="flex flex-col gap-1 w-56">
               <NavButton 
                 active={activeTab === "analytics"} 
                 onClick={() => setActiveTab("analytics")}
@@ -129,7 +145,7 @@ function AdminDashboard() {
           </aside>
 
 
-          <main className="flex-1">
+          <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "" : "w-full"}`}>
             <div className={`surface-card rounded-[2rem] p-8 border transition-all ${
               theme === "dark" 
               ? "border-white/10 bg-zinc-900" 
