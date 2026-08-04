@@ -53,6 +53,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "investimento",
     title: "Quanto você investe por mês?",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Até R$300", value: "ate_300", score: 45 },
       { label: "R$300 a R$1.000", value: "300_1000", score: 62 },
@@ -63,6 +64,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "dificuldade",
     title: "Qual é sua maior dificuldade?",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Não sei criar anúncios", value: "criar", score: 40 },
       { label: "Não sei para quem anunciar", value: "publico", score: 45 },
