@@ -95,8 +95,24 @@ export function SalesPage({ firstName }: { firstName?: string | undefined }) {
         <p className="mt-5 text-base text-muted-foreground sm:text-lg">
           Mesmo que você nunca tenha criado um anúncio.
         </p>
-        <div className="mt-9">
-          <CTAButton />
+        
+        <div className="surface-card mt-8 rounded-3xl border-primary/20 p-8 text-center sm:p-10">
+          <p className="text-sm font-bold tracking-widest text-muted-foreground uppercase opacity-60">
+            OFERTA EXCLUSIVA
+          </p>
+          <div className="mt-4 flex flex-col items-center justify-center gap-2">
+            <span className="text-xl text-muted-foreground line-through opacity-50">De R$ 399,00</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold">Por apenas</span>
+              <span className="text-5xl font-black text-primary">R$ 197,00</span>
+            </div>
+          </div>
+          <div className="mt-8">
+            <CTAButton label="QUERO APROVEITAR O DESCONTO E COMEÇAR AGORA" />
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            *Pagamento único, acesso imediato e vitalício.
+          </p>
         </div>
       </section>
 

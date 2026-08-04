@@ -1,6 +1,7 @@
 export type Question = {
   id: string;
   title: string;
+  image?: string;
   options: { label: string; value: string; score: number }[];
 };
 
@@ -8,6 +9,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "segmento",
     title: "Qual é o seu segmento?",
+    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Loja Física", value: "loja_fisica", score: 60 },
       { label: "Loja Online", value: "loja_online", score: 70 },
@@ -20,6 +22,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "anuncia",
     title: "Você anuncia atualmente?",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Sim", value: "sim", score: 78 },
       { label: "Não", value: "nao", score: 40 },
@@ -28,6 +31,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "como",
     title: "Como você anuncia?",
+    image: "https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Impulsiono publicações", value: "impulsiono", score: 45 },
       { label: "Gerenciador de Anúncios", value: "gerenciador", score: 82 },
@@ -38,6 +42,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "objetivo",
     title: "Qual seu maior objetivo?",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Mais clientes", value: "clientes", score: 65 },
       { label: "Mais vendas", value: "vendas", score: 68 },
@@ -48,6 +53,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "investimento",
     title: "Quanto você investe por mês?",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Até R$300", value: "ate_300", score: 45 },
       { label: "R$300 a R$1.000", value: "300_1000", score: 62 },
@@ -58,6 +64,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "dificuldade",
     title: "Qual é sua maior dificuldade?",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Não sei criar anúncios", value: "criar", score: 40 },
       { label: "Não sei para quem anunciar", value: "publico", score: 45 },
@@ -68,6 +75,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "tempo_empresa",
     title: "Há quanto tempo sua empresa existe?",
+    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Menos de 1 ano", value: "menos_1", score: 50 },
       { label: "1 a 3 anos", value: "1_3", score: 65 },

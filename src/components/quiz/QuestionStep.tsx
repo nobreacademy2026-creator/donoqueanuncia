@@ -27,6 +27,17 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
 
       <h2 className="mt-5 text-2xl font-semibold tracking-tight sm:text-3xl">{question.title}</h2>
 
+      {question.image ? (
+        <div className="mt-6 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-secondary/30">
+          <img
+            src={question.image}
+            alt={question.title}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      ) : null}
+
       <div className="mt-7 grid gap-3">
         {question.options.map((option) => {
           const active = selected === option.value;
