@@ -626,7 +626,9 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
                   theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
                 }`}>
-                  {item.id === 'audio' ? <Music className="h-5 w-5" /> : <ImageIcon className="h-5 w-5" />}
+                  {item.id === 'audio' ? <Music className="h-5 w-5" /> : 
+                   item.id === 'sales' ? <Video className="h-5 w-5" /> : 
+                   <ImageIcon className="h-5 w-5" />}
                 </div>
                 <div>
                   <h4 className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}>{item.title}</h4>
