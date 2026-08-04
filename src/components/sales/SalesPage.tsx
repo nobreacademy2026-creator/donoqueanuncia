@@ -1,14 +1,17 @@
+import React from "react";
 import {
   Award,
   BadgeCheck,
   Check,
   ChevronDown,
+  Clock,
   Megaphone,
   MessageCircle,
   Play,
   ShieldCheck,
   Star,
   Target,
+  Timer,
   Users,
   Wallet,
   Zap,
@@ -90,12 +93,37 @@ function Section({ title, children, className = "" }: { title: string; children:
 }
 
 export function SalesPage() {
+  const [timeLeft, setTimeLeft] = React.useState(900); // 15 minutes in seconds
+
+  React.useEffect(() => {
+    if (timeLeft <= 0) return;
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
+      {/* Countdown Timer Floating */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-2 sm:p-4 pointer-events-none">
+        <div className="bg-red-600 text-white px-4 py-2 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white animate-bounce pointer-events-auto">
+          <Clock className="h-4 w-4 animate-pulse" />
+          <span className="text-xs font-black uppercase tracking-tighter">Oferta expira em:</span>
+          <span className="text-lg font-black font-mono tabular-nums">{formatTime(timeLeft)}</span>
+        </div>
+      </div>
+
       {/* Top Banner */}
-      <div className="bg-primary/10 border-b border-primary/20 py-3 text-center">
-        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
-          ⚡ OPORTUNIDADE ÚNICA: VAISER A PAGINA DA PROMOÇÃO
+      <div className="bg-primary/10 border-b border-primary/20 py-3 text-center mt-12 sm:mt-0">
+        <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm flex items-center justify-center gap-2">
+          <Timer className="h-4 w-4 animate-pulse" /> OPORTUNIDADE ÚNICA: APROVEITE A PROMOÇÃO AGORA
         </p>
       </div>
 
