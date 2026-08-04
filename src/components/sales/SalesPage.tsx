@@ -71,10 +71,10 @@ const FAQ = [
   { q: "E se eu não gostar?", a: "Você tem 7 dias de garantia incondicional. Basta pedir o reembolso e devolvemos 100% do valor." },
 ];
 
-function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = "" }: { label?: string; className?: string }) {
+function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = "", href }: { label?: string; className?: string; href?: string }) {
   return (
     <a
-      href={CHECKOUT_URL}
+      href={href || CHECKOUT_URL}
       onClick={() => trackCheckoutClick({ origem: "pagina_vendas" })}
       className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-transform duration-200 hover:scale-[1.02] sm:text-base shadow-lg shadow-green-600/20 ${className}`}
     >
@@ -92,7 +92,23 @@ function Section({ title, children, className = "" }: { title: string; children:
   );
 }
 
-export function SalesPage() {
+type SalesDraft = {
+  videoHeadline?: string;
+  videoThumb?: string;
+  vslUrl?: string;
+  fullPrice?: string;
+  promoPrice?: string;
+  checkoutUrl?: string;
+};
+
+export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
+  const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
+  const videoThumb =
+    draft.videoThumb || "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
+  const fullPrice = draft.fullPrice || "R$ 497,00";
+  const promoPrice = draft.promoPrice || "R$ 197,00";
+  const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
+
   const [timeLeft, setTimeLeft] = React.useState(900); // 15 minutes in seconds
 
   React.useEffect(() => {
@@ -126,12 +142,12 @@ export function SalesPage() {
       {/* Hero / Video Section */}
       <section className="mx-auto max-w-4xl px-5 pt-8 text-center">
         <h2 className="text-2xl font-black text-red-600 uppercase mb-8 sm:text-3xl leading-tight">
-          ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:
+          {headline}
         </h2>
 
         <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group mb-10">
           <img 
-            src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200" 
+            src={videoThumb} 
             alt="Vídeo explicativo DONO QUE ANUNCIA"
             className="h-full w-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
           />
@@ -156,7 +172,7 @@ export function SalesPage() {
         </div>
 
         <div className="mt-10">
-          <CTAButton label="Quero garantir essa Oportunidade" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20 px-12 py-6 text-xl rounded-2xl animate-pulse-green" />
+          <CTAButton href={checkoutUrl} label="Quero garantir essa Oportunidade" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20 px-12 py-6 text-xl rounded-2xl animate-pulse-green" />
         </div>
       </section>
 
@@ -229,7 +245,7 @@ export function SalesPage() {
           </div>
         </div>
         <div className="mt-8 text-center">
-          <CTAButton label="Eu quero isso também" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
+          <CTAButton href={checkoutUrl} label="Eu quero isso também" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
         </div>
       </Section>
 
@@ -254,7 +270,7 @@ export function SalesPage() {
           </p>
         </div>
         <div className="mt-8 text-center">
-          <CTAButton label="QUERO VENDER MUITO 🤩" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
+          <CTAButton href={checkoutUrl} label="QUERO VENDER MUITO 🤩" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
         </div>
       </Section>
 
@@ -315,10 +331,10 @@ export function SalesPage() {
           </div>
           
           <div className="mt-6 flex flex-col items-center gap-2">
-            <span className="text-xl text-zinc-400 line-through">De R$ 497,00</span>
+            <span className="text-xl text-zinc-400 line-through">De {fullPrice}</span>
             <span className="text-red-600 font-black text-2xl uppercase">POR APENAS</span>
             <div className="flex flex-col items-center bg-white border-2 border-[#22c55e] rounded-3xl p-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] transform scale-110 my-4">
-               <span className="text-7xl font-black text-[#22c55e] leading-tight">R$ 197,00</span>
+               <span className="text-7xl font-black text-[#22c55e] leading-tight">{promoPrice}</span>
                <span className="text-xl font-bold text-zinc-900 mt-1 flex items-center gap-1 uppercase">No pix <img src="https://logopng.com.br/logos/pix-106.png" className="h-5 object-contain" alt="Pix" /></span>
             </div>
             <p className="text-lg font-medium text-muted-foreground mt-2">
@@ -336,7 +352,7 @@ export function SalesPage() {
             <p className="text-sm font-black text-green-600 animate-bounce">
               Clica no link e aproveita o desconto 👇
             </p>
-            <CTAButton label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
+            <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
           </div>
           
           <p className="mt-6 text-xs text-muted-foreground/60">
