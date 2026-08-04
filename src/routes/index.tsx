@@ -48,7 +48,7 @@ function Index() {
   const [stage, setStage] = useState<Stage>("intro");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [lead, setLead] = useState<Lead | null>(null);
+  const [lead, setLead] = useState<any | null>(null);
 
   const score = useMemo(() => calculateScore(answers), [answers]);
   const pillars = useMemo(() => calculatePillars(answers, score), [answers, score]);
