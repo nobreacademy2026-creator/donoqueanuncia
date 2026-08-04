@@ -7,6 +7,23 @@ export type Question = {
 
 export const QUESTIONS: Question[] = [
   {
+    id: "desanima",
+    title: "Na hora de fazer seus anúncios patrocinados, o que mais te desanima?",
+    options: [
+      { label: "Não saber por onde começar.", value: "comecar", score: 30 },
+      { label: "Gastar e não ver resultado.", value: "resultado", score: 45 },
+    ],
+  },
+  {
+    id: "objetivo",
+    title: "Por que você sente que precisa fazer anúncios?",
+    options: [
+      { label: "Porque preciso de mais clientes todos os dias.", value: "clientes", score: 70 },
+      { label: "Porque minhas vendas estão paradas.", value: "paradas", score: 60 },
+      { label: "Porque quero fazer meu negócio crescer de verdade.", value: "crescer", score: 85 },
+    ],
+  },
+  {
     id: "segmento",
     title: "Qual é o seu segmento?",
     image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=800",
@@ -40,17 +57,6 @@ export const QUESTIONS: Question[] = [
     ],
   },
   {
-    id: "objetivo",
-    title: "Qual seu maior objetivo?",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
-    options: [
-      { label: "Mais clientes", value: "clientes", score: 65 },
-      { label: "Mais vendas", value: "vendas", score: 68 },
-      { label: "Mais mensagens no WhatsApp", value: "whatsapp", score: 72 },
-      { label: "Mais visitas à loja", value: "visitas", score: 64 },
-    ],
-  },
-  {
     id: "investimento",
     title: "Quanto você investe por mês?",
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800",
@@ -59,17 +65,6 @@ export const QUESTIONS: Question[] = [
       { label: "R$300 a R$1.000", value: "300_1000", score: 62 },
       { label: "R$1.000 a R$5.000", value: "1000_5000", score: 78 },
       { label: "Acima de R$5.000", value: "acima_5000", score: 88 },
-    ],
-  },
-  {
-    id: "dificuldade",
-    title: "Qual é sua maior dificuldade?",
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800",
-    options: [
-      { label: "Não sei criar anúncios", value: "criar", score: 40 },
-      { label: "Não sei para quem anunciar", value: "publico", score: 45 },
-      { label: "Gasto dinheiro e não vendo", value: "gasto", score: 50 },
-      { label: "Não tenho tempo", value: "tempo", score: 58 },
     ],
   },
   {
@@ -98,11 +93,11 @@ export function calculateScore(answers: Answers) {
 
 export function calculatePillars(answers: Answers, score: number) {
   const jitter = (n: number) => Math.max(15, Math.min(95, Math.round(score + n)));
-  const d = answers["dificuldade"];
+  const obj = answers["objetivo"];
   return [
-    { pilar: "Criativo", valor: jitter(d === "criar" ? -22 : -6) },
-    { pilar: "Segmentação", valor: jitter(d === "publico" ? -25 : -10) },
-    { pilar: "Oferta", valor: jitter(d === "gasto" ? -20 : -4) },
+    { pilar: "Criativo", valor: jitter(obj === "paradas" ? -15 : -6) },
+    { pilar: "Segmentação", valor: jitter(obj === "clientes" ? -10 : -5) },
+    { pilar: "Oferta", valor: jitter(answers["desanima"] === "resultado" ? -20 : -4) },
     { pilar: "Estratégia", valor: jitter(answers["como"] === "gerenciador" ? 2 : -18) },
   ];
 }
