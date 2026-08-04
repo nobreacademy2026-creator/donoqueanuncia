@@ -9,9 +9,9 @@ import { AnalyzingStep } from "@/components/quiz/AnalyzingStep";
 import { ResultStep } from "@/components/quiz/ResultStep";
 import { SalesPage } from "@/components/sales/SalesPage";
 
-const TITLE = "Dono que Anuncia — Diagnóstico gratuito de anúncios | Nobre Academy";
+const TITLE = "Dono que Anuncia — Diagnóstico gratuito de anúncios";
 const DESCRIPTION =
-  "Descubra em 2 minutos por que seus anúncios não trazem clientes. Faça o diagnóstico gratuito da Nobre Academy e receba um plano personalizado para o seu negócio.";
+  "Descubra em 2 minutos por que seus anúncios não trazem clientes. Faça o diagnóstico gratuito e receba um plano personalizado para o seu negócio.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
           "@type": "Course",
           name: "Dono que Anuncia",
           description: DESCRIPTION,
-          provider: { "@type": "Organization", name: "Nobre Academy" },
+          provider: { "@type": "Organization", name: "Dono que Anuncia" },
         }),
       },
     ],
@@ -75,15 +75,15 @@ function Index() {
 
   if (stage === "sales") {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
         <SalesPage />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur">
+    <div className="min-h-screen bg-white text-zinc-900 selection:bg-primary selection:text-white">
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-zinc-100">
         <div className="mx-auto max-w-2xl px-5 py-4">
           <QuizProgress value={progress} />
         </div>
@@ -121,9 +121,9 @@ function Index() {
                   setStage("sales");
                   window.scrollTo({ top: 0 });
                 }}
-                className="gradient-primary glow-primary inline-flex items-center gap-2 rounded-2xl px-12 py-5 text-lg font-bold text-primary-foreground transition-transform duration-200 hover:scale-[1.03]"
+                className="bg-green-600 hover:bg-green-700 glow-primary inline-flex items-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-transform duration-200 hover:scale-[1.03] shadow-lg shadow-green-600/20"
               >
-                Ver Meu Plano de Ação Completo
+                Vou dominar isso agora
               </button>
             </div>
           </div>
