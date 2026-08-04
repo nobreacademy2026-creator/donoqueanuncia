@@ -22,7 +22,7 @@ export function QuizIntro({ onStart }: { onStart: () => void }) {
       </p>
       <button
         onClick={onStart}
-        className="bg-[#22c55e] hover:bg-[#16a34a] glow-primary mt-9 inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-base font-semibold text-white transition-transform duration-200 hover:scale-[1.03] shadow-lg shadow-green-600/20"
+        className="gradient-primary glow-primary mt-9 inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-base font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.03]"
       >
         Começar Diagnóstico <ArrowRight className="h-5 w-5" />
       </button>
