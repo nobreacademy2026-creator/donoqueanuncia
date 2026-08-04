@@ -85,7 +85,7 @@ export function SalesPage() {
       {/* Top Banner / Auto Top */}
       <div className="bg-primary/10 border-b border-primary/20 py-3 text-center">
         <p className="text-xs font-bold tracking-widest text-primary uppercase sm:text-sm">
-          ⚡ OPORTUNIDADE ÚNICA: SEU DIAGNÓSTICO ESTÁ PRONTO!
+          ⚡ OPORTUNIDADE ÚNICA: VAISER A PAGINA DA PROMOÇÃO
         </p>
       </div>
 
