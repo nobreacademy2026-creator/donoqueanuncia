@@ -22,7 +22,7 @@ export const Route = createFileRoute('/api/public/check-auth')({
           let userId: string | undefined;
           try {
             // Simple base64 decode of the JWT payload
-            const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+            const payload = JSON.parse(Buffer.from(token.split('.')[1] || '', 'base64').toString());
             userId = payload.sub;
           } catch (e) {
             return new Response(JSON.stringify({ error: 'Invalid token format' }), { status: 401 });
