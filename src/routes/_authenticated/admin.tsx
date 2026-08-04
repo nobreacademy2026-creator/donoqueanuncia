@@ -103,7 +103,7 @@ function AnalyticsSection() {
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Acessos Totais" value={stats.access} icon={Users} color="text-blue-500" />
-        <StatCard label="Leads Gerados" value={stats.leads} icon={MousePointer2} color="text-green-500" />
+        <StatCard label="Cliques Resultado" value={stats.leads} icon={MousePointer2} color="text-green-500" />
         <StatCard label="Cliques Checkout" value={stats.checkout} icon={BarChart3} color="text-red-500" />
       </div>
 
