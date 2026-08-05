@@ -1,7 +1,7 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
 import { useState, useRef } from "react";
 
-export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { title?: string; image?: string; audio?: string } }) {
+export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { title?: string; image?: string; audio?: string; options?: string[] } }) {
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">("objection");
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
