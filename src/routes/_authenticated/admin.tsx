@@ -1648,7 +1648,7 @@ export function ContentSection({
                         />
                       </label>
 
-                      { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio) && (
+                      { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
                         <button
                           onClick={() => {
                             updateStep(item.id, { image: "", audio: "" });
