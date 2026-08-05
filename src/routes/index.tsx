@@ -162,6 +162,25 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-900 selection:bg-primary selection:text-white">
+      {/* Fallback visual sutil para dados em carregamento ou erro */}
+      {!draft.steps['intro'] && stage === "intro" && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 text-white p-6 text-center">
+           <div className="mb-6 flex flex-col items-center animate-pulse">
+             <div className="h-20 w-48 bg-white/5 rounded-lg mb-4"></div>
+             <div className="h-4 w-64 bg-white/5 rounded mb-2"></div>
+             <div className="h-4 w-48 bg-white/5 rounded"></div>
+           </div>
+           <p className="text-zinc-500 text-sm">Sincronizando diagnóstico...</p>
+           {/* Botão de retry sutil em caso de demora excessiva */}
+           <button 
+             onClick={() => window.location.reload()} 
+             className="mt-4 text-[10px] uppercase tracking-widest text-zinc-700 hover:text-white transition-colors"
+           >
+             Recarregar se demorar
+           </button>
+        </div>
+      )}
+
       <div className="sticky top-0 z-10 bg-zinc-950/80 backdrop-blur border-b border-white/5">
         <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-center">
           <div className="flex-1 max-w-md">
