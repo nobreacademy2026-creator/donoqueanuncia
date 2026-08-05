@@ -91,6 +91,12 @@ export function useFunnelDraft(): FunnelDraft {
         if (active && published) setDraft(published);
       }).catch(err => {
         console.error("[Funnel] Erro ao carregar conteúdo:", err);
+        // Tenta novamente após um pequeno atraso se houver erro de permissão/rede
+        setTimeout(() => {
+          if (active) {
+            loadPublished().then(p => p && setDraft(p)).catch(() => {});
+          }
+        }, 2000);
       });
       return () => {
         active = false;
