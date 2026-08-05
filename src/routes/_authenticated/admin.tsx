@@ -1009,7 +1009,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                         onChange={(e) => handleUpload(item.id, e.target.files?.[0], 'audio')}
                       />
                     </label>
-                    {draft.steps[item.id]?.audio && (
+                    {draft.steps?.[item.id]?.audio && (
                       <button 
                         onClick={() => {
                           updateStep(item.id, { audio: "" });
