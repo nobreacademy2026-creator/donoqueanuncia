@@ -37,7 +37,7 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
           </div>
 
           <p className="mx-auto max-w-lg text-lg text-zinc-600 font-medium sm:text-xl leading-relaxed px-4">
-            {description.split('personalizado').map((part, i) => (
+            {description.split('personalizado').map((part: string, i: number) => (
               <span key={i}>
                 {part}
                 {i === 0 && description.includes('personalizado') && <strong className="text-zinc-950 font-bold">personalizado</strong>}
