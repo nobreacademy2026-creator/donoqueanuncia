@@ -215,9 +215,13 @@ function Section({
   className?: string;
 }) {
   return (
-    <section className={`mx-auto mt-20 w-full max-w-5xl px-5 ${className}`}>
-      <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
-      <div className="mt-8">{children}</div>
+    <section className={`mx-auto mt-24 w-full max-w-6xl px-5 sm:mt-32 sm:px-8 ${className}`}>
+      {title && (
+        <h2 className="mx-auto max-w-3xl text-center text-3xl font-black tracking-[-0.035em] text-zinc-950 sm:text-5xl">
+          {title}
+        </h2>
+      )}
+      <div className={title ? "mt-10 sm:mt-14" : ""}>{children}</div>
     </section>
   );
 }
@@ -272,16 +276,16 @@ export function SalesPage({
   };
 
   return (
-    <main className="animate-rise-in bg-zinc-50 pb-24 text-zinc-900 selection:bg-black selection:text-white">
+    <main className="animate-rise-in overflow-hidden bg-[#f6f6f4] pb-24 text-zinc-900 selection:bg-red-600 selection:text-white sm:pb-32">
       {/* Countdown Timer Floating Banner */}
-      <div className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none sm:px-0">
+      <div className="fixed top-3 left-0 right-0 z-50 px-4 pointer-events-none sm:top-5 sm:px-0">
         <div className="mx-auto flex max-w-lg justify-center pointer-events-auto">
-          <div className="bg-white/95 backdrop-blur-md text-red-600 px-6 py-2 rounded-full shadow-[0_8px_32px_rgba(220,38,38,0.15)] flex items-center gap-3 border border-red-100/50">
+          <div className="flex items-center gap-3 rounded-full border border-white/10 bg-zinc-950/90 px-5 py-2.5 text-white shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-6">
             <Timer className="h-4 w-4 animate-pulse shrink-0" />
             <span className="text-[10px] font-bold uppercase tracking-widest sm:text-xs">
               Oferta expira em:
             </span>
-            <span className="text-xl font-black font-mono tabular-nums leading-none tracking-tight sm:text-2xl min-w-[3.5rem] text-center">
+            <span className="min-w-[3.5rem] text-center font-mono text-xl font-black leading-none tracking-tight text-red-500 tabular-nums sm:text-2xl">
               {formatTime(timeLeft)}
             </span>
           </div>
@@ -289,94 +293,97 @@ export function SalesPage({
       </div>
 
       {/* Hero / Video Section */}
-      <section className="mx-auto max-w-5xl px-5 pt-12 text-center">
-        <div className="inline-block bg-red-100 text-red-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">
-          Acesso Liberado com Desconto
-        </div>
-        <h2 className="text-4xl font-black text-zinc-950 uppercase mb-10 sm:text-6xl leading-[0.9] tracking-tighter">
-          {headline.split(" ").map((word, i) => (
-            <span key={i} className={word.toUpperCase() === "VÍDEO" ? "text-red-600" : ""}>
-              {word}{" "}
-            </span>
-          ))}
-        </h2>
-
-        <div className="mx-auto max-w-4xl relative">
-          <div
-            className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group mb-12 border-4 border-white"
-            onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
-          >
-            {vslUrl && isUploadedVideo ? (
-              <video
-                src={vslUrl}
-                className="h-full w-full bg-black object-contain"
-                controls
-                playsInline
-                preload="metadata"
-              >
-                Seu navegador não suporta reprodução de vídeo.
-              </video>
-            ) : vslUrl ? (
-              <EmbeddedVideo url={vslUrl} />
-            ) : (
-              <>
-                {videoThumb && (
-                  <img
-                    key={videoThumb}
-                    src={videoThumb}
-                    alt="Vídeo explicativo DONO QUE ANUNCIA"
-                    className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-105"
-                  />
-                )}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                  <div className="h-20 w-20 rounded-full bg-red-600 flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
-                    <Play className="h-10 w-10 fill-current ml-1" />
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm px-5 py-2 rounded-full">
-                    <span className="font-bold text-[10px] tracking-widest uppercase">
-                      Assistir Aula Completa
-                    </span>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Live Badge */}
-            <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-red-600 px-2.5 py-1 rounded-full shadow-sm">
-              <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-              <span className="text-[9px] font-bold text-white uppercase tracking-wider">
-                Gravado
+      <section className="relative bg-zinc-950 px-5 pb-20 pt-28 text-center text-white sm:pb-28 sm:pt-36">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.18),transparent_38%)]" />
+        <div className="relative mx-auto max-w-6xl">
+          <div className="mb-6 inline-flex rounded-full border border-red-500/25 bg-red-500/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-red-400">
+            Acesso Liberado com Desconto
+          </div>
+          <h2 className="mx-auto mb-10 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-white sm:text-7xl">
+            {headline.split(" ").map((word, i) => (
+              <span key={i} className={word.toUpperCase() === "VÍDEO" ? "text-red-600" : ""}>
+                {word}{" "}
               </span>
+            ))}
+          </h2>
+
+          <div className="mx-auto max-w-4xl relative">
+            <div
+              className="group relative mb-12 aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.55)] sm:rounded-[2rem]"
+              onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
+            >
+              {vslUrl && isUploadedVideo ? (
+                <video
+                  src={vslUrl}
+                  className="h-full w-full bg-black object-contain"
+                  controls
+                  playsInline
+                  preload="metadata"
+                >
+                  Seu navegador não suporta reprodução de vídeo.
+                </video>
+              ) : vslUrl ? (
+                <EmbeddedVideo url={vslUrl} />
+              ) : (
+                <>
+                  {videoThumb && (
+                    <img
+                      key={videoThumb}
+                      src={videoThumb}
+                      alt="Vídeo explicativo DONO QUE ANUNCIA"
+                      className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-105"
+                    />
+                  )}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                    <div className="h-20 w-20 rounded-full bg-red-600 flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
+                      <Play className="h-10 w-10 fill-current ml-1" />
+                    </div>
+                    <div className="bg-black/40 backdrop-blur-sm px-5 py-2 rounded-full">
+                      <span className="font-bold text-[10px] tracking-widest uppercase">
+                        Assistir Aula Completa
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Live Badge */}
+              <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-red-600 px-2.5 py-1 rounded-full shadow-sm">
+                <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                <span className="text-[9px] font-bold text-white uppercase tracking-wider">
+                  Gravado
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="space-y-8 max-w-3xl mx-auto">
-          <h3 className="text-4xl font-black text-zinc-950 leading-none tracking-tighter uppercase">
-            Parabéns! Você deu o primeiro passo.
-          </h3>
-          <p className="text-xl text-zinc-600 leading-relaxed font-medium">
-            Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
-            atraindo novos clientes e vendendo muito mais{" "}
-            <span className="text-zinc-950 font-black">usando apenas o seu celular.</span>
-          </p>
+          <div className="mx-auto max-w-3xl space-y-7">
+            <h3 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-5xl">
+              Parabéns! Você deu o primeiro passo.
+            </h3>
+            <p className="text-lg font-medium leading-relaxed text-zinc-400 sm:text-xl">
+              Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
+              atraindo novos clientes e vendendo muito mais{" "}
+              <span className="font-black text-white">usando apenas o seu celular.</span>
+            </p>
 
-          <div className="flex flex-col items-center gap-4">
-            <CTAButton
-              href={checkoutUrl}
-              label="Quero Garantir Minha Vaga com Desconto"
-              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] px-8 py-6 text-xl rounded-2xl animate-pulse-green w-full sm:w-auto uppercase tracking-tighter"
-            />
-            <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
-              <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
+            <div className="flex flex-col items-center gap-4">
+              <CTAButton
+                href={checkoutUrl}
+                label="Quero Garantir Minha Vaga com Desconto"
+                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg"
+              />
+              <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
+                <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Objective */}
-      <div className="mx-auto mt-20 max-w-2xl px-5 text-center">
-        <div className="rounded-3xl p-8 border border-zinc-100 bg-white">
+      <div className="mx-auto -mt-8 max-w-3xl px-5 text-center relative z-10 sm:-mt-10">
+        <div className="rounded-3xl border border-zinc-200/70 bg-white p-7 shadow-xl shadow-zinc-900/5 sm:p-10">
           <h3 className="text-xl font-black mb-4 flex items-center justify-center gap-2 uppercase">
             🎯 Seu Objetivo:
           </h3>
@@ -390,8 +397,8 @@ export function SalesPage({
       </div>
 
       {/* Hero / Solution Content (Moved down) */}
-      <section className="mx-auto max-w-3xl px-5 mt-20 text-center">
-        <h2 className="text-3xl leading-tight font-black tracking-tight sm:text-4xl uppercase text-zinc-900">
+      <section className="mx-auto mt-24 max-w-5xl px-5 text-center sm:mt-32">
+        <h2 className="text-3xl font-black leading-tight tracking-[-0.035em] text-zinc-950 sm:text-5xl">
           No método <span className="text-zinc-900">DONO QUE ANUNCIA</span> eu vou te mostrar:
         </h2>
 
@@ -399,7 +406,7 @@ export function SalesPage({
           {LEARN.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-3 rounded-2xl bg-zinc-50 px-5 py-4 shadow-sm border border-zinc-100"
+              className="flex items-start gap-4 rounded-2xl border border-zinc-200/70 bg-white px-5 py-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#22c55e]" />
               <span className="text-sm font-medium">{item}</span>
@@ -413,14 +420,14 @@ export function SalesPage({
         title={testimonial?.title || "Clique no áudio e escute o que meu aluno disse 😱"}
         className="max-w-3xl"
       >
-        <div className="surface-card group relative overflow-hidden rounded-[2.5rem] p-8 shadow-2xl border-2 border-green-100 bg-white transition-all duration-300 hover:shadow-green-200/40">
-          <div className="flex items-center gap-6">
+        <div className="group relative overflow-hidden rounded-3xl border border-zinc-200/70 bg-white p-6 shadow-xl shadow-zinc-900/5 transition-all duration-300 sm:p-10">
+          <div className="flex flex-col items-center gap-6 sm:flex-row">
             {testimonial?.audio ? (
               <audio
                 src={testimonial.audio}
                 controls
                 preload="metadata"
-                className="w-full max-w-xs"
+                className="w-full sm:max-w-xs"
               />
             ) : (
               <button
@@ -432,7 +439,7 @@ export function SalesPage({
               </button>
             )}
             <div className="flex-1 space-y-4">
-              <div className="flex justify-between items-end">
+              <div className="flex flex-col gap-2 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
                 <div>
                   <h4 className="font-bold text-zinc-900 text-lg">Resultado Real</h4>
                   <p className="text-zinc-500 text-sm font-medium">Aluno do Dono que Anuncia</p>
@@ -477,9 +484,12 @@ export function SalesPage({
             {/* WhatsApp Header */}
             <div className="bg-[#075e54] p-4 flex items-center gap-3 text-white border-b border-black/10">
               <div className="h-10 w-10 rounded-full bg-zinc-200 overflow-hidden shrink-0 border border-white/20">
-                <img 
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100" 
-                  alt="Aluno" 
+                <img
+                  src={
+                    testimonial?.image ||
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100"
+                  }
+                  alt="Aluno"
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -490,16 +500,22 @@ export function SalesPage({
                 </p>
               </div>
               <div className="flex gap-4 opacity-80">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.3 14.45l-2.89 2.89c-2.83-1.54-5.13-3.84-6.67-6.67l2.89-2.89c.28-.28.38-.67.28-1.03L10.39 3.3c-.08-.42-.45-.72-.88-.72H3.8c-.53 0-.94.46-.89.98.41 4.7 2.32 9.05 5.3 12.5 3.33 3.85 7.82 6.13 12.75 6.42.52.03.95-.38.95-.91v-5.7c0-.43-.3-.8-.72-.88l-3.45-.72c-.36-.08-.75.02-1.04.3z"/></svg>
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2 s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                  <path d="M17.3 14.45l-2.89 2.89c-2.83-1.54-5.13-3.84-6.67-6.67l2.89-2.89c.28-.28.38-.67.28-1.03L10.39 3.3c-.08-.42-.45-.72-.88-.72H3.8c-.53 0-.94.46-.89.98.41 4.7 2.32 9.05 5.3 12.5 3.33 3.85 7.82 6.13 12.75 6.42.52.03.95-.38.95-.91v-5.7c0-.43-.3-.8-.72-.88l-3.45-.72c-.36-.08-.75.02-1.04.3z" />
+                </svg>
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2 s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                </svg>
               </div>
             </div>
-            
+
             {/* Chat Body */}
             <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-repeat bg-[length:400px]">
               <div className="flex flex-col gap-1 max-w-[85%]">
                 <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">Tony, tô passando aqui pra te agradecer de verdade!</p>
+                  <p className="text-zinc-800 text-sm leading-relaxed">
+                    Tony, tô passando aqui pra te agradecer de verdade!
+                  </p>
                   <div className="flex justify-end items-center gap-1 mt-1">
                     <p className="text-[9px] text-zinc-400">14:20</p>
                   </div>
@@ -508,7 +524,10 @@ export function SalesPage({
 
               <div className="flex flex-col gap-1 max-w-[85%]">
                 <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">Fiz minha primeira venda hoje seguindo exatamente o passo a passo. O curso é muito prático!</p>
+                  <p className="text-zinc-800 text-sm leading-relaxed">
+                    Fiz minha primeira venda hoje seguindo exatamente o passo a passo. O curso é
+                    muito prático!
+                  </p>
                   <div className="flex justify-end items-center gap-1 mt-1">
                     <p className="text-[9px] text-zinc-400">14:21</p>
                   </div>
@@ -517,17 +536,24 @@ export function SalesPage({
 
               <div className="flex flex-col gap-1 max-w-[85%] ml-auto items-end">
                 <div className="bg-[#dcf8c6] rounded-2xl rounded-tr-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">Que top Carlos! Fico muito feliz em saber disso. Bora pra cima que é só o começo! 🚀</p>
+                  <p className="text-zinc-800 text-sm leading-relaxed">
+                    Que top Carlos! Fico muito feliz em saber disso. Bora pra cima que é só o
+                    começo! 🚀
+                  </p>
                   <div className="flex justify-end items-center gap-1 mt-1">
                     <p className="text-[9px] text-zinc-400">14:25</p>
-                    <svg viewBox="0 0 16 11" className="w-3 h-3 fill-blue-400"><path d="M11.05 1.05L5.5 6.6 2.45 3.55 1.4 4.6l4.1 4.1 6.6-6.6-1.05-1.05zM14.55 1.05L8.5 7.1 7.45 6.05l-1.05 1.05 2.1 2.1 7.1-7.1-1.05-1.05z"/></svg>
+                    <svg viewBox="0 0 16 11" className="w-3 h-3 fill-blue-400">
+                      <path d="M11.05 1.05L5.5 6.6 2.45 3.55 1.4 4.6l4.1 4.1 6.6-6.6-1.05-1.05zM14.55 1.05L8.5 7.1 7.45 6.05l-1.05 1.05 2.1 2.1 7.1-7.1-1.05-1.05z" />
+                    </svg>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1 max-w-[85%]">
                 <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">Obrigado mesmo, o investimento já se pagou no primeiro dia com essa venda. 🙏</p>
+                  <p className="text-zinc-800 text-sm leading-relaxed">
+                    Obrigado mesmo, o investimento já se pagou no primeiro dia com essa venda. 🙏
+                  </p>
                   <div className="flex justify-end items-center gap-1 mt-1">
                     <p className="text-[9px] text-zinc-400">14:26</p>
                   </div>
@@ -540,12 +566,18 @@ export function SalesPage({
               <div className="bg-white flex-1 rounded-full px-4 py-2 flex items-center justify-between shadow-sm">
                 <span className="text-zinc-400 text-sm">Mensagem</span>
                 <div className="flex gap-3 text-zinc-400">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.36 8-5.29 8-9.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                    <path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.36 8-5.29 8-9.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
                 </div>
               </div>
               <div className="w-10 h-10 bg-[#075e54] rounded-full flex items-center justify-center text-white shadow-sm shrink-0">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current ml-0.5"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current ml-0.5">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
               </div>
             </div>
           </div>
@@ -573,7 +605,7 @@ export function SalesPage({
               bio: "Delivery de Carnes em São Paulo 🥩 🍖\nO melhor corte da cidade agora na sua casa 🤝 ✨",
               text: "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de chegar e sempre convertendo em vendas",
               img: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "18", followers: "1.584", following: "264" }
+              stats: { posts: "18", followers: "1.584", following: "264" },
             },
             {
               username: "clinica_vitalle",
@@ -581,7 +613,7 @@ export function SalesPage({
               bio: "Realçando sua beleza natural ✨\nAgendamentos via WhatsApp 📲",
               text: "Gente, eu tô chocada! Comecei os anúncios ontem e já tenho 5 avaliações marcadas para amanhã. O investimento se pagou em 2 horas!",
               img: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "42", followers: "2.105", following: "312" }
+              stats: { posts: "42", followers: "2.105", following: "312" },
             },
             {
               username: "loja_fashion_kids",
@@ -589,7 +621,7 @@ export function SalesPage({
               bio: "Estilo e conforto para os pequenos 👶 🎒\nEnviamos para todo o Brasil 🇧🇷",
               text: "O curso é maravilhoso! Antes eu 'impulsionava' e não dava nada. Agora os pedidos no site não param de cair. Melhor investimento do ano!",
               img: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "156", followers: "8.432", following: "890" }
+              stats: { posts: "156", followers: "8.432", following: "890" },
             },
             {
               username: "suporte_tech_br",
@@ -597,7 +629,7 @@ export function SalesPage({
               bio: "Conserto de Celulares e Notebooks 📱 💻\nOrçamento rápido e garantia 🛠️",
               text: "Minha bancada tá lotada de serviço! O segredo foi aparecer pra galera certa aqui do bairro igual o Tony ensina. Recomendo demais!",
               img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "89", followers: "3.210", following: "450" }
+              stats: { posts: "89", followers: "3.210", following: "450" },
             },
             {
               username: "doces_da_vovo",
@@ -605,10 +637,13 @@ export function SalesPage({
               bio: "Bolos e doces artesanais 🍰 🍫\nEncomendas com 24h de antecedência 📝",
               text: "Tony, você é fera! Meus anúncios de Natal esgotaram minha produção em 3 dias. Nunca tinha vendido tanto assim pelo Instagram!",
               img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "215", followers: "12.5k", following: "1.2k" }
-            }
+              stats: { posts: "215", followers: "12.5k", following: "1.2k" },
+            },
           ].map((profile, idx) => (
-            <div key={idx} className="min-w-[320px] max-w-sm rounded-[2rem] border border-zinc-200 bg-white shadow-xl overflow-hidden snap-center">
+            <div
+              key={idx}
+              className="min-w-[320px] max-w-sm rounded-[2rem] border border-zinc-200 bg-white shadow-xl overflow-hidden snap-center"
+            >
               <div className="p-4 flex items-center justify-between border-b border-zinc-50">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
@@ -626,10 +661,14 @@ export function SalesPage({
                   </div>
                 </div>
                 <button className="text-zinc-400">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                    <circle cx="12" cy="12" r="1.5" />
+                    <circle cx="6" cy="12" r="1.5" />
+                    <circle cx="18" cy="12" r="1.5" />
+                  </svg>
                 </button>
               </div>
-              
+
               <div className="p-4 text-left">
                 <div className="flex justify-around mb-4 text-center">
                   <div>
@@ -645,28 +684,28 @@ export function SalesPage({
                     <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-0.5 mb-4">
                   <p className="text-xs font-bold text-zinc-900">{profile.name}</p>
-                  {profile.bio.split('\n').map((line, i) => (
-                    <p key={i} className="text-xs text-zinc-800">{line}</p>
+                  {profile.bio.split("\n").map((line, i) => (
+                    <p key={i} className="text-xs text-zinc-800">
+                      {line}
+                    </p>
                   ))}
                 </div>
-                
+
                 <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
                   Seguir de volta
                 </button>
               </div>
-              
+
               <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
-                <p className="text-xs leading-relaxed text-zinc-700 italic">
-                  "{profile.text}"
-                </p>
+                <p className="text-xs leading-relaxed text-zinc-700 italic">"{profile.text}"</p>
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-8 text-center bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem]">
+        <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-zinc-200/70 bg-white p-8 text-center shadow-sm sm:p-10">
           <p className="text-xl font-bold text-zinc-800">
             "Não importa o seu nicho, o tráfego pago é o oxigênio de qualquer negócio que quer
             crescer."
@@ -685,7 +724,7 @@ export function SalesPage({
       </Section>
 
       <Section title="">
-        <div className="bg-[#e6fcf0] border border-[#22c55e]/20 rounded-3xl p-8 shadow-sm max-w-2xl mx-auto text-center">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-green-200/70 bg-gradient-to-br from-green-50 to-white p-8 text-center shadow-xl shadow-green-900/5 sm:p-12">
           <h3 className="text-2xl font-black text-red-600 mb-6 uppercase leading-tight">
             🎁 Bônus que você recebe no <br /> DONO QUE ANUNCIA:
           </h3>
@@ -718,7 +757,7 @@ export function SalesPage({
       </Section>
 
       {/* Anniversary Badge */}
-      <section className="mx-auto mt-20 flex justify-center px-5">
+      <section className="mx-auto mt-24 flex justify-center px-5 sm:mt-32">
         <div className="relative group transition-transform hover:scale-110">
           <img
             src={anniversaryAsset.url}
@@ -729,18 +768,18 @@ export function SalesPage({
       </section>
 
       {/* Final Offer */}
-      <section className="mx-auto mt-24 max-w-4xl px-5 text-center">
-        <div className="relative overflow-hidden rounded-[3rem] bg-zinc-950 p-12 text-white shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-4 border-white">
+      <section className="mx-auto mt-20 max-w-5xl px-5 text-center sm:mt-28">
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-950 px-6 py-12 text-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65)] sm:rounded-[3rem] sm:p-16">
           <div className="absolute top-0 right-0 p-8 opacity-10">
             <Zap className="h-64 w-64 text-red-600" />
           </div>
 
-          <div className="relative z-10 flex flex-col items-center gap-10">
+          <div className="relative z-10 flex flex-col items-center gap-9">
             <div className="space-y-4">
-              <span className="bg-red-600 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.3em] animate-bounce">
+              <span className="inline-flex rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-red-400 sm:text-xs">
                 Oferta Exclusiva e Limitada
               </span>
-              <h2 className="text-5xl font-black uppercase leading-none tracking-tighter sm:text-7xl">
+              <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.055em] sm:text-7xl">
                 SUA HORA É AGORA!
               </h2>
             </div>
@@ -753,13 +792,14 @@ export function SalesPage({
 
               <div className="relative w-full">
                 <div className="absolute inset-0 bg-red-600 blur-3xl opacity-20 animate-pulse" />
-                <div className="relative bg-white text-zinc-950 rounded-[2.5rem] p-10 shadow-2xl transform scale-110">
+                <div className="relative rounded-3xl border border-white/10 bg-white p-8 text-zinc-950 shadow-2xl sm:p-10">
                   <span className="block text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-2">
                     Preço Promocional
                   </span>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-2xl font-black">R$</span>
-                    <span className="text-8xl font-black leading-none tracking-tighter">197</span>
+                    <span className="text-5xl font-black leading-none tracking-tighter sm:text-7xl">
+                      {promoPrice}
+                    </span>
                   </div>
                   <div className="mt-4 flex items-center justify-center gap-2 border-t border-zinc-100 pt-4">
                     <img
@@ -785,14 +825,14 @@ export function SalesPage({
             </div>
 
             <div className="mt-8 flex flex-col items-center gap-4">
-              <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+              <div className="rounded-full bg-red-500/10 px-4 py-2 text-sm font-bold text-red-400">
                 55% de DESCONTO para os próximos 50 alunos
               </div>
               <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
                 Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento
                 tem valor de 497,00.
               </p>
-              <p className="text-sm font-black text-green-600 animate-bounce">
+              <p className="text-sm font-black text-green-500">
                 Clica no link e aproveita o desconto 👇
               </p>
               <CTAButton
@@ -810,13 +850,15 @@ export function SalesPage({
       </section>
 
       {/* WhatsApp Support */}
-      <section className="mx-auto mt-20 max-w-2xl px-5 text-center">
-        <h3 className="text-xl font-black mb-6 uppercase tracking-tight">AINDA ESTÁ COM DÚVIDAS?</h3>
+      <section className="mx-auto mt-24 max-w-2xl px-5 text-center sm:mt-32">
+        <h3 className="mb-6 text-xl font-black uppercase tracking-tight">
+          AINDA ESTÁ COM DÚVIDAS?
+        </h3>
         <a
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex items-center gap-4 rounded-[2rem] bg-[#25D366] hover:bg-[#20ba5a] text-white font-black px-12 py-5 transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_20px_40px_rgba(37,211,102,0.2)] uppercase tracking-tight text-lg"
+          className="inline-flex items-center gap-3 rounded-2xl bg-zinc-950 px-8 py-4 font-bold uppercase text-white shadow-xl shadow-zinc-900/10 transition hover:-translate-y-0.5 hover:bg-zinc-800 active:translate-y-0"
         >
           <div className="bg-white/20 p-2 rounded-full">
             <MessageCircle className="h-6 w-6 fill-white" />
@@ -853,7 +895,7 @@ export function SalesPage({
           {FAQ.map((item) => (
             <details
               key={item.q}
-              className="surface-card group rounded-2xl px-5 py-4 border border-zinc-100 shadow-sm bg-zinc-50"
+              className="group rounded-2xl border border-zinc-200/70 bg-white px-6 py-5 shadow-sm transition hover:shadow-md"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold">
                 {item.q}

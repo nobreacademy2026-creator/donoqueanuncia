@@ -157,7 +157,9 @@ export function ResultStep({
                   <p className="text-[10px] text-zinc-400 uppercase font-medium">seguidores</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm text-zinc-900">{testimonialDraft?.options?.[3] || "727"}</p>
+                  <p className="font-bold text-sm text-zinc-900">
+                    {testimonialDraft?.options?.[3] || "727"}
+                  </p>
                   <p className="text-[10px] text-zinc-400 uppercase font-medium">seguindo</p>
                 </div>
               </div>
@@ -180,8 +182,10 @@ export function ResultStep({
                     </div>
                   </div>
                 </div>
-                
-                <p className="text-zinc-500">... <span className="font-bold text-zinc-400">mais</span></p>
+
+                <p className="text-zinc-500">
+                  ... <span className="font-bold text-zinc-400">mais</span>
+                </p>
 
                 <div className="pt-1 space-y-1.5">
                   <p className="text-[#00376b] font-medium">
@@ -245,14 +249,20 @@ export function ResultStep({
                     </div>
                     <div className="text-left leading-tight">
                       <p className="font-bold text-sm text-zinc-900">premium_grill_sp</p>
-                      <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
+                      <p className="text-[10px] text-zinc-500">
+                        Premium Grill / Boutique de Carnes
+                      </p>
                     </div>
                   </div>
                   <button className="text-zinc-400">
-                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                      <circle cx="12" cy="12" r="1.5" />
+                      <circle cx="6" cy="12" r="1.5" />
+                      <circle cx="18" cy="12" r="1.5" />
+                    </svg>
                   </button>
                 </div>
-                
+
                 <div className="p-4 text-left">
                   <div className="flex justify-around mb-4 text-center">
                     <div>
@@ -268,18 +278,22 @@ export function ResultStep({
                       <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-0.5 mb-4">
-                    <p className="text-xs font-bold text-zinc-900">Premium Grill / Boutique de Carnes</p>
+                    <p className="text-xs font-bold text-zinc-900">
+                      Premium Grill / Boutique de Carnes
+                    </p>
                     <p className="text-xs text-zinc-800">Delivery de Carnes em São Paulo 🥩 🍖</p>
-                    <p className="text-xs text-zinc-800">O melhor corte da cidade agora na sua casa 🤝 ✨</p>
+                    <p className="text-xs text-zinc-800">
+                      O melhor corte da cidade agora na sua casa 🤝 ✨
+                    </p>
                   </div>
-                  
+
                   <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
                     Seguir de volta
                   </button>
                 </div>
-                
+
                 <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
                   <p className="text-xs leading-relaxed text-zinc-700 italic">
                     "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de
