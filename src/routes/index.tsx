@@ -174,12 +174,15 @@ function Index() {
            
            <div className="mt-8 flex flex-col gap-3">
              <button 
-               onClick={() => window.location.reload()} 
+               onClick={() => {
+                 localStorage.removeItem('dqa_funnel_draft');
+                 window.location.reload();
+               }} 
                className="rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all border border-white/5"
              >
-               Recarregar Página
+               Limpar Cache e Recarregar
              </button>
-             <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-700">Conexão segura estabelecida</p>
+             <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-800">Status: Conectando ao Servidor</p>
            </div>
         </div>
       )}
