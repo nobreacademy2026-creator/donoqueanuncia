@@ -802,14 +802,26 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
 
   const handleUpload = (id: string, file: File | undefined, field: 'image' | 'audio' = 'image') => {
     if (!file) return;
-    if (file.size > 10_000_000) { // Aumentando para 10MB para áudio
+    if (file.size > 10_000_000) { 
       toast.error("Arquivo muito grande (máx. 10MB).");
       return;
     }
     const reader = new FileReader();
     reader.onload = () => {
       const result = String(reader.result);
-      updateStep(id, { [field]: result });
+      
+      // Imediatamente atualiza o estado local e o preview
+      const next: FunnelDraft = {
+        ...draft,
+        steps: { ...draft.steps, [id]: { ...draft.steps[id], [field]: result } },
+      };
+      
+      if (id === 'sales' && field === 'image') {
+        next.sales = { ...next.sales, videoThumb: result };
+      }
+      
+      setDraft(next);
+      writeDraft(next);
       
       toast.info(`${field === 'audio' ? 'Áudio' : 'Upload'} concluído na prévia. Clique em 'Publicar' para salvar.`);
     };
