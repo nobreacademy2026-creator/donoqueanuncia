@@ -914,19 +914,23 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                 </div>
               </div>
               {QUIZ_OPTIONS[item.id] && (
-                <div className="space-y-2 sm:col-span-2">
+                <div className="space-y-3 sm:col-span-2">
                   <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Opções de resposta</label>
-                  <div className="grid gap-2">
+                  <div className="grid gap-3">
                     {(draft.steps[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
-                      <input
-                        key={i}
-                        type="text"
-                        value={option}
-                        onChange={(e) => updateOption(item.id, i, e.target.value)}
-                        className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                          theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                        }`}
-                      />
+                      <div key={i} className="flex gap-2">
+                        <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[10px] font-black ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}>
+                          #{i + 1}
+                        </div>
+                        <input
+                          type="text"
+                          value={option}
+                          onChange={(e) => updateOption(item.id, i, e.target.value)}
+                          className={`w-full rounded-xl border px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                            theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                          }`}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
