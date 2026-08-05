@@ -1,7 +1,7 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
 import { useState, useRef } from "react";
 
-export function ResultStep({ onNext }: { onNext: () => void }) {
+export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { title?: string; image?: string; audio?: string } }) {
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">("objection");
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -54,7 +54,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" alt="Student" />
               </div>
             </div>
-            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" className="hidden" />
+            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} src={draft?.audio || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} className="hidden" />
           </div>
 
           <div className="space-y-6">

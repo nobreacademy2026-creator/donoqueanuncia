@@ -771,7 +771,7 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     writeDraft(next);
   };
 
-  const updateStep = (id: string, patch: { title?: string; image?: string }) => {
+  const updateStep = (id: string, patch: { title?: string; image?: string; audio?: string }) => {
     const current = readDraft();
     const next: FunnelDraft = {
       ...current,
@@ -792,19 +792,18 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     writeDraft(next);
   };
 
-  const handleUpload = (id: string, file: File | undefined) => {
+  const handleUpload = (id: string, file: File | undefined, field: 'image' | 'audio' = 'image') => {
     if (!file) return;
-    if (file.size > 5_000_000) {
-      toast.error("Arquivo muito grande (máx. 5MB).");
+    if (file.size > 10_000_000) { // Aumentando para 10MB para áudio
+      toast.error("Arquivo muito grande (máx. 10MB).");
       return;
     }
     const reader = new FileReader();
     reader.onload = () => {
       const result = String(reader.result);
-      updateStep(id, { image: result });
+      updateStep(id, { [field]: result });
       
-      // Notificar o usuário para salvar se quiser publicar
-      toast.info("Upload concluído na prévia. Clique em 'Salvar' para publicar.");
+      toast.info(`${field === 'audio' ? 'Áudio' : 'Upload'} concluído na prévia. Clique em 'Publicar' para salvar.`);
     };
     reader.readAsDataURL(file);
   };
@@ -971,12 +970,35 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                 <div className="space-y-2">
                   <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Arquivo de Áudio (MP3)</label>
                   <div className="flex items-center gap-3">
-                    <div className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border ${
+                    <div className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border overflow-hidden truncate ${
                       theme === "dark" ? "bg-zinc-800 text-zinc-400 border-white/5" : "bg-zinc-50 text-zinc-600 border-zinc-200"
-                    }`}>testemunho_aluno_01.mp3</div>
-                    <button className="text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                      <Music className="h-3 w-3" /> Subir Novo
-                    </button>
+                    }`}>
+                      {draft.steps[item.id]?.audio ? (
+                        <span className="text-green-500 font-bold">● Áudio carregado (Base64)</span>
+                      ) : "Nenhum áudio selecionado"}
+                    </div>
+                    <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                      <Music className="h-3 w-3" /> 
+                      {draft.steps[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
+                      <input
+                        type="file"
+                        accept="audio/*"
+                        className="hidden"
+                        onChange={(e) => handleUpload(item.id, e.target.files?.[0], 'audio')}
+                      />
+                    </label>
+                    {draft.steps[item.id]?.audio && (
+                      <button 
+                        onClick={() => {
+                          updateStep(item.id, { audio: "" });
+                          toast.info("Áudio removido da prévia.");
+                        }}
+                        className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        Remover
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
