@@ -550,10 +550,22 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
     publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     setSaving(true);
     try {
-      await publishDraft(readDraft());
-      toast.success("Dados da Página de Vendas salvos!");
+      const currentDraft = readDraft();
+      // Garantir que os estados locais dos inputs estão refletidos no rascunho antes de publicar
+      currentDraft.sales = {
+        ...currentDraft.sales,
+        checkoutUrl,
+        promoPrice,
+        fullPrice,
+        vslUrl,
+        videoThumb: vslUrl // Sincroniza o thumb com a URL por padrão
+      };
+      
+      await publishDraft(currentDraft);
+      toast.success("Dados da Página de Vendas publicados com sucesso!");
     } catch (err: any) {
-      toast.error("Erro ao salvar: " + (err?.message ?? "tente novamente"));
+      console.error("Erro ao publicar:", err);
+      toast.error("Erro ao publicar: " + (err?.message ?? "tente novamente"));
     } finally {
       setSaving(false);
     }
@@ -628,10 +640,10 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
       <button 
         onClick={handleSave}
         disabled={saving}
-        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm"
+        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm disabled:opacity-50"
       >
         <Save className="h-4 w-4" />
-        {saving ? "Salvando..." : "Salvar Alterações"}
+        {saving ? "Publicando..." : "Publicar Alterações"}
       </button>
     </div>
   );
