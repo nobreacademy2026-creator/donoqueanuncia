@@ -875,7 +875,7 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                        </div>
                      )}
                   </div>
-                  <div className="flex-1 space-y-2">
+                  <div className="flex-1 space-y-3">
                     <input
                       type="text"
                       placeholder={item.id === 'sales' ? "URL do vídeo/thumb" : "URL da imagem"}
