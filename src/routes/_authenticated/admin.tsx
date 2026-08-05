@@ -741,28 +741,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
 
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    async function init() {
-      const published = await loadPublished();
-      if (!published) return;
-      
-      const local = readDraft();
-      
-      // Se não houver rascunho local, usamos o publicado.
-      // Caso contrário, mergeamos os dois para garantir que o AdminDashboard 
-      // veja todas as imagens e textos já publicados E os rascunhos locais.
-      const hasLocalData = Object.keys(local.steps).length > 0 || Object.keys(local.sales).length > 0;
-      
-      const merged: FunnelDraft = {
-        steps: { ...published.steps, ...local.steps },
-        sales: { ...published.sales, ...local.sales },
-      };
-      
-      setDraft(merged);
-      writeDraft(merged);
-    }
-    init();
-  }, []);
+  // Removido useEffect interno redundante. O AdminDashboard já gerencia a inicialização do draft.
 
   const handleSaveContent = async () => {
     setSaving(true);
