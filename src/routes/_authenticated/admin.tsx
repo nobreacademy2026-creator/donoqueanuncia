@@ -41,8 +41,24 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
+  const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function init() {
+      const published = await loadPublished();
+      const local = readDraft();
+      
+      const merged: FunnelDraft = {
+        steps: { ...(published?.steps || {}), ...local.steps },
+        sales: { ...(published?.sales || {}), ...local.sales },
+      };
+      
+      setDraft(merged);
+      writeDraft(merged);
+    }
+    init();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
