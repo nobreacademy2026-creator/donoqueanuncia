@@ -9,7 +9,6 @@ export const QUESTIONS: Question[] = [
   {
     id: "dor",
     title: "Na hora de fazer seus anúncios patrocinados, o que mais te desanima?",
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Não saber por onde começar.", value: "comecar", score: 30 },
       { label: "Gastar e não ver resultado.", value: "resultado", score: 45 },
@@ -18,7 +17,6 @@ export const QUESTIONS: Question[] = [
   {
     id: "motivacao",
     title: "Porque você sente que precisa fazer anúncios?",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
     options: [
       { label: "Porque preciso de mais clientes todos os dias.", value: "clientes", score: 70 },
       { label: "Porque minhas vendas estão paradas.", value: "paradas", score: 60 },
