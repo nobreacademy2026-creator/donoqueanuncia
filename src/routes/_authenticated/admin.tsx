@@ -1713,14 +1713,6 @@ export function ContentSection({
           </div>
         ))}
       </div>
-
-      <button
-        onClick={handleSaveContent}
-        disabled={saving}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-60"
-      >
-        <Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar Alterações de Conteúdo"}
-      </button>
     </div>
   );
 }
