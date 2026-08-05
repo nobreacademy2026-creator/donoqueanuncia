@@ -394,7 +394,7 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
               <p className="text-sm font-black text-green-600 animate-bounce">
                 Clica no link e aproveita o desconto 👇
               </p>
-              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
+              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10" />
             </div>
             
             <p className="mt-6 text-xs text-muted-foreground/60">
@@ -411,7 +411,7 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-2xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-black px-12 py-5 transition-transform hover:scale-105 shadow-lg shadow-yellow-500/20 uppercase"
+          className="inline-flex items-center gap-3 rounded-xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-bold px-8 py-4 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-yellow-500/10 uppercase"
         >
           Fale comigo no WhatsApp
         </a>
