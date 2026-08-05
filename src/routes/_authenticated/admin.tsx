@@ -533,7 +533,7 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
   );
 }
 
-function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft: (d: FunnelDraft) => void }) {
+function ConfigSection({ theme, draft, setDraft }: { theme: "dark" | "light", draft: FunnelDraft, setDraft: (d: FunnelDraft) => void }) {
   const initial = readDraft();
   const [checkoutUrl, setCheckoutUrl] = useState(initial.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
   const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
