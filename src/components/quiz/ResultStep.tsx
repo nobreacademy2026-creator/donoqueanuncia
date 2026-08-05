@@ -66,12 +66,12 @@ export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { ti
               <div className="flex items-center gap-3 p-4 border-b border-zinc-100">
                 <div className="h-12 w-12 rounded-full ring-2 ring-pink-500 p-0.5">
                   <div className="h-full w-full rounded-full bg-zinc-200 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" alt="Profile" className="h-full w-full object-cover" />
+                    <img src={draft?.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"} alt="Profile" className="h-full w-full object-cover" />
                   </div>
                 </div>
                 <div className="text-left">
-                   <p className="font-bold text-sm">taju.intima</p>
-                   <p className="text-xs text-zinc-500">Taju Íntima</p>
+                   <p className="font-bold text-sm">{draft?.options?.[0] || "taju.intima"}</p>
+                   <p className="text-xs text-zinc-500">{draft?.options?.[1] || "Taju Íntima"}</p>
                 </div>
               </div>
               <div className="flex justify-around p-3 text-center border-b border-zinc-100">
@@ -80,16 +80,16 @@ export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { ti
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">posts</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">12,7 mil</p>
+                  <p className="font-bold text-sm">{draft?.options?.[2] || "12,7 mil"}</p>
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguidores</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">727</p>
+                  <p className="font-bold text-sm">{draft?.options?.[3] || "727"}</p>
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguindo</p>
                 </div>
               </div>
               <div className="p-4 text-left text-xs space-y-1">
-                 <p className="font-bold">Taju Íntima</p>
+                 <p className="font-bold">{draft?.options?.[1] || "Taju Íntima"}</p>
                  <p>Moda Íntima e Acessórios</p>
                 <p>•Destaque do negócio 01 🚀</p>
                 <p>•Informação relevante 02 📈</p>

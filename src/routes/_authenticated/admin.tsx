@@ -756,6 +756,7 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
       "Porque minhas vendas estão paradas.",
       "Porque quero fazer meu negócio crescer de verdade.",
     ],
+    audio: ["Nome do Aluno (ex: @alan_dalila)", "Descrição curta", "Seguidores", "Seguindo"],
   };
 
   const updateOption = (id: string, index: number, value: string) => {
