@@ -991,7 +991,7 @@ function TrackingSection({
     const meta = metaPixelId.trim();
     const ga = ga4Id.trim().toUpperCase();
     const gtm = gtmId.trim().toUpperCase();
-    
+
     if (meta && !/^\d{5,25}$/.test(meta)) {
       toast.error("O ID do Meta Pixel deve conter apenas números.");
       return;
@@ -1004,7 +1004,7 @@ function TrackingSection({
       toast.error("Use um ID válido, como GTM-ABC123.");
       return;
     }
-    
+
     setSaving(true);
     const next: FunnelDraft = { ...draft, tracking: { metaPixelId: meta, ga4Id: ga, gtmId: gtm } };
     try {
@@ -1182,34 +1182,45 @@ function ContentSection({
     writeDraft(next);
   };
 
-  const handleUpload = (id: string, file: File | undefined, field: "image" | "audio" = "image") => {
+  const handleUpload = async (
+    id: string,
+    file: File | undefined,
+    field: "image" | "audio" = "image",
+  ) => {
     if (!file) return;
-    if (file.size > 10_000_000) {
-      toast.error("Arquivo muito grande (máx. 10MB).");
+    if (file.size > 50_000_000) {
+      toast.error("Arquivo muito grande (máx. 50MB).");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = String(reader.result);
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) {
+      toast.error("Sua sessão expirou. Entre novamente para enviar arquivos.");
+      return;
+    }
 
-      // Imediatamente atualiza o estado local e o preview
-      const next: FunnelDraft = {
-        ...draft,
-        steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
-      };
+    const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
+    const path = `${userData.user.id}/${crypto.randomUUID()}-${safeName}`;
+    const { error: uploadError } = await supabase.storage
+      .from("funnel-media")
+      .upload(path, file, { contentType: file.type, upsert: false, cacheControl: "3600" });
+    if (uploadError) {
+      console.error("Erro no upload do Storage:", uploadError);
+      toast.error(`Não foi possível enviar o arquivo: ${uploadError.message}`);
+      return;
+    }
 
-      if (id === "sales" && field === "image") {
-        next.sales = { ...next.sales, videoThumb: result };
-      }
-
-      setDraft(next);
-      writeDraft(next);
-
-      toast.info(
-        `${field === "audio" ? "Áudio" : "Upload"} concluído na prévia. Clique em 'Publicar' para salvar.`,
-      );
+    const { data: publicData } = supabase.storage.from("funnel-media").getPublicUrl(path);
+    const result = publicData.publicUrl;
+    const next: FunnelDraft = {
+      ...draft,
+      steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
     };
-    reader.readAsDataURL(file);
+    if (id === "sales" && field === "image") {
+      next.sales = { ...next.sales, videoThumb: result };
+    }
+    setDraft(next);
+    writeDraft(next);
+    toast.success("Arquivo enviado. Clique em Publicar para salvar o conteúdo.");
   };
 
   return (
@@ -1457,7 +1468,9 @@ function ContentSection({
                       }`}
                     >
                       {draft.steps?.[item.id]?.audio ? (
-                        <span className="text-green-500 font-bold">● Áudio carregado (Base64)</span>
+                        <span className="text-green-500 font-bold">
+                          ● Áudio carregado no Storage
+                        </span>
                       ) : (
                         "Nenhum áudio selecionado"
                       )}

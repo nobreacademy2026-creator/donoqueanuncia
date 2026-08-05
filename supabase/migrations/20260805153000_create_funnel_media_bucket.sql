@@ -1,0 +1,32 @@
+-- Store funnel media in Supabase Storage instead of embedding Base64 in quiz_config.
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('funnel-media', 'funnel-media', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DROP POLICY IF EXISTS "Public can view funnel media" ON storage.objects;
+CREATE POLICY "Public can view funnel media"
+ON storage.objects FOR SELECT
+TO public
+USING (bucket_id = 'funnel-media');
+
+DROP POLICY IF EXISTS "Admins can upload funnel media" ON storage.objects;
+CREATE POLICY "Admins can upload funnel media"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (
+  bucket_id = 'funnel-media'
+  AND (select public.has_role((select auth.uid()), 'admin'::public.app_role))
+);
+
+DROP POLICY IF EXISTS "Admins can update funnel media" ON storage.objects;
+CREATE POLICY "Admins can update funnel media"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (
+  bucket_id = 'funnel-media'
+  AND (select public.has_role((select auth.uid()), 'admin'::public.app_role))
+)
+WITH CHECK (
+  bucket_id = 'funnel-media'
+  AND (select public.has_role((select auth.uid()), 'admin'::public.app_role))
+);
