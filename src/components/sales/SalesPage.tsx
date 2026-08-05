@@ -703,13 +703,16 @@ export function SalesPage({
 
       {/* WhatsApp Support */}
       <section className="mx-auto mt-20 max-w-2xl px-5 text-center">
-        <h3 className="text-xl font-bold mb-6">AINDA ESTÁ COM DÚVIDAS?</h3>
+        <h3 className="text-xl font-black mb-6 uppercase tracking-tight">AINDA ESTÁ COM DÚVIDAS?</h3>
         <a
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-bold px-8 py-4 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-yellow-500/10 uppercase"
+          className="group inline-flex items-center gap-4 rounded-[2rem] bg-[#25D366] hover:bg-[#20ba5a] text-white font-black px-12 py-5 transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_20px_40px_rgba(37,211,102,0.2)] uppercase tracking-tight text-lg"
         >
+          <div className="bg-white/20 p-2 rounded-full">
+            <MessageCircle className="h-6 w-6 fill-white" />
+          </div>
           Fale comigo no WhatsApp
         </a>
       </section>
