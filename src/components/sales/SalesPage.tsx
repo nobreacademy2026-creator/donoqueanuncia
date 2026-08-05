@@ -139,13 +139,12 @@ function CTAButton({
   return (
     <a
       href={destination}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={async (event) => {
-        event.preventDefault();
-        await Promise.race([
-          trackCheckoutClick({ origem: "pagina_vendas" }),
-          new Promise((resolve) => window.setTimeout(resolve, 1200)),
-        ]);
-        window.location.assign(destination);
+        // We don't prevent default here to allow direct navigation if needed, 
+        // but tracking should happen. The 'target="_blank"' handles the new tab.
+        void trackCheckoutClick({ origem: "pagina_vendas" });
       }}
       className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-[1.01] sm:text-base shadow-lg shadow-green-600/10 ${className}`}
     >

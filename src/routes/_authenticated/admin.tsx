@@ -125,6 +125,17 @@ function AdminDashboard() {
             </div>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <button 
+              className="admin-action-tile" 
+              onClick={() => setActiveTab("sales")}
+            >
+              <ExternalLink className="text-primary" />
+              <span>
+                <strong>Configurar Link de Checkout</strong>
+                <small>Defina o link de destino dos botões de compra</small>
+              </span>
+              <ChevronRight />
+            </button>
             <button className="admin-action-tile" onClick={() => window.open("/", "_blank")}>
               <ExternalLink />
               <span>
