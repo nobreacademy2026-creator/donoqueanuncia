@@ -121,9 +121,9 @@ export function ResultStep({
               funciona e o próximo pode ser VOCÊ.
             </p>
 
-            <div className="mx-auto max-w-sm overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-md">
-              <div className="flex items-center gap-3 p-4 border-b border-zinc-100">
-                <div className="h-12 w-12 rounded-full ring-2 ring-pink-500 p-0.5">
+            <div className="mx-auto max-w-sm overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl">
+              <div className="p-4 flex items-center gap-3">
+                <div className="h-16 w-16 rounded-full ring-2 ring-pink-500 p-0.5 shrink-0">
                   <div className="h-full w-full rounded-full bg-zinc-200 overflow-hidden">
                     <img
                       src={
@@ -135,47 +135,64 @@ export function ResultStep({
                     />
                   </div>
                 </div>
-                <div className="text-left">
-                  <p className="font-bold text-sm">
+                <div className="text-left leading-tight">
+                  <p className="font-bold text-base text-zinc-900">
                     {testimonialDraft?.options?.[0] || "taju.intima"}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-sm text-zinc-500">
                     {testimonialDraft?.options?.[1] || "Taju Íntima"}
                   </p>
                 </div>
               </div>
-              <div className="flex justify-around p-3 text-center border-b border-zinc-100">
+
+              <div className="flex justify-around py-3 border-y border-zinc-50 text-center">
                 <div>
-                  <p className="font-bold text-sm">532</p>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">posts</p>
+                  <p className="font-bold text-sm text-zinc-900">532</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-medium">posts</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">
+                  <p className="font-bold text-sm text-zinc-900">
                     {testimonialDraft?.options?.[2] || "12,7 mil"}
                   </p>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguidores</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-medium">seguidores</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">{testimonialDraft?.options?.[3] || "727"}</p>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguindo</p>
+                  <p className="font-bold text-sm text-zinc-900">{testimonialDraft?.options?.[3] || "727"}</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-medium">seguindo</p>
                 </div>
               </div>
-              <div className="p-4 text-left text-xs space-y-1">
-                <p className="font-bold">{testimonialDraft?.options?.[1] || "Taju Íntima"}</p>
-                <p>Moda Íntima e Acessórios</p>
-                <p>•Destaque do negócio 01 🚀</p>
-                <p>•Informação relevante 02 📈</p>
-                <p>•Benefício do cliente 03 🤝</p>
-                <p>
-                  •Atendimento para todo o Brasil 🇧🇷 ... <span className="text-zinc-400">mais</span>
-                </p>
-                <p className="text-blue-900">
-                  Rua Exemplo Aleatório, 123 - Bairro Fictício, São Paulo
-                </p>
-                <p className="text-blue-900 flex items-center gap-1">
-                  <span className="inline-block rotate-45">🔗</span> wa.me/message/6CHAELMQMCH...{" "}
-                  <span className="text-zinc-400">e outros 2 links</span>
-                </p>
+
+              <div className="p-5 text-left text-xs space-y-2 text-zinc-800">
+                <div className="space-y-1">
+                  <p className="font-bold">{testimonialDraft?.options?.[1] || "Taju Íntima"}</p>
+                  <div className="flex flex-col gap-0.5 text-zinc-700">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm leading-none">🚀</span>
+                      <span>Destaque do negócio 01</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm leading-none">📈</span>
+                      <span>Informação relevante 02</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm leading-none">🤝</span>
+                      <span>Benefício do cliente 03</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-zinc-500">... <span className="font-bold text-zinc-400">mais</span></p>
+
+                <div className="pt-1 space-y-1.5">
+                  <p className="text-[#00376b] font-medium">
+                    Rua Exemplo Aleatório, 123 - Bairro Fictício, São Paulo
+                  </p>
+                  <p className="text-[#00376b] flex items-center gap-1.5 font-medium">
+                    <span className="inline-block scale-x-[-1] text-zinc-400 text-sm">🔗</span>
+                    <span>wa.me/message/6CHAELMQMCH...</span>
+                    <span className="text-zinc-400">e outros 2 links</span>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -208,51 +225,63 @@ export function ResultStep({
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg">
+          <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-2xl">
             {/* Mock Carousel of Instagram Profiles */}
             <div className="p-4 space-y-4">
-              <div className="rounded-xl border border-zinc-100 bg-white overflow-hidden shadow-sm">
-                <div className="p-3 flex items-center gap-3 border-b border-zinc-50">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5">
-                    <div className="h-full w-full rounded-full bg-white p-0.5">
-                      <img
-                        src={
-                          nicheDraft?.image ||
-                          "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
-                        }
-                        alt="Gordo Grill"
-                        className="h-full w-full rounded-full object-cover"
-                      />
+              <div className="rounded-2xl border border-zinc-100 bg-white overflow-hidden shadow-sm">
+                <div className="p-3 flex items-center justify-between border-b border-zinc-50">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
+                      <div className="h-full w-full rounded-full bg-white p-0.5">
+                        <img
+                          src={
+                            nicheDraft?.image ||
+                            "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
+                          }
+                          alt="Gordo Grill"
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="text-left leading-tight">
+                      <p className="font-bold text-sm text-zinc-900">premium_grill_sp</p>
+                      <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
                     </div>
                   </div>
-                  <div className="text-left leading-tight">
-                    <p className="font-bold text-sm">premium_grill_sp</p>
-                    <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
-                  </div>
+                  <button className="text-zinc-400">
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>
+                  </button>
                 </div>
+                
                 <div className="p-4 text-left">
-                  <div className="flex justify-around mb-3 text-center">
+                  <div className="flex justify-around mb-4 text-center">
                     <div>
-                      <p className="font-bold text-sm">18</p>
-                      <p className="text-[9px] text-zinc-400 uppercase">posts</p>
+                      <p className="font-bold text-sm text-zinc-900">18</p>
+                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">posts</p>
                     </div>
                     <div>
-                      <p className="font-bold text-sm">1.584</p>
-                      <p className="text-[9px] text-zinc-400 uppercase">seguidores</p>
+                      <p className="font-bold text-sm text-zinc-900">1.584</p>
+                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguidores</p>
                     </div>
                     <div>
-                      <p className="font-bold text-sm">264</p>
-                      <p className="text-[9px] text-zinc-400 uppercase">seguindo</p>
+                      <p className="font-bold text-sm text-zinc-900">264</p>
+                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
                     </div>
                   </div>
-                  <p className="text-xs font-medium mb-1">Delivery de Carnes em São Paulo 🥩 🍖</p>
-                  <p className="text-xs mb-3">O melhor corte da cidade agora na sua casa 🤝 ✨</p>
-                  <button className="w-full bg-blue-500 text-white rounded-md py-1.5 text-xs font-bold">
+                  
+                  <div className="space-y-0.5 mb-4">
+                    <p className="text-xs font-bold text-zinc-900">Premium Grill / Boutique de Carnes</p>
+                    <p className="text-xs text-zinc-800">Delivery de Carnes em São Paulo 🥩 🍖</p>
+                    <p className="text-xs text-zinc-800">O melhor corte da cidade agora na sua casa 🤝 ✨</p>
+                  </div>
+                  
+                  <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
                     Seguir de volta
                   </button>
                 </div>
-                <div className="bg-zinc-50 p-3 text-left">
-                  <p className="text-xs italic text-zinc-600">
+                
+                <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
+                  <p className="text-xs leading-relaxed text-zinc-700 italic">
                     "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de
                     chegar e sempre convertendo em vendas"
                   </p>
@@ -260,7 +289,7 @@ export function ResultStep({
               </div>
             </div>
 
-            <div className="flex justify-center gap-1.5 pb-4">
+            <div className="flex justify-center gap-1.5 pb-5">
               <div className="h-1.5 w-1.5 rounded-full bg-zinc-800"></div>
               <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
               <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
