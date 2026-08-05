@@ -775,22 +775,22 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
   };
 
   const updateStep = (id: string, patch: { title?: string; image?: string; audio?: string }) => {
-    const current = readDraft();
+    // Usar o estado 'draft' mais atualizado do componente em vez de ler do localStorage
+    // para evitar perda de dados se o writeDraft/readDraft tiver latência ou inconsistência
     const next: FunnelDraft = {
-      ...current,
-      steps: { ...current.steps, [id]: { ...current.steps[id], ...patch } },
+      ...draft,
+      steps: { ...draft.steps, [id]: { ...draft.steps[id], ...patch } },
     };
     
     // Sincronizar campo de vendas se o ID for 'sales'
     if (id === 'sales') {
       next.sales = {
         ...next.sales,
-        ...(patch.title ? { videoHeadline: patch.title } : {}),
-        ...(patch.image ? { videoThumb: patch.image } : {}),
+        ...(patch.title !== undefined ? { videoHeadline: patch.title } : {}),
+        ...(patch.image !== undefined ? { videoThumb: patch.image } : {}),
       };
     }
     
-    // Atualizar estado e persistir rascunho
     setDraft(next);
     writeDraft(next);
   };
