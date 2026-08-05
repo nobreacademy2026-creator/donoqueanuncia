@@ -552,6 +552,9 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    // ConfigSection agora recebe o draft atualizado do AdminDashboard via props se quisermos sincronizar
+    // Mas por simplicidade de inputs, mantemos o carregamento inicial.
+    // O setDraft pai garantirá que a publicação use o estado mais recente.
     loadPublished().then((published) => {
       if (!published) return;
       const local = readDraft();
@@ -559,8 +562,6 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
         steps: { ...published.steps, ...local.steps },
         sales: { ...published.sales, ...local.sales },
       };
-      setDraft(merged); // Sincroniza o estado global
-      writeDraft(merged); // Persiste no localStorage
       
       setCheckoutUrl(merged.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
       setPromoPrice(merged.sales.promoPrice ?? "R$ 197,00");
