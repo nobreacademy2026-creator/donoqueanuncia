@@ -80,12 +80,27 @@ function AdminDashboard() {
 
   useEffect(() => {
     async function init() {
-      const published = await loadPublished();
-      const local = readDraft();
+      // Prioridade 1: Rascunho no servidor (sincronização entre dispositivos)
+      // Prioridade 2: Publicado (fallback se não houver rascunho)
+      // Prioridade 3: Local (contingência offline)
+      const [published, serverDraft, local] = await Promise.all([
+        loadPublished(),
+        (async () => {
+          try {
+            const { loadDraftFromServer } = await import("@/lib/funnel-content");
+            return await loadDraftFromServer();
+          } catch {
+            return null;
+          }
+        })(),
+        readDraft(),
+      ]);
+
+      const base = serverDraft || published;
       const merged: FunnelDraft = {
-        steps: { ...(published?.steps || {}), ...(local.steps || {}) },
-        sales: { ...(published?.sales || {}), ...(local.sales || {}) },
-        tracking: { ...(published?.tracking || {}), ...(local.tracking || {}) },
+        steps: { ...(base?.steps || {}), ...(local.steps || {}) },
+        sales: { ...(base?.sales || {}), ...(local.sales || {}) },
+        tracking: { ...(base?.tracking || {}), ...(local.tracking || {}) },
       };
       setDraft(merged);
       writeDraft(merged);
@@ -101,9 +116,14 @@ function AdminDashboard() {
       setIsAutosaving(true);
       try {
         writeDraft(draft);
-        // We don't publish automatically to avoid hitting DB limits or overwriting production
-        // but we ensure localStorage is always fresh.
-        console.log("[Admin] Rascunho salvo automaticamente no cache local.");
+        
+        // Salvamento automático no servidor (backup na nuvem)
+        const { saveDraftToServer } = await import("@/lib/funnel-content");
+        await saveDraftToServer(draft);
+        
+        console.log("[Admin] Rascunho sincronizado com o servidor.");
+      } catch (err) {
+        console.warn("[Admin] Falha ao sincronizar rascunho no servidor", err);
       } finally {
         // Simulated delay for visual feedback
         setTimeout(() => setIsAutosaving(false), 1000);

@@ -22,6 +22,37 @@ export const EMPTY_DRAFT: FunnelDraft = { steps: {}, sales: {}, tracking: {} };
 export const DRAFT_KEY = "dqa_funnel_draft";
 export const DRAFT_EVENT = "dqa:funnel-draft";
 export const CONFIG_KEY = "funnel_content";
+export const DRAFT_DB_KEY = "funnel_draft";
+
+/** Persist a draft to the database (not published). */
+export async function saveDraftToServer(draft: FunnelDraft) {
+  const { saveAdminDraft } = await import("./admin-data.functions");
+  await saveAdminDraft({ data: draft });
+}
+
+/** Load a draft from the database. */
+export async function loadDraftFromServer(): Promise<FunnelDraft | null> {
+  try {
+    const { data, error } = await supabase
+      .from("quiz_config")
+      .select("value")
+      .eq("key", DRAFT_DB_KEY)
+      .maybeSingle();
+
+    if (error) return null;
+    if (!data?.value) return null;
+
+    const parsed = data.value as FunnelDraft;
+    return {
+      steps: parsed.steps ?? {},
+      sales: parsed.sales ?? {},
+      tracking: parsed.tracking ?? {},
+    };
+  } catch {
+    return null;
+  }
+}
+
 
 /** Persist the current content to the database (published version). */
 export async function publishDraft(draft: FunnelDraft) {
