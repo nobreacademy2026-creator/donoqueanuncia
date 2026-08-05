@@ -1041,7 +1041,7 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
         <iframe
           key={nonce}
           data-funnel-preview="true"
-          src="/?preview=1"
+          src={`/?preview=1&t=${nonce}`}
           title="Prévia da Landing Page"
           onLoad={(e) => {
             (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
