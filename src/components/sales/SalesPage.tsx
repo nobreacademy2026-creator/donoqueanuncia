@@ -273,15 +273,15 @@ export function SalesPage({
 
   return (
     <main className="animate-rise-in bg-zinc-50 pb-24 text-zinc-900 selection:bg-black selection:text-white">
-      {/* Countdown Timer Static Banner */}
-      <div className="bg-red-600 text-white py-6 text-center sticky top-0 z-50 shadow-2xl">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-4">
-          <div className="bg-white text-red-600 px-8 py-3 rounded-full shadow-2xl flex items-center gap-4 border-4 border-white transform scale-110 sm:scale-125">
-            <Timer className="h-6 w-6 animate-pulse" />
-            <span className="text-xs font-black uppercase tracking-[0.2em] sm:text-sm">
+      {/* Countdown Timer Floating Banner */}
+      <div className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none sm:px-0">
+        <div className="mx-auto flex max-w-lg justify-center pointer-events-auto">
+          <div className="bg-white/95 backdrop-blur-md text-red-600 px-6 py-2 rounded-full shadow-[0_8px_32px_rgba(220,38,38,0.15)] flex items-center gap-3 border border-red-100/50">
+            <Timer className="h-4 w-4 animate-pulse shrink-0" />
+            <span className="text-[10px] font-bold uppercase tracking-widest sm:text-xs">
               Oferta expira em:
             </span>
-            <span className="text-3xl font-black font-mono tabular-nums leading-none tracking-tighter sm:text-4xl">
+            <span className="text-xl font-black font-mono tabular-nums leading-none tracking-tight sm:text-2xl min-w-[3.5rem] text-center">
               {formatTime(timeLeft)}
             </span>
           </div>
