@@ -128,7 +128,14 @@ export function AdminAnalytics({
       if (error) {
         const detail = errorMessage(error);
         console.error("[Admin Analytics] Falha na consulta analytics_events", { error, detail });
-        setLoadError(detail);
+        if (detail.includes("Sessão administrativa inválida")) {
+          setLoadError("Sua sessão expirou. Entre novamente para ver as métricas.");
+          window.setTimeout(() => {
+            window.location.assign("/auth");
+          }, 800);
+        } else {
+          setLoadError(detail);
+        }
         setLoading(false);
         return;
       }
