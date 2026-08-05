@@ -109,7 +109,7 @@ function Index() {
   }
 
   if (stage === "sales") {
-    return <SalesPage draft={draft.sales} />;
+    return <SalesPage draft={draft.sales} tracking={draft.tracking} />;
   }
 
   return (

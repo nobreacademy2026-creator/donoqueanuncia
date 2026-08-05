@@ -101,10 +101,11 @@ type SalesDraft = {
   checkoutUrl?: string;
 };
 
-export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
+export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; tracking?: any }) {
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
     draft.videoThumb !== undefined ? draft.videoThumb : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
+  const vslUrl = draft.vslUrl;
   const fullPrice = draft.fullPrice || "R$ 497,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
@@ -152,22 +153,34 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
 
         <div className="mx-auto max-w-4xl">
           <div className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white">
-            {videoThumb && (
-              <img 
-                key={videoThumb}
-                src={videoThumb} 
-                alt="Vídeo explicativo DONO QUE ANUNCIA"
-                className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
+            {vslUrl ? (
+              <iframe
+                src={vslUrl}
+                className="h-full w-full"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+                title="Vídeo de Vendas"
               />
+            ) : (
+              <>
+                {videoThumb && (
+                  <img 
+                    key={videoThumb}
+                    src={videoThumb} 
+                    alt="Vídeo explicativo DONO QUE ANUNCIA"
+                    className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
+                  />
+                )}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                  <div className="h-28 w-28 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_50px_rgba(220,38,38,0.5)] mb-6 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
+                    <Play className="h-12 w-12 fill-current ml-2" />
+                  </div>
+                  <div className="bg-black/60 backdrop-blur-md px-6 py-2 rounded-full">
+                    <span className="font-black text-sm tracking-[0.3em] uppercase">Assistir Aula Completa</span>
+                  </div>
+                </div>
+              </>
             )}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-              <div className="h-28 w-28 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_50px_rgba(220,38,38,0.5)] mb-6 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
-                <Play className="h-12 w-12 fill-current ml-2" />
-              </div>
-              <div className="bg-black/60 backdrop-blur-md px-6 py-2 rounded-full">
-                <span className="font-black text-sm tracking-[0.3em] uppercase">Assistir Aula Completa</span>
-              </div>
-            </div>
             
             {/* Live Badge */}
             <div className="absolute top-6 left-6 flex items-center gap-2 bg-red-600 px-3 py-1 rounded-full">
