@@ -104,7 +104,7 @@ type SalesDraft = {
 export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
-    draft.videoThumb || "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
+    draft.videoThumb !== undefined ? draft.videoThumb : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
   const fullPrice = draft.fullPrice || "R$ 497,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
@@ -152,13 +152,14 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
 
         <div className="mx-auto max-w-4xl">
           <div className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white">
-            <img 
-              key={videoThumb}
-              src={videoThumb} 
-
-              alt="Vídeo explicativo DONO QUE ANUNCIA"
-              className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
-            />
+            {videoThumb && (
+              <img 
+                key={videoThumb}
+                src={videoThumb} 
+                alt="Vídeo explicativo DONO QUE ANUNCIA"
+                className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
+              />
+            )}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
               <div className="h-28 w-28 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_50px_rgba(220,38,38,0.5)] mb-6 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
                 <Play className="h-12 w-12 fill-current ml-2" />

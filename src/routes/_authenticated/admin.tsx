@@ -16,6 +16,7 @@ import {
   ChevronDown,
   Plus,
   Trash2,
+  X,
   ExternalLink,
   Target,
   Search,
@@ -840,15 +841,27 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                   {item.id === 'sales' ? 'Vídeo da Oferta (VSL)' : 'Imagem/Background'}
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className={`h-12 w-20 shrink-0 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
+                  <div className={`relative h-12 w-20 shrink-0 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
                      {draft.steps[item.id]?.image ? (
-                       <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
+                       <>
+                         <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
+                         <button 
+                           onClick={() => {
+                             updateStep(item.id, { image: "" });
+                             toast.info("Imagem removida da prévia.");
+                           }}
+                           className="absolute top-0.5 right-0.5 h-4 w-4 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-sm"
+                           title="Remover imagem"
+                         >
+                           <X className="h-2.5 w-2.5" />
+                         </button>
+                       </>
                      ) : item.id === 'sales' ? (
                        <div className="flex h-full w-full items-center justify-center bg-black/20">
                          <Video className="h-5 w-5 text-zinc-500" />
                        </div>
                      ) : (
-                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover" alt="" />
+                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover opacity-30 grayscale" alt="" />
                      )}
                   </div>
                   <div className="flex-1 space-y-2">
@@ -861,16 +874,31 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                         theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
                       }`}
                     />
-                    <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                      {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />}
-                      {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
-                      <input
-                        type="file"
-                        accept={item.id === 'sales' ? "video/*,image/*" : "image/*"}
-                        className="hidden"
-                        onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
-                      />
-                    </label>
+                    <div className="flex items-center gap-4">
+                      <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                        {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />}
+                        {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
+                        <input
+                          type="file"
+                          accept={item.id === 'sales' ? "video/*,image/*" : "image/*"}
+                          className="hidden"
+                          onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                        />
+                      </label>
+                      
+                      {draft.steps[item.id]?.image && (
+                        <button 
+                          onClick={() => {
+                            updateStep(item.id, { image: "" });
+                            toast.info("Imagem removida da prévia.");
+                          }}
+                          className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                          Remover
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
