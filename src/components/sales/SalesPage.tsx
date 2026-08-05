@@ -301,9 +301,9 @@ export function SalesPage({
           ))}
         </h2>
 
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-4xl relative">
           <div
-            className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white"
+            className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group mb-12 border-4 border-white"
             onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
           >
             {vslUrl && isUploadedVideo ? (
@@ -325,15 +325,15 @@ export function SalesPage({
                     key={videoThumb}
                     src={videoThumb}
                     alt="Vídeo explicativo DONO QUE ANUNCIA"
-                    className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
+                    className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-105"
                   />
                 )}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                  <div className="h-28 w-28 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_50px_rgba(220,38,38,0.5)] mb-6 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
-                    <Play className="h-12 w-12 fill-current ml-2" />
+                  <div className="h-20 w-20 rounded-full bg-red-600 flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
+                    <Play className="h-10 w-10 fill-current ml-1" />
                   </div>
-                  <div className="bg-black/60 backdrop-blur-md px-6 py-2 rounded-full">
-                    <span className="font-black text-sm tracking-[0.3em] uppercase">
+                  <div className="bg-black/40 backdrop-blur-sm px-5 py-2 rounded-full">
+                    <span className="font-bold text-[10px] tracking-widest uppercase">
                       Assistir Aula Completa
                     </span>
                   </div>
@@ -342,9 +342,9 @@ export function SalesPage({
             )}
 
             {/* Live Badge */}
-            <div className="absolute top-6 left-6 flex items-center gap-2 bg-red-600 px-3 py-1 rounded-full">
-              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
-              <span className="text-[10px] font-black text-white uppercase tracking-widest">
+            <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-red-600 px-2.5 py-1 rounded-full shadow-sm">
+              <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              <span className="text-[9px] font-bold text-white uppercase tracking-wider">
                 Gravado
               </span>
             </div>
