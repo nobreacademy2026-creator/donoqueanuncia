@@ -226,6 +226,22 @@ function LegacyAdminDashboard() {
     init();
   }, []);
 
+  // Autosave logic for Legacy dashboard
+  useEffect(() => {
+    if (draft === EMPTY_DRAFT) return;
+
+    const timer = setTimeout(async () => {
+      setIsAutosaving(true);
+      try {
+        writeDraft(draft);
+      } finally {
+        setTimeout(() => setIsAutosaving(false), 1000);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [draft]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate({ to: "/auth" });
