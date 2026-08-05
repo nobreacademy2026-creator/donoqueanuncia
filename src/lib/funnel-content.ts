@@ -87,9 +87,16 @@ export function useFunnelDraft(): FunnelDraft {
     if (params.get("preview") !== "1") {
       let active = true;
       loadPublished().then((published) => {
-        // Log para depuração no console do navegador (vísivel para o usuário)
         console.log("[Funnel] Conteúdo publicado carregado:", published ? "Sim" : "Não");
         if (active && published) setDraft(published);
+      }).catch(err => {
+        console.error("[Funnel] Erro ao carregar conteúdo:", err);
+        // Tenta novamente após um pequeno atraso se houver erro de permissão/rede
+        setTimeout(() => {
+          if (active) {
+            loadPublished().then(p => p && setDraft(p)).catch(() => {});
+          }
+        }, 2000);
       });
       return () => {
         active = false;

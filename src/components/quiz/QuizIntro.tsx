@@ -13,13 +13,13 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         <img 
           src={logo} 
           alt="Dono que Anuncia" 
-          className="h-32 w-auto object-contain drop-shadow-sm sm:h-44 transition-transform duration-500"
+          className="h-32 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] sm:h-44 transition-transform duration-500"
         />
       </div>
 
       {/* Hero Content */}
       <div className="space-y-6">
-        <h1 className="text-5xl leading-[1.05] font-black tracking-tight sm:text-7xl text-zinc-950 uppercase max-w-2xl mx-auto flex flex-col gap-2">
+        <h1 className="text-5xl leading-[1.05] font-black tracking-tight sm:text-7xl text-white uppercase max-w-2xl mx-auto flex flex-col gap-2">
           {title.includes('NÃO TRAZEM CLIENTES') ? (
             <>
               <span>{title.split('NÃO TRAZEM CLIENTES')[0]}</span>
@@ -31,15 +31,15 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         </h1>
         
         <div className="flex flex-col items-center gap-6">
-          <div className="h-12 w-12 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center shadow-sm">
-            <BarChart3 className="h-5 w-5 text-zinc-400" />
+          <div className="h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shadow-sm">
+            <BarChart3 className="h-5 w-5 text-zinc-500" />
           </div>
 
-          <p className="mx-auto max-w-lg text-lg text-zinc-600 font-medium sm:text-xl leading-relaxed px-4">
+          <p className="mx-auto max-w-lg text-lg text-zinc-400 font-medium sm:text-xl leading-relaxed px-4">
             {description.split('personalizado').map((part: string, i: number) => (
               <span key={i}>
                 {part}
-                {i === 0 && description.includes('personalizado') && <strong className="text-zinc-950 font-bold">personalizado</strong>}
+                {i === 0 && description.includes('personalizado') && <strong className="text-white font-bold">personalizado</strong>}
               </span>
             ))}
           </p>
@@ -49,20 +49,20 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         <div className="flex flex-col items-center gap-6 pt-2">
           <button
             onClick={onStart}
-            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-black px-8 py-3.5 text-base font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-black/10 uppercase tracking-tight w-full sm:w-auto min-w-[280px]"
+            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-white px-8 py-3.5 text-base font-black text-black transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-white/5 uppercase tracking-tight w-full sm:w-auto min-w-[280px]"
           >
             <Target className="h-4 w-4 text-red-600 animate-pulse" />
             <span className="relative z-10">Começar Diagnóstico</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 to-black"></div>
+            <div className="absolute inset-0 bg-white"></div>
           </button>
 
           <div className="flex items-center gap-4 w-full max-w-xs">
-            <div className="h-px flex-1 bg-zinc-100"></div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] whitespace-nowrap">
+            <div className="h-px flex-1 bg-white/10"></div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] whitespace-nowrap">
               <ShieldCheck className="h-3 w-3 text-green-500" /> 100% online e seguro
             </div>
-            <div className="h-px flex-1 bg-zinc-100"></div>
+            <div className="h-px flex-1 bg-white/10"></div>
           </div>
         </div>
       </div>
