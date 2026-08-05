@@ -1572,6 +1572,15 @@ export function ContentSection({
                           </span>
                         </div>
                       </div>
+                      ) : item.id === "audio" || item.id === "objecao" || item.id === "beneficios" ? (
+                      <div className="flex h-full w-full items-center justify-center bg-black/5">
+                        <div className="flex flex-col items-center gap-2">
+                          <Music className="h-8 w-8 text-zinc-400/30" />
+                          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
+                            Sem Áudio/Mídia
+                          </span>
+                        </div>
+                      </div>
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-black/5">
                         <div className="flex flex-col items-center gap-2">
@@ -1586,13 +1595,22 @@ export function ContentSection({
                   <div className="flex-1 space-y-3">
                     <input
                       type="text"
-                      placeholder={item.id === "sales" ? "URL do vídeo/thumb" : "URL da imagem"}
-                      value={
-                        draft.steps?.[item.id]?.image?.startsWith("data:")
-                          ? ""
-                          : (draft.steps?.[item.id]?.image ?? "")
+                      placeholder={
+                        item.id === "sales" 
+                          ? "URL do vídeo/thumb" 
+                          : item.id === "audio" 
+                            ? "URL do áudio (mp3/wav)" 
+                            : "URL da imagem"
                       }
-                      onChange={(e) => updateStep(item.id, { image: e.target.value })}
+                      value={
+                        (draft.steps?.[item.id]?.image?.startsWith("data:") || draft.steps?.[item.id]?.audio?.startsWith("data:"))
+                          ? ""
+                          : (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || "")
+                      }
+                      onChange={(e) => {
+                        const field = (item.id === "audio" || (e.target.value.match(/\.(mp3|wav|ogg)/i))) ? "audio" : "image";
+                        updateStep(item.id, { [field]: e.target.value });
+                      }}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark"
                           ? "border-white/10 bg-black/40 text-white"
