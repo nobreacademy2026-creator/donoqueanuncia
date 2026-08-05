@@ -54,16 +54,22 @@ function Index() {
     () =>
       QUESTIONS.map((q) => {
         const override = draft.steps[q.id];
-        if (!override) return q;
-        return {
+        const base = {
           ...q,
-          ...(override.title ? { title: override.title } : {}),
-          ...(override.image !== undefined ? { image: override.image } : {}),
+          ...(override?.title ? { title: override.title } : {}),
           options: q.options.map((option, i) => {
-            const label = override.options?.[i];
+            const label = override?.options?.[i];
             return label ? { ...option, label } : option;
           }),
         };
+
+        // If draft has an image (even empty string to remove), use it.
+        // If draft is missing this step entirely, use the original question image.
+        if (override && override.image !== undefined) {
+          return { ...base, image: override.image };
+        }
+        
+        return base;
       }),
     [draft],
   );

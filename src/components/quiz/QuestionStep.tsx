@@ -56,27 +56,27 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
             <button
               key={option.value}
               onClick={() => onSelect(option.value)}
-              className={`group relative flex items-center gap-4 rounded-3xl px-8 py-6 text-left transition-all duration-300 ${
+              className={`group relative flex items-center gap-4 rounded-2xl px-6 py-4 text-left transition-all duration-300 ${
                 active 
-                  ? "bg-zinc-950 text-white shadow-2xl shadow-zinc-900/20 translate-y-[-2px]" 
+                  ? "bg-zinc-950 text-white shadow-xl shadow-zinc-900/20 translate-y-[-1px]" 
                   : "bg-white text-zinc-800 hover:bg-zinc-50 border border-zinc-100 shadow-sm"
               }`}
             >
               <div
-                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
                   active 
                     ? "bg-red-600 border-red-600 scale-110" 
                     : "border-zinc-200 group-hover:border-zinc-300"
                 }`}
               >
-                {active ? <Check className="h-4 w-4 text-white" /> : null}
+                {active ? <Check className="h-3 w-3 text-white" /> : null}
               </div>
-              <span className="min-w-0 text-lg sm:text-xl font-black uppercase tracking-tight">{option.label}</span>
+              <span className="min-w-0 text-base font-bold uppercase tracking-tight">{option.label}</span>
               
               {!active && (
                 <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="h-8 w-8 rounded-full bg-zinc-100 flex items-center justify-center">
-                    <Check className="h-4 w-4 text-zinc-300" />
+                  <div className="h-6 w-6 rounded-full bg-zinc-100 flex items-center justify-center">
+                    <Check className="h-3 w-3 text-zinc-300" />
                   </div>
                 </div>
               )}
