@@ -170,9 +170,9 @@ function AdminDashboard() {
           }`}>
             <div className="p-8 sm:p-10">
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
-              {activeTab === "config" && <ConfigSection theme={theme} />}
+              {activeTab === "config" && <ConfigSection theme={theme} setParentDraft={setDraft} />}
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
-              {activeTab === "content" && <ContentSection theme={theme} />}
+              {activeTab === "content" && <ContentSection theme={theme} draft={draft} setDraft={setDraft} />}
             </div>
           </div>
 
@@ -525,7 +525,9 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
 
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
     const current = readDraft();
-    writeDraft({ ...current, sales: { ...current.sales, ...patch } });
+    const updated = { ...current, sales: { ...current.sales, ...patch } };
+    setDraft(updated); // Atualizar estado local do ContentSection também se necessário
+    writeDraft(updated);
   };
 
   const [saving, setSaving] = useState(false);
