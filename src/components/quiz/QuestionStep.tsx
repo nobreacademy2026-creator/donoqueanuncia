@@ -16,8 +16,8 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <div className="h-2 w-12 rounded-full bg-white/10 overflow-hidden">
-            <div 
-              className="h-full bg-red-600 transition-all duration-500" 
+            <div
+              className="h-full bg-red-600 transition-all duration-500"
               style={{ width: `${((index + 1) / total) * 100}%` }}
             />
           </div>
@@ -57,22 +57,24 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
               key={option.value}
               onClick={() => onSelect(option.value)}
               className={`group relative flex items-center gap-4 rounded-2xl px-6 py-4 text-left transition-all duration-300 ${
-                active 
-                  ? "bg-white text-black shadow-xl shadow-white/5 translate-y-[-1px]" 
+                active
+                  ? "bg-white text-black shadow-xl shadow-white/5 translate-y-[-1px]"
                   : "bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/5 shadow-sm"
               }`}
             >
               <div
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
-                  active 
-                    ? "bg-red-600 border-red-600 scale-110" 
+                  active
+                    ? "bg-red-600 border-red-600 scale-110"
                     : "border-white/20 group-hover:border-white/30"
                 }`}
               >
                 {active ? <Check className="h-3 w-3 text-white" /> : null}
               </div>
-              <span className="min-w-0 text-base font-bold uppercase tracking-tight">{option.label}</span>
-              
+              <span className="min-w-0 text-base font-bold uppercase tracking-tight">
+                {option.label}
+              </span>
+
               {!active && (
                 <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="h-6 w-6 rounded-full bg-white/5 flex items-center justify-center">

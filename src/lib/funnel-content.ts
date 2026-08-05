@@ -42,22 +42,22 @@ export async function loadPublished(): Promise<FunnelDraft | null> {
       .select("value")
       .eq("key", CONFIG_KEY)
       .maybeSingle();
-      
+
     if (error) {
       console.error("[Funnel] Database fetch error:", error);
       return null;
     }
-    
+
     if (!data?.value) {
       console.warn("[Funnel] No data found for key:", CONFIG_KEY);
       return null;
     }
-    
+
     const parsed = data.value as FunnelDraft;
-    return { 
-      steps: parsed.steps ?? {}, 
-      sales: parsed.sales ?? {}, 
-      tracking: parsed.tracking ?? {} 
+    return {
+      steps: parsed.steps ?? {},
+      sales: parsed.sales ?? {},
+      tracking: parsed.tracking ?? {},
     };
   } catch (err) {
     console.error("[Funnel] Catch-all load error:", err);
@@ -116,13 +116,16 @@ export function useFunnelDraft(): FunnelDraft {
         } else {
           // Check local cache first for instant load
           const cached = readDraft();
-          if (cached && (Object.keys(cached.steps).length > 0 || Object.keys(cached.sales).length > 0)) {
+          if (
+            cached &&
+            (Object.keys(cached.steps).length > 0 || Object.keys(cached.sales).length > 0)
+          ) {
             setDraft(cached);
           }
 
           let retries = 0;
           const MAX_RETRIES = 5;
-          
+
           while (active && retries < MAX_RETRIES) {
             const published = await loadPublished();
             if (active && published) {
@@ -133,7 +136,7 @@ export function useFunnelDraft(): FunnelDraft {
             }
             retries++;
             if (active && retries < MAX_RETRIES) {
-              await new Promise(resolve => setTimeout(resolve, retries * 1000));
+              await new Promise((resolve) => setTimeout(resolve, retries * 1000));
             }
           }
         }
@@ -143,6 +146,35 @@ export function useFunnelDraft(): FunnelDraft {
     };
 
     loadInitial();
+
+    const publishedChannel = !isPreview
+      ? supabase
+          .channel("published-funnel-content")
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "quiz_config",
+              filter: `key=eq.${CONFIG_KEY}`,
+            },
+            (payload) => {
+              const value = (payload.new as { value?: FunnelDraft }).value;
+              if (!active || !value) return;
+              const published: FunnelDraft = {
+                steps: value.steps ?? {},
+                sales: value.sales ?? {},
+                tracking: value.tracking ?? {},
+              };
+              setDraft(published);
+              writeDraft(published);
+            },
+          )
+          .subscribe((status, error) => {
+            if (error)
+              console.error("[Funnel] Falha na atualização em tempo real", { status, error });
+          })
+      : null;
 
     if (isPreview) {
       const onCustom = (event: Event) =>
@@ -166,8 +198,11 @@ export function useFunnelDraft(): FunnelDraft {
         window.removeEventListener("message", onMessage);
       };
     }
-    
-    return () => { active = false; };
+
+    return () => {
+      active = false;
+      if (publishedChannel) void supabase.removeChannel(publishedChannel);
+    };
   }, []);
 
   return draft;

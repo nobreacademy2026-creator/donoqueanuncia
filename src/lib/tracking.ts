@@ -76,21 +76,32 @@ declare global {
   }
 }
 
-export function trackEvent(event: string, payload: Payload = {}) {
-  if (typeof window === "undefined") return;
+export async function trackEvent(event: string, payload: Payload = {}): Promise<boolean> {
+  if (typeof window === "undefined") return false;
   window.fbq?.("trackCustom", event, payload);
   window.gtag?.("event", event, payload);
   window.dataLayer?.push({ event, ...payload });
-  void supabase
-    .from("analytics_events")
-    .insert({
+  try {
+    const { error } = await supabase.from("analytics_events").insert({
       event_name: event,
       payload: payload as never,
       session_id: getSessionId(),
-    })
-    .then(({ error }) => {
-      if (error) console.error("[Analytics] Falha ao registrar evento:", error.message);
     });
+    if (error) {
+      console.error("[Analytics] Falha ao registrar evento no Supabase", {
+        event,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("[Analytics] Falha de rede ao registrar evento", { event, error });
+    return false;
+  }
 }
 
 export function trackLead(payload: Payload = {}) {
@@ -99,10 +110,10 @@ export function trackLead(payload: Payload = {}) {
   trackEvent("lead_capturado", payload);
 }
 
-export function trackCheckoutClick(payload: Payload = {}) {
-  if (typeof window === "undefined") return;
+export async function trackCheckoutClick(payload: Payload = {}) {
+  if (typeof window === "undefined") return false;
   window.fbq?.("track", "InitiateCheckout", payload);
-  trackEvent("checkout_iniciado", payload);
+  return trackEvent("checkout_iniciado", payload);
 }
 
 export function whatsappLink(message: string) {

@@ -3,16 +3,18 @@ import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any }) {
   const title = draft?.title || "DESCUBRA POR QUE SEUS ANÚNCIOS NÃO TRAZEM CLIENTES.";
-  const description = draft?.description || "Responda o diagnóstico gratuito de 2 minutos e receba o plano personalizado para o seu negócio.";
+  const description =
+    draft?.description ||
+    "Responda o diagnóstico gratuito de 2 minutos e receba o plano personalizado para o seu negócio.";
   const logo = logoAsset.url;
 
   return (
     <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-4">
       {/* Logo Section */}
       <div className="mb-6 flex flex-col items-center">
-        <img 
-          src={logo} 
-          alt="Dono que Anuncia" 
+        <img
+          src={logo}
+          alt="Dono que Anuncia"
           className="h-32 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] sm:h-44 transition-transform duration-500"
         />
       </div>
@@ -20,26 +22,28 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
       {/* Hero Content */}
       <div className="space-y-6">
         <h1 className="text-5xl leading-[1.05] font-black tracking-tight sm:text-7xl text-white uppercase max-w-2xl mx-auto flex flex-col gap-2">
-          {title.includes('NÃO TRAZEM CLIENTES') ? (
+          {title.includes("NÃO TRAZEM CLIENTES") ? (
             <>
-              <span>{title.split('NÃO TRAZEM CLIENTES')[0]}</span>
+              <span>{title.split("NÃO TRAZEM CLIENTES")[0]}</span>
               <span className="text-red-600 block">NÃO TRAZEM CLIENTES.</span>
             </>
           ) : (
             <span>{title}</span>
           )}
         </h1>
-        
+
         <div className="flex flex-col items-center gap-6">
           <div className="h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shadow-sm">
             <BarChart3 className="h-5 w-5 text-zinc-500" />
           </div>
 
           <p className="mx-auto max-w-lg text-lg text-zinc-400 font-medium sm:text-xl leading-relaxed px-4">
-            {description.split('personalizado').map((part: string, i: number) => (
+            {description.split("personalizado").map((part: string, i: number) => (
               <span key={i}>
                 {part}
-                {i === 0 && description.includes('personalizado') && <strong className="text-white font-bold">personalizado</strong>}
+                {i === 0 && description.includes("personalizado") && (
+                  <strong className="text-white font-bold">personalizado</strong>
+                )}
               </span>
             ))}
           </p>

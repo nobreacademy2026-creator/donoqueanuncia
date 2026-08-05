@@ -18,7 +18,9 @@ function AuthPage() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session) {
           const data = await checkAdminRole();
           if (data && data.hasAdmin) {
@@ -38,7 +40,7 @@ function AuthPage() {
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({ email, password });
@@ -89,7 +91,9 @@ function AuthPage() {
         </div>
         <form onSubmit={handleAuth} className="mt-10 space-y-6">
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase tracking-widest text-red-500">E-mail</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-red-500">
+              E-mail
+            </label>
             <input
               type="email"
               required
@@ -100,7 +104,9 @@ function AuthPage() {
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase tracking-widest text-red-500">Senha</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-red-500">
+              Senha
+            </label>
             <input
               type="password"
               required
@@ -116,7 +122,7 @@ function AuthPage() {
           >
             {loading ? "PROCESSANDO..." : isSignUp ? "CRIAR CONTA" : "ENTRAR NO PAINEL"}
           </button>
-          
+
           <button
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}

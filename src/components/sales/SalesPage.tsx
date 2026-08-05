@@ -16,15 +16,31 @@ import {
   Wallet,
   Zap,
 } from "lucide-react";
-import { CHECKOUT_URL, trackCheckoutClick, whatsappLink } from "@/lib/tracking";
+import { CHECKOUT_URL, trackCheckoutClick, trackEvent, whatsappLink } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 
 const BENEFITS = [
-  { icon: Megaphone, title: "Anúncios que vendem", text: "Crie campanhas que trazem clientes reais, não apenas curtidas." },
-  { icon: Target, title: "Público certo", text: "Aprenda a segmentar quem realmente compra do seu negócio." },
-  { icon: Wallet, title: "Menos desperdício", text: "Pare de queimar orçamento com impulsionamentos aleatórios." },
-  { icon: MessageCircle, title: "WhatsApp cheio", text: "Transforme anúncios em conversas e conversas em vendas." },
+  {
+    icon: Megaphone,
+    title: "Anúncios que vendem",
+    text: "Crie campanhas que trazem clientes reais, não apenas curtidas.",
+  },
+  {
+    icon: Target,
+    title: "Público certo",
+    text: "Aprenda a segmentar quem realmente compra do seu negócio.",
+  },
+  {
+    icon: Wallet,
+    title: "Menos desperdício",
+    text: "Pare de queimar orçamento com impulsionamentos aleatórios.",
+  },
+  {
+    icon: MessageCircle,
+    title: "WhatsApp cheio",
+    text: "Transforme anúncios em conversas e conversas em vendas.",
+  },
 ];
 
 const LEARN = [
@@ -45,9 +61,21 @@ const FOR_WHO = [
 ];
 
 const DIFFERENTIALS = [
-  { icon: Zap, title: "Direto ao ponto", text: "Aulas curtas e práticas, feitas para quem tem pouco tempo." },
-  { icon: Users, title: "Para o dono, não para agência", text: "Linguagem simples, sem termos técnicos desnecessários." },
-  { icon: Award, title: "Método testado", text: "Aplicado em centenas de pequenos negócios no Brasil." },
+  {
+    icon: Zap,
+    title: "Direto ao ponto",
+    text: "Aulas curtas e práticas, feitas para quem tem pouco tempo.",
+  },
+  {
+    icon: Users,
+    title: "Para o dono, não para agência",
+    text: "Linguagem simples, sem termos técnicos desnecessários.",
+  },
+  {
+    icon: Award,
+    title: "Método testado",
+    text: "Aplicado em centenas de pequenos negócios no Brasil.",
+  },
 ];
 
 const BONUS = [
@@ -58,24 +86,67 @@ const BONUS = [
 ];
 
 const TESTIMONIALS = [
-  { name: "[Nome do aluno]", role: "[Segmento do negócio]", text: "[Espaço para depoimento do aluno]" },
-  { name: "[Nome do aluno]", role: "[Segmento do negócio]", text: "[Espaço para depoimento do aluno]" },
-  { name: "[Nome do aluno]", role: "[Segmento do negócio]", text: "[Espaço para depoimento do aluno]" },
+  {
+    name: "[Nome do aluno]",
+    role: "[Segmento do negócio]",
+    text: "[Espaço para depoimento do aluno]",
+  },
+  {
+    name: "[Nome do aluno]",
+    role: "[Segmento do negócio]",
+    text: "[Espaço para depoimento do aluno]",
+  },
+  {
+    name: "[Nome do aluno]",
+    role: "[Segmento do negócio]",
+    text: "[Espaço para depoimento do aluno]",
+  },
 ];
 
 const FAQ = [
-  { q: "Preciso ter experiência com anúncios?", a: "Não. O curso começa do absoluto zero, mesmo que você nunca tenha criado um anúncio." },
-  { q: "Quanto preciso investir em anúncios?", a: "Você pode começar com valores baixos. O método ensina a extrair o máximo de cada real investido." },
-  { q: "Serve para o meu segmento?", a: "Sim. O método é aplicado a lojas físicas, e-commerces, clínicas, restaurantes e prestadores de serviço." },
-  { q: "Por quanto tempo tenho acesso?", a: "O acesso é liberado imediatamente após a compra, incluindo as atualizações do curso." },
-  { q: "E se eu não gostar?", a: "Você tem 7 dias de garantia incondicional. Basta pedir o reembolso e devolvemos 100% do valor." },
+  {
+    q: "Preciso ter experiência com anúncios?",
+    a: "Não. O curso começa do absoluto zero, mesmo que você nunca tenha criado um anúncio.",
+  },
+  {
+    q: "Quanto preciso investir em anúncios?",
+    a: "Você pode começar com valores baixos. O método ensina a extrair o máximo de cada real investido.",
+  },
+  {
+    q: "Serve para o meu segmento?",
+    a: "Sim. O método é aplicado a lojas físicas, e-commerces, clínicas, restaurantes e prestadores de serviço.",
+  },
+  {
+    q: "Por quanto tempo tenho acesso?",
+    a: "O acesso é liberado imediatamente após a compra, incluindo as atualizações do curso.",
+  },
+  {
+    q: "E se eu não gostar?",
+    a: "Você tem 7 dias de garantia incondicional. Basta pedir o reembolso e devolvemos 100% do valor.",
+  },
 ];
 
-function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = "", href }: { label?: string; className?: string; href?: string }) {
+function CTAButton({
+  label = "QUERO ME TORNAR UM DONO QUE ANUNCIA",
+  className = "",
+  href,
+}: {
+  label?: string;
+  className?: string;
+  href?: string;
+}) {
+  const destination = href || CHECKOUT_URL;
   return (
     <a
-      href={href || CHECKOUT_URL}
-      onClick={() => trackCheckoutClick({ origem: "pagina_vendas" })}
+      href={destination}
+      onClick={async (event) => {
+        event.preventDefault();
+        await Promise.race([
+          trackCheckoutClick({ origem: "pagina_vendas" }),
+          new Promise((resolve) => window.setTimeout(resolve, 1200)),
+        ]);
+        window.location.assign(destination);
+      }}
       className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-[1.01] sm:text-base shadow-lg shadow-green-600/10 ${className}`}
     >
       {label}
@@ -83,7 +154,67 @@ function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = 
   );
 }
 
-function Section({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) {
+function normalizeEmbedUrl(url: string, autoplay = false) {
+  try {
+    const parsed = new URL(url);
+    let embed = parsed;
+    if (parsed.hostname.includes("youtube.com")) {
+      const videoId = parsed.searchParams.get("v");
+      if (videoId) embed = new URL(`https://www.youtube.com/embed/${videoId}`);
+    } else if (parsed.hostname === "youtu.be") {
+      embed = new URL(`https://www.youtube.com/embed/${parsed.pathname.slice(1)}`);
+    } else if (parsed.hostname.includes("vimeo.com") && !parsed.hostname.includes("player.")) {
+      embed = new URL(
+        `https://player.vimeo.com/video/${parsed.pathname.split("/").filter(Boolean)[0]}`,
+      );
+    }
+    if (autoplay) embed.searchParams.set("autoplay", "1");
+    return embed.toString();
+  } catch {
+    return url;
+  }
+}
+
+function EmbeddedVideo({ url }: { url: string }) {
+  const [started, setStarted] = React.useState(false);
+  return (
+    <div className="relative h-full w-full">
+      <iframe
+        src={normalizeEmbedUrl(url, started)}
+        className="h-full w-full"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+        title="Vídeo de Vendas"
+      />
+      {!started && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            void trackEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
+            setStarted(true);
+          }}
+          className="absolute inset-0 grid place-items-center bg-black/15 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500"
+          aria-label="Reproduzir vídeo"
+        >
+          <span className="grid h-24 w-24 place-items-center rounded-full bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] transition-transform hover:scale-105">
+            <Play className="ml-1 h-10 w-10 fill-current" />
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Section({
+  title,
+  children,
+  className = "",
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <section className={`mx-auto mt-20 w-full max-w-5xl px-5 ${className}`}>
       <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
@@ -104,8 +235,11 @@ type SalesDraft = {
 export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; tracking?: any }) {
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
-    draft.videoThumb !== undefined ? draft.videoThumb : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
+    draft.videoThumb !== undefined
+      ? draft.videoThumb
+      : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
   const vslUrl = draft.vslUrl;
+  const isUploadedVideo = Boolean(vslUrl && /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(vslUrl));
   const fullPrice = draft.fullPrice || "R$ 497,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
@@ -123,7 +257,7 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -133,12 +267,15 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-4">
           <div className="bg-white text-red-600 px-8 py-3 rounded-full shadow-2xl flex items-center gap-4 border-4 border-white transform scale-110 sm:scale-125">
             <Timer className="h-6 w-6 animate-pulse" />
-            <span className="text-xs font-black uppercase tracking-[0.2em] sm:text-sm">Oferta expira em:</span>
-            <span className="text-3xl font-black font-mono tabular-nums leading-none tracking-tighter sm:text-4xl">{formatTime(timeLeft)}</span>
+            <span className="text-xs font-black uppercase tracking-[0.2em] sm:text-sm">
+              Oferta expira em:
+            </span>
+            <span className="text-3xl font-black font-mono tabular-nums leading-none tracking-tighter sm:text-4xl">
+              {formatTime(timeLeft)}
+            </span>
           </div>
         </div>
       </div>
-
 
       {/* Hero / Video Section */}
       <section className="mx-auto max-w-5xl px-5 pt-12 text-center">
@@ -146,27 +283,36 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
           Acesso Liberado com Desconto
         </div>
         <h2 className="text-4xl font-black text-zinc-950 uppercase mb-10 sm:text-6xl leading-[0.9] tracking-tighter">
-          {headline.split(' ').map((word, i) => (
-            <span key={i} className={word.toUpperCase() === 'VÍDEO' ? 'text-red-600' : ''}>{word} </span>
+          {headline.split(" ").map((word, i) => (
+            <span key={i} className={word.toUpperCase() === "VÍDEO" ? "text-red-600" : ""}>
+              {word}{" "}
+            </span>
           ))}
         </h2>
 
         <div className="mx-auto max-w-4xl">
-          <div className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white">
-            {vslUrl ? (
-              <iframe
+          <div
+            className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white"
+            onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
+          >
+            {vslUrl && isUploadedVideo ? (
+              <video
                 src={vslUrl}
-                className="h-full w-full"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                title="Vídeo de Vendas"
-              />
+                className="h-full w-full bg-black object-contain"
+                controls
+                playsInline
+                preload="metadata"
+              >
+                Seu navegador não suporta reprodução de vídeo.
+              </video>
+            ) : vslUrl ? (
+              <EmbeddedVideo url={vslUrl} />
             ) : (
               <>
                 {videoThumb && (
-                  <img 
+                  <img
                     key={videoThumb}
-                    src={videoThumb} 
+                    src={videoThumb}
                     alt="Vídeo explicativo DONO QUE ANUNCIA"
                     className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
                   />
@@ -176,31 +322,39 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
                     <Play className="h-12 w-12 fill-current ml-2" />
                   </div>
                   <div className="bg-black/60 backdrop-blur-md px-6 py-2 rounded-full">
-                    <span className="font-black text-sm tracking-[0.3em] uppercase">Assistir Aula Completa</span>
+                    <span className="font-black text-sm tracking-[0.3em] uppercase">
+                      Assistir Aula Completa
+                    </span>
                   </div>
                 </div>
               </>
             )}
-            
+
             {/* Live Badge */}
             <div className="absolute top-6 left-6 flex items-center gap-2 bg-red-600 px-3 py-1 rounded-full">
               <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
-              <span className="text-[10px] font-black text-white uppercase tracking-widest">Gravado</span>
+              <span className="text-[10px] font-black text-white uppercase tracking-widest">
+                Gravado
+              </span>
             </div>
           </div>
         </div>
 
         <div className="space-y-8 max-w-3xl mx-auto">
-          <h3 className="text-4xl font-black text-zinc-950 leading-none tracking-tighter uppercase">Parabéns! Você deu o primeiro passo.</h3>
+          <h3 className="text-4xl font-black text-zinc-950 leading-none tracking-tighter uppercase">
+            Parabéns! Você deu o primeiro passo.
+          </h3>
           <p className="text-xl text-zinc-600 leading-relaxed font-medium">
-            Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar atraindo novos clientes e vendendo muito mais <span className="text-zinc-950 font-black">usando apenas o seu celular.</span>
+            Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
+            atraindo novos clientes e vendendo muito mais{" "}
+            <span className="text-zinc-950 font-black">usando apenas o seu celular.</span>
           </p>
-          
+
           <div className="flex flex-col items-center gap-4">
-            <CTAButton 
-              href={checkoutUrl} 
-              label="Quero Garantir Minha Vaga com Desconto" 
-              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] px-8 py-6 text-xl rounded-2xl animate-pulse-green w-full sm:w-auto uppercase tracking-tighter" 
+            <CTAButton
+              href={checkoutUrl}
+              label="Quero Garantir Minha Vaga com Desconto"
+              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] px-8 py-6 text-xl rounded-2xl animate-pulse-green w-full sm:w-auto uppercase tracking-tighter"
             />
             <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
               <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
@@ -216,7 +370,10 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
             🎯 Seu Objetivo:
           </h3>
           <p className="text-lg leading-relaxed text-zinc-800 font-medium">
-            Hoje você vai começar a fazer anúncios que realmente trazem clientes, <span className="text-red-600 font-bold italic">usando as estratégias que eu aplico pra vender todo dia!</span>
+            Hoje você vai começar a fazer anúncios que realmente trazem clientes,{" "}
+            <span className="text-red-600 font-bold italic">
+              usando as estratégias que eu aplico pra vender todo dia!
+            </span>
           </p>
         </div>
       </div>
@@ -226,10 +383,13 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
         <h2 className="text-3xl leading-tight font-black tracking-tight sm:text-4xl uppercase text-zinc-900">
           No método <span className="text-zinc-900">DONO QUE ANUNCIA</span> eu vou te mostrar:
         </h2>
-        
+
         <ul className="mt-10 grid gap-3 text-left sm:grid-cols-2">
           {LEARN.map((item) => (
-            <li key={item} className="flex items-start gap-3 rounded-2xl bg-zinc-50 px-5 py-4 shadow-sm border border-zinc-100">
+            <li
+              key={item}
+              className="flex items-start gap-3 rounded-2xl bg-zinc-50 px-5 py-4 shadow-sm border border-zinc-100"
+            >
               <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#22c55e]" />
               <span className="text-sm font-medium">{item}</span>
             </li>
@@ -257,9 +417,12 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
               <div className="relative h-3 w-full bg-zinc-100 rounded-full overflow-hidden border border-zinc-50">
                 <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.4)]" />
                 <div className="absolute inset-0 flex items-center justify-around px-4 opacity-20">
-                   {[...Array(12)].map((_, i) => (
-                     <div key={i} className={`w-0.5 bg-zinc-400 ${i % 3 === 0 ? 'h-full' : 'h-1/2'}`} />
-                   ))}
+                  {[...Array(12)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-0.5 bg-zinc-400 ${i % 3 === 0 ? "h-full" : "h-1/2"}`}
+                    />
+                  ))}
                 </div>
               </div>
               <div className="flex justify-between text-xs font-bold text-zinc-400 tracking-tighter">
@@ -270,7 +433,8 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
           </div>
         </div>
         <p className="mt-8 text-center text-xl font-bold leading-relaxed text-zinc-800">
-          O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte para o próximo nível.
+          O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte
+          para o próximo nível.
         </p>
         <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
           <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
@@ -278,36 +442,47 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
           </div>
         </div>
         <div className="mt-8 text-center">
-          <CTAButton href={checkoutUrl} label="Eu quero isso também" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
+          <CTAButton
+            href={checkoutUrl}
+            label="Eu quero isso também"
+            className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20"
+          />
         </div>
       </Section>
 
       {/* Nicho Proof (Carousel Placeholder) */}
       <Section title="SERÁ QUE FUNCIONA PRO SEU NICHO?">
         <p className="text-center text-muted-foreground -mt-4 mb-8">
-          Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje vendem muito 👇
+          Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje
+          vendem muito 👇
         </p>
         <div className="flex gap-4 overflow-x-auto pb-4 px-2 no-scrollbar">
-          {[1,2,3,4].map(i => (
-            <div key={i} className="min-w-[280px] aspect-[4/5] rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm flex items-center justify-center text-muted-foreground">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="min-w-[280px] aspect-[4/5] rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm flex items-center justify-center text-muted-foreground"
+            >
               Print de Resultado {i}
             </div>
           ))}
         </div>
         <div className="mt-8 text-center bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem]">
           <p className="text-xl font-bold text-zinc-800">
-            "Não importa o seu nicho, o tráfego pago é o oxigênio de qualquer negócio que quer crescer."
+            "Não importa o seu nicho, o tráfego pago é o oxigênio de qualquer negócio que quer
+            crescer."
           </p>
           <p className="mt-4 text-muted-foreground">
             Já ajudei centenas de empresários a saírem do zero e atingirem resultados expressivos.
           </p>
         </div>
         <div className="mt-8 text-center">
-          <CTAButton href={checkoutUrl} label="QUERO VENDER MUITO 🤩" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20" />
+          <CTAButton
+            href={checkoutUrl}
+            label="QUERO VENDER MUITO 🤩"
+            className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20"
+          />
         </div>
       </Section>
-
-
 
       <Section title="">
         <div className="bg-[#e6fcf0] border border-[#22c55e]/20 rounded-3xl p-8 shadow-sm max-w-2xl mx-auto text-center">
@@ -330,12 +505,14 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
             <li className="flex items-start gap-3">
               <span className="text-xl shrink-0">🎁</span>
               <span className="text-base font-medium text-zinc-900">
-                Todas as <strong>aulas adicionadas</strong> durante o ano você <strong>não pagará</strong> nada.
+                Todas as <strong>aulas adicionadas</strong> durante o ano você{" "}
+                <strong>não pagará</strong> nada.
               </span>
             </li>
           </ul>
           <p className="mt-8 text-sm text-zinc-700 font-medium">
-            Tudo pensado para você <strong>Impulsionar as vendas</strong> do seu negócio usando a Internet.
+            Tudo pensado para você <strong>Impulsionar as vendas</strong> do seu negócio usando a
+            Internet.
           </p>
         </div>
       </Section>
@@ -343,9 +520,9 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
       {/* Anniversary Badge */}
       <section className="mx-auto mt-20 flex justify-center px-5">
         <div className="relative group transition-transform hover:scale-110">
-          <img 
-            src={anniversaryAsset.url} 
-            alt="1st Year Anniversary Celebration" 
+          <img
+            src={anniversaryAsset.url}
+            alt="1st Year Anniversary Celebration"
             className="h-32 object-contain drop-shadow-[0_0_15px_rgba(190,155,0,0.3)]"
           />
         </div>
@@ -357,7 +534,7 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
           <div className="absolute top-0 right-0 p-8 opacity-10">
             <Zap className="h-64 w-64 text-red-600" />
           </div>
-          
+
           <div className="relative z-10 flex flex-col items-center gap-10">
             <div className="space-y-4">
               <span className="bg-red-600 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.3em] animate-bounce">
@@ -367,30 +544,40 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
                 SUA HORA É AGORA!
               </h2>
             </div>
-            
+
             <div className="flex flex-col items-center gap-6 w-full max-w-md">
               <div className="flex items-center gap-4 text-zinc-500 font-black uppercase tracking-widest italic text-xl">
                 <span>De {fullPrice}</span>
                 <div className="h-0.5 w-20 bg-red-600" />
               </div>
-              
+
               <div className="relative w-full">
                 <div className="absolute inset-0 bg-red-600 blur-3xl opacity-20 animate-pulse" />
                 <div className="relative bg-white text-zinc-950 rounded-[2.5rem] p-10 shadow-2xl transform scale-110">
-                  <span className="block text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-2">Preço Promocional</span>
+                  <span className="block text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-2">
+                    Preço Promocional
+                  </span>
                   <div className="flex items-baseline justify-center gap-1">
                     <span className="text-2xl font-black">R$</span>
                     <span className="text-8xl font-black leading-none tracking-tighter">197</span>
                   </div>
                   <div className="mt-4 flex items-center justify-center gap-2 border-t border-zinc-100 pt-4">
-                    <img src="https://logopng.com.br/logos/pix-106.png" className="h-6 object-contain" alt="Pix" />
-                    <span className="text-sm font-black uppercase tracking-widest">Pagamento Único</span>
+                    <img
+                      src="https://logopng.com.br/logos/pix-106.png"
+                      className="h-6 object-contain"
+                      alt="Pix"
+                    />
+                    <span className="text-sm font-black uppercase tracking-widest">
+                      Pagamento Único
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="mt-10 space-y-2 text-zinc-400 font-bold">
-                <p className="text-lg">Ou 12x de <span className="text-white">R$ 20,35</span> no cartão</p>
+                <p className="text-lg">
+                  Ou 12x de <span className="text-white">R$ 20,35</span> no cartão
+                </p>
                 <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest opacity-60">
                   <ShieldCheck className="h-3 w-3" /> Acesso imediato após aprovação
                 </div>
@@ -402,14 +589,19 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
                 55% de DESCONTO para os próximos 50 alunos
               </div>
               <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
-                Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento tem valor de 497,00.
+                Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento
+                tem valor de 497,00.
               </p>
               <p className="text-sm font-black text-green-600 animate-bounce">
                 Clica no link e aproveita o desconto 👇
               </p>
-              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10" />
+              <CTAButton
+                href={checkoutUrl}
+                label="Garantir com desconto"
+                className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10"
+              />
             </div>
-            
+
             <p className="mt-6 text-xs text-muted-foreground/60">
               Acesso imediato • Pagamento seguro • Vitalício
             </p>
@@ -420,7 +612,7 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
       {/* WhatsApp Support */}
       <section className="mx-auto mt-20 max-w-2xl px-5 text-center">
         <h3 className="text-xl font-bold mb-6">AINDA ESTÁ COM DÚVIDAS?</h3>
-        <a 
+        <a
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
@@ -429,12 +621,15 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
           Fale comigo no WhatsApp
         </a>
       </section>
-      
+
       {/* FAQ */}
       <Section title="Perguntas frequentes">
         <div className="grid gap-3 max-w-3xl mx-auto">
           {FAQ.map((item) => (
-            <details key={item.q} className="surface-card group rounded-2xl px-5 py-4 border border-zinc-100 shadow-sm bg-zinc-50">
+            <details
+              key={item.q}
+              className="surface-card group rounded-2xl px-5 py-4 border border-zinc-100 shadow-sm bg-zinc-50"
+            >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold">
                 {item.q}
                 <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />

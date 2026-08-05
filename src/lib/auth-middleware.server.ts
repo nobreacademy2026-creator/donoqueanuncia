@@ -1,21 +1,21 @@
-import { createMiddleware } from '@tanstack/react-start';
-import { getRequest } from '@tanstack/react-start/server';
-import { createClient } from '@supabase/supabase-js';
+import { createMiddleware } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { createClient } from "@supabase/supabase-js";
 
-export const serverSessionMiddleware = createMiddleware({ type: 'function' }).server(
+export const serverSessionMiddleware = createMiddleware({ type: "function" }).server(
   async ({ next }) => {
     const request = getRequest();
-    const authHeader = request.headers.get('Authorization') || request.headers.get('authorization');
+    const authHeader = request.headers.get("Authorization") || request.headers.get("authorization");
 
     const anonymous = () => next({ context: { userId: null as string | null } });
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return anonymous();
     }
 
-    const token = authHeader.replace('Bearer ', '');
-    const SUPABASE_URL = process.env['SUPABASE_URL'];
-    const SUPABASE_PUBLISHABLE_KEY = process.env['SUPABASE_PUBLISHABLE_KEY'];
+    const token = authHeader.replace("Bearer ", "");
+    const SUPABASE_URL = process.env["SUPABASE_URL"];
+    const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"];
 
     if (!token || !SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
       return anonymous();
@@ -34,5 +34,5 @@ export const serverSessionMiddleware = createMiddleware({ type: 'function' }).se
     } catch {
       return anonymous();
     }
-  }
+  },
 );

@@ -43,12 +43,124 @@ import {
   type FunnelDraft,
   EMPTY_DRAFT,
 } from "@/lib/funnel-content";
+import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
+import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
 });
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (error && typeof error === "object") {
+    const candidate = error as {
+      message?: unknown;
+      details?: unknown;
+      hint?: unknown;
+      code?: unknown;
+    };
+    const parts = [candidate.message, candidate.details, candidate.hint].filter(
+      (part): part is string => typeof part === "string" && part.trim().length > 0,
+    );
+    if (parts.length > 0) return parts.join(" - ");
+    if (typeof candidate.code === "string") return `Codigo ${candidate.code}`;
+  }
+  return "erro desconhecido";
+}
+
 function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState<AdminTab>("overview");
+  const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function init() {
+      const published = await loadPublished();
+      const local = readDraft();
+      const merged: FunnelDraft = {
+        steps: { ...(published?.steps || {}), ...(local.steps || {}) },
+        sales: { ...(published?.sales || {}), ...(local.sales || {}) },
+        tracking: { ...(published?.tracking || {}), ...(local.tracking || {}) },
+      };
+      setDraft(merged);
+      writeDraft(merged);
+    }
+    void init().catch((error) => console.error("[Admin] Falha ao carregar conteúdo", error));
+  }, []);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth" });
+  };
+
+  const openTab = (tab: AdminTab) => setActiveTab(tab);
+
+  return (
+    <AdminShell activeTab={activeTab} onTabChange={openTab} onLogout={logout}>
+      {(activeTab === "overview" || activeTab === "analytics") && (
+        <AdminAnalytics mode={activeTab} onNavigate={openTab} />
+      )}
+      {activeTab === "content" && (
+        <div className="admin-panel p-5 sm:p-7">
+          <ContentSection theme="dark" draft={draft} setDraft={setDraft} />
+        </div>
+      )}
+      {activeTab === "sales" && (
+        <div className="admin-panel p-5 sm:p-7">
+          <ConfigSection theme="dark" draft={draft} setDraft={setDraft} />
+        </div>
+      )}
+      {activeTab === "tracking" && (
+        <div className="admin-panel p-5 sm:p-7">
+          <TrackingSection theme="dark" draft={draft} setDraft={setDraft} />
+        </div>
+      )}
+      {activeTab === "settings" && (
+        <div className="admin-panel p-6 sm:p-8">
+          <div className="admin-section-heading">
+            <div>
+              <p className="admin-eyebrow">Preferências</p>
+              <h2>Configurações</h2>
+              <p>Gerencie os atalhos e o ambiente administrativo.</p>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <button className="admin-action-tile" onClick={() => window.open("/", "_blank")}>
+              <ExternalLink />
+              <span>
+                <strong>Visualizar página publicada</strong>
+                <small>Abra o funil em uma nova aba</small>
+              </span>
+              <ChevronRight />
+            </button>
+            <button className="admin-action-tile" onClick={logout}>
+              <LogOut />
+              <span>
+                <strong>Encerrar sessão</strong>
+                <small>Sair com segurança do painel</small>
+              </span>
+              <ChevronRight />
+            </button>
+          </div>
+        </div>
+      )}
+      {(activeTab === "content" || activeTab === "sales") && (
+        <section className="mt-6">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-7 w-1 rounded-full bg-red-500" />
+            <div>
+              <h2 className="text-base font-semibold text-white">Prévia em tempo real</h2>
+              <p className="text-sm text-zinc-500">Confira as alterações antes de publicar.</p>
+            </div>
+          </div>
+          <LivePreview theme="dark" />
+        </section>
+      )}
+    </AdminShell>
+  );
+}
+
+function LegacyAdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">(
     "analytics",
   );
@@ -93,9 +205,7 @@ function AdminDashboard() {
       {/* Sidebar Fixa */}
       <aside
         className={`hidden w-[280px] shrink-0 border-r transition-all duration-300 lg:flex lg:flex-col ${
-          theme === "dark"
-            ? "border-white/10 bg-zinc-900"
-            : "border-zinc-200 bg-white shadow-sm"
+          theme === "dark" ? "border-white/10 bg-zinc-900" : "border-zinc-200 bg-white shadow-sm"
         }`}
       >
         <div className="p-8">
@@ -304,17 +414,9 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [loadError, setLoadError] = useState("");
 
-  const [funnelData, setFunnelData] = useState([
-    { step: "Início Quiz", count: 0, drop: 0 },
-    { step: "Pergunta 1 (Dor)", count: 0, drop: 0 },
-    { step: "Pergunta 2 (Motivacao)", count: 0, drop: 0 },
-    { step: "Objeção (Minions)", count: 0, drop: 0 },
-    { step: "Checklist Benefícios", count: 0, drop: 0 },
-    { step: "Depoimento (Áudio)", count: 0, drop: 0 },
-    { step: "Nicho (Instagram)", count: 0, drop: 0 },
-    { step: "Página de Vendas", count: 0, drop: 0 },
-    { step: "Checkout", count: 0, drop: 0 },
-  ]);
+  const [funnelData, setFunnelData] = useState<
+    Array<{ step: string; count: number; drop: number }>
+  >([]);
 
   const [leads, setLeads] = useState<any[]>([]);
 
@@ -326,7 +428,7 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
         // Buscar eventos reais do banco de dados
         const { data: events, error } = await supabase
           .from("analytics_events")
-          .select("*")
+          .select("id,event_name,payload,session_id,created_at")
           .order("created_at", { ascending: false });
 
         if (error) throw error;
@@ -336,7 +438,7 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
           const accessCount = events.filter((e) => e.event_name === "quiz_iniciado").length;
           const completionCount = events.filter((e) => e.event_name === "quiz_concluido").length;
           const checkoutCount = events.filter((e) => e.event_name === "checkout_iniciado").length;
-          const videoCount = events.filter((e) => e.event_name === "clique_video").length; // Supondo este nome de evento
+          const videoCount = events.filter((e) => e.event_name === "clique_video").length;
 
           setStats({
             access: accessCount,
@@ -356,7 +458,6 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
           }));
           setLeads(formattedLeads);
 
-          // Processar funil (simplificado para demonstração com dados reais)
           const steps = [
             { name: "Início Quiz", event: "quiz_iniciado" },
             {
@@ -369,7 +470,9 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
               event: "quiz_resposta",
               filter: (p: any) => p.pergunta === "motivacao",
             },
-            { name: "Página de Vendas", event: "clique_vendas" },
+            { name: "Quiz Concluído", event: "quiz_concluido" },
+            { name: "Página de Vendas", event: "pagina_vendas_visualizada" },
+            { name: "Clique no Vídeo", event: "clique_video" },
             { name: "Checkout", event: "checkout_iniciado" },
           ];
 
@@ -397,19 +500,25 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
 
             return { step: s.name, count, drop };
           });
-          setFunnelData(newFunnel as any);
+          setFunnelData(newFunnel);
+        } else {
+          setStats({ access: 0, completion: 0, checkout: 0, videoViews: 0 });
+          setLeads([]);
+          setFunnelData([]);
         }
       } catch (err) {
         console.error("Erro ao buscar dados reais:", err);
-        const message = err instanceof Error ? err.message : "erro desconhecido";
-        
+        const message = getErrorMessage(err);
+
         // Se o erro for de permissão ou tabela inexistente, tentamos ser mais específicos
         if (message.includes("permission denied") || message.includes("403")) {
-          setLoadError(`Acesso negado às tabelas do banco de dados. Verifique as permissões RLS e os GRANTS.`);
+          setLoadError(
+            `Acesso negado às tabelas do banco de dados. Verifique as permissões RLS e os GRANTS.`,
+          );
         } else {
           setLoadError(`Erro ao carregar dados: ${message}`);
         }
-        
+
         toast.error("Falha ao atualizar as métricas.");
       } finally {
         setIsLoading(false);
@@ -419,6 +528,28 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
 
     fetchData();
   }, [refreshKey]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-analytics-events")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "analytics_events" },
+        () => setRefreshKey((value) => value + 1),
+      )
+      .subscribe((status, error) => {
+        if (error) {
+          console.error("[Analytics] Falha na atualização em tempo real", {
+            status,
+            message: error.message,
+          });
+        }
+      });
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, []);
 
   const filteredLeads = leads.filter((lead) => {
     const matchesSearch =
@@ -788,7 +919,7 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
   );
 }
 
-function ConfigSection({
+export function ConfigSection({
   theme,
   draft,
   setDraft,
@@ -815,6 +946,41 @@ function ConfigSection({
   };
 
   const [saving, setSaving] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+
+  const handleVideoUpload = async (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("video/")) {
+      toast.error("Selecione um arquivo de vídeo válido.");
+      return;
+    }
+    if (file.size > 50_000_000) {
+      toast.error("O vídeo deve ter no máximo 50 MB.");
+      return;
+    }
+
+    setUploadingVideo(true);
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) throw new Error("Sua sessão expirou. Entre novamente.");
+      const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
+      const path = `${userData.user.id}/${crypto.randomUUID()}-${safeName}`;
+      const { error: uploadError } = await supabase.storage
+        .from("funnel-media")
+        .upload(path, file, { contentType: file.type, upsert: false, cacheControl: "3600" });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from("funnel-media").getPublicUrl(path);
+      const url = data.publicUrl;
+      setVslUrl(url);
+      publish({ vslUrl: url, videoThumb: url });
+      toast.success("Vídeo enviado. Clique em Publicar Alterações para disponibilizá-lo.");
+    } catch (error) {
+      console.error("[Admin] Falha no upload do vídeo", error);
+      toast.error(`Não foi possível enviar o vídeo: ${getErrorMessage(error)}`);
+    } finally {
+      setUploadingVideo(false);
+    }
+  };
 
   useEffect(() => {
     // ConfigSection agora recebe o draft atualizado do AdminDashboard via props se quisermos sincronizar
@@ -921,6 +1087,20 @@ function ConfigSection({
                 : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
             }`}
           />
+          <label className="admin-button-secondary mt-2 cursor-pointer">
+            <Video className="h-4 w-4" />
+            {uploadingVideo ? "Enviando vídeo..." : "Upload de vídeo"}
+            <input
+              type="file"
+              accept="video/*"
+              className="hidden"
+              disabled={uploadingVideo}
+              onChange={(event) => {
+                void handleVideoUpload(event.target.files?.[0]);
+                event.currentTarget.value = "";
+              }}
+            />
+          </label>
         </div>
 
         <div className="space-y-2">
@@ -978,7 +1158,7 @@ function ConfigSection({
   );
 }
 
-function TrackingSection({
+export function TrackingSection({
   theme,
   draft,
   setDraft,
@@ -1110,7 +1290,7 @@ function TrackingSection({
   );
 }
 
-function ContentSection({
+export function ContentSection({
   theme,
   draft,
   setDraft,
@@ -1140,19 +1320,19 @@ function ContentSection({
       // Garantir que publicamos o estado 'draft' que está no componente,
       // pois ele é a fonte da verdade mais recente durante a edição
       writeDraft(draft); // Sincroniza o localStorage
-      
+
       // Forçar atualização do draft no AdminDashboard antes de publicar
       // para garantir que estamos enviando o estado exato da UI
       await publishDraft(draft);
-      
+
       toast.success("Conteúdo do quiz publicado com sucesso!");
-      
+
       // Pequeno delay e recarregar prévia se possível
       setTimeout(() => {
-        const frame = document.querySelector('iframe[data-funnel-preview]') as HTMLIFrameElement;
+        const frame = document.querySelector("iframe[data-funnel-preview]") as HTMLIFrameElement;
         if (frame) {
           const url = new URL(frame.src);
-          url.searchParams.set('t', Date.now().toString());
+          url.searchParams.set("t", Date.now().toString());
           frame.src = url.toString();
         }
       }, 500);
@@ -1199,7 +1379,7 @@ function ContentSection({
       next.sales = {
         ...next.sales,
         ...(patch.title !== undefined ? { videoHeadline: patch.title } : {}),
-        ...(patch.image !== undefined ? { videoThumb: patch.image } : {}),
+        ...(patch.image !== undefined ? { videoThumb: patch.image, vslUrl: patch.image } : {}),
       };
     }
 
@@ -1228,24 +1408,16 @@ function ContentSection({
     const { error: uploadError } = await supabase.storage
       .from("funnel-media")
       .upload(path, file, { contentType: file.type, upsert: false, cacheControl: "3600" });
-    
+
     if (uploadError) {
       console.error("Erro no upload do Storage:", uploadError);
-      
-      // Fallback para Base64 se o storage falhar por qualquer motivo (permissão, cota, etc)
-      if (uploadError.message.includes("not found") || uploadError.message.includes("permission")) {
-        toast.info("Aviso: Storage indisponível, usando fallback local...");
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target?.result as string;
-          updateStep(id, { [field]: result });
-          toast.success("Arquivo carregado localmente (fallback). Publique para salvar.");
-        };
-        reader.readAsDataURL(file);
-        return;
-      }
-      
-      toast.error(`Não foi possível enviar o arquivo: ${uploadError.message}`);
+
+      const permissionError = /permission|row-level security|403/i.test(uploadError.message);
+      toast.error(
+        permissionError
+          ? "Upload bloqueado pelo Supabase. Verifique sua sessão e as políticas do Storage."
+          : `Não foi possível enviar o arquivo: ${uploadError.message}`,
+      );
       return;
     }
 
@@ -1256,7 +1428,9 @@ function ContentSection({
       steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
     };
     if (id === "sales" && field === "image") {
-      next.sales = { ...next.sales, videoThumb: result };
+      next.sales = file.type.startsWith("video/")
+        ? { ...next.sales, vslUrl: result, videoThumb: result }
+        : { ...next.sales, videoThumb: result };
     }
     setDraft(next);
     writeDraft(next);
@@ -1371,11 +1545,19 @@ function ContentSection({
                   >
                     {draft.steps?.[item.id]?.image ? (
                       <>
-                        <img
-                          src={draft.steps?.[item.id]?.image}
-                          className="h-full w-full object-cover"
-                          alt=""
-                        />
+                        {item.id === "sales" ? (
+                          <video
+                            src={draft.steps?.[item.id]?.image}
+                            className="h-full w-full object-cover"
+                            controls
+                          />
+                        ) : (
+                          <img
+                            src={draft.steps?.[item.id]?.image}
+                            className="h-full w-full object-cover"
+                            alt="Prévia da mídia"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
                             Preview Atual
@@ -1538,6 +1720,16 @@ function ContentSection({
                       </button>
                     )}
                   </div>
+                  {draft.steps?.[item.id]?.audio && (
+                    <audio
+                      controls
+                      preload="metadata"
+                      src={draft.steps[item.id]?.audio}
+                      className="mt-3 w-full"
+                    >
+                      Seu navegador não suporta reprodução de áudio.
+                    </audio>
+                  )}
                 </div>
               )}
             </div>
@@ -1556,14 +1748,14 @@ function ContentSection({
   );
 }
 
-function LivePreview({ theme }: { theme: "dark" | "light" }) {
+export function LivePreview({ theme }: { theme: "dark" | "light" }) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   const [nonce, setNonce] = useState(0);
 
   useEffect(() => {
     // Sincronizar prévia periodicamente se necessário
     const interval = setInterval(() => {
-      const frame = document.querySelector('iframe[data-funnel-preview]') as HTMLIFrameElement;
+      const frame = document.querySelector("iframe[data-funnel-preview]") as HTMLIFrameElement;
       if (frame && frame.contentWindow) {
         frame.contentWindow.postMessage(
           { type: "dqa:funnel-draft", draft: readDraft() },

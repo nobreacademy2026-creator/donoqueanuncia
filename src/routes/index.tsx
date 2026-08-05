@@ -68,7 +68,7 @@ function Index() {
         if (override && override.image !== undefined) {
           return { ...base, image: override.image };
         }
-        
+
         return base;
       }),
     [draft],
@@ -163,27 +163,29 @@ function Index() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white selection:bg-primary selection:text-white overflow-x-hidden">
       {/* Fallback visual sutil para dados em carregamento ou erro */}
-      {!draft.steps['intro'] && stage === "intro" && (
+      {!draft.steps["intro"] && stage === "intro" && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 text-white p-6 text-center">
-           <div className="mb-6 flex flex-col items-center animate-pulse">
-             <div className="h-20 w-48 bg-white/5 rounded-lg mb-4"></div>
-             <div className="h-4 w-64 bg-white/5 rounded mb-2"></div>
-             <div className="h-4 w-48 bg-white/5 rounded"></div>
-           </div>
-           <p className="text-zinc-500 text-sm">Sincronizando diagnóstico...</p>
-           
-           <div className="mt-8 flex flex-col gap-3">
-             <button 
-               onClick={() => {
-                 localStorage.removeItem('dqa_funnel_draft');
-                 window.location.reload();
-               }} 
-               className="rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all border border-white/5"
-             >
-               Limpar Cache e Recarregar
-             </button>
-             <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-800">Status: Conectando ao Servidor</p>
-           </div>
+          <div className="mb-6 flex flex-col items-center animate-pulse">
+            <div className="h-20 w-48 bg-white/5 rounded-lg mb-4"></div>
+            <div className="h-4 w-64 bg-white/5 rounded mb-2"></div>
+            <div className="h-4 w-48 bg-white/5 rounded"></div>
+          </div>
+          <p className="text-zinc-500 text-sm">Sincronizando diagnóstico...</p>
+
+          <div className="mt-8 flex flex-col gap-3">
+            <button
+              onClick={() => {
+                localStorage.removeItem("dqa_funnel_draft");
+                window.location.reload();
+              }}
+              className="rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all border border-white/5"
+            >
+              Limpar Cache e Recarregar
+            </button>
+            <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-800">
+              Status: Conectando ao Servidor
+            </p>
+          </div>
         </div>
       )}
 
@@ -198,7 +200,7 @@ function Index() {
       <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center px-5 pt-0 pb-6">
         {stage === "intro" ? (
           <QuizIntro
-            draft={draft.steps['intro'] || undefined}
+            draft={draft.steps["intro"] || undefined}
             onStart={() => {
               trackEvent("quiz_iniciado");
               setStage("quiz");
@@ -221,12 +223,13 @@ function Index() {
 
         {stage === "result" ? (
           <div className="w-full">
-            <ResultStep 
-              draft={draft.steps['audio']}
+            <ResultStep
+              draft={draft.steps["audio"]}
               onNext={() => {
+                trackEvent("pagina_vendas_visualizada");
                 setStage("sales");
                 window.scrollTo({ top: 0 });
-              }} 
+              }}
             />
           </div>
         ) : null}

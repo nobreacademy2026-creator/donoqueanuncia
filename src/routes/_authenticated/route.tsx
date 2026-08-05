@@ -4,11 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
     // 1. Skip check during SSR
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // 2. Client-side session check
-    const { data: { session } } = await supabase.auth.getSession();
-    
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
     if (!session) {
       throw redirect({
         to: "/auth",
