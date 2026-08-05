@@ -491,23 +491,72 @@ export function SalesPage({
           Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje
           vendem muito 👇
         </p>
-        <div className="flex gap-4 overflow-x-auto pb-4 px-2 no-scrollbar">
-          {(niche?.image ? [niche.image] : [1, 2, 3, 4]).map((item, i) => (
-            <div
-              key={String(item)}
-              className="min-w-[280px] aspect-[4/5] rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm flex items-center justify-center text-muted-foreground"
-            >
-              {typeof item === "string" ? (
-                <img
-                  src={item}
-                  alt="Resultado de aluno"
-                  className="h-full w-full rounded-2xl object-cover"
-                />
-              ) : (
-                <>Print de Resultado {i + 1}</>
-              )}
+        <div className="flex gap-4 overflow-x-auto pb-6 px-2 no-scrollbar justify-center">
+          <div className="min-w-[320px] max-w-sm rounded-[2rem] border border-zinc-200 bg-white shadow-xl overflow-hidden">
+            <div className="p-4 flex items-center justify-between border-b border-zinc-50">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
+                  <div className="h-full w-full rounded-full bg-white p-0.5">
+                    <img
+                      src={
+                        niche?.image ||
+                        "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
+                      }
+                      alt="Gordo Grill"
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="text-left leading-tight">
+                  <p className="font-bold text-sm text-zinc-900">premium_grill_sp</p>
+                  <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
+                </div>
+              </div>
+              <button className="text-zinc-400">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>
+              </button>
             </div>
-          ))}
+            
+            <div className="p-4 text-left">
+              <div className="flex justify-around mb-4 text-center">
+                <div>
+                  <p className="font-bold text-sm text-zinc-900">18</p>
+                  <p className="text-[9px] text-zinc-400 uppercase font-semibold">posts</p>
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-zinc-900">1.584</p>
+                  <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguidores</p>
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-zinc-900">264</p>
+                  <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
+                </div>
+              </div>
+              
+              <div className="space-y-0.5 mb-4">
+                <div className="flex items-center gap-1">
+                   <p className="text-xs font-bold text-zinc-900">Premium Grill / Boutique de Carnes</p>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-zinc-800">
+                  <span>Delivery de Carnes em São Paulo 🥩 🍖</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-zinc-800">
+                  <span>O melhor corte da cidade agora na sua casa 🤝 ✨</span>
+                </div>
+              </div>
+              
+              <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
+                Seguir de volta
+              </button>
+            </div>
+            
+            <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
+              <p className="text-xs leading-relaxed text-zinc-700 italic">
+                "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de
+                chegar e sempre convertendo em vendas"
+              </p>
+            </div>
+          </div>
         </div>
         <div className="mt-8 text-center bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem]">
           <p className="text-xl font-bold text-zinc-800">
@@ -654,13 +703,16 @@ export function SalesPage({
 
       {/* WhatsApp Support */}
       <section className="mx-auto mt-20 max-w-2xl px-5 text-center">
-        <h3 className="text-xl font-bold mb-6">AINDA ESTÁ COM DÚVIDAS?</h3>
+        <h3 className="text-xl font-black mb-6 uppercase tracking-tight">AINDA ESTÁ COM DÚVIDAS?</h3>
         <a
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-bold px-8 py-4 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-yellow-500/10 uppercase"
+          className="group inline-flex items-center gap-4 rounded-[2rem] bg-[#25D366] hover:bg-[#20ba5a] text-white font-black px-12 py-5 transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_20px_40px_rgba(37,211,102,0.2)] uppercase tracking-tight text-lg"
         >
+          <div className="bg-white/20 p-2 rounded-full">
+            <MessageCircle className="h-6 w-6 fill-white" />
+          </div>
           Fale comigo no WhatsApp
         </a>
       </section>
