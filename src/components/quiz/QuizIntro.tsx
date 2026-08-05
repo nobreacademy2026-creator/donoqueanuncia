@@ -40,10 +40,10 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         <div className="flex flex-col items-center gap-6 pt-4">
           <button
             onClick={onStart}
-            className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-zinc-900 px-10 py-5 text-lg font-black text-white transition-all hover:bg-zinc-800 hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-zinc-900/20 uppercase tracking-wide"
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-zinc-950 px-8 py-4 text-base font-bold text-white transition-all hover:bg-zinc-900 hover:scale-[1.01] active:scale-[0.99] shadow-xl shadow-zinc-900/10 uppercase tracking-wide"
           >
             Começar Diagnóstico 
-            <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full"></div>
           </button>
 
