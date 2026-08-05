@@ -525,6 +525,8 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   const [vslUrl, setVslUrl] = useState(initial.sales.vslUrl ?? "");
 
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
+    // Aqui não temos acesso ao 'draft' do AdminDashboard diretamente a menos que passemos como prop
+    // Mas ConfigSection já recebe setDraft. Vamos garantir que ele use o rascunho mais recente.
     const current = readDraft();
     const updated = { ...current, sales: { ...current.sales, ...patch } };
     setDraft(updated); 
