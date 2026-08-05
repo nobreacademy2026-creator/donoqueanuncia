@@ -1549,8 +1549,7 @@ export function ContentSection({
                       </button>
                     )}
                   </div>
-                </div>
-                <div className="flex-1 space-y-3">
+                  <div className="flex-1 space-y-3">
                     <input
                       type="text"
                       placeholder={
