@@ -1546,7 +1546,7 @@ export function ContentSection({
                           </div>
                         ) : (
                           <img
-                            src={draft.steps?.[item.id]?.image}
+                            src={draft.steps?.[item.id]?.image || (item.id === "intro" ? logoAsset.url : "")}
                             className="h-full w-full object-cover"
                             alt="Prévia da mídia"
                           />
