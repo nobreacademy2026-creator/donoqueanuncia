@@ -58,8 +58,7 @@ function Index() {
         return {
           ...q,
           ...(override.title ? { title: override.title } : {}),
-          // Se a imagem for explicitamente uma string vazia (removida no admin), usamos null
-          image: override.image === "" ? null : (override.image || q.image),
+          image: override.image !== undefined ? override.image : q.image,
           options: q.options.map((option, i) => {
             const label = override.options?.[i];
             return label ? { ...option, label } : option;
