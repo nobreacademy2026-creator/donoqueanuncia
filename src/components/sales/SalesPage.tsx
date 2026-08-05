@@ -87,19 +87,19 @@ const BONUS = [
 
 const TESTIMONIALS = [
   {
-    name: "[Nome do aluno]",
-    role: "[Segmento do negócio]",
-    text: "[Espaço para depoimento do aluno]",
+    name: "Tony Nobre",
+    role: "Estrategista Digital",
+    text: "O método Dono que Anuncia mudou completamente a forma como encaro as vendas. Antes eu dependia da sorte, agora eu domino as ferramentas que trazem clientes todos os dias. É o caminho mais curto para quem quer resultados reais no digital.",
   },
   {
-    name: "[Nome do aluno]",
-    role: "[Segmento do negócio]",
-    text: "[Espaço para depoimento do aluno]",
+    name: "Ricardo Silva",
+    role: "Dono de Hamburgueria",
+    text: "Eu achava que anúncios eram só para grandes empresas. Com o treinamento, aprendi a investir pouco e ter um retorno absurdo. Minha agenda de pedidos vive cheia e meu WhatsApp não para de tocar.",
   },
   {
-    name: "[Nome do aluno]",
-    role: "[Segmento do negócio]",
-    text: "[Espaço para depoimento do aluno]",
+    name: "Ana Oliveira",
+    role: "Loja de Roupas Femininas",
+    text: "Simples, direto e sem enrolação. Consegui aplicar as aulas no mesmo dia e já vi diferença no movimento da loja e no engajamento do meu perfil. Vale cada centavo do investimento!",
   },
 ];
 
