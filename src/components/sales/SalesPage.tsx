@@ -76,7 +76,7 @@ function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = 
     <a
       href={href || CHECKOUT_URL}
       onClick={() => trackCheckoutClick({ origem: "pagina_vendas" })}
-      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-transform duration-200 hover:scale-[1.02] sm:text-base shadow-lg shadow-green-600/20 ${className}`}
+      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-[1.01] sm:text-base shadow-lg shadow-green-600/10 ${className}`}
     >
       {label}
     </a>
@@ -187,7 +187,7 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
             <CTAButton 
               href={checkoutUrl} 
               label="Quero Garantir Minha Vaga com Desconto" 
-              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.5)] px-12 py-8 text-2xl rounded-[2rem] animate-pulse-green w-full sm:w-auto uppercase tracking-tighter" 
+              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] px-8 py-6 text-xl rounded-2xl animate-pulse-green w-full sm:w-auto uppercase tracking-tighter" 
             />
             <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
               <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
@@ -394,7 +394,7 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
               <p className="text-sm font-black text-green-600 animate-bounce">
                 Clica no link e aproveita o desconto 👇
               </p>
-              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
+              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10" />
             </div>
             
             <p className="mt-6 text-xs text-muted-foreground/60">
@@ -411,7 +411,7 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-2xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-black px-12 py-5 transition-transform hover:scale-105 shadow-lg shadow-yellow-500/20 uppercase"
+          className="inline-flex items-center gap-3 rounded-xl bg-[#ffb900] hover:bg-[#e6a600] text-white font-bold px-8 py-4 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-yellow-500/10 uppercase"
         >
           Fale comigo no WhatsApp
         </a>
