@@ -94,9 +94,14 @@ export function useFunnelDraft(): FunnelDraft {
         // Tenta novamente após um pequeno atraso se houver erro de permissão/rede
         setTimeout(() => {
           if (active) {
-            loadPublished().then(p => p && setDraft(p)).catch(() => {});
+            loadPublished().then(p => {
+              if (p) {
+                console.log("[Funnel] Conteúdo carregado no retry.");
+                setDraft(p);
+              }
+            }).catch(() => {});
           }
-        }, 2000);
+        }, 3000);
       });
       return () => {
         active = false;
