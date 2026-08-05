@@ -58,7 +58,7 @@ function Index() {
         return {
           ...q,
           ...(override.title ? { title: override.title } : {}),
-          image: override.image !== undefined ? override.image : q.image,
+          ...(override.image !== undefined ? { image: override.image } : {}),
           options: q.options.map((option, i) => {
             const label = override.options?.[i];
             return label ? { ...option, label } : option;
