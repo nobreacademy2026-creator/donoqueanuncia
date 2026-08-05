@@ -552,7 +552,6 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   }, []);
 
   const handleSave = async () => {
-    publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     setSaving(true);
     try {
       const currentDraft = readDraft();
@@ -565,6 +564,9 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
         vslUrl,
         videoThumb: vslUrl // Sincroniza o thumb com a URL por padrão
       };
+      
+      setDraft(currentDraft); // Atualiza o estado global
+      writeDraft(currentDraft); // Persiste no localStorage
       
       await publishDraft(currentDraft);
       toast.success("Dados da Página de Vendas publicados com sucesso!");
