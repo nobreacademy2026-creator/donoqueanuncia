@@ -86,33 +86,37 @@ export function useFunnelDraft(): FunnelDraft {
     const params = new URLSearchParams(window.location.search);
     if (params.get("preview") !== "1") {
       let active = true;
-      loadPublished().then((published) => {
-        console.log("[Funnel] Conteúdo publicado carregado:", published ? "Sim" : "Não");
-        if (active && published) setDraft(published);
-      }).catch(err => {
-        console.error("[Funnel] Erro CRÍTICO ao carregar conteúdo:", err);
-        // Exibe erro no console detalhado para depuração
-        if (err && typeof err === 'object') {
-          console.error("[Funnel] Detalhes do erro:", JSON.stringify(err, null, 2));
-        }
-        
-        // Tenta novamente após um pequeno atraso
-        setTimeout(() => {
-          if (active) {
-            loadPublished().then(p => {
-              if (p) {
-                console.log("[Funnel] Conteúdo carregado no retry.");
-                setDraft(p);
-              }
-            }).catch(retryErr => {
-               console.error("[Funnel] Erro no retry:", retryErr);
-            });
+      let retries = 0;
+      const MAX_RETRIES = 5;
+
+      const attemptLoad = async () => {
+        try {
+          const published = await loadPublished();
+          if (active && published) {
+            setDraft(published);
+            console.log("[Funnel] Conteúdo publicado carregado com sucesso.");
+            return true;
           }
-        }, 3000);
-      });
-      return () => {
-        active = false;
+        } catch (err) {
+          console.error(`[Funnel] Falha na tentativa ${retries + 1}:`, err);
+        }
+        return false;
       };
+
+      const startLoading = async () => {
+        while (active && retries < MAX_RETRIES) {
+          const success = await attemptLoad();
+          if (success) break;
+          retries++;
+          if (retries < MAX_RETRIES) {
+            console.log(`[Funnel] Tentando novamente em ${retries * 1.5}s...`);
+            await new Promise(resolve => setTimeout(resolve, retries * 1500));
+          }
+        }
+      };
+
+      startLoading();
+      return () => { active = false; };
     }
 
     setDraft(readDraft());

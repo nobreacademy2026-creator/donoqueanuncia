@@ -161,7 +161,7 @@ function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-900 selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-zinc-950 text-white selection:bg-primary selection:text-white">
       {/* Fallback visual sutil para dados em carregamento ou erro */}
       {!draft.steps['intro'] && stage === "intro" && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 text-white p-6 text-center">
@@ -171,13 +171,16 @@ function Index() {
              <div className="h-4 w-48 bg-white/5 rounded"></div>
            </div>
            <p className="text-zinc-500 text-sm">Sincronizando diagnóstico...</p>
-           {/* Botão de retry sutil em caso de demora excessiva */}
-           <button 
-             onClick={() => window.location.reload()} 
-             className="mt-4 text-[10px] uppercase tracking-widest text-zinc-700 hover:text-white transition-colors"
-           >
-             Recarregar se demorar
-           </button>
+           
+           <div className="mt-8 flex flex-col gap-3">
+             <button 
+               onClick={() => window.location.reload()} 
+               className="rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all border border-white/5"
+             >
+               Recarregar Página
+             </button>
+             <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-700">Conexão segura estabelecida</p>
+           </div>
         </div>
       )}
 

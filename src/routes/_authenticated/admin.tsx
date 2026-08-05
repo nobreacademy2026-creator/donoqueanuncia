@@ -90,7 +90,7 @@ function AdminDashboard() {
       <aside
         className={`hidden w-[280px] shrink-0 border-r transition-all duration-300 lg:flex lg:flex-col ${
           theme === "dark"
-            ? "border-white/10 bg-zinc-900/50 backdrop-blur-xl"
+            ? "border-white/10 bg-zinc-900"
             : "border-zinc-200 bg-white shadow-sm"
         }`}
       >
