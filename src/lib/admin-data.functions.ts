@@ -22,7 +22,7 @@ async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerif
   if (!bucket) {
     const { error: createError } = await admin.storage.createBucket("funnel-media", {
       public: true,
-      fileSizeLimit: 50 * 1024 * 1024,
+      fileSizeLimit: 500 * 1024 * 1024,
       allowedMimeTypes: ["image/*", "audio/*", "video/*"],
     });
     if (createError) {
@@ -33,10 +33,10 @@ async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerif
     return;
   }
 
-  if (!bucket.public) {
+  if (bucket.file_size_limit !== 500 * 1024 * 1024 || !bucket.public) {
     const { error: updateError } = await admin.storage.updateBucket("funnel-media", {
       public: true,
-      fileSizeLimit: 50 * 1024 * 1024,
+      fileSizeLimit: 500 * 1024 * 1024,
       allowedMimeTypes: ["image/*", "audio/*", "video/*"],
     });
     if (updateError) {

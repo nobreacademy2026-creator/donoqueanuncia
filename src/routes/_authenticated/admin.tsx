@@ -1159,7 +1159,7 @@ export function ConfigSection({
             {uploadingVideo ? "Enviando vídeo..." : "Upload de vídeo"}
             <input
               type="file"
-              accept="video/*"
+              accept="video/*,image/*"
               className="hidden"
               disabled={uploadingVideo}
               onChange={(event) => {
