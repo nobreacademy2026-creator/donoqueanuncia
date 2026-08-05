@@ -36,14 +36,33 @@ export async function publishDraft(draft: FunnelDraft) {
 
 /** Load the published content from the database. */
 export async function loadPublished(): Promise<FunnelDraft | null> {
-  const { data, error } = await supabase
-    .from("quiz_config")
-    .select("value")
-    .eq("key", CONFIG_KEY)
-    .maybeSingle();
-  if (error || !data?.value) return null;
-  const parsed = data.value as FunnelDraft;
-  return { steps: parsed.steps ?? {}, sales: parsed.sales ?? {}, tracking: parsed.tracking ?? {} };
+  try {
+    const { data, error } = await supabase
+      .from("quiz_config")
+      .select("value")
+      .eq("key", CONFIG_KEY)
+      .maybeSingle();
+      
+    if (error) {
+      console.error("[Funnel] Database fetch error:", error);
+      return null;
+    }
+    
+    if (!data?.value) {
+      console.warn("[Funnel] No data found for key:", CONFIG_KEY);
+      return null;
+    }
+    
+    const parsed = data.value as FunnelDraft;
+    return { 
+      steps: parsed.steps ?? {}, 
+      sales: parsed.sales ?? {}, 
+      tracking: parsed.tracking ?? {} 
+    };
+  } catch (err) {
+    console.error("[Funnel] Catch-all load error:", err);
+    return null;
+  }
 }
 
 export function readDraft(): FunnelDraft {
