@@ -46,6 +46,7 @@ import {
 import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { uploadAdminMedia } from "@/lib/admin-media-upload";
+import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
