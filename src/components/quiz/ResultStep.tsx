@@ -225,51 +225,63 @@ export function ResultStep({
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg">
+          <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-2xl">
             {/* Mock Carousel of Instagram Profiles */}
             <div className="p-4 space-y-4">
-              <div className="rounded-xl border border-zinc-100 bg-white overflow-hidden shadow-sm">
-                <div className="p-3 flex items-center gap-3 border-b border-zinc-50">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5">
-                    <div className="h-full w-full rounded-full bg-white p-0.5">
-                      <img
-                        src={
-                          nicheDraft?.image ||
-                          "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
-                        }
-                        alt="Gordo Grill"
-                        className="h-full w-full rounded-full object-cover"
-                      />
+              <div className="rounded-2xl border border-zinc-100 bg-white overflow-hidden shadow-sm">
+                <div className="p-3 flex items-center justify-between border-b border-zinc-50">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
+                      <div className="h-full w-full rounded-full bg-white p-0.5">
+                        <img
+                          src={
+                            nicheDraft?.image ||
+                            "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
+                          }
+                          alt="Gordo Grill"
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="text-left leading-tight">
+                      <p className="font-bold text-sm text-zinc-900">premium_grill_sp</p>
+                      <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
                     </div>
                   </div>
-                  <div className="text-left leading-tight">
-                    <p className="font-bold text-sm">premium_grill_sp</p>
-                    <p className="text-[10px] text-zinc-500">Premium Grill / Boutique de Carnes</p>
-                  </div>
+                  <button className="text-zinc-400">
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>
+                  </button>
                 </div>
+                
                 <div className="p-4 text-left">
-                  <div className="flex justify-around mb-3 text-center">
+                  <div className="flex justify-around mb-4 text-center">
                     <div>
-                      <p className="font-bold text-sm">18</p>
-                      <p className="text-[9px] text-zinc-400 uppercase">posts</p>
+                      <p className="font-bold text-sm text-zinc-900">18</p>
+                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">posts</p>
                     </div>
                     <div>
-                      <p className="font-bold text-sm">1.584</p>
-                      <p className="text-[9px] text-zinc-400 uppercase">seguidores</p>
+                      <p className="font-bold text-sm text-zinc-900">1.584</p>
+                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguidores</p>
                     </div>
                     <div>
-                      <p className="font-bold text-sm">264</p>
-                      <p className="text-[9px] text-zinc-400 uppercase">seguindo</p>
+                      <p className="font-bold text-sm text-zinc-900">264</p>
+                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
                     </div>
                   </div>
-                  <p className="text-xs font-medium mb-1">Delivery de Carnes em São Paulo 🥩 🍖</p>
-                  <p className="text-xs mb-3">O melhor corte da cidade agora na sua casa 🤝 ✨</p>
-                  <button className="w-full bg-blue-500 text-white rounded-md py-1.5 text-xs font-bold">
+                  
+                  <div className="space-y-0.5 mb-4">
+                    <p className="text-xs font-bold text-zinc-900">Premium Grill / Boutique de Carnes</p>
+                    <p className="text-xs text-zinc-800">Delivery de Carnes em São Paulo 🥩 🍖</p>
+                    <p className="text-xs text-zinc-800">O melhor corte da cidade agora na sua casa 🤝 ✨</p>
+                  </div>
+                  
+                  <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
                     Seguir de volta
                   </button>
                 </div>
-                <div className="bg-zinc-50 p-3 text-left">
-                  <p className="text-xs italic text-zinc-600">
+                
+                <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
+                  <p className="text-xs leading-relaxed text-zinc-700 italic">
                     "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de
                     chegar e sempre convertendo em vendas"
                   </p>
@@ -277,7 +289,7 @@ export function ResultStep({
               </div>
             </div>
 
-            <div className="flex justify-center gap-1.5 pb-4">
+            <div className="flex justify-center gap-1.5 pb-5">
               <div className="h-1.5 w-1.5 rounded-full bg-zinc-800"></div>
               <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
               <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
