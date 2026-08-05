@@ -1386,6 +1386,9 @@ export function ContentSection({
       };
     }
 
+    // Se for o passo 'intro', garantir que o rascunho de vendas não seja afetado por engano
+    // mas o resto do código já cuida do merge profundo.
+
     setDraft(next);
     writeDraft(next);
   };
