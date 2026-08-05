@@ -1375,6 +1375,11 @@ export function ContentSection({
     { id: "audio", title: "Depoimento do Aluno", type: "etapa" },
     { id: "niche", title: "Validação de Nicho", type: "etapa" },
     { id: "sales", title: "Página de Vendas (Final)", type: "página" },
+    {
+      id: "sales_testimonial",
+      title: "Depoimento da Página de Vendas",
+      type: "imagem + áudio",
+    },
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -1419,6 +1424,7 @@ export function ContentSection({
       "Porque quero fazer meu negócio crescer de verdade.",
     ],
     audio: ["Nome do Aluno (ex: @alan_dalila)", "Descrição curta", "Seguidores", "Seguindo"],
+    sales_testimonial: ["Nome do Aluno", "Segmento / descrição"],
   };
 
   const updateOption = (id: string, index: number, value: string) => {
@@ -1570,7 +1576,7 @@ export function ContentSection({
                     theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
                   }`}
                 >
-                  {item.id === "audio" ? (
+                  {item.id === "audio" || item.id === "sales_testimonial" ? (
                     <Music className="h-5 w-5" />
                   ) : item.id === "sales" ? (
                     <Video className="h-5 w-5" />
@@ -1626,7 +1632,11 @@ export function ContentSection({
                 <label
                   className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
                 >
-                  {item.id === "sales" ? "Vídeo da Oferta (VSL)" : "Imagem/Background"}
+                  {item.id === "sales"
+                    ? "Vídeo da Oferta (VSL)"
+                    : item.id === "sales_testimonial"
+                      ? "Imagem e áudio do depoimento final"
+                      : "Imagem/Background"}
                 </label>
                 <div className="flex flex-col gap-3">
                   <div
@@ -1655,7 +1665,7 @@ export function ContentSection({
                       placeholder={
                         item.id === "sales"
                           ? "URL do vídeo/thumb"
-                          : item.id === "audio"
+                          : item.id === "audio" || item.id === "sales_testimonial"
                             ? "URL do áudio (mp3/wav)"
                             : "URL da imagem"
                       }
@@ -1669,7 +1679,7 @@ export function ContentSection({
                       }
                       onChange={(e) => {
                         const val = e.target.value;
-                        const isAudio = val.match(/\.(mp3|wav|ogg)/i) || item.id === "audio";
+                        const isAudio = Boolean(val.match(/\.(mp3|wav|ogg)(?:\?|$)/i));
                         updateStep(item.id, { [isAudio ? "audio" : "image"]: val });
                       }}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
@@ -1682,7 +1692,7 @@ export function ContentSection({
                       <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                         {item.id === "sales" ? (
                           <Video className="h-3 w-3" />
-                        ) : item.id === "audio" ? (
+                        ) : item.id === "audio" || item.id === "sales_testimonial" ? (
                           <Music className="h-3 w-3" />
                         ) : (
                           <ImageIcon className="h-3 w-3" />
@@ -1691,7 +1701,9 @@ export function ContentSection({
                           ? "Subir Vídeo"
                           : item.id === "audio"
                             ? "Subir Áudio"
-                            : "Alterar Upload"}
+                            : item.id === "sales_testimonial"
+                              ? "Subir Imagem"
+                              : "Alterar Upload"}
                         <input
                           type="file"
                           accept={
@@ -1709,6 +1721,19 @@ export function ContentSection({
                         />
                       </label>
 
+                      {item.id === "sales_testimonial" && (
+                        <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                          <Music className="h-3 w-3" />
+                          Subir Áudio
+                          <input
+                            type="file"
+                            accept="audio/*"
+                            className="hidden"
+                            onChange={(e) => handleUpload(item.id, e.target.files?.[0], "audio")}
+                          />
+                        </label>
+                      )}
+
                       {(draft.steps?.[item.id]?.image ||
                         draft.steps?.[item.id]?.audio ||
                         (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
@@ -1724,6 +1749,14 @@ export function ContentSection({
                         </button>
                       )}
                     </div>
+                    {item.id === "sales_testimonial" && draft.steps?.[item.id]?.audio && (
+                      <audio
+                        src={draft.steps?.[item.id]?.audio}
+                        controls
+                        preload="metadata"
+                        className="h-9 w-full"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -1925,7 +1958,9 @@ function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
     draft.steps?.[item.id]?.image ||
     draft.steps?.[item.id]?.audio ||
     (item.id === "intro" ? logoAsset.url : "");
-  const isAudio = item.id === "audio" || (mediaUrl && mediaUrl.match(/\.(mp3|wav|ogg)/i));
+  const isAudio =
+    (item.id === "audio" && !draft.steps?.[item.id]?.image) ||
+    (mediaUrl && mediaUrl.match(/\.(mp3|wav|ogg)/i));
 
   useEffect(() => {
     if (!mediaUrl) {

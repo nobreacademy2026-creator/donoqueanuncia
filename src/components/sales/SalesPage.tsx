@@ -252,7 +252,7 @@ export function SalesPage({
   const fullPrice = draft.fullPrice || "R$ 497,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
-  const testimonial = steps["audio"];
+  const testimonial = steps["sales_testimonial"] || steps["audio"];
   const niche = steps["niche"];
 
   const [timeLeft, setTimeLeft] = React.useState(900); // 15 minutes in seconds
