@@ -1532,43 +1532,21 @@ export function ContentSection({
                   <div
                     className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
                   >
-                    {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image) ? (
-                      <>
-                        {item.id === "sales" ? (
-                          <video
-                            src={draft.steps?.[item.id]?.image}
-                            className="h-full w-full object-cover"
-                            controls
-                          />
-                        ) : draft.steps?.[item.id]?.audio ? (
-                          <div className="flex h-full w-full items-center justify-center bg-primary/10">
-                            <Music className="h-8 w-8 text-primary animate-pulse" />
-                          </div>
-                        ) : (
-                          <img
-                            key={draft.steps?.[item.id]?.image || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
-                            src={draft.steps?.[item.id]?.image || (item.id === "intro" ? logoAsset.url : "")}
-                            className="h-full w-full object-cover"
-                            alt="Prévia da mídia"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                          <span className="text-[10px] font-black text-white uppercase tracking-widest">
-                            {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
-                          </span>
-                        </div>
-                        <button
-                          onClick={() => {
-                            updateStep(item.id, { image: "", audio: "" });
-                            toast.info("Mídia restaurada para o padrão.");
-                          }}
-                          className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
-                          title="Remover imagem"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </>
-                    ) : item.id === "sales" ? (
+                    <MediaPreview item={item} draft={draft} />
+                    
+                    { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
+                      <button
+                        onClick={() => {
+                          updateStep(item.id, { image: "", audio: "" });
+                          toast.info("Mídia restaurada para o padrão.");
+                        }}
+                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
+                        title="Remover imagem"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
                       <div className="flex h-full w-full items-center justify-center bg-black/20">
                         <div className="flex flex-col items-center gap-2">
                           <Video className="h-8 w-8 text-zinc-500/50" />
