@@ -1546,7 +1546,7 @@ export function ContentSection({
                           </div>
                         ) : (
                           <img
-                            key={draft.steps?.[item.id]?.image || (item.id === "intro" ? "default-logo" : "empty")}
+                            key={draft.steps?.[item.id]?.image || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
                             src={draft.steps?.[item.id]?.image || (item.id === "intro" ? logoAsset.url : "")}
                             className="h-full w-full object-cover"
                             alt="Prévia da mídia"
