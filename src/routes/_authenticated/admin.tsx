@@ -41,7 +41,6 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -54,132 +53,140 @@ function AdminDashboard() {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"} p-6`}>
-      <div className="mx-auto max-w-[1600px] pt-4">
-        <header className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between border-b pb-8 border-white/5 transition-all">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
-                theme === "dark" 
-                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white" 
-                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-sm"
-              }`}
-              title={isSidebarOpen ? "Recolher Menu" : "Expandir Menu"}
-            >
-              <Layout className={`h-5 w-5 transition-transform duration-300 ${isSidebarOpen ? "" : "rotate-90"}`} />
-            </button>
-            <div>
-              <h1 className={`text-4xl font-black tracking-tighter uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Dashboard Premium</h1>
-              <p className={`${theme === "dark" ? "text-zinc-500" : "text-zinc-600"} mt-1 font-bold flex items-center gap-2`}>
-                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                Gestão do Funil Dono que Anuncia
-              </p>
-            </div>
+    <div className={`flex min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-zinc-950 text-white" : "bg-zinc-50 text-zinc-900"}`}>
+      {/* Sidebar Fixa */}
+      <aside className={`w-[280px] shrink-0 border-r flex flex-col transition-all duration-300 ${
+        theme === "dark" 
+        ? "border-white/10 bg-zinc-900/50 backdrop-blur-xl" 
+        : "border-zinc-200 bg-white shadow-sm"
+      }`}>
+        <div className="p-8">
+          <div className="flex flex-col gap-2">
+            <h1 className={`text-2xl font-black tracking-tighter uppercase leading-none ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>
+              Dono que <span className="text-primary">Anuncia</span>
+            </h1>
+            <p className={`text-[10px] font-bold uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
+              Painel de Controle
+            </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <button 
-              onClick={toggleTheme}
-              className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
-                theme === "dark" 
-                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white" 
-                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-sm"
-              }`}
-              title={theme === "dark" ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
-            >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
-            <button 
-              onClick={() => window.open("/", "_blank")}
-              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition-all ${
-                theme === "dark"
-                ? "border-white/10 bg-white/5 hover:bg-white/10 text-white"
-                : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-sm"
-              }`}
-            >
-              <Layout className="h-4 w-4" />
-              Landing Page
-            </button>
-            <button 
-              onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 shadow-lg shadow-red-600/20"
-            >
-              <LogOut className="h-4 w-4" />
-              Sair
-            </button>
+        </div>
+
+        <nav className="flex-1 px-4 space-y-2">
+          <NavButton 
+            active={activeTab === "analytics"} 
+            onClick={() => setActiveTab("analytics")}
+            icon={BarChart3}
+            label="Analytics & Métricas"
+            theme={theme}
+          />
+          <NavButton 
+            active={activeTab === "content"} 
+            onClick={() => setActiveTab("content")}
+            icon={Layout}
+            label="Conteúdo do Funil"
+            theme={theme}
+          />
+          <NavButton 
+            active={activeTab === "config"} 
+            onClick={() => setActiveTab("config")}
+            icon={Settings}
+            label="Página de Vendas"
+            theme={theme}
+          />
+          <NavButton 
+            active={activeTab === "tracking"} 
+            onClick={() => setActiveTab("tracking")}
+            icon={Code}
+            label="Pixels & Tracking"
+            theme={theme}
+          />
+        </nav>
+
+        <div className="p-4 border-t border-white/5 space-y-2">
+          <button 
+            onClick={toggleTheme}
+            className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
+              theme === "dark" 
+              ? "text-zinc-400 hover:bg-white/5 hover:text-white" 
+              : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+            }`}
+          >
+            {theme === "dark" ? (
+              <><Sun className="h-5 w-5" /> Modo Claro</>
+            ) : (
+              <><Moon className="h-5 w-5" /> Modo Escuro</>
+            )}
+          </button>
+          
+          <button 
+            onClick={() => window.open("/", "_blank")}
+            className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
+              theme === "dark"
+              ? "text-zinc-400 hover:bg-white/5 hover:text-white"
+              : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+            }`}
+          >
+            <ExternalLink className="h-5 w-5" />
+            Ver Site
+          </button>
+
+          <button 
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-red-500 transition-all hover:bg-red-500/10"
+          >
+            <LogOut className="h-5 w-5" />
+            Sair do Admin
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto">
+        <header className="h-20 border-b border-white/5 flex items-center justify-between px-10 sticky top-0 bg-inherit/80 backdrop-blur-md z-10">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight">
+              {activeTab === "analytics" && "Analytics & Métricas"}
+              {activeTab === "content" && "Conteúdo do Funil"}
+              {activeTab === "config" && "Página de Vendas"}
+              {activeTab === "tracking" && "Pixels & Tracking"}
+            </h2>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-2 ${
+              theme === "dark" ? "bg-white/5 text-zinc-400" : "bg-zinc-100 text-zinc-600"
+            }`}>
+              <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+              Sistema Online
+            </div>
           </div>
         </header>
 
-        <div className="flex flex-col gap-8 lg:flex-row items-start relative">
-          <aside className={`fixed lg:sticky top-0 lg:top-6 left-0 h-screen lg:h-auto z-50 lg:z-0 shrink-0 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden border-r lg:border rounded-r-2xl lg:rounded-2xl ${
-            isSidebarOpen 
-            ? "w-[280px] p-6 lg:p-4 opacity-100 translate-x-0" 
-            : "w-0 p-0 opacity-0 -translate-x-full lg:translate-x-0 lg:border-0 lg:opacity-0 pointer-events-none"
-          } ${
+        <div className="p-10 max-w-[1400px]">
+          <div className={`rounded-3xl border transition-all duration-500 overflow-hidden ${
             theme === "dark" 
-            ? "border-white/10 bg-zinc-900/95 backdrop-blur-xl lg:bg-zinc-900/50" 
-            : "border-zinc-200 bg-white shadow-2xl lg:shadow-sm"
+            ? "border-white/10 bg-zinc-900/30" 
+            : "border-zinc-200 bg-white shadow-sm"
           }`}>
-            <nav className="flex flex-col gap-2 w-[232px]">
-              <NavButton 
-                active={activeTab === "analytics"} 
-                onClick={() => setActiveTab("analytics")}
-                icon={BarChart3}
-                label="Analytics & Métricas"
-                theme={theme}
-              />
-              <NavButton 
-                active={activeTab === "content"} 
-                onClick={() => setActiveTab("content")}
-                icon={Layout}
-                label="Conteúdo do Funil"
-                theme={theme}
-              />
-              <NavButton 
-                active={activeTab === "config"} 
-                onClick={() => setActiveTab("config")}
-                icon={Settings}
-                label="Página de Vendas"
-                theme={theme}
-              />
-              <NavButton 
-                active={activeTab === "tracking"} 
-                onClick={() => setActiveTab("tracking")}
-                icon={Code}
-                label="Pixels & Tracking"
-                theme={theme}
-              />
-            </nav>
-          </aside>
-
-
-          <main className={`flex-1 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? "" : "w-full lg:max-w-none"}`}>
-            <div className={`surface-card rounded-[2.5rem] p-10 border transition-all duration-500 ${
-              theme === "dark" 
-              ? "border-white/10 bg-zinc-900 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]" 
-              : "border-zinc-200 bg-white shadow-2xl shadow-zinc-200/50"
-            }`}>
+            <div className="p-8 sm:p-10">
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
               {activeTab === "config" && <ConfigSection theme={theme} />}
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
               {activeTab === "content" && <ContentSection theme={theme} />}
             </div>
+          </div>
 
-            {(activeTab === "content" || activeTab === "config") && (
-              <div className="mt-8">
-                <LivePreview theme={theme} />
+          {(activeTab === "content" || activeTab === "config") && (
+            <div className="mt-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-8 w-1 bg-primary rounded-full" />
+                <h3 className="text-xl font-bold uppercase tracking-tight">Preview em Tempo Real</h3>
               </div>
-            )}
-          </main>
-          {isSidebarOpen && (
-            <div 
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-              onClick={() => setIsSidebarOpen(false)}
-            />
+              <LivePreview theme={theme} />
+            </div>
           )}
         </div>
-
-      </div>
+      </main>
     </div>
   );
 }
