@@ -776,9 +776,9 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     reader.onload = () => {
       const result = String(reader.result);
       updateStep(id, { image: result });
-      // Forçar atualização do rascunho local para garantir que a landing page o receba via postMessage
-      const current = readDraft();
-      writeDraft(current);
+      
+      // Notificar o usuário para salvar se quiser publicar
+      toast.info("Upload concluído na prévia. Clique em 'Salvar' para publicar.");
     };
     reader.readAsDataURL(file);
   };
