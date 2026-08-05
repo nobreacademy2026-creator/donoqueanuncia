@@ -398,7 +398,7 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
       } catch (err) {
         console.error("Erro ao buscar dados reais:", err);
         const message = err instanceof Error ? err.message : "erro desconhecido";
-        setLoadError(`Não foi possível carregar os dados do Supabase. O Supabase precisa aplicar a nova migração 20260805153000_create_funnel_media_bucket.sql. Detalhes: ${message}`);
+        setLoadError(`Não foi possível carregar os dados do Supabase. Verifique se as permissões de acesso estão corretas. Detalhes: ${message}`);
         toast.error("Falha ao atualizar as métricas.");
       } finally {
         setIsLoading(false);
