@@ -51,6 +51,11 @@ export default {
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
+      // The browser closed the connection mid-render (navigation, HMR reload,
+      // iframe refresh). Not an app error — don't log or render an error page.
+      if (isAbortError(error) || request.signal?.aborted) {
+        return new Response(null, { status: 499 });
+      }
       console.error(error);
       return new Response(renderErrorPage(), {
         status: 500,
