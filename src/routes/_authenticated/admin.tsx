@@ -1609,7 +1609,7 @@ export function ContentSection({
                       value={
                         (draft.steps?.[item.id]?.image?.startsWith("data:") || draft.steps?.[item.id]?.audio?.startsWith("data:"))
                           ? ""
-                          : (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || "")
+                          : (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : ""))
                       }
                       onChange={(e) => {
                         const field = (item.id === "audio" || (e.target.value.match(/\.(mp3|wav|ogg)/i))) ? "audio" : "image";
