@@ -32,7 +32,7 @@ import {
   Eye
 } from "lucide-react";
 import { toast } from "sonner";
-import { readDraft, writeDraft, publishDraft, loadPublished, type FunnelDraft } from "@/lib/funnel-content";
+import { readDraft, writeDraft, publishDraft, loadPublished, type FunnelDraft, EMPTY_DRAFT } from "@/lib/funnel-content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
