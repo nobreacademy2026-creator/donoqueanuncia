@@ -1962,8 +1962,11 @@ function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-red-950/20 backdrop-blur-sm p-4 text-center">
           <AlertTriangle className="h-6 w-6 text-red-500 mb-1" />
           <span className="text-[9px] font-black text-red-500 uppercase tracking-tighter">
-            Erro ao carregar mídia
+            Mídia não encontrada ou link quebrado
           </span>
+          <p className="text-[8px] text-red-400/80 mt-1 max-w-[150px] leading-tight">
+            Verifique se a URL está correta ou tente fazer o upload novamente.
+          </p>
         </div>
       )}
 
