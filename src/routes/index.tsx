@@ -122,7 +122,7 @@ function Index() {
         </div>
       </div>
 
-      <div className="mx-auto flex min-h-[80vh] max-w-3xl items-center justify-center px-5 pt-0 pb-6">
+      <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center px-5 pt-0 pb-6">
         {stage === "intro" ? (
           <QuizIntro
             draft={draft.steps['intro'] || undefined}
