@@ -104,7 +104,7 @@ type SalesDraft = {
 export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
-    draft.videoThumb || "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
+    draft.videoThumb !== undefined ? draft.videoThumb : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
   const fullPrice = draft.fullPrice || "R$ 497,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
