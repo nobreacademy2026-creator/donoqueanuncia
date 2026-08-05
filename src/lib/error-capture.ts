@@ -55,19 +55,24 @@ function isErrorLike(value: unknown): value is Error {
 // must never reach the error overlay.
 export function isAbortError(value: unknown): boolean {
   let current: unknown = value;
-  for (let depth = 0; depth < CAUSE_DEPTH_LIMIT && current instanceof Error; depth++) {
-    const code = (current as { code?: string }).code;
+  for (let depth = 0; depth < CAUSE_DEPTH_LIMIT && current != null; depth++) {
+    if (typeof current !== "object") {
+      return typeof current === "string" && current.includes("aborted");
+    }
+    const candidate = current as { name?: string; message?: string; code?: string; cause?: unknown };
+    const message = typeof candidate.message === "string" ? candidate.message : "";
+    const code = candidate.code;
     if (
-      current.name === "AbortError" ||
-      current.message === "aborted" ||
-      current.message.includes("aborted") ||
+      candidate.name === "AbortError" ||
+      message === "aborted" ||
+      message.toLowerCase().includes("aborted") ||
       code === "ECONNRESET" ||
       code === "ECONNABORTED" ||
       code === "ERR_STREAM_PREMATURE_CLOSE"
     ) {
       return true;
     }
-    current = current.cause;
+    current = candidate.cause;
   }
   return false;
 }
@@ -96,6 +101,22 @@ if (typeof globalThis.addEventListener === "function") {
     const reason = (event as PromiseRejectionEvent).reason;
     if (isAbortError(reason)) return;
     record(reason);
+  });
+}
+
+// Node/dev-server path: the srvx adapter aborts its AbortController when the
+// browser closes the socket, surfacing as an unhandled DOMException. Node has
+// no global `addEventListener`, so hook the process events instead.
+const nodeProcess = (globalThis as { process?: NodeJS.Process }).process;
+if (nodeProcess && typeof nodeProcess.on === "function") {
+  nodeProcess.on("unhandledRejection", (reason: unknown) => {
+    if (isAbortError(reason)) return;
+    record(reason);
+  });
+  nodeProcess.on("uncaughtException", (error: unknown) => {
+    if (isAbortError(error)) return;
+    record(error);
+    originalConsoleError(describeError(error));
   });
 }
 
