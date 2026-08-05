@@ -173,14 +173,14 @@ function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white selection:bg-primary selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-white text-zinc-900 selection:bg-primary selection:text-white overflow-x-hidden">
       {/* Fallback visual sutil para dados em carregamento ou erro */}
       {!draft.steps["intro"] && stage === "intro" && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 text-white p-6 text-center">
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white text-zinc-900 p-6 text-center">
           <div className="mb-6 flex flex-col items-center animate-pulse">
-            <div className="h-20 w-48 bg-white/5 rounded-lg mb-4"></div>
-            <div className="h-4 w-64 bg-white/5 rounded mb-2"></div>
-            <div className="h-4 w-48 bg-white/5 rounded"></div>
+            <div className="h-20 w-48 bg-zinc-100 rounded-lg mb-4"></div>
+            <div className="h-4 w-64 bg-zinc-100 rounded mb-2"></div>
+            <div className="h-4 w-48 bg-zinc-100 rounded"></div>
           </div>
           <p className="text-zinc-500 text-sm">Sincronizando diagnóstico...</p>
 
@@ -190,18 +190,18 @@ function Index() {
                 localStorage.removeItem("dqa_funnel_draft");
                 window.location.reload();
               }}
-              className="rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all border border-white/5"
+              className="rounded-full bg-zinc-100 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-zinc-900 hover:bg-zinc-200 transition-all border border-zinc-200"
             >
               Limpar Cache e Recarregar
             </button>
-            <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-800">
+            <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-400">
               Status: Conectando ao Servidor
             </p>
           </div>
         </div>
       )}
 
-      <div className="sticky top-0 z-10 bg-zinc-950/80 backdrop-blur border-b border-white/5">
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-zinc-100">
         <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-center">
           <div className="flex-1 max-w-md">
             <QuizProgress value={progress} />

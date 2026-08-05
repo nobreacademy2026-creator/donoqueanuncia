@@ -15,30 +15,30 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
     <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl py-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-12 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-2 w-12 rounded-full bg-zinc-100 overflow-hidden">
             <div
               className="h-full bg-red-600 transition-all duration-500"
               style={{ width: `${((index + 1) / total) * 100}%` }}
             />
           </div>
-          <p className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">
+          <p className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
             Passo {index + 1}/{total}
           </p>
         </div>
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-white/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-400 transition-all hover:bg-white/10 border border-white/10 shadow-sm"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-100 border border-zinc-100 shadow-sm"
         >
           <ArrowLeft className="h-3 w-3" /> Voltar
         </button>
       </div>
 
-      <h2 className="mt-8 text-3xl font-black tracking-tight sm:text-4xl text-center text-white uppercase leading-tight">
+      <h2 className="mt-8 text-3xl font-black tracking-tight sm:text-4xl text-center text-zinc-950 uppercase leading-tight">
         {question.title}
       </h2>
 
       {question.image ? (
-        <div className="mt-8 aspect-video w-full overflow-hidden rounded-3xl border border-white/10 bg-zinc-900 shadow-2xl shadow-black/50">
+        <div className="mt-8 aspect-video w-full overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50 shadow-xl shadow-zinc-950/5">
           <img
             key={question.image}
             src={question.image}
@@ -58,15 +58,15 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
               onClick={() => onSelect(option.value)}
               className={`group relative flex items-center gap-4 rounded-2xl px-6 py-4 text-left transition-all duration-300 ${
                 active
-                  ? "bg-white text-black shadow-xl shadow-white/5 translate-y-[-1px]"
-                  : "bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/5 shadow-sm"
+                  ? "bg-zinc-950 text-white shadow-xl shadow-black/10 translate-y-[-1px]"
+                  : "bg-white text-zinc-700 hover:bg-zinc-50 border border-zinc-100 shadow-sm"
               }`}
             >
               <div
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
                   active
                     ? "bg-red-600 border-red-600 scale-110"
-                    : "border-white/20 group-hover:border-white/30"
+                    : "border-zinc-200 group-hover:border-zinc-300"
                 }`}
               >
                 {active ? <Check className="h-3 w-3 text-white" /> : null}
@@ -77,8 +77,8 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
 
               {!active && (
                 <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="h-6 w-6 rounded-full bg-white/5 flex items-center justify-center">
-                    <Check className="h-3 w-3 text-zinc-500" />
+                  <div className="h-6 w-6 rounded-full bg-zinc-50 flex items-center justify-center">
+                    <Check className="h-3 w-3 text-zinc-300" />
                   </div>
                 </div>
               )}

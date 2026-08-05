@@ -276,16 +276,16 @@ export function SalesPage({
   };
 
   return (
-    <main className="animate-rise-in overflow-hidden bg-[#f6f6f4] pb-24 text-zinc-900 selection:bg-red-600 selection:text-white sm:pb-32">
-      {/* Countdown Timer Floating Banner */}
-      <div className="fixed top-3 left-0 right-0 z-50 px-4 pointer-events-none sm:top-5 sm:px-0">
-        <div className="mx-auto flex max-w-lg justify-center pointer-events-auto">
-          <div className="flex items-center gap-3 rounded-full border border-white/10 bg-zinc-950/90 px-5 py-2.5 text-white shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-6">
-            <Timer className="h-4 w-4 animate-pulse shrink-0" />
+    <main className="animate-rise-in overflow-hidden bg-white pb-24 text-zinc-900 selection:bg-red-600 selection:text-white sm:pb-32">
+      {/* Countdown Timer Floating Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        <div className="w-full flex justify-center pointer-events-auto">
+          <div className="w-full flex items-center justify-center gap-3 bg-red-600 py-1.5 text-white shadow-lg backdrop-blur-md px-4 sm:px-6">
+            <Timer className="h-3.5 w-3.5 animate-pulse shrink-0" />
             <span className="text-[10px] font-bold uppercase tracking-widest sm:text-xs">
               Oferta expira em:
             </span>
-            <span className="min-w-[3.5rem] text-center font-mono text-xl font-black leading-none tracking-tight text-red-500 tabular-nums sm:text-2xl">
+            <span className="font-mono text-lg font-black leading-none tracking-tight tabular-nums sm:text-xl">
               {formatTime(timeLeft)}
             </span>
           </div>
@@ -293,13 +293,13 @@ export function SalesPage({
       </div>
 
       {/* Hero / Video Section */}
-      <section className="relative bg-zinc-950 px-5 pb-20 pt-28 text-center text-white sm:pb-28 sm:pt-36">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.18),transparent_38%)]" />
+      <section className="relative bg-white px-5 pb-20 pt-24 text-center text-zinc-950 sm:pb-28 sm:pt-32">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.05),transparent_45%)]" />
         <div className="relative mx-auto max-w-6xl">
-          <div className="mb-6 inline-flex rounded-full border border-red-500/25 bg-red-500/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-red-400">
+          <div className="mb-6 inline-flex rounded-full border border-red-100 bg-red-50 px-4 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-red-600">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-10 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-white sm:text-7xl">
+          <h2 className="mx-auto mb-10 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:text-7xl">
             {headline.split(" ").map((word, i) => (
               <span key={i} className={word.toUpperCase() === "VÍDEO" ? "text-red-600" : ""}>
                 {word}{" "}
@@ -309,7 +309,7 @@ export function SalesPage({
 
           <div className="mx-auto max-w-4xl relative">
             <div
-              className="group relative mb-12 aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.55)] sm:rounded-[2rem]"
+              className="group relative mb-12 aspect-video w-full overflow-hidden rounded-2xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:rounded-[2rem]"
               onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
@@ -346,25 +346,17 @@ export function SalesPage({
                   </div>
                 </>
               )}
-
-              {/* Live Badge */}
-              <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-red-600 px-2.5 py-1 rounded-full shadow-sm">
-                <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-                <span className="text-[9px] font-bold text-white uppercase tracking-wider">
-                  Gravado
-                </span>
-              </div>
             </div>
           </div>
 
           <div className="mx-auto max-w-3xl space-y-7">
-            <h3 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-5xl">
+            <h3 className="text-3xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
-            <p className="text-lg font-medium leading-relaxed text-zinc-400 sm:text-xl">
+            <p className="text-lg font-medium leading-relaxed text-zinc-600 sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
-              <span className="font-black text-white">usando apenas o seu celular.</span>
+              <span className="font-black text-zinc-950">usando apenas o seu celular.</span>
             </p>
 
             <div className="flex flex-col items-center gap-4">
