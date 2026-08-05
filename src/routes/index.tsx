@@ -155,7 +155,18 @@ function Index() {
             `}
           </script>
         )}
-        <SalesPage draft={draft.sales} tracking={draft.tracking} />
+        <SalesPage
+          draft={{
+            ...draft.sales,
+            ...(draft.steps["sales"]?.title ? { videoHeadline: draft.steps["sales"].title } : {}),
+            ...(draft.steps["sales"]?.image
+              ? /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(draft.steps["sales"].image)
+                ? { vslUrl: draft.steps["sales"].image }
+                : { videoThumb: draft.steps["sales"].image }
+              : {}),
+          }}
+          tracking={draft.tracking}
+        />
       </>
     );
   }
@@ -224,7 +235,7 @@ function Index() {
         {stage === "result" ? (
           <div className="w-full">
             <ResultStep
-              draft={draft.steps["audio"]}
+              steps={draft.steps}
               onNext={() => {
                 trackEvent("pagina_vendas_visualizada");
                 setStage("sales");

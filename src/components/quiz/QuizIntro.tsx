@@ -13,7 +13,7 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
       {/* Logo Section */}
       <div className="mb-6 flex flex-col items-center">
         <img
-          src={logo}
+          src={draft?.image || logo}
           alt="Dono que Anuncia"
           className="h-32 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] sm:h-44 transition-transform duration-500"
         />

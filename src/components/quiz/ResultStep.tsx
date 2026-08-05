@@ -4,23 +4,27 @@ import { trackEvent } from "@/lib/tracking";
 
 export function ResultStep({
   onNext,
-  draft,
+  steps,
 }: {
   onNext: () => void;
-  draft?: { title?: string; image?: string; audio?: string; options?: string[] } | undefined;
+  steps: Record<string, { title?: string; image?: string; audio?: string; options?: string[] }>;
 }) {
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(
     "objection",
   );
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const objectionDraft = steps["objecao"];
+  const solutionDraft = steps["beneficios"];
+  const testimonialDraft = steps["audio"];
+  const nicheDraft = steps["niche"];
 
   useEffect(() => {
     void trackEvent("etapa_visualizada", { etapa: subStage });
   }, [subStage]);
 
   const toggleAudio = () => {
-    if (!draft?.audio) return;
+    if (!testimonialDraft?.audio) return;
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
@@ -36,7 +40,7 @@ export function ResultStep({
       <div className="animate-rise-in mx-auto w-full max-w-2xl">
         <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
           <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl">
-            {draft?.title || "Clique no áudio e escute o que meu aluno disse 😲"}
+            {testimonialDraft?.title || "Clique no áudio e escute o que meu aluno disse 😲"}
           </h3>
 
           <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-zinc-100 bg-[#f0f2f5] p-4 shadow-sm">
@@ -45,9 +49,9 @@ export function ResultStep({
                 type="button"
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={toggleAudio}
-                disabled={!draft?.audio}
+                disabled={!testimonialDraft?.audio}
                 aria-label={
-                  draft?.audio
+                  testimonialDraft?.audio
                     ? isPlaying
                       ? "Pausar áudio"
                       : "Reproduzir áudio"
@@ -90,7 +94,7 @@ export function ResultStep({
               <div className="h-10 w-10 rounded-full bg-zinc-300 overflow-hidden border-2 border-white shadow-sm">
                 <img
                   src={
-                    draft?.image ||
+                    testimonialDraft?.image ||
                     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
                   }
                   alt="Student"
@@ -100,10 +104,10 @@ export function ResultStep({
             <audio
               ref={audioRef}
               onEnded={() => setIsPlaying(false)}
-              src={draft?.audio}
+              src={testimonialDraft?.audio}
               className="hidden"
             />
-            {!draft?.audio && (
+            {!testimonialDraft?.audio && (
               <p className="mt-3 text-xs font-medium text-zinc-500">
                 Nenhum depoimento em áudio foi publicado.
               </p>
@@ -123,7 +127,7 @@ export function ResultStep({
                   <div className="h-full w-full rounded-full bg-zinc-200 overflow-hidden">
                     <img
                       src={
-                        draft?.image ||
+                        testimonialDraft?.image ||
                         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
                       }
                       alt="Profile"
@@ -132,8 +136,12 @@ export function ResultStep({
                   </div>
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-sm">{draft?.options?.[0] || "taju.intima"}</p>
-                  <p className="text-xs text-zinc-500">{draft?.options?.[1] || "Taju Íntima"}</p>
+                  <p className="font-bold text-sm">
+                    {testimonialDraft?.options?.[0] || "taju.intima"}
+                  </p>
+                  <p className="text-xs text-zinc-500">
+                    {testimonialDraft?.options?.[1] || "Taju Íntima"}
+                  </p>
                 </div>
               </div>
               <div className="flex justify-around p-3 text-center border-b border-zinc-100">
@@ -142,16 +150,18 @@ export function ResultStep({
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">posts</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">{draft?.options?.[2] || "12,7 mil"}</p>
+                  <p className="font-bold text-sm">
+                    {testimonialDraft?.options?.[2] || "12,7 mil"}
+                  </p>
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguidores</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">{draft?.options?.[3] || "727"}</p>
+                  <p className="font-bold text-sm">{testimonialDraft?.options?.[3] || "727"}</p>
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguindo</p>
                 </div>
               </div>
               <div className="p-4 text-left text-xs space-y-1">
-                <p className="font-bold">{draft?.options?.[1] || "Taju Íntima"}</p>
+                <p className="font-bold">{testimonialDraft?.options?.[1] || "Taju Íntima"}</p>
                 <p>Moda Íntima e Acessórios</p>
                 <p>•Destaque do negócio 01 🚀</p>
                 <p>•Informação relevante 02 📈</p>
@@ -190,7 +200,7 @@ export function ResultStep({
         <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
           <div className="space-y-4">
             <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl uppercase">
-              Será que funciona pro seu nicho?
+              {nicheDraft?.title || "Será que funciona pro seu nicho?"}
             </h3>
             <p className="text-zinc-900 font-medium">
               Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e
@@ -206,7 +216,10 @@ export function ResultStep({
                   <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5">
                     <div className="h-full w-full rounded-full bg-white p-0.5">
                       <img
-                        src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
+                        src={
+                          nicheDraft?.image ||
+                          "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
+                        }
                         alt="Gordo Grill"
                         className="h-full w-full rounded-full object-cover"
                       />
@@ -276,10 +289,18 @@ export function ResultStep({
     return (
       <div className="animate-rise-in mx-auto w-full max-w-2xl">
         <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
+          {solutionDraft?.title && (
+            <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl">
+              {solutionDraft.title}
+            </h3>
+          )}
           <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
             <img
               key="result-solution"
-              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
+              src={
+                solutionDraft?.image ||
+                "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
+              }
 
               alt="Fictitious strategy"
               className="h-full w-full object-cover"
@@ -360,7 +381,10 @@ export function ResultStep({
         <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
           <img
             key="result-objection"
-            src="https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800"
+            src={
+              objectionDraft?.image ||
+              "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800"
+            }
 
             alt="Fictitious representative"
             className="h-full w-full object-cover"
@@ -369,8 +393,12 @@ export function ResultStep({
 
         <div className="space-y-4">
           <h3 className="text-xl sm:text-2xl font-bold leading-tight text-zinc-900">
-            Vão te oferecer milhares de “fórmulas mágicas”, mas o que realmente vai{" "}
-            <span className="text-red-600 block sm:inline">destravar suas vendas</span> é:
+            {objectionDraft?.title || (
+              <>
+                Vão te oferecer milhares de “fórmulas mágicas”, mas o que realmente vai{" "}
+                <span className="text-red-600 block sm:inline">destravar suas vendas</span> é:
+              </>
+            )}
           </h3>
 
           <ul className="grid gap-4 text-left max-w-lg mx-auto mt-8">
