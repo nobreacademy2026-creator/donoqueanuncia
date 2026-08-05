@@ -7,12 +7,11 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
 
   return (
     <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-10">
-      <div className="mb-6 flex flex-col items-center relative">
+      <div className="mb-2 flex flex-col items-center relative">
         <div className="absolute inset-0 bg-radial-gradient from-primary/10 to-transparent blur-3xl -z-10 h-full w-full transform scale-150 opacity-50"></div>
         <img 
           key={logo}
           src={logo} 
-
           alt="Dono que Anuncia" 
           className="h-32 w-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.1)] sm:h-48 transition-transform hover:scale-105 duration-500"
         />
