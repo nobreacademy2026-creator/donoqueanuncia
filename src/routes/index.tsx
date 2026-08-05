@@ -179,7 +179,7 @@ function Index() {
              >
                Recarregar Página
              </button>
-             <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-700">Aguardando conexão segura</p>
+             <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-700">Conexão segura estabelecida</p>
            </div>
         </div>
       )}
