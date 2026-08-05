@@ -1547,35 +1547,8 @@ export function ContentSection({
                       </button>
                     )}
                   </div>
-                      <div className="flex h-full w-full items-center justify-center bg-black/20">
-                        <div className="flex flex-col items-center gap-2">
-                          <Video className="h-8 w-8 text-zinc-500/50" />
-                          <span className="text-[10px] font-bold text-zinc-500 uppercase">
-                            Sem Vídeo
-                          </span>
-                        </div>
-                      </div>
-                      ) : item.id === "audio" || item.id === "objecao" || item.id === "beneficios" ? (
-                      <div className="flex h-full w-full items-center justify-center bg-black/5">
-                        <div className="flex flex-col items-center gap-2">
-                          <Music className="h-8 w-8 text-zinc-400/30" />
-                          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
-                            Sem Áudio/Mídia
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-black/5">
-                        <div className="flex flex-col items-center gap-2">
-                          <ImageIcon className="h-8 w-8 text-zinc-400/30" />
-                          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
-                            Sem Imagem
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 space-y-3">
+                </div>
+                <div className="flex-1 space-y-3">
                     <input
                       type="text"
                       placeholder={
