@@ -40,6 +40,7 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
       {question.image ? (
         <div className="mt-8 aspect-video w-full overflow-hidden rounded-3xl border-4 border-white bg-zinc-100 shadow-2xl shadow-zinc-200/50">
           <img
+            key={question.image}
             src={question.image}
             alt={question.title}
             className="h-full w-full object-cover"

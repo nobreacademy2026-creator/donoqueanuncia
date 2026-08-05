@@ -762,12 +762,18 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
 
   const handleUpload = (id: string, file: File | undefined) => {
     if (!file) return;
-    if (file.size > 3_000_000) {
-      toast.error("Arquivo muito grande para a prévia (máx. 3MB).");
+    if (file.size > 5_000_000) {
+      toast.error("Arquivo muito grande (máx. 5MB).");
       return;
     }
     const reader = new FileReader();
-    reader.onload = () => updateStep(id, { image: String(reader.result) });
+    reader.onload = () => {
+      const result = String(reader.result);
+      updateStep(id, { image: result });
+      // Forçar atualização do rascunho local para garantir que a landing page o receba via postMessage
+      const current = readDraft();
+      writeDraft(current);
+    };
     reader.readAsDataURL(file);
   };
 
