@@ -126,53 +126,70 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
   };
 
   return (
-    <main className="animate-rise-in bg-white pb-24 text-zinc-900 selection:bg-black selection:text-white">
+    <main className="animate-rise-in bg-zinc-50 pb-24 text-zinc-900 selection:bg-black selection:text-white">
       {/* Countdown Timer Static Banner */}
-      <div className="bg-[#ff0000] text-white py-4 text-center sticky top-0 z-50 shadow-xl">
+      <div className="bg-red-600 text-white py-6 text-center sticky top-0 z-50 shadow-2xl">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-4">
-          <div className="bg-white text-[#ff0000] px-6 py-2 rounded-full shadow-lg flex items-center gap-3 border-2 border-white transform scale-110 sm:scale-125">
-            <Clock className="h-5 w-5" />
-            <span className="text-[10px] font-black uppercase tracking-widest sm:text-xs">Oferta expira em:</span>
-            <span className="text-2xl font-black font-mono tabular-nums leading-none tracking-tight sm:text-3xl">{formatTime(timeLeft)}</span>
+          <div className="bg-white text-red-600 px-8 py-3 rounded-full shadow-2xl flex items-center gap-4 border-4 border-white transform scale-110 sm:scale-125">
+            <Timer className="h-6 w-6 animate-pulse" />
+            <span className="text-xs font-black uppercase tracking-[0.2em] sm:text-sm">Oferta expira em:</span>
+            <span className="text-3xl font-black font-mono tabular-nums leading-none tracking-tighter sm:text-4xl">{formatTime(timeLeft)}</span>
           </div>
         </div>
       </div>
 
 
       {/* Hero / Video Section */}
-      <section className="mx-auto max-w-4xl px-5 pt-8 text-center">
-        <h2 className="text-2xl font-black text-red-600 uppercase mb-8 sm:text-3xl leading-tight">
-          {headline}
+      <section className="mx-auto max-w-5xl px-5 pt-12 text-center">
+        <div className="inline-block bg-red-100 text-red-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">
+          Acesso Liberado com Desconto
+        </div>
+        <h2 className="text-4xl font-black text-zinc-950 uppercase mb-10 sm:text-6xl leading-[0.9] tracking-tighter">
+          {headline.split(' ').map((word, i) => (
+            <span key={i} className={word.toUpperCase() === 'VÍDEO' ? 'text-red-600' : ''}>{word} </span>
+          ))}
         </h2>
 
-        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl relative group mb-10">
-          <img 
-            src={videoThumb} 
-            alt="Vídeo explicativo DONO QUE ANUNCIA"
-            className="h-full w-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-            <div className="h-20 w-20 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl mb-4 group-hover:scale-110 transition-transform">
-              <Play className="h-10 w-10 fill-current ml-1" />
+        <div className="mx-auto max-w-4xl">
+          <div className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white">
+            <img 
+              src={videoThumb} 
+              alt="Vídeo explicativo DONO QUE ANUNCIA"
+              className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+              <div className="h-28 w-28 rounded-full bg-red-600 flex items-center justify-center shadow-[0_0_50px_rgba(220,38,38,0.5)] mb-6 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
+                <Play className="h-12 w-12 fill-current ml-2" />
+              </div>
+              <div className="bg-black/60 backdrop-blur-md px-6 py-2 rounded-full">
+                <span className="font-black text-sm tracking-[0.3em] uppercase">Assistir Aula Completa</span>
+              </div>
             </div>
-            <span className="font-bold text-lg tracking-widest uppercase">Ver aula exclusiva</span>
+            
+            {/* Live Badge */}
+            <div className="absolute top-6 left-6 flex items-center gap-2 bg-red-600 px-3 py-1 rounded-full">
+              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+              <span className="text-[10px] font-black text-white uppercase tracking-widest">Gravado</span>
+            </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <h3 className="text-3xl font-black text-zinc-900 leading-tight">Você está pronto!</h3>
-          <p className="text-lg text-zinc-800 leading-relaxed max-w-2xl mx-auto">
-            Em <span className="text-red-600 font-bold">menos de 24hrs</span>, você já pode <span className="text-red-600 font-bold">estar fazendo anúncios</span> do jeito certo, atraindo novos clientes e vendendo muito mais do que já vende hoje.
+        <div className="space-y-8 max-w-3xl mx-auto">
+          <h3 className="text-4xl font-black text-zinc-950 leading-none tracking-tighter uppercase">Parabéns! Você deu o primeiro passo.</h3>
+          <p className="text-xl text-zinc-600 leading-relaxed font-medium">
+            Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar atraindo novos clientes e vendendo muito mais <span className="text-zinc-950 font-black">usando apenas o seu celular.</span>
           </p>
-          <div className="bg-yellow-400 p-4 rounded-2xl inline-block">
-            <p className="text-sm font-black text-zinc-900 uppercase">
-              Tudo isso com estratégias testadas e validadas por centenas de alunos que estão vendendo todos os dias!
-            </p>
+          
+          <div className="flex flex-col items-center gap-4">
+            <CTAButton 
+              href={checkoutUrl} 
+              label="Quero Garantir Minha Vaga com Desconto" 
+              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.5)] px-12 py-8 text-2xl rounded-[2rem] animate-pulse-green w-full sm:w-auto uppercase tracking-tighter" 
+            />
+            <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
+              <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
+            </div>
           </div>
-        </div>
-
-        <div className="mt-10">
-          <CTAButton href={checkoutUrl} label="Quero garantir essa Oportunidade" className="bg-[#22c55e] hover:bg-[#16a34a] shadow-green-600/20 px-12 py-6 text-xl rounded-2xl animate-pulse-green" />
         </div>
       </section>
 
@@ -319,45 +336,68 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
       </section>
 
       {/* Final Offer */}
-      <section className="mx-auto mt-16 max-w-2xl px-5 text-center">
-        <div className="surface-card relative overflow-hidden rounded-[2.5rem] border-2 border-zinc-200 bg-white p-10 shadow-2xl">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-black"></div>
-          <div className="mb-4 flex justify-center">
-            <img 
-              src="https://img.freepik.com/vector-premium/oferta-relampago-etiqueta-venda-relampago_624938-1036.jpg" 
-              alt="Oferta Relâmpago" 
-              className="h-28 object-contain"
-            />
+      <section className="mx-auto mt-24 max-w-4xl px-5 text-center">
+        <div className="relative overflow-hidden rounded-[3rem] bg-zinc-950 p-12 text-white shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-4 border-white">
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+            <Zap className="h-64 w-64 text-red-600" />
           </div>
           
-          <div className="mt-6 flex flex-col items-center gap-2">
-            <span className="text-xl text-zinc-400 line-through">De {fullPrice}</span>
-            <span className="text-red-600 font-black text-2xl uppercase">POR APENAS</span>
-            <div className="flex flex-col items-center bg-white border-2 border-[#22c55e] rounded-3xl p-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] transform scale-110 my-4">
-               <span className="text-7xl font-black text-[#22c55e] leading-tight">{promoPrice}</span>
-               <span className="text-xl font-bold text-zinc-900 mt-1 flex items-center gap-1 uppercase">No pix <img src="https://logopng.com.br/logos/pix-106.png" className="h-5 object-contain" alt="Pix" /></span>
+          <div className="relative z-10 flex flex-col items-center gap-10">
+            <div className="space-y-4">
+              <span className="bg-red-600 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.3em] animate-bounce">
+                Oferta Exclusiva e Limitada
+              </span>
+              <h2 className="text-5xl font-black uppercase leading-none tracking-tighter sm:text-7xl">
+                SUA HORA É AGORA!
+              </h2>
             </div>
-            <p className="text-lg font-medium text-muted-foreground mt-2">
-              Ou 12x de R$ 20,35 no cartão
-            </p>
-          </div>
+            
+            <div className="flex flex-col items-center gap-6 w-full max-w-md">
+              <div className="flex items-center gap-4 text-zinc-500 font-black uppercase tracking-widest italic text-xl">
+                <span>De {fullPrice}</span>
+                <div className="h-0.5 w-20 bg-red-600" />
+              </div>
+              
+              <div className="relative w-full">
+                <div className="absolute inset-0 bg-red-600 blur-3xl opacity-20 animate-pulse" />
+                <div className="relative bg-white text-zinc-950 rounded-[2.5rem] p-10 shadow-2xl transform scale-110">
+                  <span className="block text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-2">Preço Promocional</span>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-2xl font-black">R$</span>
+                    <span className="text-8xl font-black leading-none tracking-tighter">197</span>
+                  </div>
+                  <div className="mt-4 flex items-center justify-center gap-2 border-t border-zinc-100 pt-4">
+                    <img src="https://logopng.com.br/logos/pix-106.png" className="h-6 object-contain" alt="Pix" />
+                    <span className="text-sm font-black uppercase tracking-widest">Pagamento Único</span>
+                  </div>
+                </div>
+              </div>
 
-          <div className="mt-8 flex flex-col items-center gap-4">
-            <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
-              55% de DESCONTO para os próximos 50 alunos
+              <div className="mt-10 space-y-2 text-zinc-400 font-bold">
+                <p className="text-lg">Ou 12x de <span className="text-white">R$ 20,35</span> no cartão</p>
+                <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest opacity-60">
+                  <ShieldCheck className="h-3 w-3" /> Acesso imediato após aprovação
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
-              Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento tem valor de 497,00.
+
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                55% de DESCONTO para os próximos 50 alunos
+              </div>
+              <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
+                Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento tem valor de 497,00.
+              </p>
+              <p className="text-sm font-black text-green-600 animate-bounce">
+                Clica no link e aproveita o desconto 👇
+              </p>
+              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
+            </div>
+            
+            <p className="mt-6 text-xs text-muted-foreground/60">
+              Acesso imediato • Pagamento seguro • Vitalício
             </p>
-            <p className="text-sm font-black text-green-600 animate-bounce">
-              Clica no link e aproveita o desconto 👇
-            </p>
-            <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
           </div>
-          
-          <p className="mt-6 text-xs text-muted-foreground/60">
-            Acesso imediato • Pagamento seguro • Vitalício
-          </p>
         </div>
       </section>
 
