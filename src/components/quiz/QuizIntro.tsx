@@ -7,19 +7,18 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
   const logo = logoAsset.url;
 
   return (
-    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-8">
+    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-4">
       {/* Logo Section */}
-      <div className="mb-12 flex flex-col items-center">
+      <div className="mb-6 flex flex-col items-center">
         <img 
           src={logo} 
           alt="Dono que Anuncia" 
-          className="h-28 w-auto object-contain drop-shadow-sm sm:h-36"
+          className="h-32 w-auto object-contain drop-shadow-sm sm:h-44 transition-transform duration-500"
         />
-        <div className="mt-8 w-16 h-px bg-zinc-200"></div>
       </div>
 
       {/* Hero Content */}
-      <div className="space-y-12">
+      <div className="space-y-6">
         <h1 className="text-5xl leading-[1.05] font-black tracking-tight sm:text-7xl text-zinc-950 uppercase max-w-2xl mx-auto flex flex-col gap-2">
           {title.includes('NÃO TRAZEM CLIENTES') ? (
             <>
@@ -31,9 +30,9 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
           )}
         </h1>
         
-        <div className="flex flex-col items-center gap-8">
-          <div className="h-14 w-14 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center shadow-sm">
-            <BarChart3 className="h-6 w-6 text-zinc-400" />
+        <div className="flex flex-col items-center gap-6">
+          <div className="h-12 w-12 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center shadow-sm">
+            <BarChart3 className="h-5 w-5 text-zinc-400" />
           </div>
 
           <p className="mx-auto max-w-lg text-lg text-zinc-600 font-medium sm:text-xl leading-relaxed px-4">
@@ -47,14 +46,14 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         </div>
 
         {/* CTA Section */}
-        <div className="flex flex-col items-center gap-8 pt-4">
+        <div className="flex flex-col items-center gap-6 pt-2">
           <button
             onClick={onStart}
-            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-black px-10 py-5 text-lg font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-black/10 uppercase tracking-tight w-full sm:w-auto min-w-[320px]"
+            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-black px-8 py-3.5 text-base font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-black/10 uppercase tracking-tight w-full sm:w-auto min-w-[280px]"
           >
-            <Target className="h-5 w-5 text-red-600 animate-pulse" />
+            <Target className="h-4 w-4 text-red-600 animate-pulse" />
             <span className="relative z-10">Começar Diagnóstico</span>
-            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 relative z-10" />
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
             <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 to-black"></div>
           </button>
 
