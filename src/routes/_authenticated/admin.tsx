@@ -543,7 +543,9 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
         steps: { ...published.steps, ...local.steps },
         sales: { ...published.sales, ...local.sales },
       };
-      writeDraft(merged);
+      setDraft(merged); // Sincroniza o estado global
+      writeDraft(merged); // Persiste no localStorage
+      
       setCheckoutUrl(merged.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
       setPromoPrice(merged.sales.promoPrice ?? "R$ 197,00");
       setFullPrice(merged.sales.fullPrice ?? "R$ 497,00");
