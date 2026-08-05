@@ -142,7 +142,7 @@ function CTAButton({
       target="_blank"
       rel="noopener noreferrer"
       onClick={async (event) => {
-        // We don't prevent default here to allow direct navigation if needed, 
+        // We don't prevent default here to allow direct navigation if needed,
         // but tracking should happen. The 'target="_blank"' handles the new tab.
         void trackCheckoutClick({ origem: "pagina_vendas" });
       }}

@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { createAdminMediaUpload } from "./admin-data.functions";
+import { confirmAdminMediaUpload, createAdminMediaUpload } from "./admin-data.functions";
 
 export async function uploadAdminMedia(file: File) {
   const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
@@ -12,5 +12,5 @@ export async function uploadAdminMedia(file: File) {
       cacheControl: "3600",
     });
   if (error) throw error;
-  return supabase.storage.from("funnel-media").getPublicUrl(signed.path).data.publicUrl;
+  return confirmAdminMediaUpload({ data: { path: signed.path } });
 }

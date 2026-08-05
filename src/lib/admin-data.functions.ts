@@ -16,6 +16,35 @@ async function getVerifiedAdmin(userId: string | null | undefined) {
   return supabaseAdmin;
 }
 
+async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerifiedAdmin>>) {
+  const { data: bucket, error: bucketError } = await admin.storage.getBucket("funnel-media");
+
+  if (!bucket) {
+    const { error: createError } = await admin.storage.createBucket("funnel-media", {
+      public: true,
+      fileSizeLimit: 50 * 1024 * 1024,
+      allowedMimeTypes: ["image/*", "audio/*", "video/*"],
+    });
+    if (createError) {
+      throw new Error(
+        `Falha ao preparar armazenamento: ${createError.message || bucketError?.message}`,
+      );
+    }
+    return;
+  }
+
+  if (!bucket.public) {
+    const { error: updateError } = await admin.storage.updateBucket("funnel-media", {
+      public: true,
+      fileSizeLimit: 50 * 1024 * 1024,
+      allowedMimeTypes: ["image/*", "audio/*", "video/*"],
+    });
+    if (updateError) {
+      throw new Error(`Falha ao liberar a mídia publicada: ${updateError.message}`);
+    }
+  }
+}
+
 export const loadAdminAnalytics = createServerFn({ method: "GET" })
   .middleware([serverSessionMiddleware])
   .handler(async ({ context }) => {
@@ -57,13 +86,28 @@ export const createAdminMediaUpload = createServerFn({ method: "POST" })
   })
   .handler(async ({ context, data }) => {
     const admin = await getVerifiedAdmin(context?.userId);
+    await ensurePublicMediaBucket(admin);
     const { data: signed, error } = await admin.storage
       .from("funnel-media")
       .createSignedUploadUrl(data.path);
     if (error || !signed?.token) {
       throw new Error(`Falha ao autorizar upload: ${error?.message ?? "token não gerado"}`);
     }
-    return { path: data.path, token: signed.token };
+    const publicUrl = admin.storage.from("funnel-media").getPublicUrl(signed.path).data.publicUrl;
+    return { path: signed.path, token: signed.token, publicUrl };
+  });
+
+export const confirmAdminMediaUpload = createServerFn({ method: "POST" })
+  .middleware([serverSessionMiddleware])
+  .validator((input: UploadRequest) => input)
+  .handler(async ({ context, data }) => {
+    const admin = await getVerifiedAdmin(context?.userId);
+    await ensurePublicMediaBucket(admin);
+    const { data: exists, error } = await admin.storage.from("funnel-media").exists(data.path);
+    if (error || !exists) {
+      throw new Error(`O arquivo não foi encontrado após o upload: ${error?.message ?? data.path}`);
+    }
+    return admin.storage.from("funnel-media").getPublicUrl(data.path).data.publicUrl;
   });
 
 export const saveAdminDraft = createServerFn({ method: "POST" })
@@ -82,4 +126,3 @@ export const saveAdminDraft = createServerFn({ method: "POST" })
     if (error) throw new Error(`Falha ao salvar rascunho no servidor: ${error.message}`);
     return { success: true };
   });
-

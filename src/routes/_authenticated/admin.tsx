@@ -116,11 +116,11 @@ function AdminDashboard() {
       setIsAutosaving(true);
       try {
         writeDraft(draft);
-        
+
         // Salvamento automático no servidor (backup na nuvem)
         const { saveDraftToServer } = await import("@/lib/funnel-content");
         await saveDraftToServer(draft);
-        
+
         console.log("[Admin] Rascunho sincronizado com o servidor.");
       } catch (err) {
         console.warn("[Admin] Falha ao sincronizar rascunho no servidor", err);
@@ -170,10 +170,7 @@ function AdminDashboard() {
             </div>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <button 
-              className="admin-action-tile" 
-              onClick={() => setActiveTab("sales")}
-            >
+            <button className="admin-action-tile" onClick={() => setActiveTab("sales")}>
               <ExternalLink className="text-primary" />
               <span>
                 <strong>Configurar Link de Checkout</strong>
@@ -1473,29 +1470,35 @@ export function ContentSection({
     const isVideo = file.type.startsWith("video/");
 
     if (field === "audio" && !isAudio) {
-      toast.error(`Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas áudio (MP3, WAV, OGG).`);
+      toast.error(
+        `Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas áudio (MP3, WAV, OGG).`,
+      );
       return;
     }
 
     if (field === "image" && id !== "sales" && !isImage) {
-      toast.error(`Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas imagens (JPG, PNG, WEBP).`);
+      toast.error(
+        `Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas imagens (JPG, PNG, WEBP).`,
+      );
       return;
     }
 
     if (id === "sales" && field === "image" && !isImage && !isVideo) {
-      toast.error(`Tipo de arquivo inválido ("${file.type}"). Para o vídeo de vendas, envie um arquivo de vídeo ou uma imagem de capa.`);
+      toast.error(
+        `Tipo de arquivo inválido ("${file.type}"). Para o vídeo de vendas, envie um arquivo de vídeo ou uma imagem de capa.`,
+      );
       return;
     }
 
     // Size validation
     const isLargeMedia = field === "audio" || isVideo;
     const maxSize = isLargeMedia ? 50_000_000 : 5_000_000; // 50MB for audio/video, 5MB for images
-    
+
     if (file.size > maxSize) {
       const sizeMB = (file.size / 1_000_000).toFixed(2);
       const limitMB = maxSize / 1_000_000;
       toast.error(
-        `Arquivo muito grande (${sizeMB}MB). O limite máximo permitido para ${isLargeMedia ? "vídeo/áudio" : "imagens"} nesta seção é de ${limitMB}MB.`
+        `Arquivo muito grande (${sizeMB}MB). O limite máximo permitido para ${isLargeMedia ? "vídeo/áudio" : "imagens"} nesta seção é de ${limitMB}MB.`,
       );
       return;
     }
@@ -1630,8 +1633,10 @@ export function ContentSection({
                     className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
                   >
                     <MediaPreview item={item} draft={draft} />
-                    
-                    { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
+
+                    {(draft.steps?.[item.id]?.image ||
+                      draft.steps?.[item.id]?.audio ||
+                      (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
                       <button
                         onClick={() => {
                           updateStep(item.id, { image: "", audio: "" });
@@ -1648,16 +1653,19 @@ export function ContentSection({
                     <input
                       type="text"
                       placeholder={
-                        item.id === "sales" 
-                          ? "URL do vídeo/thumb" 
-                          : item.id === "audio" 
-                            ? "URL do áudio (mp3/wav)" 
+                        item.id === "sales"
+                          ? "URL do vídeo/thumb"
+                          : item.id === "audio"
+                            ? "URL do áudio (mp3/wav)"
                             : "URL da imagem"
                       }
                       value={
-                        (draft.steps?.[item.id]?.image?.startsWith("data:") || draft.steps?.[item.id]?.audio?.startsWith("data:"))
+                        draft.steps?.[item.id]?.image?.startsWith("data:") ||
+                        draft.steps?.[item.id]?.audio?.startsWith("data:")
                           ? ""
-                          : (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : ""))
+                          : draft.steps?.[item.id]?.image ||
+                            draft.steps?.[item.id]?.audio ||
+                            (item.id === "intro" ? logoAsset.url : "")
                       }
                       onChange={(e) => {
                         const val = e.target.value;
@@ -1679,14 +1687,18 @@ export function ContentSection({
                         ) : (
                           <ImageIcon className="h-3 w-3" />
                         )}
-                        {item.id === "sales" ? "Subir Vídeo" : item.id === "audio" ? "Subir Áudio" : "Alterar Upload"}
+                        {item.id === "sales"
+                          ? "Subir Vídeo"
+                          : item.id === "audio"
+                            ? "Subir Áudio"
+                            : "Alterar Upload"}
                         <input
                           type="file"
                           accept={
-                            item.id === "sales" 
-                              ? "video/*,image/*" 
-                              : item.id === "audio" 
-                                ? "audio/*" 
+                            item.id === "sales"
+                              ? "video/*,image/*"
+                              : item.id === "audio"
+                                ? "audio/*"
                                 : "image/*"
                           }
                           className="hidden"
@@ -1697,7 +1709,9 @@ export function ContentSection({
                         />
                       </label>
 
-                      { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
+                      {(draft.steps?.[item.id]?.image ||
+                        draft.steps?.[item.id]?.audio ||
+                        (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
                         <button
                           onClick={() => {
                             updateStep(item.id, { image: "", audio: "" });
@@ -1905,29 +1919,32 @@ export function LivePreview({ theme }: { theme: "dark" | "light" }) {
   );
 }
 
-function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
-  const [status, setStatus] = useState<'loading' | 'error' | 'success'>('loading');
-  const mediaUrl = draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : "");
+function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
+  const [status, setStatus] = useState<"loading" | "error" | "success">("loading");
+  const mediaUrl =
+    draft.steps?.[item.id]?.image ||
+    draft.steps?.[item.id]?.audio ||
+    (item.id === "intro" ? logoAsset.url : "");
   const isAudio = item.id === "audio" || (mediaUrl && mediaUrl.match(/\.(mp3|wav|ogg)/i));
 
   useEffect(() => {
     if (!mediaUrl) {
-      setStatus('success'); // Empty state is not an error
+      setStatus("success"); // Empty state is not an error
       return;
     }
-    
-    setStatus('loading');
-    
+
+    setStatus("loading");
+
     if (isAudio) {
       const audio = new Audio();
       audio.src = mediaUrl;
-      audio.oncanplaythrough = () => setStatus('success');
-      audio.onerror = () => setStatus('error');
+      audio.oncanplaythrough = () => setStatus("success");
+      audio.onerror = () => setStatus("error");
     } else {
       const img = new Image();
       img.src = mediaUrl;
-      img.onload = () => setStatus('success');
-      img.onerror = () => setStatus('error');
+      img.onload = () => setStatus("success");
+      img.onerror = () => setStatus("error");
     }
   }, [mediaUrl, isAudio]);
 
@@ -1952,13 +1969,13 @@ function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
 
   return (
     <div className="relative h-full w-full">
-      {status === 'loading' && (
+      {status === "loading" && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-900/50 backdrop-blur-sm">
           <Loader2 className="h-6 w-6 text-primary animate-spin" />
         </div>
       )}
-      
-      {status === 'error' && (
+
+      {status === "error" && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-red-950/20 backdrop-blur-sm p-4 text-center">
           <AlertTriangle className="h-6 w-6 text-red-500 mb-1" />
           <span className="text-[9px] font-black text-red-500 uppercase tracking-tighter">
@@ -1971,11 +1988,7 @@ function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
       )}
 
       {item.id === "sales" ? (
-        <video
-          src={mediaUrl}
-          className="h-full w-full object-cover"
-          controls
-        />
+        <video src={mediaUrl} className="h-full w-full object-cover" controls />
       ) : isAudio ? (
         <div className="flex h-full w-full items-center justify-center bg-primary/10">
           <Music className="h-8 w-8 text-primary animate-pulse" />
@@ -1988,10 +2001,12 @@ function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
           alt="Prévia da mídia"
         />
       )}
-      
+
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
         <span className="text-[10px] font-black text-white uppercase tracking-widest">
-          {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
+          {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio
+            ? "Preview Atual"
+            : "Padrão do Sistema"}
         </span>
       </div>
     </div>

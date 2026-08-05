@@ -53,7 +53,6 @@ export async function loadDraftFromServer(): Promise<FunnelDraft | null> {
   }
 }
 
-
 /** Persist the current content to the database (published version). */
 export async function publishDraft(draft: FunnelDraft) {
   const { publishAdminFunnel } = await import("./admin-data.functions");
