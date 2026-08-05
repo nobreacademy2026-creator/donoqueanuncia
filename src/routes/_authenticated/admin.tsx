@@ -786,7 +786,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
     // para evitar perda de dados se o writeDraft/readDraft tiver latência ou inconsistência
     const next: FunnelDraft = {
       ...draft,
-      steps: { ...draft.steps, [id]: { ...draft.steps[id], ...patch } },
+      steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), ...patch } },
     };
     
     // Sincronizar campo de vendas se o ID for 'sales'
