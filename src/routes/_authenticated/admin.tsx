@@ -990,11 +990,20 @@ function TrackingSection({
     const meta = metaPixelId.trim();
     const ga = ga4Id.trim().toUpperCase();
     const gtm = gtmId.trim().toUpperCase();
-    if (meta && !/^\d{5,25}$/.test(meta))
-      return toast.error("O ID do Meta Pixel deve conter apenas números.");
-    if (ga && !/^G-[A-Z0-9]+$/.test(ga)) return toast.error("Use um ID GA4 válido, como G-ABC123.");
-    if (gtm && !/^GTM-[A-Z0-9]+$/.test(gtm))
-      return toast.error("Use um ID válido, como GTM-ABC123.");
+    
+    if (meta && !/^\d{5,25}$/.test(meta)) {
+      toast.error("O ID do Meta Pixel deve conter apenas números.");
+      return;
+    }
+    if (ga && !/^G-[A-Z0-9]+$/.test(ga)) {
+      toast.error("Use um ID GA4 válido, como G-ABC123.");
+      return;
+    }
+    if (gtm && !/^GTM-[A-Z0-9]+$/.test(gtm)) {
+      toast.error("Use um ID válido, como GTM-ABC123.");
+      return;
+    }
+    
     setSaving(true);
     const next: FunnelDraft = { ...draft, tracking: { metaPixelId: meta, ga4Id: ga, gtmId: gtm } };
     try {

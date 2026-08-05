@@ -37,7 +37,7 @@ export async function initPublishedTracking() {
 
   if (metaPixelId && !document.querySelector('script[data-dqa="meta"]')) {
     const script = document.createElement("script");
-    script.dataset.dqa = "meta";
+    script.setAttribute("data-dqa", "meta");
     script.src = "https://connect.facebook.net/en_US/fbevents.js";
     script.async = true;
     script.onload = () => {
@@ -52,7 +52,7 @@ export async function initPublishedTracking() {
     window.gtag("js", new Date());
     window.gtag("config", ga4Id);
     const script = document.createElement("script");
-    script.dataset.dqa = "ga4";
+    script.setAttribute("data-dqa", "ga4");
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`;
     script.async = true;
     document.head.appendChild(script);
@@ -61,7 +61,7 @@ export async function initPublishedTracking() {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
     const script = document.createElement("script");
-    script.dataset.dqa = "gtm";
+    script.setAttribute("data-dqa", "gtm");
     script.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`;
     script.async = true;
     document.head.appendChild(script);
