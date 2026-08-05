@@ -932,7 +932,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                     <input
                       type="text"
                       placeholder={item.id === 'sales' ? "URL do vídeo/thumb" : "URL da imagem"}
-                      value={draft.steps[item.id]?.image?.startsWith("data:") ? "" : (draft.steps[item.id]?.image ?? "")}
+                      value={draft.steps?.[item.id]?.image?.startsWith("data:") ? "" : (draft.steps?.[item.id]?.image ?? "")}
                       onChange={(e) => updateStep(item.id, { image: e.target.value })}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
