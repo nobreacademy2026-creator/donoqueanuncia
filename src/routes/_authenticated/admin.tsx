@@ -171,7 +171,7 @@ function AdminDashboard() {
           }`}>
             <div className="p-8 sm:p-10">
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
-              {activeTab === "config" && <ConfigSection theme={theme} setParentDraft={setDraft} />}
+              {activeTab === "config" && <ConfigSection theme={theme} setDraft={setDraft} />}
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
               {activeTab === "content" && <ContentSection theme={theme} draft={draft} setDraft={setDraft} />}
             </div>
