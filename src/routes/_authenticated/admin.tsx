@@ -586,10 +586,10 @@ function ConfigSection({ theme, draft, setDraft }: { theme: "dark" | "light", dr
         }
       };
       
-      setDraft(currentDraft); // Atualiza o estado global
-      writeDraft(currentDraft); // Persiste no localStorage
+      setDraft(updatedDraft); // Atualiza o estado global
+      writeDraft(updatedDraft); // Persiste no localStorage
       
-      await publishDraft(currentDraft);
+      await publishDraft(updatedDraft);
       toast.success("Dados da Página de Vendas publicados com sucesso!");
     } catch (err: any) {
       console.error("Erro ao publicar:", err);
