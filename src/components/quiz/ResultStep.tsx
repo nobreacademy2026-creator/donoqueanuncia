@@ -191,7 +191,9 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
         <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
           <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
             <img 
+              key="result-solution"
               src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" 
+
               alt="Fictitious strategy"
               className="h-full w-full object-cover"
             />
@@ -249,7 +251,9 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
       <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
         <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
           <img 
+            key="result-objection"
             src="https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800" 
+
             alt="Fictitious representative"
             className="h-full w-full object-cover"
           />
