@@ -318,8 +318,8 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
   });
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-4 sm:grid-cols-4">
+    <div className="space-y-8 animate-rise-in">
+      <div className="grid gap-6 sm:grid-cols-4">
         <StatCard label="Acessos Totais" value={stats.access} icon={Users} color={theme === "dark" ? "text-blue-400" : "text-blue-600"} theme={theme} />
         <StatCard label="Finalizados" value={stats.completion} icon={Target} color={theme === "dark" ? "text-green-400" : "text-green-600"} theme={theme} />
         <StatCard label="Cliques Vídeo" value={stats.videoViews} icon={Video} color={theme === "dark" ? "text-purple-400" : "text-purple-600"} theme={theme} />
