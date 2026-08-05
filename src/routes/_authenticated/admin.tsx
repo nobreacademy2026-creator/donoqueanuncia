@@ -881,7 +881,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                 <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Texto / Título exibido</label>
                 <input
                   type="text"
-                  value={draft.steps[item.id]?.title ?? ""}
+                  value={draft.steps?.[item.id]?.title ?? ""}
                   placeholder="Deixe vazio para manter o texto atual da página"
                   onChange={(e) => updateStep(item.id, { title: e.target.value })}
                   className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
