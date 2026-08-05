@@ -58,17 +58,21 @@ function AdminDashboard() {
 
   useEffect(() => {
     async function init() {
-      const published = await loadPublished();
-      const local = readDraft();
+      try {
+        const published = await loadPublished();
+        const local = readDraft();
 
-      const merged: FunnelDraft = {
-        steps: { ...(published?.steps || {}), ...local.steps },
-        sales: { ...(published?.sales || {}), ...local.sales },
-        tracking: { ...(published?.tracking || {}), ...local.tracking },
-      };
+        const merged: FunnelDraft = {
+          steps: { ...(published?.steps || {}), ...(local?.steps || {}) },
+          sales: { ...(published?.sales || {}), ...(local?.sales || {}) },
+          tracking: { ...(published?.tracking || {}), ...(local?.tracking || {}) },
+        };
 
-      setDraft(merged);
-      writeDraft(merged);
+        setDraft(merged);
+        writeDraft(merged);
+      } catch (err) {
+        console.error("[Admin] Erro na inicialização:", err);
+      }
     }
     init();
   }, []);
@@ -1136,8 +1140,22 @@ function ContentSection({
       // Garantir que publicamos o estado 'draft' que está no componente,
       // pois ele é a fonte da verdade mais recente durante a edição
       writeDraft(draft); // Sincroniza o localStorage
+      
+      // Forçar atualização do draft no AdminDashboard antes de publicar
+      // para garantir que estamos enviando o estado exato da UI
       await publishDraft(draft);
+      
       toast.success("Conteúdo do quiz publicado com sucesso!");
+      
+      // Pequeno delay e recarregar prévia se possível
+      setTimeout(() => {
+        const frame = document.querySelector('iframe[data-funnel-preview]') as HTMLIFrameElement;
+        if (frame) {
+          const url = new URL(frame.src);
+          url.searchParams.set('t', Date.now().toString());
+          frame.src = url.toString();
+        }
+      }, 500);
     } catch (err: any) {
       console.error("Erro ao publicar:", err);
       toast.error("Erro ao publicar: " + (err?.message ?? "tente novamente"));
@@ -1210,8 +1228,23 @@ function ContentSection({
     const { error: uploadError } = await supabase.storage
       .from("funnel-media")
       .upload(path, file, { contentType: file.type, upsert: false, cacheControl: "3600" });
+    
     if (uploadError) {
       console.error("Erro no upload do Storage:", uploadError);
+      
+      // Fallback para Base64 se o storage falhar por qualquer motivo (permissão, cota, etc)
+      if (uploadError.message.includes("not found") || uploadError.message.includes("permission")) {
+        toast.info("Aviso: Storage indisponível, usando fallback local...");
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          updateStep(id, { [field]: result });
+          toast.success("Arquivo carregado localmente (fallback). Publique para salvar.");
+        };
+        reader.readAsDataURL(file);
+        return;
+      }
+      
       toast.error(`Não foi possível enviar o arquivo: ${uploadError.message}`);
       return;
     }
@@ -1527,6 +1560,20 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   const [nonce, setNonce] = useState(0);
 
+  useEffect(() => {
+    // Sincronizar prévia periodicamente se necessário
+    const interval = setInterval(() => {
+      const frame = document.querySelector('iframe[data-funnel-preview]') as HTMLIFrameElement;
+      if (frame && frame.contentWindow) {
+        frame.contentWindow.postMessage(
+          { type: "dqa:funnel-draft", draft: readDraft() },
+          window.location.origin,
+        );
+      }
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div
       className={`sticky top-6 rounded-[2rem] border p-4 transition-all ${
@@ -1576,11 +1623,13 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
           src={`/?preview=1&t=${nonce}`}
           title="Prévia da Landing Page"
           onLoad={(e) => {
-            const currentDraft = readDraft();
-            (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
-              { type: "dqa:funnel-draft", draft: currentDraft },
-              window.location.origin,
-            );
+            setTimeout(() => {
+              const currentDraft = readDraft();
+              (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
+                { type: "dqa:funnel-draft", draft: currentDraft },
+                window.location.origin,
+              );
+            }, 500); // Delay para garantir que a página carregou os scripts de postMessage
           }}
           className="h-[720px] w-full bg-white"
         />
