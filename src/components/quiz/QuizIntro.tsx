@@ -1,7 +1,7 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
-export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: { title?: string; image?: string } }) {
+export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any }) {
   const title = draft?.title || "Descubra por que seus anúncios não trazem clientes.";
   const logo = draft?.image || logoAsset.url;
 
