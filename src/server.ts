@@ -1,6 +1,6 @@
 import "./lib/error-capture";
 
-import { consumeLastCapturedError } from "./lib/error-capture";
+import { consumeLastCapturedError, isAbortError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
 type ServerEntry = {
@@ -42,25 +42,6 @@ function isH3SwallowedErrorBody(body: string): boolean {
   } catch {
     return false;
   }
-}
-
-// Client-disconnect errors surface as "aborted" / AbortError from the HTTP layer.
-function isAbortError(error: unknown): boolean {
-  if (!(error instanceof Error)) return false;
-  const chain: unknown[] = [];
-  let current: unknown = error;
-  for (let i = 0; i < 5 && current instanceof Error; i++) {
-    chain.push(current);
-    current = current.cause;
-  }
-  return chain.some(
-    (e) =>
-      e instanceof Error &&
-      (e.name === "AbortError" ||
-        e.message === "aborted" ||
-        e.message.includes("aborted") ||
-        (e as { code?: string }).code === "ECONNRESET"),
-  );
 }
 
 export default {
