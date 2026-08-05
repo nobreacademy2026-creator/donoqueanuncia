@@ -950,7 +950,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                         />
                       </label>
                       
-                      {draft.steps[item.id]?.image && (
+                      {draft.steps?.[item.id]?.image && (
                         <button 
                           onClick={() => {
                             updateStep(item.id, { image: "" });
