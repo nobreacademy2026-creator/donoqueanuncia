@@ -1069,8 +1069,9 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
           src={`/?preview=1&t=${nonce}`}
           title="Prévia da Landing Page"
           onLoad={(e) => {
+            const currentDraft = readDraft();
             (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
-              { type: "dqa:funnel-draft", draft: readDraft() },
+              { type: "dqa:funnel-draft", draft: currentDraft },
               window.location.origin,
             );
           }}
