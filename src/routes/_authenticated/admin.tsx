@@ -970,7 +970,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                 <div className="space-y-3 sm:col-span-2">
                   <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Opções de resposta</label>
                   <div className="grid gap-3">
-                    {(draft.steps[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
+                    {(draft.steps?.[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
                       <div key={i} className="flex gap-2">
                         <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[10px] font-black ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}>
                           #{i + 1}
