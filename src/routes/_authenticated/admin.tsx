@@ -1559,7 +1559,7 @@ export function ContentSection({
                         <button
                           onClick={() => {
                             updateStep(item.id, { image: "", audio: "" });
-                            toast.info("Mídia removida da prévia.");
+                            toast.info("Mídia restaurada para o padrão.");
                           }}
                           className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
                           title="Remover imagem"
