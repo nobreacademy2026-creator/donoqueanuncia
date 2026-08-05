@@ -107,7 +107,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                 import("@/lib/tracking").then(m => m.trackEvent("clique_quero_isso_tambem"));
                 setSubStage("niche");
               }}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20 uppercase"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
               Eu quero isso também
             </button>
@@ -175,7 +175,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
 
             <button
               onClick={onNext}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20 uppercase"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
               Quero vender muito 😍
             </button>
@@ -235,7 +235,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                   import("@/lib/tracking").then(m => m.trackEvent("clique_solucao_preciso"));
                   setSubStage("testimonial");
                 }}
-                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20 uppercase"
+                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
               >
                 É disso que eu preciso
               </button>
@@ -291,7 +291,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
           <div className="mt-12 flex justify-center">
             <button
               onClick={() => setSubStage("solution")}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-2xl px-12 py-5 text-xl font-bold text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-600/20"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
               Vou dominar isso agora
             </button>
