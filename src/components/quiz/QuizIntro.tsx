@@ -20,7 +20,7 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
 
       <div className="space-y-6">
         <h1 className="text-4xl leading-tight font-black tracking-tight sm:text-6xl text-zinc-950 uppercase">
-          {title.split('não trazem clientes').map((part, i) => (
+          {title.split('não trazem clientes').map((part: string, i: number) => (
             <span key={i}>
               {part}
               {i === 0 && title.includes('não trazem clientes') && (
