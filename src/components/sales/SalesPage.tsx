@@ -381,22 +381,23 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
               </div>
             </div>
 
-          <div className="mt-8 flex flex-col items-center gap-4">
-            <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
-              55% de DESCONTO para os próximos 50 alunos
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                55% de DESCONTO para os próximos 50 alunos
+              </div>
+              <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
+                Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento tem valor de 497,00.
+              </p>
+              <p className="text-sm font-black text-green-600 animate-bounce">
+                Clica no link e aproveita o desconto 👇
+              </p>
+              <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
             </div>
-            <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
-              Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento tem valor de 497,00.
+            
+            <p className="mt-6 text-xs text-muted-foreground/60">
+              Acesso imediato • Pagamento seguro • Vitalício
             </p>
-            <p className="text-sm font-black text-green-600 animate-bounce">
-              Clica no link e aproveita o desconto 👇
-            </p>
-            <CTAButton href={checkoutUrl} label="Garantir com desconto" className="w-full sm:w-auto px-16 py-6 text-xl bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/20" />
           </div>
-          
-          <p className="mt-6 text-xs text-muted-foreground/60">
-            Acesso imediato • Pagamento seguro • Vitalício
-          </p>
         </div>
       </section>
 
