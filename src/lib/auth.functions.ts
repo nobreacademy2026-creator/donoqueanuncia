@@ -5,7 +5,7 @@ export const checkAdminRole = createServerFn({ method: "GET" })
   .middleware([serverSessionMiddleware])
   .handler(async ({ context }) => {
     try {
-      const userId = context.userId;
+      const userId = context?.userId;
       if (!userId) return { hasAdmin: false, error: 'Unauthenticated' };
 
       const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
