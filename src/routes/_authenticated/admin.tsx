@@ -202,6 +202,7 @@ function LegacyAdminDashboard() {
   );
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
+  const [isAutosaving, setIsAutosaving] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
