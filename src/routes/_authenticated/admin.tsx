@@ -1030,8 +1030,8 @@ export function ConfigSection({
       toast.error("Selecione um arquivo de vídeo válido.");
       return;
     }
-    if (file.size > 50_000_000) {
-      toast.error("O vídeo deve ter no máximo 50 MB.");
+    if (file.size > 500_000_000) {
+      toast.error("O vídeo deve ter no máximo 500 MB.");
       return;
     }
 
@@ -1492,7 +1492,7 @@ export function ContentSection({
 
     // Size validation
     const isLargeMedia = field === "audio" || isVideo;
-    const maxSize = isLargeMedia ? 50_000_000 : 5_000_000; // 50MB for audio/video, 5MB for images
+    const maxSize = isLargeMedia ? 500_000_000 : 5_000_000; // 500MB for audio/video, 5MB for images
 
     if (file.size > maxSize) {
       const sizeMB = (file.size / 1_000_000).toFixed(2);
