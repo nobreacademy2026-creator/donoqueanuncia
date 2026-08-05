@@ -1446,10 +1446,36 @@ export function ContentSection({
     field: "image" | "audio" = "image",
   ) => {
     if (!file) return;
-    if (file.size > 50_000_000) {
-      toast.error("Arquivo muito grande (máx. 50MB).");
+
+    // Type validation
+    const isImage = file.type.startsWith("image/");
+    const isAudio = file.type.startsWith("audio/");
+    const isVideo = file.type.startsWith("video/");
+
+    if (field === "audio" && !isAudio) {
+      toast.error("Por favor, envie apenas arquivos de áudio (MP3, WAV, etc).");
       return;
     }
+
+    if (field === "image" && id !== "sales" && !isImage) {
+      toast.error("Por favor, envie apenas arquivos de imagem (JPG, PNG, WEBP, etc).");
+      return;
+    }
+
+    if (id === "sales" && field === "image" && !isImage && !isVideo) {
+      toast.error("Para o vídeo de vendas, envie um arquivo de vídeo ou uma imagem de capa.");
+      return;
+    }
+
+    // Size validation
+    const maxSize = field === "audio" || isVideo ? 50_000_000 : 5_000_000; // 50MB for audio/video, 5MB for images
+    if (file.size > maxSize) {
+      toast.error(
+        `Arquivo muito grande. O limite para ${field === "audio" ? "áudio" : isVideo ? "vídeo" : "imagens"} é de ${maxSize / 1_000_000}MB.`,
+      );
+      return;
+    }
+
     let result: string;
     try {
       result = await uploadAdminMedia(file);
@@ -1458,12 +1484,13 @@ export function ContentSection({
       toast.error(`Não foi possível enviar o arquivo: ${getErrorMessage(uploadError)}`);
       return;
     }
+
     const next: FunnelDraft = {
       ...draft,
       steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
     };
     if (id === "sales" && field === "image") {
-      next.sales = file.type.startsWith("video/")
+      next.sales = isVideo
         ? { ...next.sales, vslUrl: result, videoThumb: result }
         : { ...next.sales, videoThumb: result };
     }
