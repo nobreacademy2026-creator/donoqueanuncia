@@ -1553,7 +1553,7 @@ export function ContentSection({
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
-                            Preview Atual
+                            {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
                           </span>
                         </div>
                         <button
