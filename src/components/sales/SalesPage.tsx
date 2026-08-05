@@ -76,7 +76,7 @@ function CTAButton({ label = "QUERO ME TORNAR UM DONO QUE ANUNCIA", className = 
     <a
       href={href || CHECKOUT_URL}
       onClick={() => trackCheckoutClick({ origem: "pagina_vendas" })}
-      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-2xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-transform duration-200 hover:scale-[1.02] sm:text-base shadow-lg shadow-green-600/20 ${className}`}
+      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-[1.01] sm:text-base shadow-lg shadow-green-600/10 ${className}`}
     >
       {label}
     </a>
@@ -187,7 +187,7 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
             <CTAButton 
               href={checkoutUrl} 
               label="Quero Garantir Minha Vaga com Desconto" 
-              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.5)] px-12 py-8 text-2xl rounded-[2rem] animate-pulse-green w-full sm:w-auto uppercase tracking-tighter" 
+              className="bg-green-500 hover:bg-green-600 shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] px-8 py-6 text-xl rounded-2xl animate-pulse-green w-full sm:w-auto uppercase tracking-tighter" 
             />
             <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
               <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
