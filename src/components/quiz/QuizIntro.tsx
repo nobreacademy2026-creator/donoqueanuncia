@@ -47,12 +47,10 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full"></div>
           </button>
 
-          <div className="flex items-center gap-6 text-sm font-bold text-zinc-400 uppercase tracking-widest">
-            <span className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-green-500" /> 100% online
+          <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="h-3 w-3 text-green-500" /> 100% online
             </span>
-            <span className="h-1 w-1 rounded-full bg-zinc-300"></span>
-            <span>Acesso Imediato</span>
           </div>
         </div>
       </div>
