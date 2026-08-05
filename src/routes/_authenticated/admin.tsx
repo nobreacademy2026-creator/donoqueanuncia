@@ -861,16 +861,31 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                         theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
                       }`}
                     />
-                    <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                      {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />}
-                      {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
-                      <input
-                        type="file"
-                        accept={item.id === 'sales' ? "video/*,image/*" : "image/*"}
-                        className="hidden"
-                        onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
-                      />
-                    </label>
+                    <div className="flex items-center gap-4">
+                      <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                        {item.id === 'sales' ? <Video className="h-3 w-3" /> : <ImageIcon className="h-3 w-3" />}
+                        {item.id === 'sales' ? 'Subir Vídeo' : 'Alterar Upload'}
+                        <input
+                          type="file"
+                          accept={item.id === 'sales' ? "video/*,image/*" : "image/*"}
+                          className="hidden"
+                          onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                        />
+                      </label>
+                      
+                      {draft.steps[item.id]?.image && (
+                        <button 
+                          onClick={() => {
+                            updateStep(item.id, { image: "" });
+                            toast.info("Imagem removida da prévia.");
+                          }}
+                          className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                          Remover
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
