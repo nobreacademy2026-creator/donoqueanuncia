@@ -1613,8 +1613,9 @@ export function ContentSection({
                           : (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : ""))
                       }
                       onChange={(e) => {
-                        const field = (item.id === "audio" || (e.target.value.match(/\.(mp3|wav|ogg)/i))) ? "audio" : "image";
-                        updateStep(item.id, { [field]: e.target.value });
+                        const val = e.target.value;
+                        const isAudio = val.match(/\.(mp3|wav|ogg)/i) || item.id === "audio";
+                        updateStep(item.id, { [isAudio ? "audio" : "image"]: val });
                       }}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark"
