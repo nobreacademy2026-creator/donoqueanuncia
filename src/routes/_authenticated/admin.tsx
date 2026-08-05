@@ -45,6 +45,7 @@ import {
 } from "@/lib/funnel-content";
 import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
+import { uploadAdminMedia } from "@/lib/admin-media-upload";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
@@ -972,16 +973,7 @@ export function ConfigSection({
 
     setUploadingVideo(true);
     try {
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData.user) throw new Error("Sua sessão expirou. Entre novamente.");
-      const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
-      const path = `${userData.user.id}/${crypto.randomUUID()}-${safeName}`;
-      const { error: uploadError } = await supabase.storage
-        .from("funnel-media")
-        .upload(path, file, { contentType: file.type, upsert: false, cacheControl: "3600" });
-      if (uploadError) throw uploadError;
-      const { data } = supabase.storage.from("funnel-media").getPublicUrl(path);
-      const url = data.publicUrl;
+      const url = await uploadAdminMedia(file);
       setVslUrl(url);
       publish({ vslUrl: url, videoThumb: url });
       toast.success("Vídeo enviado. Clique em Publicar Alterações para disponibilizá-lo.");
@@ -1408,32 +1400,14 @@ export function ContentSection({
       toast.error("Arquivo muito grande (máx. 50MB).");
       return;
     }
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData.user) {
-      toast.error("Sua sessão expirou. Entre novamente para enviar arquivos.");
-      return;
-    }
-
-    const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
-    const path = `${userData.user.id}/${crypto.randomUUID()}-${safeName}`;
-    const { error: uploadError } = await supabase.storage
-      .from("funnel-media")
-      .upload(path, file, { contentType: file.type, upsert: false, cacheControl: "3600" });
-
-    if (uploadError) {
+    let result: string;
+    try {
+      result = await uploadAdminMedia(file);
+    } catch (uploadError) {
       console.error("Erro no upload do Storage:", uploadError);
-
-      const permissionError = /permission|row-level security|403/i.test(uploadError.message);
-      toast.error(
-        permissionError
-          ? "Upload bloqueado pelo Supabase. Verifique sua sessão e as políticas do Storage."
-          : `Não foi possível enviar o arquivo: ${uploadError.message}`,
-      );
+      toast.error(`Não foi possível enviar o arquivo: ${getErrorMessage(uploadError)}`);
       return;
     }
-
-    const { data: publicData } = supabase.storage.from("funnel-media").getPublicUrl(path);
-    const result = publicData.publicUrl;
     const next: FunnelDraft = {
       ...draft,
       steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },

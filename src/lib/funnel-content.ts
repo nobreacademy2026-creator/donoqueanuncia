@@ -25,13 +25,8 @@ export const CONFIG_KEY = "funnel_content";
 
 /** Persist the current content to the database (published version). */
 export async function publishDraft(draft: FunnelDraft) {
-  const { error } = await supabase
-    .from("quiz_config")
-    .upsert(
-      { key: CONFIG_KEY, value: draft as any, updated_at: new Date().toISOString() },
-      { onConflict: "key" },
-    );
-  if (error) throw error;
+  const { publishAdminFunnel } = await import("./admin-data.functions");
+  await publishAdminFunnel({ data: draft });
 }
 
 /** Load the published content from the database. */

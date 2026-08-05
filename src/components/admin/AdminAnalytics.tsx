@@ -32,6 +32,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { loadAdminAnalytics } from "@/lib/admin-data.functions";
 import type { AdminTab } from "./AdminShell";
 
 type EventPayload = { stage?: string; source?: string; pergunta?: string } & Record<
@@ -116,10 +117,13 @@ export function AdminAnalytics({
     async function load() {
       setLoading(true);
       setLoadError("");
-      const { data, error } = await supabase
-        .from("analytics_events")
-        .select("id,event_name,payload,session_id,created_at")
-        .order("created_at", { ascending: false });
+      let data: unknown;
+      let error: unknown;
+      try {
+        data = await loadAdminAnalytics();
+      } catch (loadFailure) {
+        error = loadFailure;
+      }
       if (!active) return;
       if (error) {
         const detail = errorMessage(error);
