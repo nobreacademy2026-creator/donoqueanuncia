@@ -1536,6 +1536,10 @@ export function ContentSection({
                             className="h-full w-full object-cover"
                             controls
                           />
+                        ) : draft.steps?.[item.id]?.audio ? (
+                          <div className="flex h-full w-full items-center justify-center bg-primary/10">
+                            <Music className="h-8 w-8 text-primary animate-pulse" />
+                          </div>
                         ) : (
                           <img
                             src={draft.steps?.[item.id]?.image}
