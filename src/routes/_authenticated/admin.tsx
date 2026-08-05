@@ -397,7 +397,8 @@ function AnalyticsSection({ theme }: { theme: "dark" | "light" }) {
         }
       } catch (err) {
         console.error("Erro ao buscar dados reais:", err);
-        setLoadError("Não foi possível carregar os dados do Supabase.");
+        const message = err instanceof Error ? err.message : "erro desconhecido";
+        setLoadError(`Não foi possível carregar os dados do Supabase: ${message}`);
         toast.error("Falha ao atualizar as métricas.");
       } finally {
         setIsLoading(false);
