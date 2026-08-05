@@ -36,14 +36,33 @@ export async function publishDraft(draft: FunnelDraft) {
 
 /** Load the published content from the database. */
 export async function loadPublished(): Promise<FunnelDraft | null> {
-  const { data, error } = await supabase
-    .from("quiz_config")
-    .select("value")
-    .eq("key", CONFIG_KEY)
-    .maybeSingle();
-  if (error || !data?.value) return null;
-  const parsed = data.value as FunnelDraft;
-  return { steps: parsed.steps ?? {}, sales: parsed.sales ?? {}, tracking: parsed.tracking ?? {} };
+  try {
+    const { data, error } = await supabase
+      .from("quiz_config")
+      .select("value")
+      .eq("key", CONFIG_KEY)
+      .maybeSingle();
+      
+    if (error) {
+      console.error("[Funnel] Database fetch error:", error);
+      return null;
+    }
+    
+    if (!data?.value) {
+      console.warn("[Funnel] No data found for key:", CONFIG_KEY);
+      return null;
+    }
+    
+    const parsed = data.value as FunnelDraft;
+    return { 
+      steps: parsed.steps ?? {}, 
+      sales: parsed.sales ?? {}, 
+      tracking: parsed.tracking ?? {} 
+    };
+  } catch (err) {
+    console.error("[Funnel] Catch-all load error:", err);
+    return null;
+  }
 }
 
 export function readDraft(): FunnelDraft {
@@ -80,66 +99,75 @@ export function writeDraft(draft: FunnelDraft) {
 
 /** Live draft inside the admin preview (?preview=1); published content otherwise. */
 export function useFunnelDraft(): FunnelDraft {
-  const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
+  const [draft, setDraft] = useState<FunnelDraft>(() => {
+    // Initial state from cache if available to prevent flash
+    return readDraft() || EMPTY_DRAFT;
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("preview") !== "1") {
-      let active = true;
-      let retries = 0;
-      const MAX_RETRIES = 5;
+    const isPreview = params.get("preview") === "1";
+    let active = true;
 
-      const attemptLoad = async () => {
-        try {
-          const published = await loadPublished();
-          if (active && published) {
-            setDraft(published);
-            console.log("[Funnel] Conteúdo publicado carregado com sucesso.");
-            return true;
+    const loadInitial = async () => {
+      try {
+        if (isPreview) {
+          setDraft(readDraft());
+        } else {
+          // Check local cache first for instant load
+          const cached = readDraft();
+          if (cached && (Object.keys(cached.steps).length > 0 || Object.keys(cached.sales).length > 0)) {
+            setDraft(cached);
           }
-        } catch (err) {
-          console.error(`[Funnel] Falha na tentativa ${retries + 1}:`, err);
+
+          let retries = 0;
+          const MAX_RETRIES = 5;
+          
+          while (active && retries < MAX_RETRIES) {
+            const published = await loadPublished();
+            if (active && published) {
+              setDraft(published);
+              writeDraft(published); // Update cache
+              console.log("[Funnel] Conteúdo publicado carregado com sucesso.");
+              return;
+            }
+            retries++;
+            if (active && retries < MAX_RETRIES) {
+              await new Promise(resolve => setTimeout(resolve, retries * 1000));
+            }
+          }
         }
-        return false;
+      } catch (err) {
+        console.error("[Funnel] Falha crítica no carregamento:", err);
+      }
+    };
+
+    loadInitial();
+
+    if (isPreview) {
+      const onCustom = (event: Event) =>
+        setDraft((event as CustomEvent<FunnelDraft>).detail ?? readDraft());
+      const onStorage = (event: StorageEvent) => {
+        if (event.key === DRAFT_KEY) setDraft(readDraft());
+      };
+      const onMessage = (event: MessageEvent) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data?.type === DRAFT_EVENT && event.data.draft)
+          setDraft(event.data.draft as FunnelDraft);
       };
 
-      const startLoading = async () => {
-        while (active && retries < MAX_RETRIES) {
-          const success = await attemptLoad();
-          if (success) break;
-          retries++;
-          if (retries < MAX_RETRIES) {
-            console.log(`[Funnel] Tentando novamente em ${retries * 1.5}s...`);
-            await new Promise(resolve => setTimeout(resolve, retries * 1500));
-          }
-        }
+      window.addEventListener(DRAFT_EVENT, onCustom);
+      window.addEventListener("storage", onStorage);
+      window.addEventListener("message", onMessage);
+      return () => {
+        active = false;
+        window.removeEventListener(DRAFT_EVENT, onCustom);
+        window.removeEventListener("storage", onStorage);
+        window.removeEventListener("message", onMessage);
       };
-
-      startLoading();
-      return () => { active = false; };
     }
-
-    setDraft(readDraft());
-
-    const onCustom = (event: Event) =>
-      setDraft((event as CustomEvent<FunnelDraft>).detail ?? readDraft());
-    const onStorage = (event: StorageEvent) => {
-      if (event.key === DRAFT_KEY) setDraft(readDraft());
-    };
-    const onMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
-      if (event.data?.type === DRAFT_EVENT && event.data.draft)
-        setDraft(event.data.draft as FunnelDraft);
-    };
-
-    window.addEventListener(DRAFT_EVENT, onCustom);
-    window.addEventListener("storage", onStorage);
-    window.addEventListener("message", onMessage);
-    return () => {
-      window.removeEventListener(DRAFT_EVENT, onCustom);
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("message", onMessage);
-    };
+    
+    return () => { active = false; };
   }, []);
 
   return draft;
