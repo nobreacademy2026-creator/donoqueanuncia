@@ -1531,7 +1531,7 @@ export function ContentSection({
                   <div
                     className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
                   >
-                    {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? (
+                    {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image && logoAsset.url) ? (
                       <>
                         {item.id === "sales" ? (
                           <video
