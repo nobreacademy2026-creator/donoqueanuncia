@@ -840,31 +840,42 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                 <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>
                   {item.id === 'sales' ? 'Vídeo da Oferta (VSL)' : 'Imagem/Background'}
                 </label>
-                <div className="flex items-center gap-3">
-                  <div className={`relative h-12 w-20 shrink-0 rounded-lg overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
+                <div className="flex flex-col gap-3">
+                  <div className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
                      {draft.steps[item.id]?.image ? (
                        <>
                          <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                           <span className="text-[10px] font-black text-white uppercase tracking-widest">Preview Atual</span>
+                         </div>
                          <button 
                            onClick={() => {
                              updateStep(item.id, { image: "" });
                              toast.info("Imagem removida da prévia.");
                            }}
-                           className="absolute top-0.5 right-0.5 h-4 w-4 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-sm"
+                           className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
                            title="Remover imagem"
                          >
-                           <X className="h-2.5 w-2.5" />
+                           <X className="h-3.5 w-3.5" />
                          </button>
                        </>
                      ) : item.id === 'sales' ? (
                        <div className="flex h-full w-full items-center justify-center bg-black/20">
-                         <Video className="h-5 w-5 text-zinc-500" />
+                         <div className="flex flex-col items-center gap-2">
+                           <Video className="h-8 w-8 text-zinc-500/50" />
+                           <span className="text-[10px] font-bold text-zinc-500 uppercase">Sem Vídeo</span>
+                         </div>
                        </div>
                      ) : (
-                       <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" className="h-full w-full object-cover opacity-30 grayscale" alt="" />
+                       <div className="flex h-full w-full items-center justify-center bg-black/5">
+                         <div className="flex flex-col items-center gap-2">
+                           <ImageIcon className="h-8 w-8 text-zinc-400/30" />
+                           <span className="text-[10px] font-bold text-zinc-400/50 uppercase">Sem Imagem</span>
+                         </div>
+                       </div>
                      )}
                   </div>
-                  <div className="flex-1 space-y-2">
+                  <div className="flex-1 space-y-3">
                     <input
                       type="text"
                       placeholder={item.id === 'sales' ? "URL do vídeo/thumb" : "URL da imagem"}
@@ -903,19 +914,23 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
                 </div>
               </div>
               {QUIZ_OPTIONS[item.id] && (
-                <div className="space-y-2 sm:col-span-2">
+                <div className="space-y-3 sm:col-span-2">
                   <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Opções de resposta</label>
-                  <div className="grid gap-2">
+                  <div className="grid gap-3">
                     {(draft.steps[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
-                      <input
-                        key={i}
-                        type="text"
-                        value={option}
-                        onChange={(e) => updateOption(item.id, i, e.target.value)}
-                        className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                          theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                        }`}
-                      />
+                      <div key={i} className="flex gap-2">
+                        <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[10px] font-black ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}>
+                          #{i + 1}
+                        </div>
+                        <input
+                          type="text"
+                          value={option}
+                          onChange={(e) => updateOption(item.id, i, e.target.value)}
+                          className={`w-full rounded-xl border px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                            theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                          }`}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
