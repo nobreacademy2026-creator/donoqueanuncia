@@ -90,8 +90,13 @@ export function useFunnelDraft(): FunnelDraft {
         console.log("[Funnel] Conteúdo publicado carregado:", published ? "Sim" : "Não");
         if (active && published) setDraft(published);
       }).catch(err => {
-        console.error("[Funnel] Erro ao carregar conteúdo:", err);
-        // Tenta novamente após um pequeno atraso se houver erro de permissão/rede
+        console.error("[Funnel] Erro CRÍTICO ao carregar conteúdo:", err);
+        // Exibe erro no console detalhado para depuração
+        if (err && typeof err === 'object') {
+          console.error("[Funnel] Detalhes do erro:", JSON.stringify(err, null, 2));
+        }
+        
+        // Tenta novamente após um pequeno atraso
         setTimeout(() => {
           if (active) {
             loadPublished().then(p => {
@@ -99,7 +104,9 @@ export function useFunnelDraft(): FunnelDraft {
                 console.log("[Funnel] Conteúdo carregado no retry.");
                 setDraft(p);
               }
-            }).catch(() => {});
+            }).catch(retryErr => {
+               console.error("[Funnel] Erro no retry:", retryErr);
+            });
           }
         }, 3000);
       });
