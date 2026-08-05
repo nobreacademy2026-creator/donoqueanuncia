@@ -1644,11 +1644,11 @@ export function ContentSection({
                         />
                       </label>
 
-                      {draft.steps?.[item.id]?.image && (
+                      { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio) && (
                         <button
                           onClick={() => {
-                            updateStep(item.id, { image: "" });
-                            toast.info("Imagem removida da prévia.");
+                            updateStep(item.id, { image: "", audio: "" });
+                            toast.info("Mídia removida da prévia.");
                           }}
                           className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
                         >
