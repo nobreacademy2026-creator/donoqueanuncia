@@ -75,6 +75,7 @@ function getErrorMessage(error: unknown): string {
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
+  const [isAutosaving, setIsAutosaving] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -91,6 +92,26 @@ function AdminDashboard() {
     }
     void init().catch((error) => console.error("[Admin] Falha ao carregar conteúdo", error));
   }, []);
+
+  // Autosave logic
+  useEffect(() => {
+    if (draft === EMPTY_DRAFT) return;
+
+    const timer = setTimeout(async () => {
+      setIsAutosaving(true);
+      try {
+        writeDraft(draft);
+        // We don't publish automatically to avoid hitting DB limits or overwriting production
+        // but we ensure localStorage is always fresh.
+        console.log("[Admin] Rascunho salvo automaticamente no cache local.");
+      } finally {
+        // Simulated delay for visual feedback
+        setTimeout(() => setIsAutosaving(false), 1000);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [draft]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -324,6 +345,12 @@ function LegacyAdminDashboard() {
           </div>
 
           <div className="flex items-center gap-4">
+            {isAutosaving && (
+              <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest animate-pulse">
+                <RefreshCw className="h-3 w-3 animate-spin" />
+                Salvando...
+              </div>
+            )}
             <div
               className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-2 ${
                 theme === "dark" ? "bg-white/5 text-zinc-400" : "bg-zinc-100 text-zinc-600"
