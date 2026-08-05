@@ -102,7 +102,7 @@ function Index() {
     else setStep(step - 1);
   }
 
-  if (stage === ("sales" as any)) {
+  if (stage === "sales") {
     return <SalesPage draft={draft.sales} />;
   }
 
@@ -119,6 +119,7 @@ function Index() {
       <div className="mx-auto flex min-h-[80vh] max-w-3xl items-start justify-center px-5 pt-0 pb-6">
         {stage === "intro" ? (
           <QuizIntro
+            draft={draft.steps['intro'] || undefined}
             onStart={() => {
               trackEvent("quiz_iniciado");
               setStage("quiz");

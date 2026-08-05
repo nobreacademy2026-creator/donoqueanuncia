@@ -153,7 +153,9 @@ export function SalesPage({ draft = {} }: { draft?: SalesDraft }) {
         <div className="mx-auto max-w-4xl">
           <div className="aspect-video w-full overflow-hidden rounded-[2.5rem] bg-zinc-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] relative group mb-12 border-8 border-white">
             <img 
+              key={videoThumb}
               src={videoThumb} 
+
               alt="Vídeo explicativo DONO QUE ANUNCIA"
               className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-110"
             />

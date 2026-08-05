@@ -705,6 +705,8 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
         sales: { ...published.sales, ...local.sales },
       };
       setDraft(merged);
+      // Não sobrescrever o rascunho local se ele já contiver algo mais recente? 
+      // Por enquanto, sincronizamos para garantir consistência.
       writeDraft(merged);
     });
   }, []);
@@ -749,6 +751,8 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
       ...current,
       steps: { ...current.steps, [id]: { ...current.steps[id], ...patch } },
     };
+    
+    // Sincronizar campo de vendas se o ID for 'sales'
     if (id === 'sales') {
       next.sales = {
         ...next.sales,
@@ -756,18 +760,26 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
         ...(patch.image ? { videoThumb: patch.image } : {}),
       };
     }
+    
+    // Atualizar estado e persistir rascunho
     setDraft(next);
     writeDraft(next);
   };
 
   const handleUpload = (id: string, file: File | undefined) => {
     if (!file) return;
-    if (file.size > 3_000_000) {
-      toast.error("Arquivo muito grande para a prévia (máx. 3MB).");
+    if (file.size > 5_000_000) {
+      toast.error("Arquivo muito grande (máx. 5MB).");
       return;
     }
     const reader = new FileReader();
-    reader.onload = () => updateStep(id, { image: String(reader.result) });
+    reader.onload = () => {
+      const result = String(reader.result);
+      updateStep(id, { image: result });
+      
+      // Notificar o usuário para salvar se quiser publicar
+      toast.info("Upload concluído na prévia. Clique em 'Salvar' para publicar.");
+    };
     reader.readAsDataURL(file);
   };
 
