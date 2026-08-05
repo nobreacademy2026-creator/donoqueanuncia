@@ -33,6 +33,8 @@ import {
   Download,
   FileText,
   Activity,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -1532,69 +1534,19 @@ export function ContentSection({
                   <div
                     className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
                   >
-                    {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image) ? (
-                      <>
-                        {item.id === "sales" ? (
-                          <video
-                            src={draft.steps?.[item.id]?.image}
-                            className="h-full w-full object-cover"
-                            controls
-                          />
-                        ) : draft.steps?.[item.id]?.audio ? (
-                          <div className="flex h-full w-full items-center justify-center bg-primary/10">
-                            <Music className="h-8 w-8 text-primary animate-pulse" />
-                          </div>
-                        ) : (
-                          <img
-                            key={draft.steps?.[item.id]?.image || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
-                            src={draft.steps?.[item.id]?.image || (item.id === "intro" ? logoAsset.url : "")}
-                            className="h-full w-full object-cover"
-                            alt="Prévia da mídia"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                          <span className="text-[10px] font-black text-white uppercase tracking-widest">
-                            {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
-                          </span>
-                        </div>
-                        <button
-                          onClick={() => {
-                            updateStep(item.id, { image: "", audio: "" });
-                            toast.info("Mídia restaurada para o padrão.");
-                          }}
-                          className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
-                          title="Remover imagem"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </>
-                    ) : item.id === "sales" ? (
-                      <div className="flex h-full w-full items-center justify-center bg-black/20">
-                        <div className="flex flex-col items-center gap-2">
-                          <Video className="h-8 w-8 text-zinc-500/50" />
-                          <span className="text-[10px] font-bold text-zinc-500 uppercase">
-                            Sem Vídeo
-                          </span>
-                        </div>
-                      </div>
-                      ) : item.id === "audio" || item.id === "objecao" || item.id === "beneficios" ? (
-                      <div className="flex h-full w-full items-center justify-center bg-black/5">
-                        <div className="flex flex-col items-center gap-2">
-                          <Music className="h-8 w-8 text-zinc-400/30" />
-                          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
-                            Sem Áudio/Mídia
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-black/5">
-                        <div className="flex flex-col items-center gap-2">
-                          <ImageIcon className="h-8 w-8 text-zinc-400/30" />
-                          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
-                            Sem Imagem
-                          </span>
-                        </div>
-                      </div>
+                    <MediaPreview item={item} draft={draft} />
+                    
+                    { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
+                      <button
+                        onClick={() => {
+                          updateStep(item.id, { image: "", audio: "" });
+                          toast.info("Mídia restaurada para o padrão.");
+                        }}
+                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
+                        title="Remover imagem"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
                     )}
                   </div>
                   <div className="flex-1 space-y-3">
@@ -1760,11 +1712,10 @@ export function ContentSection({
           </div>
         ))}
       </div>
-
       <button
         onClick={handleSaveContent}
         disabled={saving}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-60"
+        className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-sm font-black uppercase text-primary-foreground shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-60"
       >
         <Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar Alterações de Conteúdo"}
       </button>
@@ -1855,6 +1806,96 @@ export function LivePreview({ theme }: { theme: "dark" | "light" }) {
       >
         Atualiza automaticamente enquanto você edita
       </p>
+    </div>
+  );
+}
+
+function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
+  const [status, setStatus] = useState<'loading' | 'error' | 'success'>('loading');
+  const mediaUrl = draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : "");
+  const isAudio = item.id === "audio" || (mediaUrl && mediaUrl.match(/\.(mp3|wav|ogg)/i));
+
+  useEffect(() => {
+    if (!mediaUrl) {
+      setStatus('success'); // Empty state is not an error
+      return;
+    }
+    
+    setStatus('loading');
+    
+    if (isAudio) {
+      const audio = new Audio();
+      audio.src = mediaUrl;
+      audio.oncanplaythrough = () => setStatus('success');
+      audio.onerror = () => setStatus('error');
+    } else {
+      const img = new Image();
+      img.src = mediaUrl;
+      img.onload = () => setStatus('success');
+      img.onerror = () => setStatus('error');
+    }
+  }, [mediaUrl, isAudio]);
+
+  if (!mediaUrl && item.id !== "intro") {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black/5">
+        <div className="flex flex-col items-center gap-2">
+          {item.id === "sales" ? (
+            <Video className="h-8 w-8 text-zinc-400/30" />
+          ) : isAudio ? (
+            <Music className="h-8 w-8 text-zinc-400/30" />
+          ) : (
+            <ImageIcon className="h-8 w-8 text-zinc-400/30" />
+          )}
+          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
+            Sem {item.id === "sales" ? "Vídeo" : isAudio ? "Áudio" : "Imagem"}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative h-full w-full">
+      {status === 'loading' && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-900/50 backdrop-blur-sm">
+          <Loader2 className="h-6 w-6 text-primary animate-spin" />
+        </div>
+      )}
+      
+      {status === 'error' && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-red-950/20 backdrop-blur-sm p-4 text-center">
+          <AlertTriangle className="h-6 w-6 text-red-500 mb-1" />
+          <span className="text-[9px] font-black text-red-500 uppercase tracking-tighter">
+            Erro ao carregar mídia
+          </span>
+        </div>
+      )}
+
+      {item.id === "sales" ? (
+        <video
+          src={mediaUrl}
+          className="h-full w-full object-cover"
+          controls
+        />
+      ) : isAudio ? (
+        <div className="flex h-full w-full items-center justify-center bg-primary/10">
+          <Music className="h-8 w-8 text-primary animate-pulse" />
+        </div>
+      ) : (
+        <img
+          key={mediaUrl || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
+          src={mediaUrl}
+          className="h-full w-full object-cover"
+          alt="Prévia da mídia"
+        />
+      )}
+      
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+        <span className="text-[10px] font-black text-white uppercase tracking-widest">
+          {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
+        </span>
+      </div>
     </div>
   );
 }
