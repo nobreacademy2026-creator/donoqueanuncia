@@ -573,15 +573,17 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   const handleSave = async () => {
     setSaving(true);
     try {
-      const currentDraft = readDraft();
-      // Garantir que os estados locais dos inputs estão refletidos no rascunho antes de publicar
-      currentDraft.sales = {
-        ...currentDraft.sales,
-        checkoutUrl,
-        promoPrice,
-        fullPrice,
-        vslUrl,
-        videoThumb: vslUrl // Sincroniza o thumb com a URL por padrão
+      // Usar o rascunho mais recente (draft) em vez de ler do localStorage
+      const updatedDraft = {
+        ...draft,
+        sales: {
+          ...draft.sales,
+          checkoutUrl,
+          promoPrice,
+          fullPrice,
+          vslUrl,
+          videoThumb: vslUrl 
+        }
       };
       
       setDraft(currentDraft); // Atualiza o estado global
