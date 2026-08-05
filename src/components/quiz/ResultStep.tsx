@@ -1,7 +1,7 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
 import { useState, useRef } from "react";
 
-export function ResultStep({ onNext }: { onNext: () => void }) {
+export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { title?: string; image?: string; audio?: string; options?: string[] } | undefined }) {
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">("objection");
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -22,7 +22,7 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
       <div className="animate-rise-in mx-auto w-full max-w-2xl">
         <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
           <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl">
-            Clique no áudio e escute o que meu aluno disse 😲
+            {draft?.title || "Clique no áudio e escute o que meu aluno disse 😲"}
           </h3>
 
           <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-zinc-100 bg-[#f0f2f5] p-4 shadow-sm">
@@ -51,10 +51,10 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                 </div>
               </div>
               <div className="h-10 w-10 rounded-full bg-zinc-300 overflow-hidden border-2 border-white shadow-sm">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" alt="Student" />
+                <img src={draft?.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"} alt="Student" />
               </div>
             </div>
-            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" className="hidden" />
+            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} src={draft?.audio || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} className="hidden" />
           </div>
 
           <div className="space-y-6">
@@ -66,12 +66,12 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
               <div className="flex items-center gap-3 p-4 border-b border-zinc-100">
                 <div className="h-12 w-12 rounded-full ring-2 ring-pink-500 p-0.5">
                   <div className="h-full w-full rounded-full bg-zinc-200 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" alt="Profile" className="h-full w-full object-cover" />
+                    <img src={draft?.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"} alt="Profile" className="h-full w-full object-cover" />
                   </div>
                 </div>
                 <div className="text-left">
-                   <p className="font-bold text-sm">taju.intima</p>
-                   <p className="text-xs text-zinc-500">Taju Íntima</p>
+                   <p className="font-bold text-sm">{draft?.options?.[0] || "taju.intima"}</p>
+                   <p className="text-xs text-zinc-500">{draft?.options?.[1] || "Taju Íntima"}</p>
                 </div>
               </div>
               <div className="flex justify-around p-3 text-center border-b border-zinc-100">
@@ -80,16 +80,16 @@ export function ResultStep({ onNext }: { onNext: () => void }) {
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">posts</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">12,7 mil</p>
+                  <p className="font-bold text-sm">{draft?.options?.[2] || "12,7 mil"}</p>
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguidores</p>
                 </div>
                 <div>
-                  <p className="font-bold text-sm">727</p>
+                  <p className="font-bold text-sm">{draft?.options?.[3] || "727"}</p>
                   <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">seguindo</p>
                 </div>
               </div>
               <div className="p-4 text-left text-xs space-y-1">
-                 <p className="font-bold">Taju Íntima</p>
+                 <p className="font-bold">{draft?.options?.[1] || "Taju Íntima"}</p>
                  <p>Moda Íntima e Acessórios</p>
                 <p>•Destaque do negócio 01 🚀</p>
                 <p>•Informação relevante 02 📈</p>

@@ -149,6 +149,7 @@ function Index() {
         {stage === "result" ? (
           <div className="w-full">
             <ResultStep 
+              draft={draft.steps['audio']}
               onNext={() => {
                 setStage("sales");
                 window.scrollTo({ top: 0 });
