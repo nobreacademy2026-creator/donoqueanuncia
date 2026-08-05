@@ -1560,6 +1560,20 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   const [nonce, setNonce] = useState(0);
 
+  useEffect(() => {
+    // Sincronizar prévia periodicamente se necessário
+    const interval = setInterval(() => {
+      const frame = document.querySelector('iframe[data-funnel-preview]') as HTMLIFrameElement;
+      if (frame && frame.contentWindow) {
+        frame.contentWindow.postMessage(
+          { type: "dqa:funnel-draft", draft: readDraft() },
+          window.location.origin,
+        );
+      }
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div
       className={`sticky top-6 rounded-[2rem] border p-4 transition-all ${
@@ -1609,11 +1623,13 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
           src={`/?preview=1&t=${nonce}`}
           title="Prévia da Landing Page"
           onLoad={(e) => {
-            const currentDraft = readDraft();
-            (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
-              { type: "dqa:funnel-draft", draft: currentDraft },
-              window.location.origin,
-            );
+            setTimeout(() => {
+              const currentDraft = readDraft();
+              (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
+                { type: "dqa:funnel-draft", draft: currentDraft },
+                window.location.origin,
+              );
+            }, 500); // Delay para garantir que a página carregou os scripts de postMessage
           }}
           className="h-[720px] w-full bg-white"
         />
