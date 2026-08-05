@@ -59,7 +59,12 @@ export function isAbortError(value: unknown): boolean {
     if (typeof current !== "object") {
       return typeof current === "string" && current.includes("aborted");
     }
-    const candidate = current as { name?: string; message?: string; code?: string; cause?: unknown };
+    const candidate = current as {
+      name?: string;
+      message?: string;
+      code?: string;
+      cause?: unknown;
+    };
     const message = typeof candidate.message === "string" ? candidate.message : "";
     const code = candidate.code;
     if (

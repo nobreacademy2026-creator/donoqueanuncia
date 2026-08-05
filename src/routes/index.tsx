@@ -166,6 +166,7 @@ function Index() {
               : {}),
           }}
           tracking={draft.tracking}
+          steps={draft.steps}
         />
       </>
     );

@@ -231,7 +231,17 @@ type SalesDraft = {
   checkoutUrl?: string;
 };
 
-export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; tracking?: any }) {
+type FunnelStep = { title?: string; image?: string; audio?: string; options?: string[] };
+
+export function SalesPage({
+  draft = {},
+  tracking = {},
+  steps = {},
+}: {
+  draft?: SalesDraft;
+  tracking?: any;
+  steps?: Record<string, FunnelStep>;
+}) {
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
     draft.videoThumb !== undefined
@@ -242,6 +252,8 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
   const fullPrice = draft.fullPrice || "R$ 497,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
+  const testimonial = steps["audio"];
+  const niche = steps["niche"];
 
   const [timeLeft, setTimeLeft] = React.useState(900); // 15 minutes in seconds
 
@@ -397,12 +409,28 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
       </section>
 
       {/* Audio Proof */}
-      <Section title="Clique no áudio e escute o que meu aluno disse 😱" className="max-w-3xl">
+      <Section
+        title={testimonial?.title || "Clique no áudio e escute o que meu aluno disse 😱"}
+        className="max-w-3xl"
+      >
         <div className="surface-card group relative overflow-hidden rounded-[2.5rem] p-8 shadow-2xl border-2 border-green-100 bg-white transition-all duration-300 hover:shadow-green-200/40">
           <div className="flex items-center gap-6">
-            <button className="h-20 w-20 flex-shrink-0 rounded-full bg-green-500 flex items-center justify-center text-white shadow-xl shadow-green-500/30 transition-transform active:scale-95 group-hover:scale-105">
-              <Play className="h-10 w-10 fill-current ml-1" />
-            </button>
+            {testimonial?.audio ? (
+              <audio
+                src={testimonial.audio}
+                controls
+                preload="metadata"
+                className="w-full max-w-xs"
+              />
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="h-20 w-20 flex-shrink-0 rounded-full bg-green-500 flex items-center justify-center text-white shadow-xl shadow-green-500/30 opacity-60"
+              >
+                <Play className="h-10 w-10 fill-current ml-1" />
+              </button>
+            )}
             <div className="flex-1 space-y-4">
               <div className="flex justify-between items-end">
                 <div>
@@ -436,9 +464,17 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
           para o próximo nível.
         </p>
         <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
-          <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
-            Foto/Prova Social do Aluno
-          </div>
+          {testimonial?.image ? (
+            <img
+              src={testimonial.image}
+              alt="Depoimento de aluno"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
+              Foto/Prova Social do Aluno
+            </div>
+          )}
         </div>
         <div className="mt-8 text-center">
           <CTAButton
@@ -450,18 +486,26 @@ export function SalesPage({ draft = {}, tracking = {} }: { draft?: SalesDraft; t
       </Section>
 
       {/* Nicho Proof (Carousel Placeholder) */}
-      <Section title="SERÁ QUE FUNCIONA PRO SEU NICHO?">
+      <Section title={niche?.title || "SERÁ QUE FUNCIONA PRO SEU NICHO?"}>
         <p className="text-center text-muted-foreground -mt-4 mb-8">
           Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje
           vendem muito 👇
         </p>
         <div className="flex gap-4 overflow-x-auto pb-4 px-2 no-scrollbar">
-          {[1, 2, 3, 4].map((i) => (
+          {(niche?.image ? [niche.image] : [1, 2, 3, 4]).map((item, i) => (
             <div
-              key={i}
+              key={String(item)}
               className="min-w-[280px] aspect-[4/5] rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm flex items-center justify-center text-muted-foreground"
             >
-              Print de Resultado {i}
+              {typeof item === "string" ? (
+                <img
+                  src={item}
+                  alt="Resultado de aluno"
+                  className="h-full w-full rounded-2xl object-cover"
+                />
+              ) : (
+                <>Print de Resultado {i + 1}</>
+              )}
             </div>
           ))}
         </div>
