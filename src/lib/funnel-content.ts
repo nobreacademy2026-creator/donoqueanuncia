@@ -11,9 +11,14 @@ export type FunnelDraft = {
     promoPrice?: string;
     checkoutUrl?: string;
   };
+  tracking?: {
+    metaPixelId?: string;
+    ga4Id?: string;
+    gtmId?: string;
+  };
 };
 
-export const EMPTY_DRAFT: FunnelDraft = { steps: {}, sales: {} };
+export const EMPTY_DRAFT: FunnelDraft = { steps: {}, sales: {}, tracking: {} };
 export const DRAFT_KEY = "dqa_funnel_draft";
 export const DRAFT_EVENT = "dqa:funnel-draft";
 export const CONFIG_KEY = "funnel_content";
@@ -22,7 +27,10 @@ export const CONFIG_KEY = "funnel_content";
 export async function publishDraft(draft: FunnelDraft) {
   const { error } = await supabase
     .from("quiz_config")
-    .upsert({ key: CONFIG_KEY, value: draft as any, updated_at: new Date().toISOString() }, { onConflict: "key" });
+    .upsert(
+      { key: CONFIG_KEY, value: draft as any, updated_at: new Date().toISOString() },
+      { onConflict: "key" },
+    );
   if (error) throw error;
 }
 
@@ -35,7 +43,7 @@ export async function loadPublished(): Promise<FunnelDraft | null> {
     .maybeSingle();
   if (error || !data?.value) return null;
   const parsed = data.value as FunnelDraft;
-  return { steps: parsed.steps ?? {}, sales: parsed.sales ?? {} };
+  return { steps: parsed.steps ?? {}, sales: parsed.sales ?? {}, tracking: parsed.tracking ?? {} };
 }
 
 export function readDraft(): FunnelDraft {
@@ -44,7 +52,11 @@ export function readDraft(): FunnelDraft {
     const raw = window.localStorage.getItem(DRAFT_KEY);
     if (!raw) return EMPTY_DRAFT;
     const parsed = JSON.parse(raw) as FunnelDraft;
-    return { steps: parsed.steps ?? {}, sales: parsed.sales ?? {} };
+    return {
+      steps: parsed.steps ?? {},
+      sales: parsed.sales ?? {},
+      tracking: parsed.tracking ?? {},
+    };
   } catch {
     return EMPTY_DRAFT;
   }
@@ -59,7 +71,10 @@ export function writeDraft(draft: FunnelDraft) {
   }
   window.dispatchEvent(new CustomEvent(DRAFT_EVENT, { detail: draft }));
   document.querySelectorAll("iframe[data-funnel-preview]").forEach((frame) => {
-    (frame as HTMLIFrameElement).contentWindow?.postMessage({ type: DRAFT_EVENT, draft }, window.location.origin);
+    (frame as HTMLIFrameElement).contentWindow?.postMessage(
+      { type: DRAFT_EVENT, draft },
+      window.location.origin,
+    );
   });
 }
 
@@ -83,13 +98,15 @@ export function useFunnelDraft(): FunnelDraft {
 
     setDraft(readDraft());
 
-    const onCustom = (event: Event) => setDraft((event as CustomEvent<FunnelDraft>).detail ?? readDraft());
+    const onCustom = (event: Event) =>
+      setDraft((event as CustomEvent<FunnelDraft>).detail ?? readDraft());
     const onStorage = (event: StorageEvent) => {
       if (event.key === DRAFT_KEY) setDraft(readDraft());
     };
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
-      if (event.data?.type === DRAFT_EVENT && event.data.draft) setDraft(event.data.draft as FunnelDraft);
+      if (event.data?.type === DRAFT_EVENT && event.data.draft)
+        setDraft(event.data.draft as FunnelDraft);
     };
 
     window.addEventListener(DRAFT_EVENT, onCustom);
