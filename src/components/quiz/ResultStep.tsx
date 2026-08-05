@@ -22,7 +22,7 @@ export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { ti
       <div className="animate-rise-in mx-auto w-full max-w-2xl">
         <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
           <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl">
-            Clique no áudio e escute o que meu aluno disse 😲
+            {draft?.title || "Clique no áudio e escute o que meu aluno disse 😲"}
           </h3>
 
           <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-zinc-100 bg-[#f0f2f5] p-4 shadow-sm">
@@ -51,7 +51,7 @@ export function ResultStep({ onNext, draft }: { onNext: () => void; draft?: { ti
                 </div>
               </div>
               <div className="h-10 w-10 rounded-full bg-zinc-300 overflow-hidden border-2 border-white shadow-sm">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" alt="Student" />
+                <img src={draft?.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"} alt="Student" />
               </div>
             </div>
             <audio ref={audioRef} onEnded={() => setIsPlaying(false)} src={draft?.audio || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} className="hidden" />
