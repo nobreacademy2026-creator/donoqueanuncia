@@ -102,7 +102,7 @@ function Index() {
     else setStep(step - 1);
   }
 
-  if (stage === ("sales" as any)) {
+  if (stage === "sales") {
     return <SalesPage draft={draft.sales} />;
   }
 
