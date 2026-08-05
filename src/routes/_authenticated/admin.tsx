@@ -744,8 +744,10 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
   const handleSaveContent = async () => {
     setSaving(true);
     try {
-      const currentDraft = readDraft();
-      await publishDraft(currentDraft);
+      // Garantir que publicamos o estado 'draft' que está no componente,
+      // pois ele é a fonte da verdade mais recente durante a edição
+      writeDraft(draft); // Sincroniza o localStorage
+      await publishDraft(draft);
       toast.success("Conteúdo do quiz publicado com sucesso!");
     } catch (err: any) {
       console.error("Erro ao publicar:", err);
