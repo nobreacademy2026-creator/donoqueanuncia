@@ -99,7 +99,10 @@ export function writeDraft(draft: FunnelDraft) {
 
 /** Live draft inside the admin preview (?preview=1); published content otherwise. */
 export function useFunnelDraft(): FunnelDraft {
-  const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
+  const [draft, setDraft] = useState<FunnelDraft>(() => {
+    // Initial state from cache if available to prevent flash
+    return readDraft() || EMPTY_DRAFT;
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

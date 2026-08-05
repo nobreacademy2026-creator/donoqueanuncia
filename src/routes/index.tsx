@@ -161,7 +161,7 @@ function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-zinc-950 text-white selection:bg-primary selection:text-white overflow-x-hidden">
       {/* Fallback visual sutil para dados em carregamento ou erro */}
       {!draft.steps['intro'] && stage === "intro" && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 text-white p-6 text-center">
