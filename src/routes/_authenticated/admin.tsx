@@ -723,22 +723,26 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    loadPublished().then((published) => {
+    async function init() {
+      const published = await loadPublished();
       if (!published) return;
       
-      // Sincronizar o estado local com o publicado apenas se o local estiver vazio
-      // ou se quisermos garantir que o admin veja o que está no ar.
-      // O rascunho (localStorage) é usado para o preview ao vivo.
       const local = readDraft();
       
-      // Se não houver rascunho local (EMPTY_DRAFT), usamos o publicado
+      // Se não houver rascunho local, usamos o publicado.
+      // Caso contrário, mergeamos os dois para garantir que o AdminDashboard 
+      // veja todas as imagens e textos já publicados E os rascunhos locais.
       const hasLocalData = Object.keys(local.steps).length > 0 || Object.keys(local.sales).length > 0;
       
-      const merged: FunnelDraft = hasLocalData ? local : published;
+      const merged: FunnelDraft = {
+        steps: { ...published.steps, ...local.steps },
+        sales: { ...published.sales, ...local.sales },
+      };
       
       setDraft(merged);
       writeDraft(merged);
-    });
+    }
+    init();
   }, []);
 
   const handleSaveContent = async () => {
