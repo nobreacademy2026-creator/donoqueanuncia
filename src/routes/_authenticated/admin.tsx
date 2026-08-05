@@ -1811,3 +1811,93 @@ export function LivePreview({ theme }: { theme: "dark" | "light" }) {
     </div>
   );
 }
+
+function MediaPreview({ item, draft }: { item: any, draft: FunnelDraft }) {
+  const [status, setStatus] = useState<'loading' | 'error' | 'success'>('loading');
+  const mediaUrl = draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : "");
+  const isAudio = item.id === "audio" || (mediaUrl && mediaUrl.match(/\.(mp3|wav|ogg)/i));
+
+  useEffect(() => {
+    if (!mediaUrl) {
+      setStatus('success'); // Empty state is not an error
+      return;
+    }
+    
+    setStatus('loading');
+    
+    if (isAudio) {
+      const audio = new Audio();
+      audio.src = mediaUrl;
+      audio.oncanplaythrough = () => setStatus('success');
+      audio.onerror = () => setStatus('error');
+    } else {
+      const img = new Image();
+      img.src = mediaUrl;
+      img.onload = () => setStatus('success');
+      img.onerror = () => setStatus('error');
+    }
+  }, [mediaUrl, isAudio]);
+
+  if (!mediaUrl && item.id !== "intro") {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black/5">
+        <div className="flex flex-col items-center gap-2">
+          {item.id === "sales" ? (
+            <Video className="h-8 w-8 text-zinc-400/30" />
+          ) : isAudio ? (
+            <Music className="h-8 w-8 text-zinc-400/30" />
+          ) : (
+            <ImageIcon className="h-8 w-8 text-zinc-400/30" />
+          )}
+          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
+            Sem {item.id === "sales" ? "Vídeo" : isAudio ? "Áudio" : "Imagem"}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative h-full w-full">
+      {status === 'loading' && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-900/50 backdrop-blur-sm">
+          <Loader2 className="h-6 w-6 text-primary animate-spin" />
+        </div>
+      )}
+      
+      {status === 'error' && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-red-950/20 backdrop-blur-sm p-4 text-center">
+          <AlertTriangle className="h-6 w-6 text-red-500 mb-1" />
+          <span className="text-[9px] font-black text-red-500 uppercase tracking-tighter">
+            Erro ao carregar mídia
+          </span>
+        </div>
+      )}
+
+      {item.id === "sales" ? (
+        <video
+          src={mediaUrl}
+          className="h-full w-full object-cover"
+          controls
+        />
+      ) : isAudio ? (
+        <div className="flex h-full w-full items-center justify-center bg-primary/10">
+          <Music className="h-8 w-8 text-primary animate-pulse" />
+        </div>
+      ) : (
+        <img
+          key={mediaUrl || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
+          src={mediaUrl}
+          className="h-full w-full object-cover"
+          alt="Prévia da mídia"
+        />
+      )}
+      
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+        <span className="text-[10px] font-black text-white uppercase tracking-widest">
+          {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
+        </span>
+      </div>
+    </div>
+  );
+}
