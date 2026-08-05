@@ -995,7 +995,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                     <div className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border overflow-hidden truncate ${
                       theme === "dark" ? "bg-zinc-800 text-zinc-400 border-white/5" : "bg-zinc-50 text-zinc-600 border-zinc-200"
                     }`}>
-                      {draft.steps[item.id]?.audio ? (
+                      {draft.steps?.[item.id]?.audio ? (
                         <span className="text-green-500 font-bold">● Áudio carregado (Base64)</span>
                       ) : "Nenhum áudio selecionado"}
                     </div>
