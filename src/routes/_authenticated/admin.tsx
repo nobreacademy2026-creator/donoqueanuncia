@@ -41,6 +41,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -170,9 +171,9 @@ function AdminDashboard() {
           }`}>
             <div className="p-8 sm:p-10">
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
-              {activeTab === "config" && <ConfigSection theme={theme} />}
+              {activeTab === "config" && <ConfigSection theme={theme} setDraft={setDraft} />}
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
-              {activeTab === "content" && <ContentSection theme={theme} />}
+              {activeTab === "content" && <ContentSection theme={theme} draft={draft} setDraft={setDraft} />}
             </div>
           </div>
 
@@ -516,7 +517,7 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
   );
 }
 
-function ConfigSection({ theme }: { theme: "dark" | "light" }) {
+function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft: (d: FunnelDraft) => void }) {
   const initial = readDraft();
   const [checkoutUrl, setCheckoutUrl] = useState(initial.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
   const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
@@ -525,7 +526,9 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
 
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
     const current = readDraft();
-    writeDraft({ ...current, sales: { ...current.sales, ...patch } });
+    const updated = { ...current, sales: { ...current.sales, ...patch } };
+    setDraft(updated); 
+    writeDraft(updated);
   };
 
   const [saving, setSaving] = useState(false);
@@ -701,7 +704,7 @@ function TrackingSection({ theme }: { theme: "dark" | "light" }) {
   );
 }
 
-function ContentSection({ theme }: { theme: "dark" | "light" }) {
+function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", draft: FunnelDraft, setDraft: (d: FunnelDraft) => void }) {
   const [questions, setQuestions] = useState([
     { id: 'intro', title: 'Página Inicial (Intro)', type: 'página' },
     { id: 'dor', title: 'Pergunta: Dor do Cliente', type: 'pergunta' },
@@ -713,7 +716,6 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     { id: 'sales', title: 'Página de Vendas (Final)', type: 'página' },
   ]);
 
-  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -1067,8 +1069,9 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
           src={`/?preview=1&t=${nonce}`}
           title="Prévia da Landing Page"
           onLoad={(e) => {
+            const currentDraft = readDraft();
             (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
-              { type: "dqa:funnel-draft", draft: readDraft() },
+              { type: "dqa:funnel-draft", draft: currentDraft },
               window.location.origin,
             );
           }}
