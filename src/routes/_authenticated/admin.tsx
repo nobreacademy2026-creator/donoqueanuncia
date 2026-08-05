@@ -1473,25 +1473,29 @@ export function ContentSection({
     const isVideo = file.type.startsWith("video/");
 
     if (field === "audio" && !isAudio) {
-      toast.error("Por favor, envie apenas arquivos de áudio (MP3, WAV, etc).");
+      toast.error(`Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas áudio (MP3, WAV, OGG).`);
       return;
     }
 
     if (field === "image" && id !== "sales" && !isImage) {
-      toast.error("Por favor, envie apenas arquivos de imagem (JPG, PNG, WEBP, etc).");
+      toast.error(`Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas imagens (JPG, PNG, WEBP).`);
       return;
     }
 
     if (id === "sales" && field === "image" && !isImage && !isVideo) {
-      toast.error("Para o vídeo de vendas, envie um arquivo de vídeo ou uma imagem de capa.");
+      toast.error(`Tipo de arquivo inválido ("${file.type}"). Para o vídeo de vendas, envie um arquivo de vídeo ou uma imagem de capa.`);
       return;
     }
 
     // Size validation
-    const maxSize = field === "audio" || isVideo ? 50_000_000 : 5_000_000; // 50MB for audio/video, 5MB for images
+    const isLargeMedia = field === "audio" || isVideo;
+    const maxSize = isLargeMedia ? 50_000_000 : 5_000_000; // 50MB for audio/video, 5MB for images
+    
     if (file.size > maxSize) {
+      const sizeMB = (file.size / 1_000_000).toFixed(2);
+      const limitMB = maxSize / 1_000_000;
       toast.error(
-        `Arquivo muito grande. O limite para ${field === "audio" ? "áudio" : isVideo ? "vídeo" : "imagens"} é de ${maxSize / 1_000_000}MB.`,
+        `Arquivo muito grande (${sizeMB}MB). O limite máximo permitido para ${isLargeMedia ? "vídeo/áudio" : "imagens"} nesta seção é de ${limitMB}MB.`
       );
       return;
     }
