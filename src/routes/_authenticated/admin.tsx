@@ -46,6 +46,7 @@ import {
 import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { uploadAdminMedia } from "@/lib/admin-media-upload";
+import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
@@ -1386,6 +1387,9 @@ export function ContentSection({
       };
     }
 
+    // Se for o passo 'intro', garantir que o rascunho de vendas não seja afetado por engano
+    // mas o resto do código já cuida do merge profundo.
+
     setDraft(next);
     writeDraft(next);
   };
@@ -1528,7 +1532,7 @@ export function ContentSection({
                   <div
                     className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
                   >
-                    {draft.steps?.[item.id]?.image ? (
+                    {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && !draft.steps?.[item.id]?.image) ? (
                       <>
                         {item.id === "sales" ? (
                           <video
@@ -1536,22 +1540,26 @@ export function ContentSection({
                             className="h-full w-full object-cover"
                             controls
                           />
+                        ) : draft.steps?.[item.id]?.audio ? (
+                          <div className="flex h-full w-full items-center justify-center bg-primary/10">
+                            <Music className="h-8 w-8 text-primary animate-pulse" />
+                          </div>
                         ) : (
                           <img
-                            src={draft.steps?.[item.id]?.image}
+                            src={draft.steps?.[item.id]?.image || (item.id === "intro" ? logoAsset.url : "")}
                             className="h-full w-full object-cover"
                             alt="Prévia da mídia"
                           />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
-                            Preview Atual
+                            {draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio ? "Preview Atual" : "Padrão do Sistema"}
                           </span>
                         </div>
                         <button
                           onClick={() => {
-                            updateStep(item.id, { image: "" });
-                            toast.info("Imagem removida da prévia.");
+                            updateStep(item.id, { image: "", audio: "" });
+                            toast.info("Mídia restaurada para o padrão.");
                           }}
                           className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
                           title="Remover imagem"
@@ -1565,6 +1573,15 @@ export function ContentSection({
                           <Video className="h-8 w-8 text-zinc-500/50" />
                           <span className="text-[10px] font-bold text-zinc-500 uppercase">
                             Sem Vídeo
+                          </span>
+                        </div>
+                      </div>
+                      ) : item.id === "audio" || item.id === "objecao" || item.id === "beneficios" ? (
+                      <div className="flex h-full w-full items-center justify-center bg-black/5">
+                        <div className="flex flex-col items-center gap-2">
+                          <Music className="h-8 w-8 text-zinc-400/30" />
+                          <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
+                            Sem Áudio/Mídia
                           </span>
                         </div>
                       </div>
@@ -1582,13 +1599,22 @@ export function ContentSection({
                   <div className="flex-1 space-y-3">
                     <input
                       type="text"
-                      placeholder={item.id === "sales" ? "URL do vídeo/thumb" : "URL da imagem"}
-                      value={
-                        draft.steps?.[item.id]?.image?.startsWith("data:")
-                          ? ""
-                          : (draft.steps?.[item.id]?.image ?? "")
+                      placeholder={
+                        item.id === "sales" 
+                          ? "URL do vídeo/thumb" 
+                          : item.id === "audio" 
+                            ? "URL do áudio (mp3/wav)" 
+                            : "URL da imagem"
                       }
-                      onChange={(e) => updateStep(item.id, { image: e.target.value })}
+                      value={
+                        (draft.steps?.[item.id]?.image?.startsWith("data:") || draft.steps?.[item.id]?.audio?.startsWith("data:"))
+                          ? ""
+                          : (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" ? logoAsset.url : ""))
+                      }
+                      onChange={(e) => {
+                        const field = (item.id === "audio" || (e.target.value.match(/\.(mp3|wav|ogg)/i))) ? "audio" : "image";
+                        updateStep(item.id, { [field]: e.target.value });
+                      }}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark"
                           ? "border-white/10 bg-black/40 text-white"
@@ -1599,23 +1625,34 @@ export function ContentSection({
                       <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                         {item.id === "sales" ? (
                           <Video className="h-3 w-3" />
+                        ) : item.id === "audio" ? (
+                          <Music className="h-3 w-3" />
                         ) : (
                           <ImageIcon className="h-3 w-3" />
                         )}
-                        {item.id === "sales" ? "Subir Vídeo" : "Alterar Upload"}
+                        {item.id === "sales" ? "Subir Vídeo" : item.id === "audio" ? "Subir Áudio" : "Alterar Upload"}
                         <input
                           type="file"
-                          accept={item.id === "sales" ? "video/*,image/*" : "image/*"}
+                          accept={
+                            item.id === "sales" 
+                              ? "video/*,image/*" 
+                              : item.id === "audio" 
+                                ? "audio/*" 
+                                : "image/*"
+                          }
                           className="hidden"
-                          onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                          onChange={(e) => {
+                            const field = item.id === "audio" ? "audio" : "image";
+                            handleUpload(item.id, e.target.files?.[0], field);
+                          }}
                         />
                       </label>
 
-                      {draft.steps?.[item.id]?.image && (
+                      { (draft.steps?.[item.id]?.image || draft.steps?.[item.id]?.audio || (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
                         <button
                           onClick={() => {
-                            updateStep(item.id, { image: "" });
-                            toast.info("Imagem removida da prévia.");
+                            updateStep(item.id, { image: "", audio: "" });
+                            toast.info("Mídia restaurada para o padrão.");
                           }}
                           className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
                         >
