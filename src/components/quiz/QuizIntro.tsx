@@ -1,52 +1,69 @@
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, BarChart3, Target } from "lucide-react";
 import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any }) {
   const title = draft?.title || "DESCUBRA POR QUE SEUS ANÚNCIOS NÃO TRAZEM CLIENTES.";
   const description = draft?.description || "Responda o diagnóstico gratuito de 2 minutos e receba o plano personalizado para o seu negócio.";
-  const logo = logoAsset.url; // Force the logo as requested
+  const logo = logoAsset.url;
 
   return (
-    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-10">
-      <div className="mb-8 flex flex-col items-center relative">
-        <div className="absolute inset-0 bg-radial-gradient from-primary/10 to-transparent blur-3xl -z-10 h-full w-full transform scale-150 opacity-50"></div>
+    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-8">
+      {/* Logo Section */}
+      <div className="mb-12 flex flex-col items-center">
         <img 
           src={logo} 
           alt="Dono que Anuncia" 
-          className="h-32 w-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.1)] sm:h-48 transition-transform hover:scale-105 duration-500"
+          className="h-28 w-auto object-contain drop-shadow-sm sm:h-36"
         />
+        <div className="mt-8 w-16 h-px bg-zinc-200"></div>
       </div>
 
-      <div className="space-y-8">
-        <h1 className="text-4xl leading-[1.1] font-black tracking-tight sm:text-6xl text-zinc-950 uppercase max-w-xl mx-auto">
+      {/* Hero Content */}
+      <div className="space-y-12">
+        <h1 className="text-5xl leading-[1.05] font-black tracking-tight sm:text-7xl text-zinc-950 uppercase max-w-2xl mx-auto flex flex-col gap-2">
           {title.includes('NÃO TRAZEM CLIENTES') ? (
             <>
-              {title.split('NÃO TRAZEM CLIENTES')[0]}
-              <span className="text-red-600 block mt-2">NÃO TRAZEM CLIENTES.</span>
+              <span>{title.split('NÃO TRAZEM CLIENTES')[0]}</span>
+              <span className="text-red-600 block">NÃO TRAZEM CLIENTES.</span>
             </>
-          ) : title}
+          ) : (
+            <span>{title}</span>
+          )}
         </h1>
         
-        <div className="w-12 h-1.5 bg-zinc-950 mx-auto rounded-full opacity-10"></div>
+        <div className="flex flex-col items-center gap-8">
+          <div className="h-14 w-14 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center shadow-sm">
+            <BarChart3 className="h-6 w-6 text-zinc-400" />
+          </div>
 
-        <p className="mx-auto max-w-lg text-lg text-zinc-600 font-medium sm:text-xl leading-relaxed">
-          {description}
-        </p>
+          <p className="mx-auto max-w-lg text-lg text-zinc-600 font-medium sm:text-xl leading-relaxed px-4">
+            {description.split('personalizado').map((part: string, i: number) => (
+              <span key={i}>
+                {part}
+                {i === 0 && description.includes('personalizado') && <strong className="text-zinc-950 font-bold">personalizado</strong>}
+              </span>
+            ))}
+          </p>
+        </div>
 
-        <div className="flex flex-col items-center gap-6 pt-6">
+        {/* CTA Section */}
+        <div className="flex flex-col items-center gap-8 pt-4">
           <button
             onClick={onStart}
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-zinc-950 px-8 py-4 text-base font-bold text-white transition-all hover:bg-zinc-900 hover:scale-[1.01] active:scale-[0.99] shadow-xl shadow-zinc-900/10 uppercase tracking-wide"
+            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-black px-10 py-5 text-lg font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-black/10 uppercase tracking-tight w-full sm:w-auto min-w-[320px]"
           >
-            Começar Diagnóstico 
-            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full"></div>
+            <Target className="h-5 w-5 text-red-600 animate-pulse" />
+            <span className="relative z-10">Começar Diagnóstico</span>
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 relative z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 to-black"></div>
           </button>
 
-          <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3 w-3 text-green-500" /> 100% online
-            </span>
+          <div className="flex items-center gap-4 w-full max-w-xs">
+            <div className="h-px flex-1 bg-zinc-100"></div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] whitespace-nowrap">
+              <ShieldCheck className="h-3 w-3 text-green-500" /> 100% online e seguro
+            </div>
+            <div className="h-px flex-1 bg-zinc-100"></div>
           </div>
         </div>
       </div>
