@@ -32,7 +32,7 @@ import {
   Eye
 } from "lucide-react";
 import { toast } from "sonner";
-import { readDraft, writeDraft, publishDraft, loadPublished, type FunnelDraft } from "@/lib/funnel-content";
+import { readDraft, writeDraft, publishDraft, loadPublished, type FunnelDraft, EMPTY_DRAFT } from "@/lib/funnel-content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminDashboard,
@@ -41,8 +41,24 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
+  const [draft, setDraft] = useState<FunnelDraft>(EMPTY_DRAFT);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function init() {
+      const published = await loadPublished();
+      const local = readDraft();
+      
+      const merged: FunnelDraft = {
+        steps: { ...(published?.steps || {}), ...local.steps },
+        sales: { ...(published?.sales || {}), ...local.sales },
+      };
+      
+      setDraft(merged);
+      writeDraft(merged);
+    }
+    init();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -171,7 +187,7 @@ function AdminDashboard() {
           }`}>
             <div className="p-8 sm:p-10">
               {activeTab === "analytics" && <AnalyticsSection theme={theme} />}
-              {activeTab === "config" && <ConfigSection theme={theme} setDraft={setDraft} />}
+              {activeTab === "config" && <ConfigSection theme={theme} draft={draft} setDraft={setDraft} />}
               {activeTab === "tracking" && <TrackingSection theme={theme} />}
               {activeTab === "content" && <ContentSection theme={theme} draft={draft} setDraft={setDraft} />}
             </div>
@@ -517,7 +533,7 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
   );
 }
 
-function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft: (d: FunnelDraft) => void }) {
+function ConfigSection({ theme, draft, setDraft }: { theme: "dark" | "light", draft: FunnelDraft, setDraft: (d: FunnelDraft) => void }) {
   const initial = readDraft();
   const [checkoutUrl, setCheckoutUrl] = useState(initial.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
   const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
@@ -525,6 +541,8 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   const [vslUrl, setVslUrl] = useState(initial.sales.vslUrl ?? "");
 
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
+    // Aqui não temos acesso ao 'draft' do AdminDashboard diretamente a menos que passemos como prop
+    // Mas ConfigSection já recebe setDraft. Vamos garantir que ele use o rascunho mais recente.
     const current = readDraft();
     const updated = { ...current, sales: { ...current.sales, ...patch } };
     setDraft(updated); 
@@ -534,6 +552,9 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    // ConfigSection agora recebe o draft atualizado do AdminDashboard via props se quisermos sincronizar
+    // Mas por simplicidade de inputs, mantemos o carregamento inicial.
+    // O setDraft pai garantirá que a publicação use o estado mais recente.
     loadPublished().then((published) => {
       if (!published) return;
       const local = readDraft();
@@ -541,7 +562,7 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
         steps: { ...published.steps, ...local.steps },
         sales: { ...published.sales, ...local.sales },
       };
-      writeDraft(merged);
+      
       setCheckoutUrl(merged.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
       setPromoPrice(merged.sales.promoPrice ?? "R$ 197,00");
       setFullPrice(merged.sales.fullPrice ?? "R$ 497,00");
@@ -550,21 +571,25 @@ function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft:
   }, []);
 
   const handleSave = async () => {
-    publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     setSaving(true);
     try {
-      const currentDraft = readDraft();
-      // Garantir que os estados locais dos inputs estão refletidos no rascunho antes de publicar
-      currentDraft.sales = {
-        ...currentDraft.sales,
-        checkoutUrl,
-        promoPrice,
-        fullPrice,
-        vslUrl,
-        videoThumb: vslUrl // Sincroniza o thumb com a URL por padrão
+      // Usar o rascunho mais recente (draft) em vez de ler do localStorage
+      const updatedDraft = {
+        ...draft,
+        sales: {
+          ...draft.sales,
+          checkoutUrl,
+          promoPrice,
+          fullPrice,
+          vslUrl,
+          videoThumb: vslUrl 
+        }
       };
       
-      await publishDraft(currentDraft);
+      setDraft(updatedDraft); // Atualiza o estado global
+      writeDraft(updatedDraft); // Persiste no localStorage
+      
+      await publishDraft(updatedDraft);
       toast.success("Dados da Página de Vendas publicados com sucesso!");
     } catch (err: any) {
       console.error("Erro ao publicar:", err);
@@ -718,30 +743,15 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
 
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadPublished().then((published) => {
-      if (!published) return;
-      
-      // Sincronizar o estado local com o publicado apenas se o local estiver vazio
-      // ou se quisermos garantir que o admin veja o que está no ar.
-      // O rascunho (localStorage) é usado para o preview ao vivo.
-      const local = readDraft();
-      
-      // Se não houver rascunho local (EMPTY_DRAFT), usamos o publicado
-      const hasLocalData = Object.keys(local.steps).length > 0 || Object.keys(local.sales).length > 0;
-      
-      const merged: FunnelDraft = hasLocalData ? local : published;
-      
-      setDraft(merged);
-      writeDraft(merged);
-    });
-  }, []);
+  // Removido useEffect interno redundante. O AdminDashboard já gerencia a inicialização do draft.
 
   const handleSaveContent = async () => {
     setSaving(true);
     try {
-      const currentDraft = readDraft();
-      await publishDraft(currentDraft);
+      // Garantir que publicamos o estado 'draft' que está no componente,
+      // pois ele é a fonte da verdade mais recente durante a edição
+      writeDraft(draft); // Sincroniza o localStorage
+      await publishDraft(draft);
       toast.success("Conteúdo do quiz publicado com sucesso!");
     } catch (err: any) {
       console.error("Erro ao publicar:", err);
@@ -762,49 +772,60 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
   };
 
   const updateOption = (id: string, index: number, value: string) => {
-    const current = readDraft();
-    const step = current.steps[id] || {};
+    const step = draft.steps?.[id] || {};
     const options = [...(step.options ?? QUIZ_OPTIONS[id] ?? [])];
     options[index] = value;
     const next: FunnelDraft = {
-      ...current,
-      steps: { ...current.steps, [id]: { ...step, options } },
+      ...draft,
+      steps: { ...(draft.steps || {}), [id]: { ...step, options } },
     };
     setDraft(next);
     writeDraft(next);
   };
 
   const updateStep = (id: string, patch: { title?: string; image?: string; audio?: string }) => {
-    const current = readDraft();
+    // Usar o estado 'draft' mais atualizado do componente em vez de ler do localStorage
+    // para evitar perda de dados se o writeDraft/readDraft tiver latência ou inconsistência
     const next: FunnelDraft = {
-      ...current,
-      steps: { ...current.steps, [id]: { ...current.steps[id], ...patch } },
+      ...draft,
+      steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), ...patch } },
     };
     
     // Sincronizar campo de vendas se o ID for 'sales'
     if (id === 'sales') {
       next.sales = {
         ...next.sales,
-        ...(patch.title ? { videoHeadline: patch.title } : {}),
-        ...(patch.image ? { videoThumb: patch.image } : {}),
+        ...(patch.title !== undefined ? { videoHeadline: patch.title } : {}),
+        ...(patch.image !== undefined ? { videoThumb: patch.image } : {}),
       };
     }
     
-    // Atualizar estado e persistir rascunho
     setDraft(next);
     writeDraft(next);
   };
 
   const handleUpload = (id: string, file: File | undefined, field: 'image' | 'audio' = 'image') => {
     if (!file) return;
-    if (file.size > 10_000_000) { // Aumentando para 10MB para áudio
+    if (file.size > 10_000_000) { 
       toast.error("Arquivo muito grande (máx. 10MB).");
       return;
     }
     const reader = new FileReader();
     reader.onload = () => {
       const result = String(reader.result);
-      updateStep(id, { [field]: result });
+      
+      // Imediatamente atualiza o estado local e o preview
+      const next: FunnelDraft = {
+        ...draft,
+        steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
+      };
+      
+      if (id === 'sales' && field === 'image') {
+        next.sales = { ...next.sales, videoThumb: result };
+      }
+      
+      setDraft(next);
+      writeDraft(next);
       
       toast.info(`${field === 'audio' ? 'Áudio' : 'Upload'} concluído na prévia. Clique em 'Publicar' para salvar.`);
     };
@@ -862,7 +883,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                 <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Texto / Título exibido</label>
                 <input
                   type="text"
-                  value={draft.steps[item.id]?.title ?? ""}
+                  value={draft.steps?.[item.id]?.title ?? ""}
                   placeholder="Deixe vazio para manter o texto atual da página"
                   onChange={(e) => updateStep(item.id, { title: e.target.value })}
                   className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
@@ -876,9 +897,9 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                 </label>
                 <div className="flex flex-col gap-3">
                   <div className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
-                     {draft.steps[item.id]?.image ? (
+                     {draft.steps?.[item.id]?.image ? (
                        <>
-                         <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
+                         <img src={draft.steps?.[item.id]?.image} className="h-full w-full object-cover" alt="" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                            <span className="text-[10px] font-black text-white uppercase tracking-widest">Preview Atual</span>
                          </div>
@@ -913,7 +934,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                     <input
                       type="text"
                       placeholder={item.id === 'sales' ? "URL do vídeo/thumb" : "URL da imagem"}
-                      value={draft.steps[item.id]?.image?.startsWith("data:") ? "" : (draft.steps[item.id]?.image ?? "")}
+                      value={draft.steps?.[item.id]?.image?.startsWith("data:") ? "" : (draft.steps?.[item.id]?.image ?? "")}
                       onChange={(e) => updateStep(item.id, { image: e.target.value })}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark" ? "border-white/10 bg-black/40 text-white" : "border-zinc-200 bg-zinc-50 text-zinc-900"
@@ -931,7 +952,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                         />
                       </label>
                       
-                      {draft.steps[item.id]?.image && (
+                      {draft.steps?.[item.id]?.image && (
                         <button 
                           onClick={() => {
                             updateStep(item.id, { image: "" });
@@ -951,7 +972,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                 <div className="space-y-3 sm:col-span-2">
                   <label className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}>Opções de resposta</label>
                   <div className="grid gap-3">
-                    {(draft.steps[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
+                    {(draft.steps?.[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map((option, i) => (
                       <div key={i} className="flex gap-2">
                         <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[10px] font-black ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}>
                           #{i + 1}
@@ -976,13 +997,13 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                     <div className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border overflow-hidden truncate ${
                       theme === "dark" ? "bg-zinc-800 text-zinc-400 border-white/5" : "bg-zinc-50 text-zinc-600 border-zinc-200"
                     }`}>
-                      {draft.steps[item.id]?.audio ? (
+                      {draft.steps?.[item.id]?.audio ? (
                         <span className="text-green-500 font-bold">● Áudio carregado (Base64)</span>
                       ) : "Nenhum áudio selecionado"}
                     </div>
                     <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                       <Music className="h-3 w-3" /> 
-                      {draft.steps[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
+                      {draft.steps?.[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
                       <input
                         type="file"
                         accept="audio/*"
@@ -990,7 +1011,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                         onChange={(e) => handleUpload(item.id, e.target.files?.[0], 'audio')}
                       />
                     </label>
-                    {draft.steps[item.id]?.audio && (
+                    {draft.steps?.[item.id]?.audio && (
                       <button 
                         onClick={() => {
                           updateStep(item.id, { audio: "" });
