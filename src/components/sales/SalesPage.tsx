@@ -463,18 +463,50 @@ export function SalesPage({
           O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte
           para o próximo nível.
         </p>
-        <div className="mt-8 aspect-square max-w-sm mx-auto rounded-3xl overflow-hidden shadow-xl border border-zinc-100">
-          {testimonial?.image ? (
-            <img
-              src={testimonial.image}
-              alt="Depoimento de aluno"
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-muted-foreground">
-              Foto/Prova Social do Aluno
+        <div className="mt-8 max-w-sm mx-auto">
+          <div className="bg-[#e7fedf] rounded-2xl shadow-xl overflow-hidden border border-green-100 flex flex-col">
+            {/* WhatsApp Header */}
+            <div className="bg-[#075e54] p-4 flex items-center gap-3 text-white">
+              <div className="h-10 w-10 rounded-full bg-zinc-200 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" 
+                  alt="Aluno" 
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="font-bold text-sm leading-none">Marcos (Aluno)</p>
+                <p className="text-[10px] opacity-70">Online</p>
+              </div>
             </div>
-          )}
+            
+            {/* Chat Body */}
+            <div className="p-4 space-y-3 bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-repeat bg-contain">
+              <div className="bg-white rounded-lg p-3 text-sm shadow-sm relative max-w-[85%] self-start">
+                <p className="text-zinc-800">Tony, passando pra agradecer!</p>
+                <p className="text-[10px] text-zinc-400 text-right mt-1">14:20</p>
+                <div className="absolute top-0 -left-2 w-0 h-0 border-t-[10px] border-t-white border-l-[10px] border-l-transparent" />
+              </div>
+
+              <div className="bg-white rounded-lg p-3 text-sm shadow-sm relative max-w-[85%] self-start">
+                <p className="text-zinc-800">Fiz minha primeira venda hoje seguindo o passo a passo das aulas. O curso é muito direto ao ponto!</p>
+                <p className="text-[10px] text-zinc-400 text-right mt-1">14:21</p>
+                <div className="absolute top-0 -left-2 w-0 h-0 border-t-[10px] border-t-white border-l-[10px] border-l-transparent" />
+              </div>
+
+              <div className="bg-[#dcf8c6] rounded-lg p-3 text-sm shadow-sm relative max-w-[85%] self-end ml-auto">
+                <p className="text-zinc-800">Que top Marcos! Fico muito feliz em saber disso. Bora pra cima! 🚀</p>
+                <p className="text-[10px] text-zinc-400 text-right mt-1">14:25</p>
+                <div className="absolute top-0 -right-2 w-0 h-0 border-t-[10px] border-t-[#dcf8c6] border-r-[10px] border-r-transparent" />
+              </div>
+
+              <div className="bg-white rounded-lg p-3 text-sm shadow-sm relative max-w-[85%] self-start">
+                <p className="text-zinc-800">Obrigado mesmo, o investimento já se pagou no primeiro dia 🙏</p>
+                <p className="text-[10px] text-zinc-400 text-right mt-1">14:26</p>
+                <div className="absolute top-0 -left-2 w-0 h-0 border-t-[10px] border-t-white border-l-[10px] border-l-transparent" />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="mt-8 text-center">
           <CTAButton
