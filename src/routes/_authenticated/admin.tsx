@@ -1621,15 +1621,26 @@ export function ContentSection({
                       <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                         {item.id === "sales" ? (
                           <Video className="h-3 w-3" />
+                        ) : item.id === "audio" ? (
+                          <Music className="h-3 w-3" />
                         ) : (
                           <ImageIcon className="h-3 w-3" />
                         )}
-                        {item.id === "sales" ? "Subir Vídeo" : "Alterar Upload"}
+                        {item.id === "sales" ? "Subir Vídeo" : item.id === "audio" ? "Subir Áudio" : "Alterar Upload"}
                         <input
                           type="file"
-                          accept={item.id === "sales" ? "video/*,image/*" : "image/*"}
+                          accept={
+                            item.id === "sales" 
+                              ? "video/*,image/*" 
+                              : item.id === "audio" 
+                                ? "audio/*" 
+                                : "image/*"
+                          }
                           className="hidden"
-                          onChange={(e) => handleUpload(item.id, e.target.files?.[0])}
+                          onChange={(e) => {
+                            const field = item.id === "audio" ? "audio" : "image";
+                            handleUpload(item.id, e.target.files?.[0], field);
+                          }}
                         />
                       </label>
 
