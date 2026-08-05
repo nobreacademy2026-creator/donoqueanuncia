@@ -41,6 +41,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"analytics" | "config" | "tracking" | "content">("analytics");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -516,7 +517,7 @@ function StatCard({ label, value, icon: Icon, color, theme }: any) {
   );
 }
 
-function ConfigSection({ theme }: { theme: "dark" | "light" }) {
+function ConfigSection({ theme, setDraft }: { theme: "dark" | "light", setDraft: (d: FunnelDraft) => void }) {
   const initial = readDraft();
   const [checkoutUrl, setCheckoutUrl] = useState(initial.sales.checkoutUrl ?? "https://pay.kiwify.com.br/...");
   const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
@@ -526,7 +527,7 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
     const current = readDraft();
     const updated = { ...current, sales: { ...current.sales, ...patch } };
-    setDraft(updated); // Atualizar estado local do ContentSection também se necessário
+    setDraft(updated); 
     writeDraft(updated);
   };
 
@@ -703,7 +704,7 @@ function TrackingSection({ theme }: { theme: "dark" | "light" }) {
   );
 }
 
-function ContentSection({ theme }: { theme: "dark" | "light" }) {
+function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", draft: FunnelDraft, setDraft: (d: FunnelDraft) => void }) {
   const [questions, setQuestions] = useState([
     { id: 'intro', title: 'Página Inicial (Intro)', type: 'página' },
     { id: 'dor', title: 'Pergunta: Dor do Cliente', type: 'pergunta' },
@@ -715,7 +716,6 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
     { id: 'sales', title: 'Página de Vendas (Final)', type: 'página' },
   ]);
 
-  const [draft, setDraft] = useState<FunnelDraft>(() => readDraft());
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
