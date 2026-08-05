@@ -895,7 +895,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                 </label>
                 <div className="flex flex-col gap-3">
                   <div className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}>
-                     {draft.steps[item.id]?.image ? (
+                     {draft.steps?.[item.id]?.image ? (
                        <>
                          <img src={draft.steps[item.id]?.image} className="h-full w-full object-cover" alt="" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
