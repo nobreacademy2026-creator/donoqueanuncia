@@ -815,7 +815,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
       // Imediatamente atualiza o estado local e o preview
       const next: FunnelDraft = {
         ...draft,
-        steps: { ...draft.steps, [id]: { ...draft.steps[id], [field]: result } },
+        steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
       };
       
       if (id === 'sales' && field === 'image') {
