@@ -58,18 +58,18 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
               onClick={() => onSelect(option.value)}
               className={`group relative flex items-center gap-4 rounded-2xl px-6 py-4 text-left transition-all duration-300 ${
                 active
-                  ? "bg-zinc-950 text-white shadow-xl shadow-black/10 translate-y-[-1px]"
-                  : "bg-white text-zinc-700 hover:bg-zinc-50 border border-zinc-100 shadow-sm"
+                  ? "bg-red-600 text-white shadow-xl shadow-red-600/20 translate-y-[-1px] border-red-600"
+                  : "bg-white text-zinc-950 hover:bg-zinc-50 border border-zinc-200 shadow-sm"
               }`}
             >
               <div
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
-                  active
-                    ? "bg-red-600 border-red-600 scale-110"
+                   active
+                    ? "bg-white border-white scale-110"
                     : "border-zinc-200 group-hover:border-zinc-300"
                 }`}
               >
-                {active ? <Check className="h-3 w-3 text-white" /> : null}
+                {active ? <Check className="h-3 w-3 text-red-600" /> : null}
               </div>
               <span className="min-w-0 text-base font-bold uppercase tracking-tight">
                 {option.label}

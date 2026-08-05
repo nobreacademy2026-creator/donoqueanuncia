@@ -33,16 +33,16 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         </h1>
 
         <div className="flex flex-col items-center gap-6">
-          <div className="h-12 w-12 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center shadow-sm">
-            <BarChart3 className="h-5 w-5 text-zinc-400" />
+          <div className="h-12 w-12 rounded-full bg-zinc-50 border border-zinc-200 flex items-center justify-center shadow-sm">
+            <BarChart3 className="h-5 w-5 text-zinc-600" />
           </div>
 
-          <p className="mx-auto max-w-lg text-lg text-zinc-600 font-medium sm:text-xl leading-relaxed px-4">
+          <p className="mx-auto max-w-lg text-lg text-zinc-950 font-medium sm:text-xl leading-relaxed px-4">
             {description.split("personalizado").map((part: string, i: number) => (
               <span key={i}>
                 {part}
                 {i === 0 && description.includes("personalizado") && (
-                  <strong className="text-zinc-950 font-bold">personalizado</strong>
+                  <strong className="text-red-600 font-bold">personalizado</strong>
                 )}
               </span>
             ))}
@@ -53,20 +53,20 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         <div className="flex flex-col items-center gap-6 pt-2">
           <button
             onClick={onStart}
-            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-zinc-950 px-8 py-3.5 text-base font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-black/10 uppercase tracking-tight w-full sm:w-auto min-w-[280px]"
+            className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-red-600 px-8 py-3.5 text-base font-black text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-red-600/20 uppercase tracking-tight w-full sm:w-auto min-w-[280px]"
           >
-            <Target className="h-4 w-4 text-red-500 animate-pulse" />
+            <Target className="h-4 w-4 text-white animate-pulse" />
             <span className="relative z-10">Começar Diagnóstico</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
-            <div className="absolute inset-0 bg-zinc-950"></div>
+            <div className="absolute inset-0 bg-red-600"></div>
           </button>
 
           <div className="flex items-center gap-4 w-full max-w-xs">
-            <div className="h-px flex-1 bg-zinc-100"></div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] whitespace-nowrap">
-              <ShieldCheck className="h-3 w-3 text-green-500" /> 100% online e seguro
+            <div className="h-px flex-1 bg-zinc-200"></div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-900 uppercase tracking-[0.2em] whitespace-nowrap">
+              <ShieldCheck className="h-3 w-3 text-green-600" /> 100% online e seguro
             </div>
-            <div className="h-px flex-1 bg-zinc-100"></div>
+            <div className="h-px flex-1 bg-zinc-200"></div>
           </div>
         </div>
       </div>
