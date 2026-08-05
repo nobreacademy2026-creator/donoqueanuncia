@@ -7,8 +7,10 @@ export const serverSessionMiddleware = createMiddleware({ type: 'function' }).se
     const request = getRequest();
     const authHeader = request.headers.get('Authorization') || request.headers.get('authorization');
 
+    const anonymous = () => next({ context: { userId: null as string | null } });
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return next({ context: { userId: null } });
+      return anonymous();
     }
 
     const token = authHeader.replace('Bearer ', '');
@@ -16,7 +18,7 @@ export const serverSessionMiddleware = createMiddleware({ type: 'function' }).se
     const SUPABASE_PUBLISHABLE_KEY = process.env['SUPABASE_PUBLISHABLE_KEY'];
 
     if (!token || !SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-      return next({ context: { userId: null } });
+      return anonymous();
     }
 
     try {
@@ -26,11 +28,11 @@ export const serverSessionMiddleware = createMiddleware({ type: 'function' }).se
       });
       const { data, error } = await supabase.auth.getUser(token);
       if (error || !data?.user?.id) {
-        return next({ context: { userId: null } });
+        return anonymous();
       }
-      return next({ context: { userId: data.user.id } });
+      return next({ context: { userId: data.user.id as string | null } });
     } catch {
-      return next({ context: { userId: null } });
+      return anonymous();
     }
   }
 );
