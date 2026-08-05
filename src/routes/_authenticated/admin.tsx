@@ -550,10 +550,22 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
     publish({ checkoutUrl, promoPrice, fullPrice, vslUrl });
     setSaving(true);
     try {
-      await publishDraft(readDraft());
-      toast.success("Dados da Página de Vendas salvos!");
+      const currentDraft = readDraft();
+      // Garantir que os estados locais dos inputs estão refletidos no rascunho antes de publicar
+      currentDraft.sales = {
+        ...currentDraft.sales,
+        checkoutUrl,
+        promoPrice,
+        fullPrice,
+        vslUrl,
+        videoThumb: vslUrl // Sincroniza o thumb com a URL por padrão
+      };
+      
+      await publishDraft(currentDraft);
+      toast.success("Dados da Página de Vendas publicados com sucesso!");
     } catch (err: any) {
-      toast.error("Erro ao salvar: " + (err?.message ?? "tente novamente"));
+      console.error("Erro ao publicar:", err);
+      toast.error("Erro ao publicar: " + (err?.message ?? "tente novamente"));
     } finally {
       setSaving(false);
     }
@@ -628,10 +640,10 @@ function ConfigSection({ theme }: { theme: "dark" | "light" }) {
       <button 
         onClick={handleSave}
         disabled={saving}
-        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm"
+        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest text-sm disabled:opacity-50"
       >
         <Save className="h-4 w-4" />
-        {saving ? "Salvando..." : "Salvar Alterações"}
+        {saving ? "Publicando..." : "Publicar Alterações"}
       </button>
     </div>
   );
@@ -707,14 +719,18 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
   useEffect(() => {
     loadPublished().then((published) => {
       if (!published) return;
+      
+      // Sincronizar o estado local com o publicado apenas se o local estiver vazio
+      // ou se quisermos garantir que o admin veja o que está no ar.
+      // O rascunho (localStorage) é usado para o preview ao vivo.
       const local = readDraft();
-      const merged: FunnelDraft = {
-        steps: { ...published.steps, ...local.steps },
-        sales: { ...published.sales, ...local.sales },
-      };
+      
+      // Se não houver rascunho local (EMPTY_DRAFT), usamos o publicado
+      const hasLocalData = Object.keys(local.steps).length > 0 || Object.keys(local.sales).length > 0;
+      
+      const merged: FunnelDraft = hasLocalData ? local : published;
+      
       setDraft(merged);
-      // Não sobrescrever o rascunho local se ele já contiver algo mais recente? 
-      // Por enquanto, sincronizamos para garantir consistência.
       writeDraft(merged);
     });
   }, []);
@@ -722,10 +738,12 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
   const handleSaveContent = async () => {
     setSaving(true);
     try {
-      await publishDraft(readDraft());
-      toast.success("Conteúdo do quiz salvo com sucesso!");
+      const currentDraft = readDraft();
+      await publishDraft(currentDraft);
+      toast.success("Conteúdo do quiz publicado com sucesso!");
     } catch (err: any) {
-      toast.error("Erro ao salvar: " + (err?.message ?? "tente novamente"));
+      console.error("Erro ao publicar:", err);
+      toast.error("Erro ao publicar: " + (err?.message ?? "tente novamente"));
     } finally {
       setSaving(false);
     }
@@ -798,9 +816,16 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
           <h3 className={`text-xl font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}>Conteúdo e Mídia</h3>
           <p className={`text-sm font-medium ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>Gerencie imagens, textos e áudios do quiz.</p>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest">
-          <Plus className="h-4 w-4" /> Nova Etapa
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={handleSaveContent}
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs font-black text-white hover:opacity-90 shadow-lg shadow-primary/20 uppercase tracking-widest disabled:opacity-50"
+          >
+            <Save className="h-4 w-4" />
+            {saving ? "Publicando..." : "Publicar Alterações"}
+          </button>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -1016,7 +1041,7 @@ function LivePreview({ theme }: { theme: "dark" | "light" }) {
         <iframe
           key={nonce}
           data-funnel-preview="true"
-          src="/?preview=1"
+          src={`/?preview=1&t=${nonce}`}
           title="Prévia da Landing Page"
           onLoad={(e) => {
             (e.currentTarget as HTMLIFrameElement).contentWindow?.postMessage(
