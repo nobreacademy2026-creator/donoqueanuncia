@@ -735,12 +735,12 @@ function ContentSection({ theme }: { theme: "dark" | "light" }) {
 
   const updateOption = (id: string, index: number, value: string) => {
     const current = readDraft();
-    const base = current.steps[id]?.options ?? [...(QUIZ_OPTIONS[id] ?? [])];
-    const options = [...base];
+    const step = current.steps[id] || {};
+    const options = [...(step.options ?? QUIZ_OPTIONS[id] ?? [])];
     options[index] = value;
     const next: FunnelDraft = {
       ...current,
-      steps: { ...current.steps, [id]: { ...current.steps[id], options } },
+      steps: { ...current.steps, [id]: { ...step, options } },
     };
     setDraft(next);
     writeDraft(next);
