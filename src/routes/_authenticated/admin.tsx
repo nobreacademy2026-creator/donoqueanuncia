@@ -1001,7 +1001,7 @@ function ContentSection({ theme, draft, setDraft }: { theme: "dark" | "light", d
                     </div>
                     <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                       <Music className="h-3 w-3" /> 
-                      {draft.steps[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
+                      {draft.steps?.[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
                       <input
                         type="file"
                         accept="audio/*"
