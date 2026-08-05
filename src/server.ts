@@ -44,6 +44,25 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// Client-disconnect errors surface as "aborted" / AbortError from the HTTP layer.
+function isAbortError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const chain: unknown[] = [];
+  let current: unknown = error;
+  for (let i = 0; i < 5 && current instanceof Error; i++) {
+    chain.push(current);
+    current = current.cause;
+  }
+  return chain.some(
+    (e) =>
+      e instanceof Error &&
+      (e.name === "AbortError" ||
+        e.message === "aborted" ||
+        e.message.includes("aborted") ||
+        (e as { code?: string }).code === "ECONNRESET"),
+  );
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
@@ -51,6 +70,11 @@ export default {
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
+      // The browser closed the connection mid-render (navigation, HMR reload,
+      // iframe refresh). Not an app error — don't log or render an error page.
+      if (isAbortError(error) || request.signal?.aborted) {
+        return new Response(null, { status: 499 });
+      }
       console.error(error);
       return new Response(renderErrorPage(), {
         status: 500,
