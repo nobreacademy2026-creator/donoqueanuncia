@@ -65,3 +65,21 @@ export const createAdminMediaUpload = createServerFn({ method: "POST" })
     }
     return { path: data.path, token: signed.token };
   });
+
+export const saveAdminDraft = createServerFn({ method: "POST" })
+  .middleware([serverSessionMiddleware])
+  .validator((draft: FunnelDraft) => draft)
+  .handler(async ({ context, data: draft }) => {
+    const admin = await getVerifiedAdmin(context?.userId);
+    const { error } = await admin.from("quiz_config").upsert(
+      {
+        key: "funnel_draft",
+        value: draft as never,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "key" },
+    );
+    if (error) throw new Error(`Falha ao salvar rascunho no servidor: ${error.message}`);
+    return { success: true };
+  });
+
