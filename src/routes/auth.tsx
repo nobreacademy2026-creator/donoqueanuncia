@@ -36,6 +36,7 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [recoveryReady, setRecoveryReady] = useState(false);
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -84,6 +85,7 @@ function AuthPage() {
 
   const goToMode = (nextMode: AuthMode) => {
     setMode(nextMode);
+    setFormError("");
     setPassword("");
     setConfirmPassword("");
     if (nextMode !== "reset") window.history.replaceState({}, "", "/auth");
@@ -91,6 +93,7 @@ function AuthPage() {
 
   const handleLoginOrSignup = async (event: React.FormEvent) => {
     event.preventDefault();
+    setFormError("");
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -110,11 +113,11 @@ function AuthPage() {
       const role = await checkCurrentUserAdmin();
       if (!role?.hasAdmin) {
         await supabase.auth.signOut();
-        toast.error(
-          role?.error
-            ? `Login aceito, mas não foi possível validar o acesso: ${role.error}`
-            : "Login aceito, mas sua conta não possui permissão de administrador.",
-        );
+        const accessError = role?.error
+          ? `Login aceito, mas não foi possível validar o acesso: ${role.error}`
+          : "Login aceito, mas esta conta não possui permissão de administrador.";
+        setFormError(accessError);
+        toast.error(accessError);
         return;
       }
 
@@ -122,7 +125,9 @@ function AuthPage() {
       window.location.replace("/admin");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro inesperado.";
-      toast.error(getAuthErrorMessage(message));
+      const friendlyMessage = getAuthErrorMessage(message);
+      setFormError(friendlyMessage);
+      toast.error(friendlyMessage);
     } finally {
       setLoading(false);
     }
@@ -130,6 +135,7 @@ function AuthPage() {
 
   const handleForgotPassword = async (event: React.FormEvent) => {
     event.preventDefault();
+    setFormError("");
     setLoading(true);
     try {
       const redirectTo = `${window.location.origin}/auth?mode=reset`;
@@ -138,7 +144,9 @@ function AuthPage() {
       toast.success("Enviamos o link de recuperação. Verifique sua caixa de entrada e o spam.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro inesperado.";
-      toast.error(getAuthErrorMessage(message));
+      const friendlyMessage = getAuthErrorMessage(message);
+      setFormError(friendlyMessage);
+      toast.error(friendlyMessage);
     } finally {
       setLoading(false);
     }
@@ -146,6 +154,7 @@ function AuthPage() {
 
   const handleResetPassword = async (event: React.FormEvent) => {
     event.preventDefault();
+    setFormError("");
     if (password.length < 6) {
       toast.error("A nova senha precisa ter pelo menos 6 caracteres.");
       return;
@@ -170,7 +179,9 @@ function AuthPage() {
       goToMode("login");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro inesperado.";
-      toast.error(getAuthErrorMessage(message));
+      const friendlyMessage = getAuthErrorMessage(message);
+      setFormError(friendlyMessage);
+      toast.error(friendlyMessage);
     } finally {
       setLoading(false);
     }
@@ -239,6 +250,14 @@ function AuthPage() {
         </div>
 
         <div className="p-8 sm:p-10">
+          {formError && (
+            <div
+              role="alert"
+              className="mb-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium leading-relaxed text-red-700"
+            >
+              {formError}
+            </div>
+          )}
           {mode === "reset" && !recoveryReady ? (
             <div className="space-y-5 text-center">
               <p className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
