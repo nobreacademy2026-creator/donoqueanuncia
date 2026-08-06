@@ -1,4 +1,5 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
+import danielInstagramMockup from "@/assets/daniel-instagram-mockup.png.asset.json";
 import { useEffect, useState, useRef } from "react";
 import { trackEvent } from "@/lib/tracking";
 
