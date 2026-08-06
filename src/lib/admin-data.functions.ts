@@ -83,6 +83,17 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
       { onConflict: "key" },
     );
     if (error) throw new Error(`Falha ao publicar conteúdo: ${error.message}`);
+
+    const { data: published, error: verifyError } = await admin
+      .from("quiz_config")
+      .select("value,updated_at")
+      .eq("key", "funnel_content")
+      .single();
+    if (verifyError || !published || JSON.stringify(published.value) !== JSON.stringify(draft)) {
+      throw new Error(
+        `A publicação não pôde ser confirmada no banco: ${verifyError?.message ?? "conteúdo divergente"}`,
+      );
+    }
     return { success: true, updatedAt };
   });
 

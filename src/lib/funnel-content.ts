@@ -203,6 +203,19 @@ export function useFunnelDraft(): FunnelDraft {
           })
       : null;
 
+    const refreshPublished = async () => {
+      if (!active || isPreview) return;
+      const published = await loadPublished();
+      if (active && published) setDraft(published);
+    };
+    const refreshTimer = !isPreview
+      ? window.setInterval(() => void refreshPublished(), 10_000)
+      : null;
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") void refreshPublished();
+    };
+    if (!isPreview) document.addEventListener("visibilitychange", onVisibilityChange);
+
     if (isPreview) {
       const onCustom = (event: Event) =>
         setDraft((event as CustomEvent<FunnelDraft>).detail ?? readDraft());
@@ -228,6 +241,8 @@ export function useFunnelDraft(): FunnelDraft {
 
     return () => {
       active = false;
+      if (refreshTimer !== null) window.clearInterval(refreshTimer);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       if (publishedChannel) void supabase.removeChannel(publishedChannel);
     };
   }, []);
