@@ -750,7 +750,7 @@ export function SalesPage({
               />
             </div>
 
-            <p className="mt-6 text-xs text-muted-foreground/60">
+            <p className="mt-6 text-xs text-zinc-400 font-bold uppercase tracking-widest">
               Acesso imediato • Pagamento seguro • Vitalício
             </p>
           </div>
