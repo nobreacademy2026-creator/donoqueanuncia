@@ -2,10 +2,22 @@ import { createServerFn } from "@tanstack/react-start";
 import { serverSessionMiddleware } from "./auth-middleware.server";
 import type { FunnelDraft } from "./funnel-content";
 
-async function getVerifiedAdmin(userId: string | null | undefined) {
-  if (!userId) throw new Error("Sessão administrativa inválida.");
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin
+async function getVerifiedAdmin(
+  userId: string | null | undefined,
+  accessToken: string | null | undefined,
+) {
+  if (!userId || !accessToken) throw new Error("Sessão administrativa inválida.");
+  const { createClient } = await import("@supabase/supabase-js");
+  const supabaseUrl = process.env["SUPABASE_URL"];
+  const publishableKey = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  if (!supabaseUrl || !publishableKey) {
+    throw new Error("A conexão com o Supabase não está configurada no servidor.");
+  }
+  const authenticatedAdmin = createClient(supabaseUrl, publishableKey, {
+    global: { headers: { Authorization: `Bearer ${accessToken}` } },
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+  const { data, error } = await authenticatedAdmin
     .from("user_roles")
     .select("role")
     .eq("user_id", userId)
@@ -13,7 +25,7 @@ async function getVerifiedAdmin(userId: string | null | undefined) {
     .maybeSingle();
   if (error) throw new Error(`Falha ao verificar administrador: ${error.message}`);
   if (!data) throw new Error("Permissão administrativa negada.");
-  return supabaseAdmin;
+  return authenticatedAdmin;
 }
 
 async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerifiedAdmin>>) {
@@ -48,7 +60,7 @@ async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerif
 export const loadAdminAnalytics = createServerFn({ method: "GET" })
   .middleware([serverSessionMiddleware])
   .handler(async ({ context }) => {
-    const admin = await getVerifiedAdmin(context?.userId);
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
     const { data, error } = await admin
       .from("analytics_events")
       .select("id,event_name,payload,session_id,created_at")
@@ -61,7 +73,7 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
   .middleware([serverSessionMiddleware])
   .validator((draft: FunnelDraft) => draft)
   .handler(async ({ context, data: draft }) => {
-    const admin = await getVerifiedAdmin(context?.userId);
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
     const updatedAt = new Date().toISOString();
     const { error } = await admin.from("quiz_config").upsert(
       [
@@ -85,7 +97,7 @@ export const createAdminMediaUpload = createServerFn({ method: "POST" })
     return input;
   })
   .handler(async ({ context, data }) => {
-    const admin = await getVerifiedAdmin(context?.userId);
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
     await ensurePublicMediaBucket(admin);
     const { data: signed, error } = await admin.storage
       .from("funnel-media")
@@ -101,7 +113,7 @@ export const confirmAdminMediaUpload = createServerFn({ method: "POST" })
   .middleware([serverSessionMiddleware])
   .validator((input: UploadRequest) => input)
   .handler(async ({ context, data }) => {
-    const admin = await getVerifiedAdmin(context?.userId);
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
     await ensurePublicMediaBucket(admin);
     const { data: exists, error } = await admin.storage.from("funnel-media").exists(data.path);
     if (error || !exists) {
@@ -114,7 +126,7 @@ export const saveAdminDraft = createServerFn({ method: "POST" })
   .middleware([serverSessionMiddleware])
   .validator((draft: FunnelDraft) => draft)
   .handler(async ({ context, data: draft }) => {
-    const admin = await getVerifiedAdmin(context?.userId);
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
     const { error } = await admin.from("quiz_config").upsert(
       {
         key: "funnel_draft",
