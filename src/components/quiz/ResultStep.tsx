@@ -95,15 +95,6 @@ export function ResultStep({
                   </div>
                 </div>
               </div>
-              <div className="h-10 w-10 rounded-full bg-zinc-300 overflow-hidden border-2 border-white shadow-sm">
-                <img
-                  src={
-                    "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
-                  }
-                  alt="Student"
-                  className="h-full w-full object-cover"
-                />
-              </div>
             </div>
             <audio
               ref={audioRef}
@@ -119,12 +110,6 @@ export function ResultStep({
           </div>
 
           <div className="space-y-6">
-            <img
-              src={testimonialDraft?.image || danielInstagramMockup.url}
-              alt="Depoimento do aluno no Instagram"
-              className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl border border-zinc-100"
-            />
-
             <button
               onClick={() => {
                 import("@/lib/tracking").then((m) => m.trackEvent("clique_quero_isso_tambem"));

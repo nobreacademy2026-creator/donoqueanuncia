@@ -1473,9 +1473,9 @@ export function ContentSection({
     {
       id: "audio",
       title: "Etapa 5 — Testemunho com áudio",
-      type: "imagem + áudio + texto",
+      type: "áudio + texto",
       section: "Resultado e testemunhos",
-      description: "Testemunho com o player de áudio em cima e a imagem logo abaixo.",
+      description: "Testemunho com player de áudio, sem imagem.",
     },
     {
       id: "niche",
@@ -1825,7 +1825,7 @@ export function ContentSection({
                     )}
                   </div>
                 )}
-                {item.id !== "sales_vsl" && item.id !== "sales_offer" && (
+                {item.id !== "sales_vsl" && item.id !== "sales_offer" && item.id !== "audio" && (
                   <div className="space-y-2 sm:col-span-2">
                     <label
                       className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
