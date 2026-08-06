@@ -300,11 +300,14 @@ export function SalesPage({
             Acesso Liberado com Desconto
           </div>
           <h2 className="mx-auto mb-10 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:text-7xl">
-            {headline.split(" ").map((word, i) => (
-              <span key={i} className={word.toUpperCase() === "VÍDEO" ? "text-red-600" : ""}>
-                {word}{" "}
-              </span>
-            ))}
+            {headline.split(" ").map((word, i) => {
+              const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
+              return (
+                <span key={i} className={cleanWord === "VÍDEO" ? "text-red-600" : ""}>
+                  {word}{" "}
+                </span>
+              );
+            })}
           </h2>
 
           <div className="mx-auto max-w-4xl relative">
