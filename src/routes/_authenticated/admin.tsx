@@ -2122,6 +2122,7 @@ function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
   const isAudio =
     (item.id === "audio" && !draft.steps?.[item.id]?.image) ||
     (mediaUrl && mediaUrl.match(/\.(mp3|wav|ogg)/i));
+  const isVideo = Boolean(mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|m4v|ogv)(?:\?|#|$)/i));
 
   useEffect(() => {
     if (!mediaUrl) {
@@ -2136,19 +2137,25 @@ function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
       audio.src = mediaUrl;
       audio.oncanplaythrough = () => setStatus("success");
       audio.onerror = () => setStatus("error");
+    } else if (isVideo) {
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      video.src = mediaUrl;
+      video.onloadedmetadata = () => setStatus("success");
+      video.onerror = () => setStatus("error");
     } else {
       const img = new Image();
       img.src = mediaUrl;
       img.onload = () => setStatus("success");
       img.onerror = () => setStatus("error");
     }
-  }, [mediaUrl, isAudio]);
+  }, [mediaUrl, isAudio, isVideo]);
 
   if (!mediaUrl && item.id !== "intro") {
     return (
       <div className="flex h-full w-full items-center justify-center bg-black/5">
         <div className="flex flex-col items-center gap-2">
-          {item.id === "sales" ? (
+          {item.id === "sales_vsl_video" ? (
             <Video className="h-8 w-8 text-zinc-400/30" />
           ) : isAudio ? (
             <Music className="h-8 w-8 text-zinc-400/30" />
@@ -2156,7 +2163,7 @@ function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
             <ImageIcon className="h-8 w-8 text-zinc-400/30" />
           )}
           <span className="text-[10px] font-bold text-zinc-400/50 uppercase">
-            Sem {item.id === "sales" ? "Vídeo" : isAudio ? "Áudio" : "Imagem"}
+            Sem {item.id === "sales_vsl_video" ? "Vídeo" : isAudio ? "Áudio" : "Imagem"}
           </span>
         </div>
       </div>
@@ -2183,8 +2190,13 @@ function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
         </div>
       )}
 
-      {item.id === "sales" ? (
-        <video src={mediaUrl} className="h-full w-full object-cover" controls />
+      {isVideo ? (
+        <video
+          src={mediaUrl}
+          className="h-full w-full bg-black object-contain"
+          controls
+          preload="metadata"
+        />
       ) : isAudio ? (
         <div className="flex h-full w-full items-center justify-center bg-primary/10">
           <Music className="h-8 w-8 text-primary animate-pulse" />
