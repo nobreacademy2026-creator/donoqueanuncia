@@ -293,7 +293,7 @@ export function SalesPage({
       {/* Countdown Timer Floating Bar */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
         <div className="w-full flex justify-center pointer-events-auto">
-          <div className="w-full flex items-center justify-center gap-3 bg-red-600 py-1.5 text-white backdrop-blur-md px-4 sm:px-6">
+          <div className="w-full flex items-center justify-center gap-3 bg-red-600 py-3 text-white backdrop-blur-md px-4 sm:px-6">
             <Timer className="h-3.5 w-3.5 animate-pulse shrink-0" />
             <span className="text-[10px] font-bold uppercase tracking-widest sm:text-xs">
               Oferta expira em:
