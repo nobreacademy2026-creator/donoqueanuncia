@@ -402,10 +402,14 @@ export function SalesPage({
             <p className="text-lg font-medium leading-relaxed text-zinc-600 sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
-              <span className="font-black text-zinc-950">usando apenas o seu celular.</span>
+              <span className="font-black text-zinc-950">com essa oferta exclusiva.</span>
             </p>
 
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex flex-col items-center">
+                <span className="text-zinc-400 line-through text-lg font-bold">De {fullPrice}</span>
+                <span className="text-4xl font-black text-red-600 sm:text-6xl">Por apenas {promoPrice}</span>
+              </div>
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
@@ -654,7 +658,7 @@ export function SalesPage({
 
               <div className="mt-10 space-y-2 text-zinc-500 font-bold">
                 <p className="text-lg">
-                  Ou 12x de <span className="text-zinc-950 font-black">R$ 20,35</span> no cartão
+                  Ou 12x de <span className="text-zinc-950 font-black">R$ 19,78</span> no cartão
                 </p>
                 <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest opacity-60">
                   <ShieldCheck className="h-3 w-3" /> Acesso imediato após aprovação
@@ -668,7 +672,7 @@ export function SalesPage({
               </div>
               <p className="text-xs text-zinc-500 max-w-xs mx-auto mb-2 font-medium">
                 Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento
-                tem valor de 497,00.
+                tem valor de 399,00.
               </p>
               <p className="text-sm font-black text-green-500">
                 Clica no link e aproveita o desconto 👇
