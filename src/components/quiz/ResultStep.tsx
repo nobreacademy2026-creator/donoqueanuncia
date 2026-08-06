@@ -247,9 +247,9 @@ export function ResultStep({
                       </div>
                     </div>
                     <div className="text-left leading-tight">
-                      <p className="font-bold text-sm text-zinc-900">premium_grill_sp</p>
+                      <p className="font-bold text-sm text-zinc-900">daniel_ferreira</p>
                       <p className="text-[10px] text-zinc-500">
-                        Premium Grill / Boutique de Carnes
+                        Daniel Ferreira / Empreendedor
                       </p>
                     </div>
                   </div>
@@ -280,11 +280,11 @@ export function ResultStep({
 
                   <div className="space-y-0.5 mb-4">
                     <p className="text-xs font-bold text-zinc-900">
-                      Premium Grill / Boutique de Carnes
+                      Daniel Ferreira
                     </p>
-                    <p className="text-xs text-zinc-800">Delivery de Carnes em São Paulo 🥩 🍖</p>
+                    <p className="text-xs text-zinc-800">Transformando negócios com anúncios 🚀</p>
                     <p className="text-xs text-zinc-800">
-                      O melhor corte da cidade agora na sua casa 🤝 ✨
+                      De R$ 10k para R$ 100k em 30 dias! 📈
                     </p>
                   </div>
 
@@ -295,8 +295,7 @@ export function ResultStep({
 
                 <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
                   <p className="text-xs leading-relaxed text-zinc-700 italic">
-                    "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de
-                    chegar e sempre convertendo em vendas"
+                    "O método Dono que Anuncia mudou minha vida. Em 1 semana já comecei a ver os resultados e as vendas não param de chegar!"
                   </p>
                 </div>
               </div>
