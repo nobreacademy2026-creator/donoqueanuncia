@@ -13,14 +13,16 @@ type Props = {
 export function QuestionStep({ question, index, total, selected, onSelect, onBack }: Props) {
   return (
     <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl">
-      <div className="flex items-center justify-end gap-4">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-100 border border-zinc-100 shadow-sm"
-        >
-          <ArrowLeft className="h-3 w-3" /> Voltar
-        </button>
-      </div>
+      {index > 0 && (
+        <div className="flex items-center justify-end gap-4">
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-100 border border-zinc-100 shadow-sm"
+          >
+            <ArrowLeft className="h-3 w-3" /> Voltar
+          </button>
+        </div>
+      )}
 
       <h2 className="mt-8 text-3xl font-black tracking-tight sm:text-4xl text-center text-zinc-950 uppercase leading-tight">
         {question.title}
@@ -53,7 +55,7 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
             >
               <div
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
-                   active
+                  active
                     ? "bg-white border-white scale-110"
                     : "border-zinc-200 group-hover:border-zinc-300"
                 }`}

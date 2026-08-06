@@ -4,7 +4,6 @@ import { QUESTIONS, calculatePillars, calculateScore, type Answers } from "@/lib
 import { trackEvent } from "@/lib/tracking";
 import { useFunnelDraft } from "@/lib/funnel-content";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
-import { QuizIntro } from "@/components/quiz/QuizIntro";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
 import { AnalyzingStep } from "@/components/quiz/AnalyzingStep";
 import { ResultStep } from "@/components/quiz/ResultStep";
@@ -42,13 +41,17 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Stage = "intro" | "quiz" | "analyzing" | "result" | "sales";
+type Stage = "quiz" | "analyzing" | "result" | "sales";
 
 function Index() {
-  const [stage, setStage] = useState<Stage>("intro");
+  const [stage, setStage] = useState<Stage>("quiz");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const draft = useFunnelDraft();
+
+  useEffect(() => {
+    void trackEvent("quiz_iniciado");
+  }, []);
 
   const questions = useMemo(
     () =>
@@ -83,11 +86,9 @@ function Index() {
   const pillars = useMemo(() => calculatePillars(answers, score), [answers, score]);
 
   const progress =
-    stage === "intro"
-      ? 0
-      : stage === "quiz"
-        ? ((step + (answers[questions[step]!.id] ? 1 : 0)) / questions.length) * 100
-        : 100;
+    stage === "quiz"
+      ? ((step + (answers[questions[step]!.id] ? 1 : 0)) / questions.length) * 100
+      : 100;
 
   function handleSelect(value: string) {
     const question = questions[step]!;
@@ -104,8 +105,7 @@ function Index() {
   }
 
   function handleBack() {
-    if (step === 0) setStage("intro");
-    else setStep(step - 1);
+    if (step > 0) setStep(step - 1);
   }
 
   if (stage === "sales") {
@@ -158,15 +158,23 @@ function Index() {
         <SalesPage
           draft={{
             ...draft.sales,
-            ...(draft.steps["sales_vsl"]?.title ? { videoHeadline: draft.steps["sales_vsl"].title } : {}),
+            ...(draft.steps["sales_vsl"]?.title
+              ? { videoHeadline: draft.steps["sales_vsl"].title }
+              : {}),
             ...(draft.steps["sales_vsl_video"]?.image
               ? /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(draft.steps["sales_vsl_video"].image)
                 ? { vslUrl: draft.steps["sales_vsl_video"].image }
                 : { videoThumb: draft.steps["sales_vsl_video"].image }
               : {}),
-            ...(draft.steps["sales_offer"]?.options?.[0] ? { promoPrice: draft.steps["sales_offer"].options[0] } : {}),
-            ...(draft.steps["sales_offer"]?.options?.[1] ? { fullPrice: draft.steps["sales_offer"].options[1] } : {}),
-            ...(draft.steps["sales_offer"]?.options?.[2] ? { checkoutUrl: draft.steps["sales_offer"].options[2] } : {}),
+            ...(draft.steps["sales_offer"]?.options?.[0]
+              ? { promoPrice: draft.steps["sales_offer"].options[0] }
+              : {}),
+            ...(draft.steps["sales_offer"]?.options?.[1]
+              ? { fullPrice: draft.steps["sales_offer"].options[1] }
+              : {}),
+            ...(draft.steps["sales_offer"]?.options?.[2]
+              ? { checkoutUrl: draft.steps["sales_offer"].options[2] }
+              : {}),
           }}
           tracking={draft.tracking}
           steps={draft.steps}
@@ -177,33 +185,6 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 selection:bg-primary selection:text-white overflow-x-hidden">
-      {/* Fallback visual sutil para dados em carregamento ou erro */}
-      {!draft.steps["intro"] && stage === "intro" && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white text-zinc-900 p-6 text-center">
-          <div className="mb-6 flex flex-col items-center animate-pulse">
-            <div className="h-20 w-48 bg-zinc-100 rounded-lg mb-4"></div>
-            <div className="h-4 w-64 bg-zinc-100 rounded mb-2"></div>
-            <div className="h-4 w-48 bg-zinc-100 rounded"></div>
-          </div>
-          <p className="text-zinc-500 text-sm">Sincronizando diagnóstico...</p>
-
-          <div className="mt-8 flex flex-col gap-3">
-            <button
-              onClick={() => {
-                localStorage.removeItem("dqa_funnel_draft");
-                window.location.reload();
-              }}
-              className="rounded-full bg-zinc-100 px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-zinc-900 hover:bg-zinc-200 transition-all border border-zinc-200"
-            >
-              Limpar Cache e Recarregar
-            </button>
-            <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-400">
-              Status: Conectando ao Servidor
-            </p>
-          </div>
-        </div>
-      )}
-
       <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-center">
         <div className="flex-1 max-w-md">
           <QuizProgress value={progress} />
@@ -211,16 +192,6 @@ function Index() {
       </div>
 
       <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center px-5 pt-0 pb-6">
-        {stage === "intro" ? (
-          <QuizIntro
-            draft={draft.steps["intro"] || undefined}
-            onStart={() => {
-              trackEvent("quiz_iniciado");
-              setStage("quiz");
-            }}
-          />
-        ) : null}
-
         {stage === "quiz" ? (
           <QuestionStep
             question={questions[step]!}

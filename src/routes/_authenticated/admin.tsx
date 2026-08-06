@@ -1564,13 +1564,6 @@ export function ContentSection({
 }) {
   const [questions, setQuestions] = useState([
     {
-      id: "intro",
-      title: "Abertura do diagnóstico",
-      type: "imagem + texto",
-      section: "Entrada e perguntas",
-      description: "Primeira tela do funil: logo, chamada principal e botão para começar.",
-    },
-    {
       id: "dor",
       title: "Pergunta 1 — Dor do cliente",
       type: "imagem + respostas",
