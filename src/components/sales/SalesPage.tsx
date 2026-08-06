@@ -733,10 +733,10 @@ export function SalesPage({
             </div>
 
             <div className="mt-8 flex flex-col items-center gap-4">
-              <div className="rounded-full bg-red-500/10 px-4 py-2 text-sm font-bold text-red-400">
+              <div className="rounded-full bg-red-50 px-4 py-2 text-sm font-bold text-red-600">
                 55% de DESCONTO para os próximos 50 alunos
               </div>
-              <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
+              <p className="text-xs text-zinc-500 max-w-xs mx-auto mb-2 font-medium">
                 Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento
                 tem valor de 497,00.
               </p>
