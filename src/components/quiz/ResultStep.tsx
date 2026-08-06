@@ -239,7 +239,7 @@ export function ResultStep({
                         <img
                           src={
                             nicheDraft?.image ||
-                            "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100"
+                            "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
                           }
                           alt="Gordo Grill"
                           className="h-full w-full rounded-full object-cover"
