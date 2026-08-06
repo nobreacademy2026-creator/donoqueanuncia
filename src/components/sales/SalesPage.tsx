@@ -677,14 +677,14 @@ export function SalesPage({
 
       {/* Final Offer */}
       <section className="mx-auto mt-20 max-w-5xl px-5 text-center sm:mt-28">
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-950 px-6 py-12 text-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65)] sm:rounded-[3rem] sm:p-16">
-          <div className="absolute top-0 right-0 p-8 opacity-10">
+        <div className="relative overflow-hidden rounded-[2rem] border border-zinc-200 bg-white px-6 py-12 text-zinc-950 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.05)] sm:rounded-[3rem] sm:p-16">
+          <div className="absolute top-0 right-0 p-8 opacity-5">
             <Zap className="h-64 w-64 text-red-600" />
           </div>
 
           <div className="relative z-10 flex flex-col items-center gap-9">
             <div className="space-y-4">
-              <span className="inline-flex rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-red-400 sm:text-xs">
+              <span className="inline-flex rounded-full border border-red-500/30 bg-red-50 px-5 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-red-600 sm:text-xs">
                 Oferta Exclusiva e Limitada
               </span>
               <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.055em] sm:text-7xl">
@@ -693,14 +693,14 @@ export function SalesPage({
             </div>
 
             <div className="flex flex-col items-center gap-6 w-full max-w-md">
-              <div className="flex items-center gap-4 text-zinc-500 font-black uppercase tracking-widest italic text-xl">
+              <div className="flex items-center gap-4 text-zinc-400 font-black uppercase tracking-widest italic text-xl">
                 <span>De {fullPrice}</span>
                 <div className="h-0.5 w-20 bg-red-600" />
               </div>
 
               <div className="relative w-full">
-                <div className="absolute inset-0 bg-red-600 blur-3xl opacity-20 animate-pulse" />
-                <div className="relative rounded-3xl border border-white/10 bg-white p-8 text-zinc-950 shadow-2xl sm:p-10">
+                <div className="absolute inset-0 bg-red-600 blur-3xl opacity-5" />
+                <div className="relative rounded-3xl border border-zinc-200 bg-zinc-50 p-8 text-zinc-950 shadow-sm sm:p-10">
                   <span className="block text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-2">
                     Preço Promocional
                   </span>
@@ -722,9 +722,9 @@ export function SalesPage({
                 </div>
               </div>
 
-              <div className="mt-10 space-y-2 text-zinc-400 font-bold">
+              <div className="mt-10 space-y-2 text-zinc-500 font-bold">
                 <p className="text-lg">
-                  Ou 12x de <span className="text-white">R$ 20,35</span> no cartão
+                  Ou 12x de <span className="text-zinc-950 font-black">R$ 20,35</span> no cartão
                 </p>
                 <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest opacity-60">
                   <ShieldCheck className="h-3 w-3" /> Acesso imediato após aprovação
@@ -733,10 +733,10 @@ export function SalesPage({
             </div>
 
             <div className="mt-8 flex flex-col items-center gap-4">
-              <div className="rounded-full bg-red-500/10 px-4 py-2 text-sm font-bold text-red-400">
+              <div className="rounded-full bg-red-50 px-4 py-2 text-sm font-bold text-red-600">
                 55% de DESCONTO para os próximos 50 alunos
               </div>
-              <p className="text-xs text-zinc-400 max-w-xs mx-auto mb-2">
+              <p className="text-xs text-zinc-500 max-w-xs mx-auto mb-2 font-medium">
                 Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento
                 tem valor de 497,00.
               </p>
@@ -750,7 +750,7 @@ export function SalesPage({
               />
             </div>
 
-            <p className="mt-6 text-xs text-muted-foreground/60">
+            <p className="mt-6 text-xs text-zinc-400 font-bold uppercase tracking-widest">
               Acesso imediato • Pagamento seguro • Vitalício
             </p>
           </div>
@@ -766,10 +766,10 @@ export function SalesPage({
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-2xl bg-zinc-950 px-8 py-4 font-bold uppercase text-white shadow-xl shadow-zinc-900/10 transition hover:-translate-y-0.5 hover:bg-zinc-800 active:translate-y-0"
+          className="inline-flex items-center gap-3 rounded-2xl bg-zinc-100 border border-zinc-200 px-8 py-4 font-bold uppercase text-zinc-950 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-200 active:translate-y-0"
         >
-          <div className="bg-white/20 p-2 rounded-full">
-            <MessageCircle className="h-6 w-6 fill-white" />
+          <div className="bg-[#25D366] p-2 rounded-full">
+            <MessageCircle className="h-6 w-6 fill-white text-white" />
           </div>
           Fale comigo no WhatsApp
         </a>
