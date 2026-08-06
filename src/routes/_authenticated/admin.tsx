@@ -1374,7 +1374,9 @@ export function ContentSection({
     { id: "beneficios", title: "Página: Checklist de Benefícios", type: "etapa" },
     { id: "audio", title: "Depoimento com Áudio", type: "imagem + áudio" },
     { id: "niche", title: "Depoimento do Instagram", type: "imagem" },
-    { id: "sales", title: "Página de Vendas (Final)", type: "página" },
+    { id: "sales_vsl", title: "Sales: Título do Vídeo", type: "página" },
+    { id: "sales_vsl_video", title: "Sales: Vídeo/VSL", type: "página" },
+    { id: "sales_offer", title: "Sales: Preços e Checkout", type: "página" },
     {
       id: "sales_testimonial",
       title: "Depoimento da Página de Vendas",
@@ -1447,13 +1449,14 @@ export function ContentSection({
       steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), ...patch } },
     };
 
-    // Sincronizar campo de vendas se o ID for 'sales'
-    if (id === "sales") {
-      next.sales = {
-        ...next.sales,
-        ...(patch.title !== undefined ? { videoHeadline: patch.title } : {}),
-        ...(patch.image !== undefined ? { videoThumb: patch.image, vslUrl: patch.image } : {}),
-      };
+    // Sincronizar campo de vendas se o ID for relacionado a sales
+    if (id === "sales_vsl") {
+      next.sales = { ...next.sales, videoHeadline: patch.title };
+    } else if (id === "sales_vsl_video") {
+      next.sales = { ...next.sales, vslUrl: patch.image, videoThumb: patch.image };
+    } else if (id === "sales_offer") {
+      // O título pode ser usado para o promoPrice se quisermos, mas melhor manter separado
+      // por enquanto vamos focar nos campos explícitos do ConfigSection
     }
 
     // Se for o passo 'intro', garantir que o rascunho de vendas não seja afetado por engano
