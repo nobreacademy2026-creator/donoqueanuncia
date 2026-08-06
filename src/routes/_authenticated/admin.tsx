@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Settings,
@@ -1367,20 +1367,82 @@ export function ContentSection({
   setDraft: (d: FunnelDraft) => void;
 }) {
   const [questions, setQuestions] = useState([
-    { id: "intro", title: "Página Inicial (Intro)", type: "página" },
-    { id: "dor", title: "Pergunta: Dor do Cliente", type: "pergunta" },
-    { id: "motivacao", title: "Pergunta: Motivação", type: "pergunta" },
-    { id: "objecao", title: "Página: Quebra de Objeção", type: "etapa" },
-    { id: "beneficios", title: "Página: Checklist de Benefícios", type: "etapa" },
-    { id: "audio", title: "Depoimento com Áudio", type: "imagem + áudio" },
-    { id: "niche", title: "Depoimento do Instagram", type: "imagem" },
-    { id: "sales_vsl", title: "Sales: Título do Vídeo", type: "página" },
-    { id: "sales_vsl_video", title: "Sales: Vídeo/VSL", type: "página" },
-    { id: "sales_offer", title: "Sales: Preços e Checkout", type: "página" },
+    {
+      id: "intro",
+      title: "Abertura do diagnóstico",
+      type: "imagem + texto",
+      section: "Entrada e perguntas",
+      description: "Primeira tela do funil: logo, chamada principal e botão para começar.",
+    },
+    {
+      id: "dor",
+      title: "Pergunta 1 — Dor do cliente",
+      type: "imagem + respostas",
+      section: "Entrada e perguntas",
+      description: "Primeira pergunta exibida depois que o visitante inicia o diagnóstico.",
+    },
+    {
+      id: "motivacao",
+      title: "Pergunta 2 — Motivação",
+      type: "imagem + respostas",
+      section: "Entrada e perguntas",
+      description: "Segunda pergunta do diagnóstico, com as opções de motivação.",
+    },
+    {
+      id: "objecao",
+      title: "Etapa 3 — Quebra de objeção",
+      type: "imagem + texto",
+      section: "Resultado e testemunhos",
+      description: "Primeira tela apresentada após a análise das respostas.",
+    },
+    {
+      id: "beneficios",
+      title: "Etapa 4 — Benefícios do método",
+      type: "imagem + texto",
+      section: "Resultado e testemunhos",
+      description: "Tela de explicação e checklist exibida antes dos testemunhos.",
+    },
+    {
+      id: "audio",
+      title: "Etapa 5 — Testemunho com áudio",
+      type: "imagem + áudio + texto",
+      section: "Resultado e testemunhos",
+      description: "Testemunho com o player de áudio em cima e a imagem logo abaixo.",
+    },
+    {
+      id: "niche",
+      title: "Etapa 6 — Testemunho do Instagram",
+      type: "imagem + texto",
+      section: "Resultado e testemunhos",
+      description: "Último testemunho do funil antes de entrar na página de vendas.",
+    },
+    {
+      id: "sales_vsl",
+      title: "Etapa 7 — Chamada do vídeo",
+      type: "texto",
+      section: "Página de vendas",
+      description: "Título exibido imediatamente acima do vídeo principal de vendas.",
+    },
+    {
+      id: "sales_vsl_video",
+      title: "Etapa 8 — Vídeo de vendas",
+      type: "vídeo ou capa",
+      section: "Página de vendas",
+      description: "Arquivo de vídeo ou imagem de capa do vídeo principal.",
+    },
+    {
+      id: "sales_offer",
+      title: "Etapa 9 — Oferta e checkout",
+      type: "preços + link",
+      section: "Página de vendas",
+      description: "Preço promocional, preço cheio e endereço do checkout.",
+    },
     {
       id: "sales_testimonial",
-      title: "Depoimento da Página de Vendas",
+      title: "Etapa 10 — Testemunho da página de vendas",
       type: "imagem do WhatsApp + áudio",
+      section: "Página de vendas",
+      description: "Áudio e print do WhatsApp exibidos dentro da página de vendas.",
     },
   ]);
 
@@ -1453,7 +1515,10 @@ export function ContentSection({
     writeDraft(next);
   };
 
-  const updateStep = (id: string, patch: { title?: string; image?: string; audio?: string }) => {
+  const updateStep = (
+    id: string,
+    patch: { title?: string; description?: string; image?: string; audio?: string },
+  ) => {
     // Usar o estado 'draft' mais atualizado do componente em vez de ler do localStorage
     // para evitar perda de dados se o writeDraft/readDraft tiver latência ou inconsistência
     const next: FunnelDraft = {
@@ -1572,202 +1637,351 @@ export function ContentSection({
       </div>
 
       <div className="space-y-4">
-        {questions.map((item) => (
-          <div
-            key={item.id}
-            className={`group flex flex-col rounded-2xl border transition-all p-4 ${
-              theme === "dark"
-                ? "border-white/5 bg-white/5 hover:border-primary/30"
-                : "border-zinc-200 bg-white hover:border-primary/30 shadow-sm"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
-                    theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
-                  }`}
+        {questions.map((item, index) => (
+          <Fragment key={item.id}>
+            {(index === 0 || questions[index - 1]?.section !== item.section) && (
+              <div
+                className={`mb-2 mt-8 rounded-2xl border px-5 py-4 first:mt-0 ${
+                  theme === "dark" ? "border-primary/20 bg-primary/10" : "border-red-100 bg-red-50"
+                }`}
+              >
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-primary">
+                  Parte{" "}
+                  {Array.from(new Set(questions.map((question) => question.section))).indexOf(
+                    item.section,
+                  ) + 1}
+                </p>
+                <h4
+                  className={`mt-1 text-base font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}
                 >
-                  {item.id === "audio" || item.id === "sales_testimonial" ? (
-                    <Music className="h-5 w-5" />
-                  ) : item.id === "sales_vsl_video" ? (
-                    <Video className="h-5 w-5" />
-                  ) : (
-                    <ImageIcon className="h-5 w-5" />
-                  )}
-                </div>
-                <div>
-                  <h4
-                    className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}
-                  >
-                    {item.title}
-                  </h4>
-                  <span
-                    className={`text-[10px] uppercase tracking-widest font-bold ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                  >
-                    {item.type} • ID: {item.id}
-                  </span>
-                </div>
+                  {item.section}
+                </h4>
               </div>
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="p-2 text-zinc-500 hover:text-white">
-                  <Settings className="h-4 w-4" />
-                </button>
-                <button className="p-2 text-red-500/50 hover:text-red-500">
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
+            )}
             <div
-              className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}
+              className={`group flex flex-col rounded-2xl border transition-all p-4 ${
+                theme === "dark"
+                  ? "border-white/5 bg-white/5 hover:border-primary/30"
+                  : "border-zinc-200 bg-white hover:border-primary/30 shadow-sm"
+              }`}
             >
-              <div className="space-y-2 sm:col-span-2">
-                <label
-                  className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                >
-                  Texto / Título exibido
-                </label>
-                <input
-                  type="text"
-                  value={draft.steps?.[item.id]?.title ?? ""}
-                  placeholder="Deixe vazio para manter o texto atual da página"
-                  onChange={(e) => updateStep(item.id, { title: e.target.value })}
-                  className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                    theme === "dark"
-                      ? "border-white/10 bg-black/40 text-white"
-                      : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                  }`}
-                />
-              </div>
-              <div className="space-y-2">
-                <label
-                  className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                >
-                  {item.id === "sales_vsl_video"
-                    ? "Vídeo da Oferta (VSL)"
-                    : item.id === "audio"
-                      ? "Imagem do depoimento exibida abaixo do áudio"
-                      : item.id === "sales_testimonial"
-                        ? "Print do depoimento no WhatsApp"
-                        : item.id === "niche"
-                          ? "Print do depoimento no Instagram"
-                          : "Imagem/Background"}
-                </label>
-                <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
                   <div
-                    className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
+                      theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
+                    }`}
                   >
-                    <MediaPreview item={item} draft={draft} />
-
-                    {(draft.steps?.[item.id]?.image ||
-                      draft.steps?.[item.id]?.audio ||
-                      (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
-                      <button
-                        onClick={() => {
-                          updateStep(
-                            item.id,
-                            item.id === "audio" ? { image: "" } : { image: "", audio: "" },
-                          );
-                          toast.info("Mídia restaurada para o padrão.");
-                        }}
-                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
-                        title="Remover imagem"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
+                    {item.id === "audio" || item.id === "sales_testimonial" ? (
+                      <Music className="h-5 w-5" />
+                    ) : item.id === "sales_vsl_video" ? (
+                      <Video className="h-5 w-5" />
+                    ) : (
+                      <ImageIcon className="h-5 w-5" />
                     )}
                   </div>
-                  <div className="flex-1 space-y-3">
+                  <div>
+                    <h4
+                      className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}
+                    >
+                      {item.title}
+                    </h4>
+                    <p
+                      className={`mt-1 max-w-2xl text-xs leading-relaxed ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}
+                    >
+                      {item.description}
+                    </p>
+                    <span
+                      className={`text-[10px] uppercase tracking-widest font-bold ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      {item.type} • ID: {item.id}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button className="p-2 text-zinc-500 hover:text-white">
+                    <Settings className="h-4 w-4" />
+                  </button>
+                  <button className="p-2 text-red-500/50 hover:text-red-500">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div
+                className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}
+              >
+                {item.id !== "sales_vsl_video" && item.id !== "sales_offer" && (
+                  <div className="space-y-2 sm:col-span-2">
+                    <label
+                      className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      {item.id === "intro"
+                        ? "Chamada principal da abertura"
+                        : item.id === "dor" || item.id === "motivacao"
+                          ? "Texto da pergunta"
+                          : item.id === "sales_vsl"
+                            ? "Chamada exibida acima do vídeo"
+                            : "Título exibido nesta etapa"}
+                    </label>
                     <input
                       type="text"
-                      placeholder={
-                        item.id === "sales_vsl_video"
-                          ? "URL do vídeo/thumb"
-                          : item.id === "audio"
-                            ? "URL da imagem do depoimento"
-                            : item.id === "sales_testimonial"
-                              ? "URL da imagem do WhatsApp"
-                              : item.id === "niche"
-                                ? "URL da imagem do Instagram"
-                                : "URL da imagem"
-                      }
-                      value={
-                        draft.steps?.[item.id]?.image?.startsWith("data:") ||
-                        draft.steps?.[item.id]?.audio?.startsWith("data:")
-                          ? ""
-                          : draft.steps?.[item.id]?.image ||
-                            draft.steps?.[item.id]?.audio ||
-                            (item.id === "intro" ? logoAsset.url : "")
-                      }
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        const isAudio = Boolean(val.match(/\.(mp3|wav|ogg)(?:\?|$)/i));
-                        updateStep(item.id, {
-                          [item.id !== "audio" && isAudio ? "audio" : "image"]: val,
-                        });
-                      }}
-                      className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                      value={draft.steps?.[item.id]?.title ?? ""}
+                      placeholder="Deixe vazio para manter o texto atual da página"
+                      onChange={(e) => updateStep(item.id, { title: e.target.value })}
+                      className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark"
                           ? "border-white/10 bg-black/40 text-white"
                           : "border-zinc-200 bg-zinc-50 text-zinc-900"
                       }`}
                     />
-                    <div className="flex items-center gap-4">
-                      <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                        {item.id === "sales_vsl_video" ? (
-                          <Video className="h-3 w-3" />
-                        ) : item.id === "sales_testimonial" ? (
-                          <Music className="h-3 w-3" />
-                        ) : (
-                          <ImageIcon className="h-3 w-3" />
+                    {item.id === "intro" && (
+                      <>
+                        <label
+                          className={`mt-3 block text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                        >
+                          Texto de apoio abaixo da chamada
+                        </label>
+                        <textarea
+                          value={draft.steps?.[item.id]?.description ?? ""}
+                          placeholder="Responda o diagnóstico gratuito de 2 minutos..."
+                          onChange={(e) => updateStep(item.id, { description: e.target.value })}
+                          rows={3}
+                          className={`w-full resize-y rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                            theme === "dark"
+                              ? "border-white/10 bg-black/40 text-white"
+                              : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                          }`}
+                        />
+                      </>
+                    )}
+                  </div>
+                )}
+                {item.id !== "sales_vsl" && item.id !== "sales_offer" && (
+                  <div className="space-y-2 sm:col-span-2">
+                    <label
+                      className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      {item.id === "sales_vsl_video"
+                        ? "Vídeo da Oferta (VSL)"
+                        : item.id === "audio"
+                          ? "Imagem do depoimento exibida abaixo do áudio"
+                          : item.id === "sales_testimonial"
+                            ? "Print do depoimento no WhatsApp"
+                            : item.id === "niche"
+                              ? "Print do depoimento no Instagram"
+                              : "Imagem/Background"}
+                    </label>
+                    <div className="flex flex-col gap-3">
+                      <div
+                        className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
+                      >
+                        <MediaPreview item={item} draft={draft} />
+
+                        {(draft.steps?.[item.id]?.image ||
+                          draft.steps?.[item.id]?.audio ||
+                          (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
+                          <button
+                            onClick={() => {
+                              updateStep(
+                                item.id,
+                                item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                              );
+                              toast.info("Mídia restaurada para o padrão.");
+                            }}
+                            className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
+                            title="Remover imagem"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
                         )}
-                        {item.id === "sales_vsl_video"
-                          ? "Subir Vídeo"
-                          : item.id === "audio"
-                            ? "Subir Imagem"
-                            : item.id === "sales_testimonial"
-                              ? "Subir Imagem"
-                              : "Alterar Upload"}
+                      </div>
+                      <div className="flex-1 space-y-3">
+                        <input
+                          type="text"
+                          placeholder={
+                            item.id === "sales_vsl_video"
+                              ? "URL do vídeo/thumb"
+                              : item.id === "audio"
+                                ? "URL da imagem do depoimento"
+                                : item.id === "sales_testimonial"
+                                  ? "URL da imagem do WhatsApp"
+                                  : item.id === "niche"
+                                    ? "URL da imagem do Instagram"
+                                    : "URL da imagem"
+                          }
+                          value={
+                            draft.steps?.[item.id]?.image?.startsWith("data:") ||
+                            draft.steps?.[item.id]?.audio?.startsWith("data:")
+                              ? ""
+                              : draft.steps?.[item.id]?.image ||
+                                draft.steps?.[item.id]?.audio ||
+                                (item.id === "intro" ? logoAsset.url : "")
+                          }
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            const isAudio = Boolean(val.match(/\.(mp3|wav|ogg)(?:\?|$)/i));
+                            updateStep(item.id, {
+                              [item.id !== "audio" && isAudio ? "audio" : "image"]: val,
+                            });
+                          }}
+                          className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                            theme === "dark"
+                              ? "border-white/10 bg-black/40 text-white"
+                              : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                          }`}
+                        />
+                        <div className="flex items-center gap-4">
+                          <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                            {item.id === "sales_vsl_video" ? (
+                              <Video className="h-3 w-3" />
+                            ) : item.id === "sales_testimonial" ? (
+                              <Music className="h-3 w-3" />
+                            ) : (
+                              <ImageIcon className="h-3 w-3" />
+                            )}
+                            {item.id === "sales_vsl_video"
+                              ? "Subir Vídeo"
+                              : item.id === "audio"
+                                ? "Subir Imagem"
+                                : item.id === "sales_testimonial"
+                                  ? "Subir Imagem"
+                                  : "Alterar Upload"}
+                            <input
+                              type="file"
+                              accept={
+                                item.id === "sales_vsl_video"
+                                  ? "video/*,image/*"
+                                  : item.id === "audio"
+                                    ? "image/*"
+                                    : "image/*"
+                              }
+                              className="hidden"
+                              onChange={(e) => {
+                                handleUpload(item.id, e.target.files?.[0], "image");
+                              }}
+                            />
+                          </label>
+
+                          {item.id === "sales_testimonial" && (
+                            <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                              <Music className="h-3 w-3" />
+                              Subir Áudio
+                              <input
+                                type="file"
+                                accept="audio/*"
+                                className="hidden"
+                                onChange={(e) =>
+                                  handleUpload(item.id, e.target.files?.[0], "audio")
+                                }
+                              />
+                            </label>
+                          )}
+
+                          {(draft.steps?.[item.id]?.image ||
+                            draft.steps?.[item.id]?.audio ||
+                            (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
+                            <button
+                              onClick={() => {
+                                updateStep(
+                                  item.id,
+                                  item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                                );
+                                toast.info("Mídia restaurada para o padrão.");
+                              }}
+                              className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                              Remover
+                            </button>
+                          )}
+                        </div>
+                        {item.id === "sales_testimonial" && draft.steps?.[item.id]?.audio && (
+                          <audio
+                            src={draft.steps?.[item.id]?.audio}
+                            controls
+                            preload="metadata"
+                            className="h-9 w-full"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {QUIZ_OPTIONS[item.id] && (
+                  <div className="space-y-3 sm:col-span-2">
+                    <label
+                      className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      {item.id === "sales_offer"
+                        ? "Dados da oferta na ordem exibida abaixo"
+                        : item.id === "audio" || item.id === "sales_testimonial"
+                          ? "Textos complementares do testemunho"
+                          : "Respostas que o visitante pode escolher"}
+                    </label>
+                    <div className="grid gap-3">
+                      {(draft.steps?.[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map(
+                        (option, i) => (
+                          <div key={i} className="flex gap-2">
+                            <div
+                              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[10px] font-black ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}
+                            >
+                              #{i + 1}
+                            </div>
+                            <input
+                              type="text"
+                              value={option}
+                              onChange={(e) => updateOption(item.id, i, e.target.value)}
+                              className={`w-full rounded-xl border px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                                theme === "dark"
+                                  ? "border-white/10 bg-black/40 text-white"
+                                  : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                              }`}
+                            />
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                )}
+                {item.id === "audio" && (
+                  <div className="space-y-2">
+                    <label
+                      className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      Arquivo de Áudio (MP3)
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border overflow-hidden truncate ${
+                          theme === "dark"
+                            ? "bg-zinc-800 text-zinc-400 border-white/5"
+                            : "bg-zinc-50 text-zinc-600 border-zinc-200"
+                        }`}
+                      >
+                        {draft.steps?.[item.id]?.audio ? (
+                          <span className="text-green-500 font-bold">
+                            ● Áudio carregado no Storage
+                          </span>
+                        ) : (
+                          "Nenhum áudio selecionado"
+                        )}
+                      </div>
+                      <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                        <Music className="h-3 w-3" />
+                        {draft.steps?.[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
                         <input
                           type="file"
-                          accept={
-                            item.id === "sales_vsl_video"
-                              ? "video/*,image/*"
-                              : item.id === "audio"
-                                ? "image/*"
-                                : "image/*"
-                          }
+                          accept="audio/*"
                           className="hidden"
-                          onChange={(e) => {
-                            handleUpload(item.id, e.target.files?.[0], "image");
-                          }}
+                          onChange={(e) => handleUpload(item.id, e.target.files?.[0], "audio")}
                         />
                       </label>
-
-                      {item.id === "sales_testimonial" && (
-                        <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                          <Music className="h-3 w-3" />
-                          Subir Áudio
-                          <input
-                            type="file"
-                            accept="audio/*"
-                            className="hidden"
-                            onChange={(e) => handleUpload(item.id, e.target.files?.[0], "audio")}
-                          />
-                        </label>
-                      )}
-
-                      {(draft.steps?.[item.id]?.image ||
-                        draft.steps?.[item.id]?.audio ||
-                        (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
+                      {draft.steps?.[item.id]?.audio && (
                         <button
                           onClick={() => {
-                            updateStep(
-                              item.id,
-                              item.id === "audio" ? { image: "" } : { image: "", audio: "" },
-                            );
-                            toast.info("Mídia restaurada para o padrão.");
+                            updateStep(item.id, { audio: "" });
+                            toast.info("Áudio removido da prévia.");
                           }}
                           className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
                         >
@@ -1776,109 +1990,21 @@ export function ContentSection({
                         </button>
                       )}
                     </div>
-                    {item.id === "sales_testimonial" && draft.steps?.[item.id]?.audio && (
+                    {draft.steps?.[item.id]?.audio && (
                       <audio
-                        src={draft.steps?.[item.id]?.audio}
                         controls
                         preload="metadata"
-                        className="h-9 w-full"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-              {QUIZ_OPTIONS[item.id] && (
-                <div className="space-y-3 sm:col-span-2">
-                  <label
-                    className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                  >
-                    Opções de resposta
-                  </label>
-                  <div className="grid gap-3">
-                    {(draft.steps?.[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map(
-                      (option, i) => (
-                        <div key={i} className="flex gap-2">
-                          <div
-                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[10px] font-black ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}
-                          >
-                            #{i + 1}
-                          </div>
-                          <input
-                            type="text"
-                            value={option}
-                            onChange={(e) => updateOption(item.id, i, e.target.value)}
-                            className={`w-full rounded-xl border px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                              theme === "dark"
-                                ? "border-white/10 bg-black/40 text-white"
-                                : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                            }`}
-                          />
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </div>
-              )}
-              {item.id === "audio" && (
-                <div className="space-y-2">
-                  <label
-                    className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                  >
-                    Arquivo de Áudio (MP3)
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border overflow-hidden truncate ${
-                        theme === "dark"
-                          ? "bg-zinc-800 text-zinc-400 border-white/5"
-                          : "bg-zinc-50 text-zinc-600 border-zinc-200"
-                      }`}
-                    >
-                      {draft.steps?.[item.id]?.audio ? (
-                        <span className="text-green-500 font-bold">
-                          ● Áudio carregado no Storage
-                        </span>
-                      ) : (
-                        "Nenhum áudio selecionado"
-                      )}
-                    </div>
-                    <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                      <Music className="h-3 w-3" />
-                      {draft.steps?.[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        className="hidden"
-                        onChange={(e) => handleUpload(item.id, e.target.files?.[0], "audio")}
-                      />
-                    </label>
-                    {draft.steps?.[item.id]?.audio && (
-                      <button
-                        onClick={() => {
-                          updateStep(item.id, { audio: "" });
-                          toast.info("Áudio removido da prévia.");
-                        }}
-                        className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
+                        src={draft.steps[item.id]?.audio}
+                        className="mt-3 w-full"
                       >
-                        <Trash2 className="h-3 w-3" />
-                        Remover
-                      </button>
+                        Seu navegador não suporta reprodução de áudio.
+                      </audio>
                     )}
                   </div>
-                  {draft.steps?.[item.id]?.audio && (
-                    <audio
-                      controls
-                      preload="metadata"
-                      src={draft.steps[item.id]?.audio}
-                      className="mt-3 w-full"
-                    >
-                      Seu navegador não suporta reprodução de áudio.
-                    </audio>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
+          </Fragment>
         ))}
       </div>
       <button

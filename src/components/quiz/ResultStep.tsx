@@ -8,7 +8,10 @@ export function ResultStep({
   steps,
 }: {
   onNext: () => void;
-  steps: Record<string, { title?: string; image?: string; audio?: string; options?: string[] }>;
+  steps: Record<
+    string,
+    { title?: string; description?: string; image?: string; audio?: string; options?: string[] }
+  >;
 }) {
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(
     "objection",

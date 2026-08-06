@@ -230,7 +230,13 @@ type SalesDraft = {
   checkoutUrl?: string;
 };
 
-type FunnelStep = { title?: string; image?: string; audio?: string; options?: string[] };
+type FunnelStep = {
+  title?: string;
+  description?: string;
+  image?: string;
+  audio?: string;
+  options?: string[];
+};
 
 export function SalesPage({
   draft = {},

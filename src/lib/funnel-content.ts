@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export type FunnelDraft = {
-  steps: Record<string, { title?: string; image?: string; audio?: string; options?: string[] }>;
+  steps: Record<
+    string,
+    { title?: string; description?: string; image?: string; audio?: string; options?: string[] }
+  >;
   sales: {
     videoHeadline?: string;
     videoThumb?: string;
