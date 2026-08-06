@@ -654,7 +654,7 @@ export function SalesPage({
 
               <div className="mt-10 space-y-2 text-zinc-500 font-bold">
                 <p className="text-lg">
-                  Ou 12x de <span className="text-zinc-950 font-black">R$ 20,35</span> no cartão
+                  Ou 12x de <span className="text-zinc-950 font-black">R$ 19,78</span> no cartão
                 </p>
                 <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest opacity-60">
                   <ShieldCheck className="h-3 w-3" /> Acesso imediato após aprovação
@@ -668,7 +668,7 @@ export function SalesPage({
               </div>
               <p className="text-xs text-zinc-500 max-w-xs mx-auto mb-2 font-medium">
                 Isso aqui não é gatilho mental, olhe no link da minha bio e veja que o treinamento
-                tem valor de 497,00.
+                tem valor de 399,00.
               </p>
               <p className="text-sm font-black text-green-500">
                 Clica no link e aproveita o desconto 👇
