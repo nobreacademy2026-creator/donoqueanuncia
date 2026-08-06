@@ -1720,7 +1720,13 @@ export function ContentSection({
 
   const updateStep = (
     id: string,
-    patch: { title?: string; description?: string; image?: string; audio?: string },
+    patch: {
+      title?: string;
+      description?: string;
+      image?: string;
+      images?: string[];
+      audio?: string;
+    },
   ) => {
     // Usar o estado 'draft' mais atualizado do componente em vez de ler do localStorage
     // para evitar perda de dados se o writeDraft/readDraft tiver latência ou inconsistência
@@ -1791,14 +1797,38 @@ export function ContentSection({
       return;
     }
 
+    const existingGallery = draft.steps?.[id]?.images?.length
+      ? (draft.steps[id]?.images ?? [])
+      : draft.steps?.[id]?.image
+        ? [draft.steps[id]!.image!]
+        : [];
+    if (id === "niche" && field === "image" && existingGallery.length >= 5) {
+      toast.error("A Etapa 6 aceita no máximo 5 imagens.");
+      return;
+    }
+
     const uploadKey = `${id}:${field}`;
     setUploadingMediaKey(uploadKey);
     try {
       const result = await uploadAdminMedia(file);
 
+      const currentStep = draft.steps?.[id] || {};
+      const isNicheGallery = id === "niche" && field === "image";
+      const currentGallery = currentStep.images?.length
+        ? currentStep.images
+        : currentStep.image
+          ? [currentStep.image]
+          : [];
+      const nextStep = isNicheGallery
+        ? {
+            ...currentStep,
+            image: currentGallery[0] || result,
+            images: [...currentGallery, result],
+          }
+        : { ...currentStep, [field]: result };
       const next: FunnelDraft = {
         ...draft,
-        steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
+        steps: { ...(draft.steps || {}), [id]: nextStep },
       };
       if (id === "sales_vsl_video" && field === "image") {
         next.sales = isVideo
@@ -2014,7 +2044,11 @@ export function ContentSection({
                             onClick={() => {
                               updateStep(
                                 item.id,
-                                item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                                item.id === "audio"
+                                  ? { image: "" }
+                                  : item.id === "niche"
+                                    ? { image: "", images: [] }
+                                    : { image: "", audio: "" },
                               );
                               toast.info("Mídia restaurada para o padrão.");
                             }}
@@ -2025,6 +2059,35 @@ export function ContentSection({
                           </button>
                         )}
                       </div>
+                      {item.id === "niche" && (draft.steps?.[item.id]?.images?.length ?? 0) > 0 && (
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                          {draft.steps[item.id]!.images!.slice(0, 5).map((image, imageIndex) => (
+                            <div
+                              key={`${image}-${imageIndex}`}
+                              className="relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-black"
+                            >
+                              <img
+                                src={image}
+                                alt={`Imagem ${imageIndex + 1}`}
+                                className="h-full w-full object-cover"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const images = draft.steps[item.id]!.images!.filter(
+                                    (_, index) => index !== imageIndex,
+                                  );
+                                  updateStep(item.id, { images, image: images[0] || "" });
+                                }}
+                                className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-red-600 text-white shadow-lg"
+                                aria-label={`Remover imagem ${imageIndex + 1}`}
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       <div className="flex-1 space-y-3">
                         <input
                           type="text"
@@ -2126,7 +2189,11 @@ export function ContentSection({
                               onClick={() => {
                                 updateStep(
                                   item.id,
-                                  item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                                  item.id === "audio"
+                                    ? { image: "" }
+                                    : item.id === "niche"
+                                      ? { image: "", images: [] }
+                                      : { image: "", audio: "" },
                                 );
                                 toast.info("Mídia restaurada para o padrão.");
                               }}

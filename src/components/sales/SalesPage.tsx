@@ -235,6 +235,7 @@ type FunnelStep = {
   title?: string;
   description?: string;
   image?: string;
+  images?: string[];
   audio?: string;
   options?: string[];
 };

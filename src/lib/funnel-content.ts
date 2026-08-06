@@ -4,7 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 export type FunnelDraft = {
   steps: Record<
     string,
-    { title?: string; description?: string; image?: string; audio?: string; options?: string[] }
+    {
+      title?: string;
+      description?: string;
+      image?: string;
+      images?: string[];
+      audio?: string;
+      options?: string[];
+    }
   >;
   sales: {
     videoHeadline?: string;

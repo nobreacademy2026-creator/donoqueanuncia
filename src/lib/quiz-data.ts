@@ -2,6 +2,7 @@ export type Question = {
   id: string;
   title: string;
   image?: string;
+  images?: string[];
   options: { label: string; value: string; score: number }[];
 };
 

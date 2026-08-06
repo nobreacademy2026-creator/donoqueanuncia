@@ -10,7 +10,14 @@ export function ResultStep({
   onNext: () => void;
   steps: Record<
     string,
-    { title?: string; description?: string; image?: string; audio?: string; options?: string[] }
+    {
+      title?: string;
+      description?: string;
+      image?: string;
+      images?: string[];
+      audio?: string;
+      options?: string[];
+    }
   >;
 }) {
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(
@@ -22,6 +29,11 @@ export function ResultStep({
   const solutionDraft = steps["beneficios"];
   const testimonialDraft = steps["audio"];
   const nicheDraft = steps["niche"];
+  const nicheImages = nicheDraft?.images?.length
+    ? nicheDraft.images.slice(0, 5)
+    : nicheDraft?.image
+      ? [nicheDraft.image]
+      : [];
 
   useEffect(() => {
     void trackEvent("etapa_visualizada", { etapa: subStage });
@@ -145,12 +157,25 @@ export function ResultStep({
             </p>
           </div>
 
-          {nicheDraft?.image ? (
-            <img
-              src={nicheDraft.image}
-              alt="Depoimento de aluno no Instagram"
-              className="mx-auto h-auto w-full max-w-md rounded-3xl border border-zinc-200 object-contain shadow-2xl"
-            />
+          {nicheImages.length > 0 ? (
+            nicheImages.length === 1 ? (
+              <img
+                src={nicheImages[0]}
+                alt="Depoimento de aluno no Instagram"
+                className="mx-auto h-auto w-full max-w-md rounded-3xl border border-zinc-200 object-contain shadow-2xl"
+              />
+            ) : (
+              <div className="mx-auto flex w-full max-w-md snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-thin">
+                {nicheImages.map((image, index) => (
+                  <img
+                    key={`${image}-${index}`}
+                    src={image}
+                    alt={`Depoimento ${index + 1}`}
+                    className="w-full shrink-0 snap-center rounded-3xl border border-zinc-200 object-contain shadow-xl"
+                  />
+                ))}
+              </div>
+            )
           ) : (
             <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-2xl">
               {/* Mock Carousel of Instagram Profiles */}
