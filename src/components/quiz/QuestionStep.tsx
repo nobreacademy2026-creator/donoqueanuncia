@@ -12,7 +12,7 @@ type Props = {
 
 export function QuestionStep({ question, index, total, selected, onSelect, onBack }: Props) {
   return (
-    <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl py-6">
+    <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl">
       <div className="flex items-center justify-end gap-4">
         <button
           onClick={onBack}
