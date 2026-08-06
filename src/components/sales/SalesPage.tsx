@@ -376,20 +376,18 @@ export function SalesPage({
                     void trackEvent("clique_video", { origem: "pagina_vendas" });
                   }}
                 >
-                  <div className="flex flex-col items-center gap-6">
+                  <div className="flex flex-col items-center gap-4 bg-red-600/90 p-8 rounded-2xl border-2 border-white/30 backdrop-blur-sm shadow-2xl animate-pulse-subtle">
+                    <span className="text-xl font-bold uppercase tracking-wider text-white">Clique aqui</span>
                     <div className="relative">
-                      <div className="absolute inset-0 animate-ping rounded-full bg-red-600/40" />
-                      <div className="relative h-24 w-24 rounded-full bg-red-600 flex items-center justify-center shadow-lg group-hover/overlay:scale-110 transition-transform duration-500">
-                        <Play className="h-10 w-10 fill-current ml-1" />
+                      <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
+                      <div className="relative grid h-20 w-20 place-items-center rounded-full bg-white text-red-600 shadow-xl transition-transform group-hover/overlay:scale-110">
+                        <div className="relative">
+                          <Play className="ml-1 h-10 w-10 fill-current" />
+                          <div className="absolute -top-1 -right-1 h-12 w-1 border-t-2 border-red-600 rotate-45 origin-center" />
+                        </div>
                       </div>
                     </div>
-
-                    <div className="flex flex-col items-center gap-2 animate-bounce">
-                      <div className="flex items-center gap-3 rounded-full bg-zinc-950/80 px-6 py-3 backdrop-blur-md border border-white/20 shadow-2xl">
-                        <Megaphone className="h-6 w-6 text-red-500 fill-red-500" />
-                        <span className="text-lg font-black uppercase tracking-wider">Aumenta o Volume!</span>
-                      </div>
-                    </div>
+                    <span className="text-lg font-medium text-white/90">para ativar o som</span>
                   </div>
                 </div>
               )}
