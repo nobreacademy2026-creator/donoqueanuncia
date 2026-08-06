@@ -366,7 +366,7 @@ export function SalesPage({
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
-                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg"
+                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg animate-pulse-subtle"
               />
               <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
                 <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
