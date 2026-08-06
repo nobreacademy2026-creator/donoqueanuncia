@@ -193,12 +193,24 @@ function EmbeddedVideo({ url }: { url: string }) {
             void trackEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
             setStarted(true);
           }}
-          className="absolute inset-0 grid place-items-center bg-black/15 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500"
+          className="absolute inset-0 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
           aria-label="Reproduzir vídeo"
         >
-          <span className="grid h-24 w-24 place-items-center rounded-full bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] transition-transform hover:scale-105">
-            <Play className="ml-1 h-10 w-10 fill-current" />
-          </span>
+          <div className="flex flex-col items-center gap-6">
+            <div className="relative">
+              <div className="absolute inset-0 animate-ping rounded-full bg-red-600/40" />
+              <span className="relative grid h-24 w-24 place-items-center rounded-full bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] transition-transform group-hover:scale-110">
+                <Play className="ml-1 h-10 w-10 fill-current" />
+              </span>
+            </div>
+            
+            <div className="flex flex-col items-center gap-2 animate-bounce">
+              <div className="flex items-center gap-3 rounded-full bg-zinc-950/80 px-6 py-3 backdrop-blur-md border border-white/20 shadow-2xl">
+                <Megaphone className="h-6 w-6 text-red-500 fill-red-500" />
+                <span className="text-lg font-black uppercase tracking-wider">Aumenta o Volume!</span>
+              </div>
+            </div>
+          </div>
         </button>
       )}
     </div>
