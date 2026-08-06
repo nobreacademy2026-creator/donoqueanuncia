@@ -116,6 +116,7 @@ export async function trackCheckoutClick(payload: Payload = {}) {
   return trackEvent("checkout_iniciado", payload);
 }
 
-export function whatsappLink(message: string) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+export function whatsappLink(message: string, number = WHATSAPP_NUMBER) {
+  const sanitizedNumber = number.replace(/\D/g, "") || WHATSAPP_NUMBER;
+  return `https://wa.me/${sanitizedNumber}?text=${encodeURIComponent(message)}`;
 }

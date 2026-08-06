@@ -13,6 +13,8 @@ export type FunnelDraft = {
     fullPrice?: string;
     promoPrice?: string;
     checkoutUrl?: string;
+    whatsappNumber?: string;
+    whatsappMessage?: string;
   };
   tracking?: {
     metaPixelId?: string;

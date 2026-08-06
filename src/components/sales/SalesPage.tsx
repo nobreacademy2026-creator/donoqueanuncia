@@ -228,6 +228,8 @@ type SalesDraft = {
   fullPrice?: string;
   promoPrice?: string;
   checkoutUrl?: string;
+  whatsappNumber?: string;
+  whatsappMessage?: string;
 };
 
 type FunnelStep = {
@@ -258,6 +260,8 @@ export function SalesPage({
   const fullPrice = draft.fullPrice || "R$ 399,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
+  const whatsappNumber = draft.whatsappNumber;
+  const whatsappMessage = draft.whatsappMessage || "Olá! Tenho dúvidas sobre o Dono que Anuncia.";
   const testimonial = steps["sales_testimonial"] || steps["audio"];
   const niche = steps["niche"];
 
@@ -674,7 +678,7 @@ export function SalesPage({
           AINDA ESTÁ COM DÚVIDAS?
         </h3>
         <a
-          href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
+          href={whatsappLink(whatsappMessage, whatsappNumber)}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 rounded-2xl bg-zinc-100 border border-zinc-200 px-8 py-4 font-bold uppercase text-zinc-950 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-200 active:translate-y-0"
