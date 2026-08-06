@@ -19,7 +19,7 @@ import {
 import { CHECKOUT_URL, trackCheckoutClick, trackEvent, whatsappLink } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
-import whatsappPrintAsset from "@/assets/whatsapp-print.png.asset.json";
+import whatsappPrintAsset from "@/assets/daniel-ferreira-whatsapp.png.asset.json";
 
 const BENEFITS = [
   {
