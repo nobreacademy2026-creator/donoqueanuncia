@@ -405,7 +405,11 @@ export function SalesPage({
               <span className="font-black text-zinc-950">usando apenas o seu celular.</span>
             </p>
 
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex flex-col items-center">
+                <span className="text-zinc-400 line-through text-lg font-bold">De {fullPrice}</span>
+                <span className="text-4xl font-black text-red-600 sm:text-6xl">Por apenas {promoPrice}</span>
+              </div>
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
