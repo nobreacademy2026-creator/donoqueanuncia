@@ -13,7 +13,7 @@ export const TRACKING_CONFIG = {
 };
 
 export const CHECKOUT_URL = import.meta.env["VITE_CHECKOUT_URL"] ?? "#checkout";
-export const WHATSAPP_NUMBER = import.meta.env["VITE_WHATSAPP_NUMBER"] ?? "5500000000000";
+export const WHATSAPP_NUMBER = import.meta.env["VITE_WHATSAPP_NUMBER"] ?? "5535999777944";
 
 type Payload = Record<string, unknown>;
 
