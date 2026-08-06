@@ -1,4 +1,6 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import {
   BarChart3,
   Bell,
@@ -22,6 +24,13 @@ type ShellProps = {
   onTabChange: (tab: AdminTab) => void;
   onLogout: () => void | Promise<void>;
   children: ReactNode;
+};
+
+type CheckoutNotification = {
+  id: string;
+  created_at: string | null;
+  session_id: string | null;
+  payload: Record<string, unknown> | null;
 };
 
 const NAV_ITEMS = [
@@ -64,12 +73,70 @@ export function AdminShell({ activeTab, onTabChange, onLogout, children }: Shell
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<CheckoutNotification[]>([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const page = PAGE_COPY[activeTab];
   const initials = useMemo(() => "DA", []);
 
   const selectTab = (tab: AdminTab) => {
     onTabChange(tab);
     setMobileOpen(false);
+  };
+
+  useEffect(() => {
+    let active = true;
+
+    void supabase
+      .from("analytics_events")
+      .select("id,created_at,session_id,payload")
+      .eq("event_name", "checkout_iniciado")
+      .order("created_at", { ascending: false })
+      .limit(10)
+      .then(({ data, error }) => {
+        if (!active) return;
+        if (error) {
+          console.error("[Admin] Falha ao carregar notificacoes de checkout", error);
+          return;
+        }
+        setNotifications((data ?? []) as CheckoutNotification[]);
+      });
+
+    const channel = supabase
+      .channel("admin-checkout-notifications")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "analytics_events",
+          filter: "event_name=eq.checkout_iniciado",
+        },
+        ({ new: inserted }) => {
+          const notification = inserted as CheckoutNotification & { event_name?: string };
+          if (notification.event_name !== "checkout_iniciado") return;
+          setNotifications((current) => [notification, ...current].slice(0, 10));
+          setUnreadNotifications((current) => current + 1);
+          toast.success("Novo clique no checkout", {
+            description: "Uma pessoa acabou de clicar no botao de compra.",
+          });
+        },
+      )
+      .subscribe((status, error) => {
+        if (error)
+          console.error("[Admin] Notificacoes em tempo real indisponiveis", { status, error });
+      });
+
+    return () => {
+      active = false;
+      void supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const toggleNotifications = () => {
+    setNotificationsOpen((open) => !open);
+    setProfileOpen(false);
+    setUnreadNotifications(0);
   };
 
   const sidebar = (
@@ -188,10 +255,68 @@ export function AdminShell({ activeTab, onTabChange, onLogout, children }: Shell
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
               Sistema online
             </span>
-            <button className="admin-icon-button relative" aria-label="Notificações">
-              <Bell className="h-[18px] w-[18px]" />
-              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                className="admin-icon-button relative"
+                aria-label="Notificações"
+                aria-expanded={notificationsOpen}
+                onClick={toggleNotifications}
+              >
+                <Bell className="h-[18px] w-[18px]" />
+                {unreadNotifications > 0 && (
+                  <span className="absolute -right-1 -top-1 grid min-h-5 min-w-5 place-items-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white ring-2 ring-[#08090b]">
+                    {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                  </span>
+                )}
+              </button>
+              {notificationsOpen && (
+                <div className="absolute right-0 top-12 z-50 w-[min(90vw,360px)] overflow-hidden rounded-2xl border border-white/10 bg-[#15161a] shadow-2xl">
+                  <div className="border-b border-white/[0.06] px-4 py-3">
+                    <strong className="block text-sm text-white">Notificações</strong>
+                    <span className="text-xs text-zinc-500">Cliques recentes no checkout</span>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto p-2">
+                    {notifications.length === 0 ? (
+                      <p className="px-3 py-8 text-center text-sm text-zinc-500">
+                        Nenhum clique no checkout registrado ainda.
+                      </p>
+                    ) : (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className="flex gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[0.04]"
+                        >
+                          <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                            <ShoppingBag className="h-4 w-4" />
+                          </span>
+                          <span className="min-w-0">
+                            <strong className="block text-sm font-medium text-zinc-100">
+                              Clique no botão de checkout
+                            </strong>
+                            <small className="mt-1 block text-xs text-zinc-500">
+                              {notification.created_at
+                                ? new Date(notification.created_at).toLocaleString("pt-BR")
+                                : "Agora"}
+                            </small>
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectTab("analytics");
+                      setNotificationsOpen(false);
+                    }}
+                    className="w-full border-t border-white/[0.06] px-4 py-3 text-center text-xs font-semibold text-red-400 transition hover:bg-white/[0.03]"
+                  >
+                    Ver todos os eventos
+                  </button>
+                </div>
+              )}
+            </div>
             <div className="relative">
               <button
                 onClick={() => setProfileOpen((value) => !value)}
