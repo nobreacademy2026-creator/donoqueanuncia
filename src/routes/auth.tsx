@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdminRole } from "@/lib/auth.functions";
+import { checkCurrentUserAdmin } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -53,7 +53,7 @@ function AuthPage() {
         }
 
         if (data.session) {
-          const role = await checkAdminRole();
+          const role = await checkCurrentUserAdmin();
           if (role?.hasAdmin) {
             window.location.replace("/admin");
             return;
@@ -107,10 +107,14 @@ function AuthPage() {
       });
       if (error) throw error;
 
-      const role = await checkAdminRole();
+      const role = await checkCurrentUserAdmin();
       if (!role?.hasAdmin) {
         await supabase.auth.signOut();
-        toast.error("Sua conta não possui permissão de administrador.");
+        toast.error(
+          role?.error
+            ? `Login aceito, mas não foi possível validar o acesso: ${role.error}`
+            : "Login aceito, mas sua conta não possui permissão de administrador.",
+        );
         return;
       }
 

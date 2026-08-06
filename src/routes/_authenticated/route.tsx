@@ -17,8 +17,8 @@ export const Route = createFileRoute("/_authenticated")({
     // 3. Admin path check
     if (location.pathname.startsWith("/admin")) {
       try {
-        const { checkAdminRole } = await import("@/lib/auth.functions");
-        const data = await checkAdminRole();
+        const { checkCurrentUserAdmin } = await import("@/lib/auth-client");
+        const data = await checkCurrentUserAdmin();
 
         if (!data || !data.hasAdmin) {
           console.warn("[Auth] No admin access", data?.error);
