@@ -736,7 +736,7 @@ export function SalesPage({
               <CTAButton
                 href={checkoutUrl}
                 label="Garantir com desconto"
-                className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10"
+                className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10 animate-pulse-subtle"
               />
             </div>
 
