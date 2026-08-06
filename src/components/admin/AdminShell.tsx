@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Code2,
   Gauge,
+  LibraryBig,
   LayoutTemplate,
   LogOut,
   Menu,
@@ -17,7 +18,8 @@ import {
   X,
 } from "lucide-react";
 
-export type AdminTab = "overview" | "analytics" | "content" | "sales" | "tracking" | "settings";
+export type AdminTab =
+  "overview" | "analytics" | "templates" | "content" | "sales" | "tracking" | "settings";
 
 type ShellProps = {
   activeTab: AdminTab;
@@ -36,6 +38,7 @@ type CheckoutNotification = {
 const NAV_ITEMS = [
   { id: "overview" as const, label: "Visão Geral", icon: Gauge },
   { id: "analytics" as const, label: "Analytics e Métricas", icon: BarChart3 },
+  { id: "templates" as const, label: "Modelos de Funil", icon: LibraryBig },
   { id: "content" as const, label: "Conteúdo do Funil", icon: LayoutTemplate },
   { id: "sales" as const, label: "Página de Vendas", icon: ShoppingBag },
   { id: "tracking" as const, label: "Pixels e Tracking", icon: Code2 },
@@ -50,6 +53,10 @@ const PAGE_COPY: Record<AdminTab, { title: string; description: string }> = {
   analytics: {
     title: "Analytics e Métricas",
     description: "Acompanhe o desempenho e a conversão do seu funil em tempo real.",
+  },
+  templates: {
+    title: "Modelos de Funil",
+    description: "Escolha um funil de quiz pronto para personalizar e publicar.",
   },
   content: {
     title: "Conteúdo do Funil",
