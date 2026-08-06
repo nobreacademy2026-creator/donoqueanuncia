@@ -1427,6 +1427,7 @@ export function TrackingSection({
   );
 }
 
+// v2: estado de modelos garantido no topo do componente
 export function ContentSection({
   theme,
   draft,
