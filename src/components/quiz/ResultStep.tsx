@@ -199,15 +199,22 @@ export function ResultStep({
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                import("@/lib/tracking").then((m) => m.trackEvent("clique_quero_isso_tambem"));
-                setSubStage("niche");
-              }}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
-            >
-              Eu quero isso também
-            </button>
+            <div className="rounded-2xl border-2 border-dashed border-green-200 bg-green-50/50 p-6 space-y-4">
+              <p className="text-sm font-bold text-green-700 uppercase tracking-wider">OFERTA ESPECIAL PARA VOCÊ:</p>
+              <div className="flex flex-col items-center">
+                <span className="text-zinc-400 line-through text-sm font-bold">De R$ 399,00</span>
+                <span className="text-3xl font-black text-zinc-900">Por apenas R$ 197,00</span>
+              </div>
+              <button
+                onClick={() => {
+                  import("@/lib/tracking").then((m) => m.trackEvent("clique_quero_isso_tambem"));
+                  setSubStage("niche");
+                }}
+                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
+              >
+                Eu quero isso também
+              </button>
+            </div>
           </div>
         </div>
       </div>
