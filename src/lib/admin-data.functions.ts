@@ -28,33 +28,11 @@ async function getVerifiedAdmin(
   return authenticatedAdmin;
 }
 
-async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerifiedAdmin>>) {
-  const { data: bucket, error: bucketError } = await admin.storage.getBucket("funnel-media");
-
-  if (!bucket) {
-    const { error: createError } = await admin.storage.createBucket("funnel-media", {
-      public: true,
-      fileSizeLimit: 500 * 1024 * 1024,
-      allowedMimeTypes: ["image/*", "audio/*", "video/*"],
-    });
-    if (createError) {
-      throw new Error(
-        `Falha ao preparar armazenamento: ${createError.message || bucketError?.message}`,
-      );
-    }
-    return;
-  }
-
-  if (bucket.file_size_limit !== 500 * 1024 * 1024 || !bucket.public) {
-    const { error: updateError } = await admin.storage.updateBucket("funnel-media", {
-      public: true,
-      fileSizeLimit: 500 * 1024 * 1024,
-      allowedMimeTypes: ["image/*", "audio/*", "video/*"],
-    });
-    if (updateError) {
-      throw new Error(`Falha ao liberar a mídia publicada: ${updateError.message}`);
-    }
-  }
+// Storage admin operations require the service role; the user-scoped client is
+// blocked by RLS on storage.buckets. The bucket already exists and is public.
+async function getStorage() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin.storage;
 }
 
 export const loadAdminAnalytics = createServerFn({ method: "GET" })
