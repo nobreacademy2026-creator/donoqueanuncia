@@ -776,27 +776,6 @@ export function SalesPage({
       </section>
 
       {/* FAQ */}
-      <Section title="O que os alunos estão dizendo">
-        <div className="grid gap-6 sm:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <div
-              key={i}
-              className="bg-white p-6 rounded-3xl border border-zinc-100 shadow-sm flex flex-col gap-4"
-            >
-              <div className="flex gap-1 text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-current" />
-                ))}
-              </div>
-              <p className="text-zinc-600 text-sm italic leading-relaxed">"{t.text}"</p>
-              <div className="mt-auto pt-4 border-t border-zinc-50">
-                <p className="font-bold text-sm text-zinc-950">{t.name}</p>
-                <p className="text-xs text-zinc-400 font-medium">{t.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
 
       <Section title="Perguntas frequentes">
         <div className="grid gap-3 max-w-3xl mx-auto">
