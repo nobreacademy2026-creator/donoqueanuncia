@@ -193,12 +193,24 @@ function EmbeddedVideo({ url }: { url: string }) {
             void trackEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
             setStarted(true);
           }}
-          className="absolute inset-0 grid place-items-center bg-black/15 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500"
+          className="absolute inset-0 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
           aria-label="Reproduzir vídeo"
         >
-          <span className="grid h-24 w-24 place-items-center rounded-full bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] transition-transform hover:scale-105">
-            <Play className="ml-1 h-10 w-10 fill-current" />
-          </span>
+          <div className="flex flex-col items-center gap-6">
+            <div className="relative">
+              <div className="absolute inset-0 animate-ping rounded-full bg-red-600/40" />
+              <span className="relative grid h-24 w-24 place-items-center rounded-full bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] transition-transform group-hover:scale-110">
+                <Play className="ml-1 h-10 w-10 fill-current" />
+              </span>
+            </div>
+            
+            <div className="flex flex-col items-center gap-2 animate-bounce">
+              <div className="flex items-center gap-3 rounded-full bg-zinc-950/80 px-6 py-3 backdrop-blur-md border border-white/20 shadow-2xl">
+                <Megaphone className="h-6 w-6 text-red-500 fill-red-500" />
+                <span className="text-lg font-black uppercase tracking-wider">Aumenta o Volume!</span>
+              </div>
+            </div>
+          </div>
         </button>
       )}
     </div>
@@ -328,26 +340,31 @@ export function SalesPage({
               ) : vslUrl ? (
                 <EmbeddedVideo url={vslUrl} />
               ) : (
-                <>
-                  {videoThumb && (
-                    <img
-                      key={videoThumb}
-                      src={videoThumb}
-                      alt="Vídeo explicativo DONO QUE ANUNCIA"
-                      className="h-full w-full object-cover opacity-70 group-hover:opacity-50 transition-all duration-700 group-hover:scale-105"
-                    />
-                  )}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <div className="h-20 w-20 rounded-full bg-red-600 flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
-                      <Play className="h-10 w-10 fill-current ml-1" />
+                <div 
+                  className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
+                  onClick={() => {
+                    void trackEvent("clique_video", { origem: "pagina_vendas" });
+                    // Since there is no state here in the fallback branch, 
+                    // this logic assumes the parent would handle the 'vslUrl' being present.
+                    // But in this 'else' branch, vslUrl is null.
+                  }}
+                >
+                  <div className="flex flex-col items-center gap-6">
+                    <div className="relative">
+                      <div className="absolute inset-0 animate-ping rounded-full bg-red-600/40" />
+                      <div className="relative h-24 w-24 rounded-full bg-red-600 flex items-center justify-center shadow-lg group-hover/overlay:scale-110 transition-transform duration-500">
+                        <Play className="h-10 w-10 fill-current ml-1" />
+                      </div>
                     </div>
-                    <div className="bg-black/40 backdrop-blur-sm px-5 py-2 rounded-full">
-                      <span className="font-bold text-[10px] tracking-widest uppercase">
-                        Assistir Aula Completa
-                      </span>
+
+                    <div className="flex flex-col items-center gap-2 animate-bounce">
+                      <div className="flex items-center gap-3 rounded-full bg-zinc-950/80 px-6 py-3 backdrop-blur-md border border-white/20 shadow-2xl">
+                        <Megaphone className="h-6 w-6 text-red-500 fill-red-500" />
+                        <span className="text-lg font-black uppercase tracking-wider">Aumenta o Volume!</span>
+                      </div>
                     </div>
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
