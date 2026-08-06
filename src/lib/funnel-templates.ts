@@ -272,13 +272,14 @@ export function applyFunnelTemplate(current: FunnelDraft, selected: FunnelTempla
   }
 
   const currentCheckout =
-    current.sales.checkoutUrl || current.steps.sales_offer?.options?.[2] || "";
-  if (steps.sales_offer?.options) {
-    steps.sales_offer = {
-      ...steps.sales_offer,
+    current.sales.checkoutUrl || current.steps["sales_offer"]?.options?.[2] || "";
+  const offerStep = steps["sales_offer"];
+  if (offerStep?.options) {
+    steps["sales_offer"] = {
+      ...offerStep,
       options: [
-        steps.sales_offer.options[0] ?? "",
-        steps.sales_offer.options[1] ?? "",
+        offerStep.options[0] ?? "",
+        offerStep.options[1] ?? "",
         currentCheckout,
       ],
     };
