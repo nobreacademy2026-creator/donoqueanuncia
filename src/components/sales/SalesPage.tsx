@@ -510,114 +510,11 @@ export function SalesPage({
         </p>
         <div className="mt-8 max-w-sm mx-auto">
           <div className="bg-[#e5ddd5] rounded-[2.5rem] shadow-2xl overflow-hidden border-[8px] border-zinc-900 flex flex-col aspect-[9/19] relative">
-            {/* Status Bar */}
-            <div className="bg-[#075e54] px-6 py-2 flex justify-between items-center text-white text-[10px] font-medium">
-              <span>14:26</span>
-              <div className="flex gap-1">
-                <div className="w-3 h-3 border border-white/50 rounded-sm" />
-                <div className="w-3 h-3 bg-white rounded-full" />
-              </div>
-            </div>
-
-            {/* WhatsApp Header */}
-            <div className="bg-[#075e54] p-4 flex items-center gap-3 text-white border-b border-black/10">
-              <div className="h-10 w-10 rounded-full bg-zinc-200 overflow-hidden shrink-0 border border-white/20">
-                <img
-                  src={
-                    testimonial?.image ||
-                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100"
-                  }
-                  alt="Aluno"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-base leading-none truncate">Carlos Eduardo (Aluno)</p>
-                <p className="text-[10px] opacity-80 mt-1 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full" /> online
-                </p>
-              </div>
-              <div className="flex gap-4 opacity-80">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                  <path d="M17.3 14.45l-2.89 2.89c-2.83-1.54-5.13-3.84-6.67-6.67l2.89-2.89c.28-.28.38-.67.28-1.03L10.39 3.3c-.08-.42-.45-.72-.88-.72H3.8c-.53 0-.94.46-.89.98.41 4.7 2.32 9.05 5.3 12.5 3.33 3.85 7.82 6.13 12.75 6.42.52.03.95-.38.95-.91v-5.7c0-.43-.3-.8-.72-.88l-3.45-.72c-.36-.08-.75.02-1.04.3z" />
-                </svg>
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2 s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Chat Body */}
-            <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-repeat bg-[length:400px]">
-              <div className="flex flex-col gap-1 max-w-[85%]">
-                <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">
-                    Tony, tô passando aqui pra te agradecer de verdade!
-                  </p>
-                  <div className="flex justify-end items-center gap-1 mt-1">
-                    <p className="text-[9px] text-zinc-400">14:20</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1 max-w-[85%]">
-                <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">
-                    Fiz minha primeira venda hoje seguindo exatamente o passo a passo. O curso é
-                    muito prático!
-                  </p>
-                  <div className="flex justify-end items-center gap-1 mt-1">
-                    <p className="text-[9px] text-zinc-400">14:21</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1 max-w-[85%] ml-auto items-end">
-                <div className="bg-[#dcf8c6] rounded-2xl rounded-tr-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">
-                    Que top Carlos! Fico muito feliz em saber disso. Bora pra cima que é só o
-                    começo! 🚀
-                  </p>
-                  <div className="flex justify-end items-center gap-1 mt-1">
-                    <p className="text-[9px] text-zinc-400">14:25</p>
-                    <svg viewBox="0 0 16 11" className="w-3 h-3 fill-blue-400">
-                      <path d="M11.05 1.05L5.5 6.6 2.45 3.55 1.4 4.6l4.1 4.1 6.6-6.6-1.05-1.05zM14.55 1.05L8.5 7.1 7.45 6.05l-1.05 1.05 2.1 2.1 7.1-7.1-1.05-1.05z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1 max-w-[85%]">
-                <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm relative">
-                  <p className="text-zinc-800 text-sm leading-relaxed">
-                    Obrigado mesmo, o investimento já se pagou no primeiro dia com essa venda. 🙏
-                  </p>
-                  <div className="flex justify-end items-center gap-1 mt-1">
-                    <p className="text-[9px] text-zinc-400">14:26</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Input Bar */}
-            <div className="bg-[#f0f0f0] p-2 flex items-center gap-2">
-              <div className="bg-white flex-1 rounded-full px-4 py-2 flex items-center justify-between shadow-sm">
-                <span className="text-zinc-400 text-sm">Mensagem</span>
-                <div className="flex gap-3 text-zinc-400">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                    <path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.36 8-5.29 8-9.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2v-4h2v4z" />
-                  </svg>
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="w-10 h-10 bg-[#075e54] rounded-full flex items-center justify-center text-white shadow-sm shrink-0">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current ml-0.5">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
-              </div>
-            </div>
+            <img 
+              src={whatsappPrintAsset.url} 
+              alt="Conversa de WhatsApp" 
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
         <div className="mt-8 text-center">
