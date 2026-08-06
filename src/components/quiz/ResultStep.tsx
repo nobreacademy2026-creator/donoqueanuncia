@@ -110,6 +110,12 @@ export function ResultStep({
           </div>
 
           <div className="space-y-6">
+            <img
+              src={testimonialDraft?.image || danielInstagramMockup.url}
+              alt="Depoimento do aluno no Instagram"
+              className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl border border-zinc-100"
+            />
+
             <button
               onClick={() => {
                 import("@/lib/tracking").then((m) => m.trackEvent("clique_quero_isso_tambem"));
