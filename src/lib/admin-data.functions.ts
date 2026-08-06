@@ -2,6 +2,16 @@ import { createServerFn } from "@tanstack/react-start";
 import { serverSessionMiddleware } from "./auth-middleware.server";
 import type { FunnelDraft } from "./funnel-content";
 
+// jsonb does not preserve key order, so compare structurally with sorted keys.
+function stableStringify(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value) ?? "null";
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+  const entries = Object.entries(value as Record<string, unknown>)
+    .filter(([, v]) => v !== undefined)
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+  return `{${entries.map(([k, v]) => `${JSON.stringify(k)}:${stableStringify(v)}`).join(",")}}`;
+}
+
 async function getVerifiedAdmin(
   userId: string | null | undefined,
   accessToken: string | null | undefined,
@@ -67,7 +77,11 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
       .select("value,updated_at")
       .eq("key", "funnel_content")
       .single();
-    if (verifyError || !published || JSON.stringify(published.value) !== JSON.stringify(draft)) {
+    if (
+      verifyError ||
+      !published ||
+      stableStringify(published.value) !== stableStringify(draft)
+    ) {
       throw new Error(
         `A publicação não pôde ser confirmada no banco: ${verifyError?.message ?? "conteúdo divergente"}`,
       );
