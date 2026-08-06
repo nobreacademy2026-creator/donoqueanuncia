@@ -269,6 +269,7 @@ export function SalesPage({
     audio: salesTestimonial?.audio || funnelTestimonial?.audio,
   };
   const niche = steps["niche"];
+  const salesInstagram = steps["sales_instagram"] || niche;
 
   const [timeLeft, setTimeLeft] = React.useState(900); // 15 minutes in seconds
 
@@ -524,13 +525,13 @@ export function SalesPage({
         </div>
       </Section>
 
-      <Section title={niche?.title || "O QUE OS ALUNOS ESTÃO DIZENDO"}>
+      <Section title={salesInstagram?.title || "O QUE OS ALUNOS ESTÃO DIZENDO"}>
         <p className="text-center text-muted-foreground -mt-4 mb-8">
           Confira o depoimento de quem já aplicou o método e transformou seus resultados 👇
         </p>
         <div className="mx-auto max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
           <img
-            src={niche?.image || instagramPrintAsset.url}
+            src={salesInstagram?.image || instagramPrintAsset.url}
             alt="Depoimento de cliente no Instagram"
             className="h-auto w-full object-contain"
             loading="lazy"

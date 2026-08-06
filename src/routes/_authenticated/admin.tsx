@@ -1630,6 +1630,13 @@ export function ContentSection({
       section: "Página de vendas",
       description: "Áudio exibido antes da oferta e dos botões de checkout.",
     },
+    {
+      id: "sales_instagram",
+      title: "Etapa 11 — Imagem da página de vendas",
+      type: "imagem + texto",
+      section: "Página de vendas",
+      description: "Print do Instagram exibido depois do áudio e antes da oferta final.",
+    },
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -1954,15 +1961,18 @@ export function ContentSection({
                           ? "Imagem do depoimento exibida abaixo do áudio"
                           : item.id === "sales_testimonial"
                             ? "Print do depoimento no WhatsApp"
-                            : item.id === "niche"
-                              ? "Print do depoimento no Instagram"
-                              : "Imagem/Background"}
+                            : item.id === "sales_instagram"
+                              ? "Print do Instagram da página de vendas"
+                              : item.id === "niche"
+                                ? "Print do depoimento no Instagram"
+                                : "Imagem/Background"}
                     </label>
                     <div className="flex flex-col gap-3">
                       <div
                         className={`relative w-full overflow-hidden rounded-2xl border ${
                           item.id === "audio" ||
                           item.id === "niche" ||
+                          item.id === "sales_instagram" ||
                           item.id === "sales_testimonial"
                             ? "h-[420px] sm:h-[520px]"
                             : item.id === "intro" || item.id === "sales_vsl_video"
@@ -2000,9 +2010,11 @@ export function ContentSection({
                                 ? "URL da imagem do depoimento"
                                 : item.id === "sales_testimonial"
                                   ? "URL da imagem do WhatsApp"
-                                  : item.id === "niche"
-                                    ? "URL da imagem do Instagram"
-                                    : "URL da imagem"
+                                  : item.id === "sales_instagram"
+                                    ? "URL da imagem do Instagram na página de vendas"
+                                    : item.id === "niche"
+                                      ? "URL da imagem do Instagram"
+                                      : "URL da imagem"
                           }
                           value={
                             draft.steps?.[item.id]?.image?.startsWith("data:") ||

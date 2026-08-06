@@ -51,6 +51,7 @@ function template(
           title: "Veja o que aconteceu com quem decidiu começar",
           options: ["Nome do cliente", "Segmento / resultado"],
         },
+        sales_instagram: { title: "Veja mais um resultado real" },
       },
       sales: {
         videoHeadline: content.video,
@@ -277,11 +278,7 @@ export function applyFunnelTemplate(current: FunnelDraft, selected: FunnelTempla
   if (offerStep?.options) {
     steps["sales_offer"] = {
       ...offerStep,
-      options: [
-        offerStep.options[0] ?? "",
-        offerStep.options[1] ?? "",
-        currentCheckout,
-      ],
+      options: [offerStep.options[0] ?? "", offerStep.options[1] ?? "", currentCheckout],
     };
   }
 
