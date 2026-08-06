@@ -7,7 +7,8 @@ export const serverSessionMiddleware = createMiddleware({ type: "function" }).se
     const request = getRequest();
     const authHeader = request.headers.get("Authorization") || request.headers.get("authorization");
 
-    const anonymous = () => next({ context: { userId: null as string | null } });
+    const anonymous = () =>
+      next({ context: { userId: null as string | null, accessToken: null as string | null } });
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return anonymous();
@@ -30,7 +31,12 @@ export const serverSessionMiddleware = createMiddleware({ type: "function" }).se
       if (error || !data?.user?.id) {
         return anonymous();
       }
-      return next({ context: { userId: data.user.id as string | null } });
+      return next({
+        context: {
+          userId: data.user.id as string | null,
+          accessToken: token as string | null,
+        },
+      });
     } catch {
       return anonymous();
     }

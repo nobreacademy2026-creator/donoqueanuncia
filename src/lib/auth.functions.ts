@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 import { serverSessionMiddleware } from "./auth-middleware.server";
 
 export const checkAdminRole = createServerFn({ method: "GET" })
@@ -6,10 +7,20 @@ export const checkAdminRole = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     try {
       const userId = context?.userId;
-      if (!userId) return { hasAdmin: false, error: "Unauthenticated" };
+      const accessToken = context?.accessToken;
+      if (!userId || !accessToken) return { hasAdmin: false, error: "Unauthenticated" };
 
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data, error } = await supabaseAdmin
+      const supabaseUrl = process.env["SUPABASE_URL"];
+      const publishableKey = process.env["SUPABASE_PUBLISHABLE_KEY"];
+      if (!supabaseUrl || !publishableKey) {
+        return { hasAdmin: false, error: "Supabase server configuration is missing" };
+      }
+
+      const authenticatedClient = createClient(supabaseUrl, publishableKey, {
+        global: { headers: { Authorization: `Bearer ${accessToken}` } },
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+      const { data, error } = await authenticatedClient
         .from("user_roles" as any)
         .select("role")
         .eq("user_id", userId)
