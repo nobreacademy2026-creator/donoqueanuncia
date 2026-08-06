@@ -677,7 +677,7 @@ export function SalesPage({
 
       {/* Final Offer */}
       <section className="mx-auto mt-20 max-w-5xl px-5 text-center sm:mt-28">
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-950 px-6 py-12 text-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65)] sm:rounded-[3rem] sm:p-16">
+        <div className="relative overflow-hidden rounded-[2rem] border border-zinc-200 bg-white px-6 py-12 text-zinc-950 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.05)] sm:rounded-[3rem] sm:p-16">
           <div className="absolute top-0 right-0 p-8 opacity-10">
             <Zap className="h-64 w-64 text-red-600" />
           </div>
