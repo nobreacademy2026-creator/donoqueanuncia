@@ -1011,6 +1011,10 @@ export function ConfigSection({
   const [promoPrice, setPromoPrice] = useState(initial.sales.promoPrice ?? "R$ 197,00");
   const [fullPrice, setFullPrice] = useState(initial.sales.fullPrice ?? "R$ 497,00");
   const [vslUrl, setVslUrl] = useState(initial.sales.vslUrl ?? "");
+  const [whatsappNumber, setWhatsappNumber] = useState(initial.sales.whatsappNumber ?? "");
+  const [whatsappMessage, setWhatsappMessage] = useState(
+    initial.sales.whatsappMessage ?? "Olá! Tenho dúvidas sobre o Dono que Anuncia.",
+  );
 
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
     // Aqui não temos acesso ao 'draft' do AdminDashboard diretamente a menos que passemos como prop
@@ -1065,6 +1069,10 @@ export function ConfigSection({
       setPromoPrice(merged.sales.promoPrice ?? "R$ 197,00");
       setFullPrice(merged.sales.fullPrice ?? "R$ 497,00");
       setVslUrl(merged.sales.vslUrl ?? "");
+      setWhatsappNumber(merged.sales.whatsappNumber ?? "");
+      setWhatsappMessage(
+        merged.sales.whatsappMessage ?? "Olá! Tenho dúvidas sobre o Dono que Anuncia.",
+      );
     });
   }, []);
 
@@ -1081,6 +1089,8 @@ export function ConfigSection({
           fullPrice,
           vslUrl,
           videoThumb: vslUrl,
+          whatsappNumber: whatsappNumber.replace(/\D/g, ""),
+          whatsappMessage,
         },
       };
 
@@ -1205,6 +1215,64 @@ export function ConfigSection({
               publish({ promoPrice: e.target.value });
             }}
             className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+              theme === "dark"
+                ? "border-white/10 bg-black/40 text-white"
+                : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+            }`}
+          />
+        </div>
+
+        <div className="space-y-2 sm:col-span-2">
+          <div className="mt-2 border-t border-zinc-200 pt-6">
+            <h4
+              className={`text-base font-black uppercase ${theme === "dark" ? "text-white" : "text-zinc-900"}`}
+            >
+              Configuração do WhatsApp
+            </h4>
+            <p className={`mt-1 text-sm ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}>
+              Defina o destino do botão de atendimento da página de vendas.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label
+            className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}
+          >
+            Número com DDI e DDD
+          </label>
+          <input
+            type="tel"
+            placeholder="Ex.: 5535999999999"
+            value={whatsappNumber}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              setWhatsappNumber(value);
+              publish({ whatsappNumber: value });
+            }}
+            className={`w-full rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+              theme === "dark"
+                ? "border-white/10 bg-black/40 text-white"
+                : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
+            }`}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label
+            className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}
+          >
+            Mensagem personalizada
+          </label>
+          <textarea
+            rows={4}
+            placeholder="Mensagem preenchida ao abrir o WhatsApp"
+            value={whatsappMessage}
+            onChange={(e) => {
+              setWhatsappMessage(e.target.value);
+              publish({ whatsappMessage: e.target.value });
+            }}
+            className={`w-full resize-y rounded-2xl border px-4 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
               theme === "dark"
                 ? "border-white/10 bg-black/40 text-white"
                 : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
@@ -1438,16 +1506,8 @@ export function ContentSection({
       description: "Preço promocional, preço cheio e endereço do checkout.",
     },
     {
-      id: "sales_whatsapp",
-      title: "Etapa 10 — Atendimento pelo WhatsApp",
-      type: "número + mensagem",
-      section: "Página de vendas",
-      description:
-        "Número que receberá o contato e mensagem preenchida automaticamente ao clicar no botão.",
-    },
-    {
       id: "sales_testimonial",
-      title: "Etapa 11 — Testemunho da página de vendas",
+      title: "Etapa 10 — Testemunho da página de vendas",
       type: "imagem do WhatsApp + áudio",
       section: "Página de vendas",
       description: "Áudio e print do WhatsApp exibidos dentro da página de vendas.",
@@ -1498,7 +1558,6 @@ export function ContentSection({
     audio: ["Nome do Aluno (ex: @alan_dalila)", "Descrição curta", "Seguidores", "Seguindo"],
     sales_testimonial: ["Nome do Aluno", "Segmento / descrição"],
     sales_offer: ["Preço Oferta (Ex: R$ 197,00)", "Preço Cheio (Ex: R$ 399,00)", "Link Checkout"],
-    sales_whatsapp: ["5535999999999", "Olá! Tenho dúvidas sobre o Dono que Anuncia."],
   };
 
   const updateOption = (id: string, index: number, value: string) => {
@@ -1517,12 +1576,6 @@ export function ContentSection({
         ...(index === 0 ? { promoPrice: value } : {}),
         ...(index === 1 ? { fullPrice: value } : {}),
         ...(index === 2 ? { checkoutUrl: value } : {}),
-      };
-    } else if (id === "sales_whatsapp") {
-      next.sales = {
-        ...next.sales,
-        ...(index === 0 ? { whatsappNumber: value.replace(/\D/g, "") } : {}),
-        ...(index === 1 ? { whatsappMessage: value } : {}),
       };
     }
 
@@ -1726,88 +1779,184 @@ export function ContentSection({
               <div
                 className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}
               >
-                {item.id !== "sales_vsl_video" &&
-                  item.id !== "sales_offer" &&
-                  item.id !== "sales_whatsapp" && (
-                    <div className="space-y-2 sm:col-span-2">
-                      <label
-                        className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                      >
-                        {item.id === "intro"
-                          ? "Chamada principal da abertura"
-                          : item.id === "dor" || item.id === "motivacao"
-                            ? "Texto da pergunta"
-                            : item.id === "sales_vsl"
-                              ? "Chamada exibida acima do vídeo"
-                              : "Título exibido nesta etapa"}
-                      </label>
-                      <input
-                        type="text"
-                        value={draft.steps?.[item.id]?.title ?? ""}
-                        placeholder="Deixe vazio para manter o texto atual da página"
-                        onChange={(e) => updateStep(item.id, { title: e.target.value })}
-                        className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                          theme === "dark"
-                            ? "border-white/10 bg-black/40 text-white"
-                            : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                        }`}
-                      />
-                      {item.id === "intro" && (
-                        <>
-                          <label
-                            className={`mt-3 block text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                          >
-                            Texto de apoio abaixo da chamada
-                          </label>
-                          <textarea
-                            value={draft.steps?.[item.id]?.description ?? ""}
-                            placeholder="Responda o diagnóstico gratuito de 2 minutos..."
-                            onChange={(e) => updateStep(item.id, { description: e.target.value })}
-                            rows={3}
-                            className={`w-full resize-y rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                              theme === "dark"
-                                ? "border-white/10 bg-black/40 text-white"
-                                : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                            }`}
-                          />
-                        </>
-                      )}
-                    </div>
-                  )}
-                {item.id !== "sales_vsl" &&
-                  item.id !== "sales_offer" &&
-                  item.id !== "sales_whatsapp" && (
-                    <div className="space-y-2 sm:col-span-2">
-                      <label
-                        className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
-                      >
-                        {item.id === "sales_vsl_video"
-                          ? "Vídeo da Oferta (VSL)"
-                          : item.id === "audio"
-                            ? "Imagem do depoimento exibida abaixo do áudio"
-                            : item.id === "sales_testimonial"
-                              ? "Print do depoimento no WhatsApp"
-                              : item.id === "niche"
-                                ? "Print do depoimento no Instagram"
-                                : "Imagem/Background"}
-                      </label>
-                      <div className="flex flex-col gap-3">
-                        <div
-                          className={`relative w-full overflow-hidden rounded-2xl border ${
-                            item.id === "audio" ||
-                            item.id === "niche" ||
-                            item.id === "sales_testimonial"
-                              ? "h-[420px] sm:h-[520px]"
-                              : item.id === "intro" || item.id === "sales_vsl_video"
-                                ? "h-64"
-                                : "h-52"
-                          } ${theme === "dark" ? "bg-zinc-900 border-white/5" : "bg-zinc-50 border-zinc-200 shadow-inner"}`}
+                {item.id !== "sales_vsl_video" && item.id !== "sales_offer" && (
+                  <div className="space-y-2 sm:col-span-2">
+                    <label
+                      className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      {item.id === "intro"
+                        ? "Chamada principal da abertura"
+                        : item.id === "dor" || item.id === "motivacao"
+                          ? "Texto da pergunta"
+                          : item.id === "sales_vsl"
+                            ? "Chamada exibida acima do vídeo"
+                            : "Título exibido nesta etapa"}
+                    </label>
+                    <input
+                      type="text"
+                      value={draft.steps?.[item.id]?.title ?? ""}
+                      placeholder="Deixe vazio para manter o texto atual da página"
+                      onChange={(e) => updateStep(item.id, { title: e.target.value })}
+                      className={`w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                        theme === "dark"
+                          ? "border-white/10 bg-black/40 text-white"
+                          : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                      }`}
+                    />
+                    {item.id === "intro" && (
+                      <>
+                        <label
+                          className={`mt-3 block text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
                         >
-                          <MediaPreview item={item} draft={draft} />
+                          Texto de apoio abaixo da chamada
+                        </label>
+                        <textarea
+                          value={draft.steps?.[item.id]?.description ?? ""}
+                          placeholder="Responda o diagnóstico gratuito de 2 minutos..."
+                          onChange={(e) => updateStep(item.id, { description: e.target.value })}
+                          rows={3}
+                          className={`w-full resize-y rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                            theme === "dark"
+                              ? "border-white/10 bg-black/40 text-white"
+                              : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                          }`}
+                        />
+                      </>
+                    )}
+                  </div>
+                )}
+                {item.id !== "sales_vsl" && item.id !== "sales_offer" && (
+                  <div className="space-y-2 sm:col-span-2">
+                    <label
+                      className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
+                    >
+                      {item.id === "sales_vsl_video"
+                        ? "Vídeo da Oferta (VSL)"
+                        : item.id === "audio"
+                          ? "Imagem do depoimento exibida abaixo do áudio"
+                          : item.id === "sales_testimonial"
+                            ? "Print do depoimento no WhatsApp"
+                            : item.id === "niche"
+                              ? "Print do depoimento no Instagram"
+                              : "Imagem/Background"}
+                    </label>
+                    <div className="flex flex-col gap-3">
+                      <div
+                        className={`relative w-full overflow-hidden rounded-2xl border ${
+                          item.id === "audio" ||
+                          item.id === "niche" ||
+                          item.id === "sales_testimonial"
+                            ? "h-[420px] sm:h-[520px]"
+                            : item.id === "intro" || item.id === "sales_vsl_video"
+                              ? "h-64"
+                              : "h-52"
+                        } ${theme === "dark" ? "bg-zinc-900 border-white/5" : "bg-zinc-50 border-zinc-200 shadow-inner"}`}
+                      >
+                        <MediaPreview item={item} draft={draft} />
+
+                        {(draft.steps?.[item.id]?.image ||
+                          draft.steps?.[item.id]?.audio ||
+                          (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
+                          <button
+                            onClick={() => {
+                              updateStep(
+                                item.id,
+                                item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                              );
+                              toast.info("Mídia restaurada para o padrão.");
+                            }}
+                            className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
+                            title="Remover imagem"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex-1 space-y-3">
+                        <input
+                          type="text"
+                          placeholder={
+                            item.id === "sales_vsl_video"
+                              ? "URL do vídeo/thumb"
+                              : item.id === "audio"
+                                ? "URL da imagem do depoimento"
+                                : item.id === "sales_testimonial"
+                                  ? "URL da imagem do WhatsApp"
+                                  : item.id === "niche"
+                                    ? "URL da imagem do Instagram"
+                                    : "URL da imagem"
+                          }
+                          value={
+                            draft.steps?.[item.id]?.image?.startsWith("data:") ||
+                            draft.steps?.[item.id]?.audio?.startsWith("data:")
+                              ? ""
+                              : draft.steps?.[item.id]?.image ||
+                                draft.steps?.[item.id]?.audio ||
+                                (item.id === "intro" ? logoAsset.url : "")
+                          }
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            const isAudio = Boolean(val.match(/\.(mp3|wav|ogg)(?:\?|$)/i));
+                            updateStep(item.id, {
+                              [item.id !== "audio" && isAudio ? "audio" : "image"]: val,
+                            });
+                          }}
+                          className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
+                            theme === "dark"
+                              ? "border-white/10 bg-black/40 text-white"
+                              : "border-zinc-200 bg-zinc-50 text-zinc-900"
+                          }`}
+                        />
+                        <div className="flex items-center gap-4">
+                          <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                            {item.id === "sales_vsl_video" ? (
+                              <Video className="h-3 w-3" />
+                            ) : item.id === "sales_testimonial" ? (
+                              <Music className="h-3 w-3" />
+                            ) : (
+                              <ImageIcon className="h-3 w-3" />
+                            )}
+                            {item.id === "sales_vsl_video"
+                              ? "Subir Vídeo"
+                              : item.id === "audio"
+                                ? "Subir Imagem"
+                                : item.id === "sales_testimonial"
+                                  ? "Subir Imagem"
+                                  : "Alterar Upload"}
+                            <input
+                              type="file"
+                              accept={
+                                item.id === "sales_vsl_video"
+                                  ? "video/*,image/*"
+                                  : item.id === "audio"
+                                    ? "image/*"
+                                    : "image/*"
+                              }
+                              className="hidden"
+                              onChange={(e) => {
+                                handleUpload(item.id, e.target.files?.[0], "image");
+                              }}
+                            />
+                          </label>
+
+                          {item.id === "sales_testimonial" && (
+                            <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
+                              <Music className="h-3 w-3" />
+                              Subir Áudio
+                              <input
+                                type="file"
+                                accept="audio/*"
+                                className="hidden"
+                                onChange={(e) =>
+                                  handleUpload(item.id, e.target.files?.[0], "audio")
+                                }
+                              />
+                            </label>
+                          )}
 
                           {(draft.steps?.[item.id]?.image ||
                             draft.steps?.[item.id]?.audio ||
-                            (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
+                            (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
                             <button
                               onClick={() => {
                                 updateStep(
@@ -1816,125 +1965,25 @@ export function ContentSection({
                                 );
                                 toast.info("Mídia restaurada para o padrão.");
                               }}
-                              className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
-                              title="Remover imagem"
+                              className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
                             >
-                              <X className="h-3.5 w-3.5" />
+                              <Trash2 className="h-3 w-3" />
+                              Remover
                             </button>
                           )}
                         </div>
-                        <div className="flex-1 space-y-3">
-                          <input
-                            type="text"
-                            placeholder={
-                              item.id === "sales_vsl_video"
-                                ? "URL do vídeo/thumb"
-                                : item.id === "audio"
-                                  ? "URL da imagem do depoimento"
-                                  : item.id === "sales_testimonial"
-                                    ? "URL da imagem do WhatsApp"
-                                    : item.id === "niche"
-                                      ? "URL da imagem do Instagram"
-                                      : "URL da imagem"
-                            }
-                            value={
-                              draft.steps?.[item.id]?.image?.startsWith("data:") ||
-                              draft.steps?.[item.id]?.audio?.startsWith("data:")
-                                ? ""
-                                : draft.steps?.[item.id]?.image ||
-                                  draft.steps?.[item.id]?.audio ||
-                                  (item.id === "intro" ? logoAsset.url : "")
-                            }
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              const isAudio = Boolean(val.match(/\.(mp3|wav|ogg)(?:\?|$)/i));
-                              updateStep(item.id, {
-                                [item.id !== "audio" && isAudio ? "audio" : "image"]: val,
-                              });
-                            }}
-                            className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                              theme === "dark"
-                                ? "border-white/10 bg-black/40 text-white"
-                                : "border-zinc-200 bg-zinc-50 text-zinc-900"
-                            }`}
+                        {item.id === "sales_testimonial" && draft.steps?.[item.id]?.audio && (
+                          <audio
+                            src={draft.steps?.[item.id]?.audio}
+                            controls
+                            preload="metadata"
+                            className="h-9 w-full"
                           />
-                          <div className="flex items-center gap-4">
-                            <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                              {item.id === "sales_vsl_video" ? (
-                                <Video className="h-3 w-3" />
-                              ) : item.id === "sales_testimonial" ? (
-                                <Music className="h-3 w-3" />
-                              ) : (
-                                <ImageIcon className="h-3 w-3" />
-                              )}
-                              {item.id === "sales_vsl_video"
-                                ? "Subir Vídeo"
-                                : item.id === "audio"
-                                  ? "Subir Imagem"
-                                  : item.id === "sales_testimonial"
-                                    ? "Subir Imagem"
-                                    : "Alterar Upload"}
-                              <input
-                                type="file"
-                                accept={
-                                  item.id === "sales_vsl_video"
-                                    ? "video/*,image/*"
-                                    : item.id === "audio"
-                                      ? "image/*"
-                                      : "image/*"
-                                }
-                                className="hidden"
-                                onChange={(e) => {
-                                  handleUpload(item.id, e.target.files?.[0], "image");
-                                }}
-                              />
-                            </label>
-
-                            {item.id === "sales_testimonial" && (
-                              <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                                <Music className="h-3 w-3" />
-                                Subir Áudio
-                                <input
-                                  type="file"
-                                  accept="audio/*"
-                                  className="hidden"
-                                  onChange={(e) =>
-                                    handleUpload(item.id, e.target.files?.[0], "audio")
-                                  }
-                                />
-                              </label>
-                            )}
-
-                            {(draft.steps?.[item.id]?.image ||
-                              draft.steps?.[item.id]?.audio ||
-                              (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
-                              <button
-                                onClick={() => {
-                                  updateStep(
-                                    item.id,
-                                    item.id === "audio" ? { image: "" } : { image: "", audio: "" },
-                                  );
-                                  toast.info("Mídia restaurada para o padrão.");
-                                }}
-                                className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                                Remover
-                              </button>
-                            )}
-                          </div>
-                          {item.id === "sales_testimonial" && draft.steps?.[item.id]?.audio && (
-                            <audio
-                              src={draft.steps?.[item.id]?.audio}
-                              controls
-                              preload="metadata"
-                              className="h-9 w-full"
-                            />
-                          )}
-                        </div>
+                        )}
                       </div>
                     </div>
-                  )}
+                  </div>
+                )}
                 {QUIZ_OPTIONS[item.id] && (
                   <div className="space-y-3 sm:col-span-2">
                     <label
@@ -1942,11 +1991,9 @@ export function ContentSection({
                     >
                       {item.id === "sales_offer"
                         ? "Dados da oferta na ordem exibida abaixo"
-                        : item.id === "sales_whatsapp"
-                          ? "Número com DDI e DDD, seguido da mensagem personalizada"
-                          : item.id === "audio" || item.id === "sales_testimonial"
-                            ? "Textos complementares do testemunho"
-                            : "Respostas que o visitante pode escolher"}
+                        : item.id === "audio" || item.id === "sales_testimonial"
+                          ? "Textos complementares do testemunho"
+                          : "Respostas que o visitante pode escolher"}
                     </label>
                     <div className="grid gap-3">
                       {(draft.steps?.[item.id]?.options ?? QUIZ_OPTIONS[item.id] ?? []).map(
@@ -1955,22 +2002,11 @@ export function ContentSection({
                             <div
                               className={`flex h-11 shrink-0 items-center justify-center rounded-xl border px-3 text-[10px] font-black uppercase ${theme === "dark" ? "bg-zinc-800 border-white/5 text-zinc-500" : "bg-zinc-100 border-zinc-200 text-zinc-400"}`}
                             >
-                              {item.id === "sales_whatsapp"
-                                ? i === 0
-                                  ? "Número"
-                                  : "Mensagem"
-                                : `#${i + 1}`}
+                              #{i + 1}
                             </div>
                             <input
-                              type={item.id === "sales_whatsapp" && i === 0 ? "tel" : "text"}
+                              type="text"
                               value={option}
-                              placeholder={
-                                item.id === "sales_whatsapp"
-                                  ? i === 0
-                                    ? "Ex.: 5535999999999"
-                                    : "Mensagem que chegará preenchida no WhatsApp"
-                                  : undefined
-                              }
                               onChange={(e) => updateOption(item.id, i, e.target.value)}
                               className={`w-full rounded-xl border px-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                                 theme === "dark"
