@@ -1373,12 +1373,12 @@ export function ContentSection({
     { id: "objecao", title: "Página: Quebra de Objeção", type: "etapa" },
     { id: "beneficios", title: "Página: Checklist de Benefícios", type: "etapa" },
     { id: "audio", title: "Depoimento do Aluno", type: "etapa" },
-    { id: "niche", title: "Validação de Nicho", type: "etapa" },
+    { id: "niche", title: "Depoimento do Instagram", type: "imagem" },
     { id: "sales", title: "Página de Vendas (Final)", type: "página" },
     {
       id: "sales_testimonial",
       title: "Depoimento da Página de Vendas",
-      type: "imagem + áudio",
+      type: "imagem do WhatsApp + áudio",
     },
   ]);
 
@@ -1635,8 +1635,10 @@ export function ContentSection({
                   {item.id === "sales"
                     ? "Vídeo da Oferta (VSL)"
                     : item.id === "sales_testimonial"
-                      ? "Imagem e áudio do depoimento final"
-                      : "Imagem/Background"}
+                      ? "Print do depoimento no WhatsApp"
+                      : item.id === "niche"
+                        ? "Print do depoimento no Instagram"
+                        : "Imagem/Background"}
                 </label>
                 <div className="flex flex-col gap-3">
                   <div
@@ -1665,9 +1667,13 @@ export function ContentSection({
                       placeholder={
                         item.id === "sales"
                           ? "URL do vídeo/thumb"
-                          : item.id === "audio" || item.id === "sales_testimonial"
+                          : item.id === "audio"
                             ? "URL do áudio (mp3/wav)"
-                            : "URL da imagem"
+                            : item.id === "sales_testimonial"
+                              ? "URL da imagem do WhatsApp"
+                              : item.id === "niche"
+                                ? "URL da imagem do Instagram"
+                                : "URL da imagem"
                       }
                       value={
                         draft.steps?.[item.id]?.image?.startsWith("data:") ||

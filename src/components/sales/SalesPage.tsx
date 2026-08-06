@@ -9,7 +9,6 @@ import {
   MessageCircle,
   Play,
   ShieldCheck,
-  Star,
   Target,
   Timer,
   Users,
@@ -20,6 +19,7 @@ import { CHECKOUT_URL, trackCheckoutClick, trackEvent, whatsappLink } from "@/li
 import professorImg from "@/assets/rogerio-nobre.jpg";
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 import whatsappPrintAsset from "@/assets/daniel-whatsapp-chat.png.asset.json";
+import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
 
 const BENEFITS = [
   {
@@ -84,24 +84,6 @@ const BONUS = [
   "Ideias infinitas de anúncios pro seu negócio.",
   "Todas as aulas adicionais durante o ano.",
   "Tudo pensado para você impulsionar as vendas do seu negócio usando a Internet.",
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Tony Nobre",
-    role: "Estrategista Digital",
-    text: "O método Dono que Anuncia mudou completamente a forma como encaro as vendas. Antes eu dependia da sorte, agora eu domino as ferramentas que trazem clientes todos os dias. É o caminho mais curto para quem quer resultados reais no digital.",
-  },
-  {
-    name: "Ricardo Silva",
-    role: "Dono de Hamburgueria",
-    text: "Eu achava que anúncios eram só para grandes empresas. Com o treinamento, aprendi a investir pouco e ter um retorno absurdo. Minha agenda de pedidos vive cheia e meu WhatsApp não para de tocar.",
-  },
-  {
-    name: "Ana Oliveira",
-    role: "Loja de Roupas Femininas",
-    text: "Simples, direto e sem enrolação. Consegui aplicar as aulas no mesmo dia e já vi diferença no movimento da loja e no engajamento do meu perfil. Vale cada centavo do investimento!",
-  },
 ];
 
 const FAQ = [
@@ -198,7 +180,9 @@ function EmbeddedVideo({ url }: { url: string }) {
           aria-label="Reproduzir vídeo"
         >
           <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">
-            <span className="text-xs font-bold uppercase tracking-widest text-white">Clique aqui</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-white">
+              Clique aqui
+            </span>
             <div className="relative">
               <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
               <div className="relative grid h-12 w-12 place-items-center rounded-full bg-white text-red-600 shadow-lg">
@@ -344,8 +328,13 @@ export function SalesPage({
                       type="button"
                       onClick={(event) => {
                         event.stopPropagation();
-                        void trackEvent("clique_video", { origem: "pagina_vendas", tipo: "upload" });
-                        const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
+                        void trackEvent("clique_video", {
+                          origem: "pagina_vendas",
+                          tipo: "upload",
+                        });
+                        const video = document.getElementById(
+                          "vsl-video-player",
+                        ) as HTMLVideoElement;
                         if (video) video.play();
                         setStarted(true);
                       }}
@@ -353,7 +342,9 @@ export function SalesPage({
                       aria-label="Reproduzir vídeo"
                     >
                       <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">
-                        <span className="text-xs font-bold uppercase tracking-widest text-white">Clique aqui</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-white">
+                          Clique aqui
+                        </span>
                         <div className="relative">
                           <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
                           <div className="relative grid h-12 w-12 place-items-center rounded-full bg-white text-red-600 shadow-lg">
@@ -363,7 +354,9 @@ export function SalesPage({
                             </div>
                           </div>
                         </div>
-                        <span className="text-[10px] font-medium text-white/90">para ativar o som</span>
+                        <span className="text-[10px] font-medium text-white/90">
+                          para ativar o som
+                        </span>
                       </div>
                     </button>
                   )}
@@ -371,14 +364,16 @@ export function SalesPage({
               ) : vslUrl ? (
                 <EmbeddedVideo url={vslUrl} />
               ) : (
-                <div 
+                <div
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
                   onClick={() => {
                     void trackEvent("clique_video", { origem: "pagina_vendas" });
                   }}
                 >
                   <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">
-                    <span className="text-xs font-bold uppercase tracking-widest text-white">Clique aqui</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-white">
+                      Clique aqui
+                    </span>
                     <div className="relative">
                       <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
                       <div className="relative grid h-12 w-12 place-items-center rounded-full bg-white text-red-600 shadow-lg">
@@ -408,7 +403,9 @@ export function SalesPage({
             <div className="flex flex-col items-center gap-6">
               <div className="flex flex-col items-center">
                 <span className="text-zinc-400 line-through text-lg font-bold">De {fullPrice}</span>
-                <span className="text-4xl font-black text-red-600 sm:text-6xl">Por apenas {promoPrice}</span>
+                <span className="text-4xl font-black text-red-600 sm:text-6xl">
+                  Por apenas {promoPrice}
+                </span>
               </div>
               <CTAButton
                 href={checkoutUrl}
@@ -481,15 +478,6 @@ export function SalesPage({
               </button>
             )}
             <div className="flex-1 space-y-4">
-              <div className="flex flex-col gap-2 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
-                <div>
-                  <h4 className="font-bold text-zinc-900 text-lg">Resultado Real</h4>
-                  <p className="text-zinc-500 text-sm font-medium">Aluno do Dono que Anuncia</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-green-600 font-bold text-xl">De R$ 10k → R$ 100k</span>
-                </div>
-              </div>
               <div className="relative h-3 w-full bg-zinc-100 rounded-full overflow-hidden border border-zinc-50">
                 <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.4)]" />
                 <div className="absolute inset-0 flex items-center justify-around px-4 opacity-20">
@@ -512,14 +500,13 @@ export function SalesPage({
           O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte
           para o próximo nível.
         </p>
-        <div className="mt-8 max-w-sm mx-auto">
-          <div className="bg-[#e5ddd5] rounded-[2.5rem] shadow-2xl overflow-hidden border-[8px] border-zinc-900 flex flex-col aspect-[9/19] relative">
-            <img 
-              src={whatsappPrintAsset.url} 
-              alt="Conversa de WhatsApp" 
-              className="w-full h-full object-cover"
-            />
-          </div>
+        <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
+          <img
+            src={testimonial?.image || whatsappPrintAsset.url}
+            alt="Depoimento de aluno no WhatsApp"
+            className="h-auto w-full object-contain"
+            loading="lazy"
+          />
         </div>
         <div className="mt-8 text-center">
           <CTAButton
@@ -534,29 +521,14 @@ export function SalesPage({
         <p className="text-center text-muted-foreground -mt-4 mb-8">
           Confira o depoimento de quem já aplicou o método e transformou seus resultados 👇
         </p>
-        
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
-          {TESTIMONIALS.map((t, i) => (
-            <div key={i} className="rounded-3xl border border-zinc-100 bg-zinc-50/30 p-8 shadow-sm transition hover:shadow-md">
-              <div className="mb-4 flex gap-1">
-                {[...Array(5)].map((_, star) => (
-                  <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="mb-6 text-sm font-medium leading-relaxed text-zinc-700 italic">
-                "{t.text}"
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-zinc-200" />
-                <div className="text-left">
-                  <p className="text-sm font-bold text-zinc-900">{t.name}</p>
-                  <p className="text-xs text-zinc-500">{t.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="mx-auto max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
+          <img
+            src={niche?.image || instagramPrintAsset.url}
+            alt="Depoimento de cliente no Instagram"
+            className="h-auto w-full object-contain"
+            loading="lazy"
+          />
         </div>
-
         <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-zinc-200/70 bg-white p-8 text-center shadow-sm sm:p-10">
           <p className="text-xl font-bold text-zinc-800">
             "Não importa o seu nicho, o tráfego pago é o oxigênio de qualquer negócio que quer
@@ -607,7 +579,6 @@ export function SalesPage({
           </p>
         </div>
       </Section>
-
 
       {/* Final Offer */}
       <section className="mx-auto mt-20 max-w-5xl px-5 text-center sm:mt-28">
