@@ -48,6 +48,7 @@ import {
 import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { uploadAdminMedia } from "@/lib/admin-media-upload";
+import { applyFunnelTemplate, FUNNEL_TEMPLATES } from "@/lib/funnel-templates";
 import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -1026,6 +1027,7 @@ export function ConfigSection({
   };
 
   const [saving, setSaving] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState(FUNNEL_TEMPLATES[0]?.id ?? "");
   const [uploadingVideo, setUploadingVideo] = useState(false);
 
   const handleVideoUpload = async (file: File | undefined) => {
@@ -1548,6 +1550,22 @@ export function ContentSection({
     }
   };
 
+  const handleApplyTemplate = () => {
+    const selected = FUNNEL_TEMPLATES.find((item) => item.id === selectedTemplateId);
+    if (!selected) return;
+    const confirmed = window.confirm(
+      `Aplicar o modelo "${selected.name}" ao rascunho? Os textos e respostas serão substituídos. Suas mídias, checkout, WhatsApp e pixels serão preservados.`,
+    );
+    if (!confirmed) return;
+
+    const next = applyFunnelTemplate(draft, selected);
+    setDraft(next);
+    writeDraft(next);
+    toast.success(`Modelo "${selected.name}" aplicado ao rascunho.`, {
+      description: "Revise o conteúdo abaixo e publique somente quando estiver pronto.",
+    });
+  };
+
   const QUIZ_OPTIONS: Record<string, string[]> = {
     dor: ["Não saber por onde começar.", "Gastar e não ver resultado."],
     motivacao: [
@@ -1679,6 +1697,73 @@ export function ContentSection({
 
   return (
     <div className="space-y-8">
+      <section className="overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-white/[0.03] to-transparent p-5 sm:p-7">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-primary">
+              Biblioteca de modelos
+            </p>
+            <h3 className="mt-2 text-xl font-black text-white sm:text-2xl">
+              Comece com um funil de quiz pronto
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-400">
+              Escolha um segmento, aplique ao rascunho e personalize todos os textos antes de
+              publicar. Suas imagens, áudios, checkout, WhatsApp e pixels são preservados.
+            </p>
+          </div>
+          <span className="shrink-0 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+            {FUNNEL_TEMPLATES.length} modelos disponíveis
+          </span>
+        </div>
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {FUNNEL_TEMPLATES.map((item) => {
+            const selected = item.id === selectedTemplateId;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setSelectedTemplateId(item.id)}
+                className={`rounded-2xl border p-4 text-left transition-all ${
+                  selected
+                    ? "border-primary bg-primary/10 shadow-[0_0_0_1px_rgba(239,68,68,.15)]"
+                    : "border-white/[0.07] bg-black/20 hover:border-white/20 hover:bg-white/[0.04]"
+                }`}
+              >
+                <span className="flex items-start gap-3">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-xl">
+                    {item.icon}
+                  </span>
+                  <span className="min-w-0">
+                    <strong className="block text-sm font-bold text-white">{item.name}</strong>
+                    <small className="mt-0.5 block text-[10px] font-bold uppercase tracking-widest text-primary">
+                      {item.category}
+                    </small>
+                  </span>
+                </span>
+                <span className="mt-3 block text-xs leading-relaxed text-zinc-500">
+                  {item.description}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-white/[0.07] bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-zinc-400">
+            O modelo altera apenas o rascunho. Revise na prévia antes de colocar no ar.
+          </p>
+          <button
+            type="button"
+            onClick={handleApplyTemplate}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:opacity-90"
+          >
+            <Layout className="h-4 w-4" />
+            Aplicar modelo selecionado
+          </button>
+        </div>
+      </section>
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3
