@@ -146,7 +146,7 @@ function CTAButton({
         // but tracking should happen. The 'target="_blank"' handles the new tab.
         void trackCheckoutClick({ origem: "pagina_vendas" });
       }}
-      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-[1.01] sm:text-base shadow-lg shadow-green-600/10 ${className}`}
+      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-105 sm:text-base shadow-lg shadow-green-600/20 animate-pulse-subtle ${className}`}
     >
       {label}
     </a>
@@ -366,7 +366,7 @@ export function SalesPage({
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
-                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg"
+                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg animate-pulse-subtle"
               />
               <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
                 <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
@@ -736,7 +736,7 @@ export function SalesPage({
               <CTAButton
                 href={checkoutUrl}
                 label="Garantir com desconto"
-                className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10"
+                className="w-full sm:w-auto px-10 py-5 text-lg bg-[#22c55e] hover:bg-[#16a34a] border-b-4 border-[#15803d] active:border-b-0 active:translate-y-1 shadow-lg shadow-green-600/10 animate-pulse-subtle"
               />
             </div>
 
