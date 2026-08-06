@@ -766,7 +766,7 @@ export function SalesPage({
           href={whatsappLink("Olá! Tenho dúvidas sobre o Dono que Anuncia.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-2xl bg-zinc-950 px-8 py-4 font-bold uppercase text-white shadow-xl shadow-zinc-900/10 transition hover:-translate-y-0.5 hover:bg-zinc-800 active:translate-y-0"
+          className="inline-flex items-center gap-3 rounded-2xl bg-zinc-100 border border-zinc-200 px-8 py-4 font-bold uppercase text-zinc-950 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-200 active:translate-y-0"
         >
           <div className="bg-white/20 p-2 rounded-full">
             <MessageCircle className="h-6 w-6 fill-white" />
