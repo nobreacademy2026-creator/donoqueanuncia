@@ -664,16 +664,6 @@ export function SalesPage({
         </div>
       </Section>
 
-      {/* Anniversary Badge */}
-      <section className="mx-auto mt-24 flex justify-center px-5 sm:mt-32">
-        <div className="relative group transition-transform hover:scale-110">
-          <img
-            src={anniversaryAsset.url}
-            alt="1st Year Anniversary Celebration"
-            className="h-32 object-contain drop-shadow-[0_0_15px_rgba(190,155,0,0.3)]"
-          />
-        </div>
-      </section>
 
       {/* Final Offer */}
       <section className="mx-auto mt-20 max-w-5xl px-5 text-center sm:mt-28">
