@@ -1774,7 +1774,15 @@ export function ContentSection({
                     </label>
                     <div className="flex flex-col gap-3">
                       <div
-                        className={`relative h-28 w-full rounded-xl overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-white/5" : "bg-zinc-100 border-zinc-200 shadow-inner"}`}
+                        className={`relative w-full overflow-hidden rounded-2xl border ${
+                          item.id === "audio" ||
+                          item.id === "niche" ||
+                          item.id === "sales_testimonial"
+                            ? "h-[420px] sm:h-[520px]"
+                            : item.id === "intro" || item.id === "sales_vsl_video"
+                              ? "h-64"
+                              : "h-52"
+                        } ${theme === "dark" ? "bg-zinc-900 border-white/5" : "bg-zinc-50 border-zinc-200 shadow-inner"}`}
                       >
                         <MediaPreview item={item} draft={draft} />
 
@@ -2182,12 +2190,23 @@ function MediaPreview({ item, draft }: { item: any; draft: FunnelDraft }) {
           <Music className="h-8 w-8 text-primary animate-pulse" />
         </div>
       ) : (
-        <img
-          key={mediaUrl || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
-          src={mediaUrl}
-          className="h-full w-full object-cover"
-          alt="Prévia da mídia"
-        />
+        <a
+          href={mediaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group/preview relative block h-full w-full"
+          title="Abrir imagem em tamanho original"
+        >
+          <img
+            key={mediaUrl || (item.id === "intro" ? "default-logo" : `step-${item.id}-default`)}
+            src={mediaUrl}
+            className="h-full w-full object-contain p-3 transition-transform duration-300 group-hover/preview:scale-[1.02]"
+            alt="Prévia da mídia"
+          />
+          <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/75 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-white opacity-0 transition-opacity group-hover/preview:opacity-100">
+            Clique para ampliar
+          </span>
+        </a>
       )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
