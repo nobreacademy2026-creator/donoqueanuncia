@@ -9,7 +9,7 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
   const logo = logoAsset.url;
 
   return (
-    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center py-4">
+    <div className="animate-rise-in mx-auto flex max-w-2xl flex-col items-center justify-center text-center">
       {/* Logo Section */}
       <div className="mb-6 flex flex-col items-center">
         <img

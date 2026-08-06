@@ -12,19 +12,8 @@ type Props = {
 
 export function QuestionStep({ question, index, total, selected, onSelect, onBack }: Props) {
   return (
-    <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl py-6">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-12 rounded-full bg-zinc-100 overflow-hidden">
-            <div
-              className="h-full bg-red-600 transition-all duration-500"
-              style={{ width: `${((index + 1) / total) * 100}%` }}
-            />
-          </div>
-          <p className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
-            Passo {index + 1}/{total}
-          </p>
-        </div>
+    <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl">
+      <div className="flex items-center justify-end gap-4">
         <button
           onClick={onBack}
           className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-100 border border-zinc-100 shadow-sm"

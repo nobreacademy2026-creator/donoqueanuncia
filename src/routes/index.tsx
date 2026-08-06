@@ -201,11 +201,9 @@ function Index() {
         </div>
       )}
 
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-zinc-100">
-        <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-center">
-          <div className="flex-1 max-w-md">
-            <QuizProgress value={progress} />
-          </div>
+      <div className="mx-auto max-w-2xl px-5 py-4 flex items-center justify-center">
+        <div className="flex-1 max-w-md">
+          <QuizProgress value={progress} />
         </div>
       </div>
 

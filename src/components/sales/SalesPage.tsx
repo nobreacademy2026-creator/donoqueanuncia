@@ -280,7 +280,7 @@ export function SalesPage({
       {/* Countdown Timer Floating Bar */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
         <div className="w-full flex justify-center pointer-events-auto">
-          <div className="w-full flex items-center justify-center gap-3 bg-red-600 py-1.5 text-white shadow-lg backdrop-blur-md px-4 sm:px-6">
+          <div className="w-full flex items-center justify-center gap-3 bg-red-600 py-1.5 text-white backdrop-blur-md px-4 sm:px-6">
             <Timer className="h-3.5 w-3.5 animate-pulse shrink-0" />
             <span className="text-[10px] font-bold uppercase tracking-widest sm:text-xs">
               Oferta expira em:
@@ -300,11 +300,14 @@ export function SalesPage({
             Acesso Liberado com Desconto
           </div>
           <h2 className="mx-auto mb-10 max-w-4xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:text-7xl">
-            {headline.split(" ").map((word, i) => (
-              <span key={i} className={word.toUpperCase() === "VÍDEO" ? "text-red-600" : ""}>
-                {word}{" "}
-              </span>
-            ))}
+            {headline.split(" ").map((word, i) => {
+              const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
+              return (
+                <span key={i} className={cleanWord === "VÍDEO" ? "text-red-600" : ""}>
+                  {word}{" "}
+                </span>
+              );
+            })}
           </h2>
 
           <div className="mx-auto max-w-4xl relative">
@@ -773,27 +776,6 @@ export function SalesPage({
       </section>
 
       {/* FAQ */}
-      <Section title="O que os alunos estão dizendo">
-        <div className="grid gap-6 sm:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <div
-              key={i}
-              className="bg-white p-6 rounded-3xl border border-zinc-100 shadow-sm flex flex-col gap-4"
-            >
-              <div className="flex gap-1 text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-current" />
-                ))}
-              </div>
-              <p className="text-zinc-600 text-sm italic leading-relaxed">"{t.text}"</p>
-              <div className="mt-auto pt-4 border-t border-zinc-50">
-                <p className="font-bold text-sm text-zinc-950">{t.name}</p>
-                <p className="text-xs text-zinc-400 font-medium">{t.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
 
       <Section title="Perguntas frequentes">
         <div className="grid gap-3 max-w-3xl mx-auto">
