@@ -62,16 +62,16 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
   .validator((draft: FunnelDraft) => draft)
   .handler(async ({ context, data: draft }) => {
     const admin = await getVerifiedAdmin(context?.userId);
+    const updatedAt = new Date().toISOString();
     const { error } = await admin.from("quiz_config").upsert(
-      {
-        key: "funnel_content",
-        value: draft as never,
-        updated_at: new Date().toISOString(),
-      },
+      [
+        { key: "funnel_content", value: draft as never, updated_at: updatedAt },
+        { key: "funnel_draft", value: draft as never, updated_at: updatedAt },
+      ],
       { onConflict: "key" },
     );
     if (error) throw new Error(`Falha ao publicar conteúdo: ${error.message}`);
-    return { success: true };
+    return { success: true, updatedAt };
   });
 
 type UploadRequest = { path: string };

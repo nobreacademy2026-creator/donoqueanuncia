@@ -68,7 +68,7 @@ export async function loadDraftFromServer(): Promise<FunnelDraft | null> {
 /** Persist the current content to the database (published version). */
 export async function publishDraft(draft: FunnelDraft) {
   const { publishAdminFunnel } = await import("./admin-data.functions");
-  await publishAdminFunnel({ data: draft });
+  return publishAdminFunnel({ data: draft });
 }
 
 /** Load the published content from the database. */
@@ -137,8 +137,9 @@ export function writeDraft(draft: FunnelDraft) {
 /** Live draft inside the admin preview (?preview=1); published content otherwise. */
 export function useFunnelDraft(): FunnelDraft {
   const [draft, setDraft] = useState<FunnelDraft>(() => {
-    // Initial state from cache if available to prevent flash
-    return readDraft() || EMPTY_DRAFT;
+    if (typeof window === "undefined") return EMPTY_DRAFT;
+    const isPreview = new URLSearchParams(window.location.search).get("preview") === "1";
+    return isPreview ? readDraft() : EMPTY_DRAFT;
   });
 
   useEffect(() => {
@@ -151,15 +152,6 @@ export function useFunnelDraft(): FunnelDraft {
         if (isPreview) {
           setDraft(readDraft());
         } else {
-          // Check local cache first for instant load
-          const cached = readDraft();
-          if (
-            cached &&
-            (Object.keys(cached.steps).length > 0 || Object.keys(cached.sales).length > 0)
-          ) {
-            setDraft(cached);
-          }
-
           let retries = 0;
           const MAX_RETRIES = 5;
 
@@ -167,7 +159,6 @@ export function useFunnelDraft(): FunnelDraft {
             const published = await loadPublished();
             if (active && published) {
               setDraft(published);
-              writeDraft(published); // Update cache
               console.log("[Funnel] Conteúdo publicado carregado com sucesso.");
               return;
             }
@@ -204,7 +195,6 @@ export function useFunnelDraft(): FunnelDraft {
                 tracking: value.tracking ?? {},
               };
               setDraft(published);
-              writeDraft(published);
             },
           )
           .subscribe((status, error) => {
