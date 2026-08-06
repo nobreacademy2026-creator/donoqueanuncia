@@ -378,9 +378,6 @@ export function SalesPage({
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
                   onClick={() => {
                     void trackEvent("clique_video", { origem: "pagina_vendas" });
-                    // Since there is no state here in the fallback branch, 
-                    // this logic assumes the parent would handle the 'vslUrl' being present.
-                    // But in this 'else' branch, vslUrl is null.
                   }}
                 >
                   <div className="flex flex-col items-center gap-6">
