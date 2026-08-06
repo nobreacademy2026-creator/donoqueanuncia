@@ -583,120 +583,33 @@ export function SalesPage({
         </div>
       </Section>
 
-      {/* Nicho Proof (Carousel Placeholder) */}
-      <Section title={niche?.title || "SERÁ QUE FUNCIONA PRO SEU NICHO?"}>
+      <Section title={niche?.title || "O QUE OS ALUNOS ESTÃO DIZENDO"}>
         <p className="text-center text-muted-foreground -mt-4 mb-8">
-          Se ainda tem dúvidas se funciona mesmo, olha o tanto de segmentos que eu já ajudei e hoje
-          vendem muito 👇
+          Confira o depoimento de quem já aplicou o método e transformou seus resultados 👇
         </p>
-        <div className="flex gap-4 overflow-x-auto pb-6 px-2 no-scrollbar snap-x snap-mandatory">
-          {[
-            {
-              username: "premium_grill_sp",
-              name: "Premium Grill / Boutique de Carnes",
-              bio: "Delivery de Carnes em São Paulo 🥩 🍖\nO melhor corte da cidade agora na sua casa 🤝 ✨",
-              text: "Fiz o insta do Zero Hoje faz 1 semana Apenas Já Bateu 1500 agr e não para de chegar e sempre convertendo em vendas",
-              img: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "18", followers: "1.584", following: "264" },
-            },
-            {
-              username: "clinica_vitalle",
-              name: "Dra. Ana - Estética Avançada",
-              bio: "Realçando sua beleza natural ✨\nAgendamentos via WhatsApp 📲",
-              text: "Gente, eu tô chocada! Comecei os anúncios ontem e já tenho 5 avaliações marcadas para amanhã. O investimento se pagou em 2 horas!",
-              img: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "42", followers: "2.105", following: "312" },
-            },
-            {
-              username: "loja_fashion_kids",
-              name: "Fashion Kids | Moda Infantil",
-              bio: "Estilo e conforto para os pequenos 👶 🎒\nEnviamos para todo o Brasil 🇧🇷",
-              text: "O curso é maravilhoso! Antes eu 'impulsionava' e não dava nada. Agora os pedidos no site não param de cair. Melhor investimento do ano!",
-              img: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "156", followers: "8.432", following: "890" },
-            },
-            {
-              username: "suporte_tech_br",
-              name: "Tech Solutions | Assistência",
-              bio: "Conserto de Celulares e Notebooks 📱 💻\nOrçamento rápido e garantia 🛠️",
-              text: "Minha bancada tá lotada de serviço! O segredo foi aparecer pra galera certa aqui do bairro igual o Tony ensina. Recomendo demais!",
-              img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "89", followers: "3.210", following: "450" },
-            },
-            {
-              username: "doces_da_vovo",
-              name: "Doces Gourmet | Confeitaria",
-              bio: "Bolos e doces artesanais 🍰 🍫\nEncomendas com 24h de antecedência 📝",
-              text: "Tony, você é fera! Meus anúncios de Natal esgotaram minha produção em 3 dias. Nunca tinha vendido tanto assim pelo Instagram!",
-              img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=100",
-              stats: { posts: "215", followers: "12.5k", following: "1.2k" },
-            },
-          ].map((profile, idx) => (
-            <div
-              key={idx}
-              className="min-w-[320px] max-w-sm rounded-[2rem] border border-zinc-200 bg-white shadow-xl overflow-hidden snap-center"
-            >
-              <div className="p-4 flex items-center justify-between border-b border-zinc-50">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
-                    <div className="h-full w-full rounded-full bg-white p-0.5">
-                      <img
-                        src={profile.img}
-                        alt={profile.username}
-                        className="h-full w-full rounded-full object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="text-left leading-tight">
-                    <p className="font-bold text-sm text-zinc-900">{profile.username}</p>
-                    <p className="text-[10px] text-zinc-500">{profile.name}</p>
-                  </div>
-                </div>
-                <button className="text-zinc-400">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                    <circle cx="12" cy="12" r="1.5" />
-                    <circle cx="6" cy="12" r="1.5" />
-                    <circle cx="18" cy="12" r="1.5" />
-                  </svg>
-                </button>
+        
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+          {TESTIMONIALS.map((t, i) => (
+            <div key={i} className="rounded-3xl border border-zinc-100 bg-zinc-50/30 p-8 shadow-sm transition hover:shadow-md">
+              <div className="mb-4 flex gap-1">
+                {[...Array(5)].map((_, star) => (
+                  <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                ))}
               </div>
-
-              <div className="p-4 text-left">
-                <div className="flex justify-around mb-4 text-center">
-                  <div>
-                    <p className="font-bold text-sm text-zinc-900">{profile.stats.posts}</p>
-                    <p className="text-[9px] text-zinc-400 uppercase font-semibold">posts</p>
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm text-zinc-900">{profile.stats.followers}</p>
-                    <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguidores</p>
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm text-zinc-900">{profile.stats.following}</p>
-                    <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
-                  </div>
+              <p className="mb-6 text-sm font-medium leading-relaxed text-zinc-700 italic">
+                "{t.text}"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-zinc-200" />
+                <div className="text-left">
+                  <p className="text-sm font-bold text-zinc-900">{t.name}</p>
+                  <p className="text-xs text-zinc-500">{t.role}</p>
                 </div>
-
-                <div className="space-y-0.5 mb-4">
-                  <p className="text-xs font-bold text-zinc-900">{profile.name}</p>
-                  {profile.bio.split("\n").map((line, i) => (
-                    <p key={i} className="text-xs text-zinc-800">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-
-                <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
-                  Seguir de volta
-                </button>
-              </div>
-
-              <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
-                <p className="text-xs leading-relaxed text-zinc-700 italic">"{profile.text}"</p>
               </div>
             </div>
           ))}
         </div>
+
         <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-zinc-200/70 bg-white p-8 text-center shadow-sm sm:p-10">
           <p className="text-xl font-bold text-zinc-800">
             "Não importa o seu nicho, o tráfego pago é o oxigênio de qualquer negócio que quer
