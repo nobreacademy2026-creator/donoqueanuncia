@@ -1511,9 +1511,9 @@ export function ContentSection({
     {
       id: "sales_testimonial",
       title: "Etapa 10 — Testemunho da página de vendas",
-      type: "imagem do WhatsApp + áudio",
+      type: "áudio + texto",
       section: "Página de vendas",
-      description: "Áudio e print do WhatsApp exibidos dentro da página de vendas.",
+      description: "Áudio exibido antes da oferta e dos botões de checkout.",
     },
   ]);
 
@@ -1913,7 +1913,7 @@ export function ContentSection({
                     )}
                   </div>
                 )}
-                {item.id !== "sales_vsl" && item.id !== "sales_offer" && (
+                {!["sales_vsl", "sales_offer", "sales_testimonial"].includes(item.id) && (
                   <div className="space-y-2 sm:col-span-2">
                     <label
                       className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
@@ -2108,7 +2108,7 @@ export function ContentSection({
                     </div>
                   </div>
                 )}
-                {item.id === "audio" && (
+                {(item.id === "audio" || item.id === "sales_testimonial") && (
                   <div className="space-y-2">
                     <label
                       className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}

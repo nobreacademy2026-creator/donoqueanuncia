@@ -18,7 +18,6 @@ import {
 import { CHECKOUT_URL, trackCheckoutClick, trackEvent, whatsappLink } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
-import whatsappPrintAsset from "@/assets/daniel-whatsapp-chat.png.asset.json";
 import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
 
 const BENEFITS = [
@@ -262,7 +261,13 @@ export function SalesPage({
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
   const whatsappNumber = draft.whatsappNumber;
   const whatsappMessage = draft.whatsappMessage || "Olá! Tenho dúvidas sobre o Dono que Anuncia.";
-  const testimonial = steps["sales_testimonial"] || steps["audio"];
+  const salesTestimonial = steps["sales_testimonial"];
+  const funnelTestimonial = steps["audio"];
+  const testimonial = {
+    ...funnelTestimonial,
+    ...salesTestimonial,
+    audio: salesTestimonial?.audio || funnelTestimonial?.audio,
+  };
   const niche = steps["niche"];
 
   const [timeLeft, setTimeLeft] = React.useState(900); // 15 minutes in seconds
@@ -510,14 +515,6 @@ export function SalesPage({
           O método <span className="text-primary font-black">DONO QUE ANUNCIA</span> é a sua ponte
           para o próximo nível.
         </p>
-        <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
-          <img
-            src={testimonial?.image || whatsappPrintAsset.url}
-            alt="Depoimento de aluno no WhatsApp"
-            className="h-auto w-full object-contain"
-            loading="lazy"
-          />
-        </div>
         <div className="mt-8 text-center">
           <CTAButton
             href={checkoutUrl}
