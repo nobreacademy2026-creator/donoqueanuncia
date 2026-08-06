@@ -1608,9 +1608,9 @@ export function ContentSection({
     {
       id: "niche",
       title: "Etapa 6 — Testemunho do Instagram",
-      type: "imagem + texto",
+      type: "carrossel com até 5 imagens + texto",
       section: "Resultado e testemunhos",
-      description: "Último testemunho do funil antes de entrar na página de vendas.",
+      description: "Adicione de 1 a 5 imagens. Com 2 ou mais, o visitante desliza para os lados.",
     },
     {
       id: "sales_vsl",
@@ -2011,6 +2011,19 @@ export function ContentSection({
                                 ? "Print do depoimento no Instagram"
                                 : "Imagem/Background"}
                     </label>
+                    {item.id === "niche" && (
+                      <div className="flex flex-col gap-2 rounded-xl border border-blue-500/20 bg-blue-500/10 p-3 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="text-xs leading-relaxed text-blue-200">
+                          Você pode adicionar até 5 imagens. A partir da segunda, o carrossel é
+                          ativado automaticamente.
+                        </span>
+                        <strong className="shrink-0 rounded-full bg-blue-500/15 px-3 py-1 text-[10px] uppercase tracking-widest text-blue-300">
+                          {draft.steps?.[item.id]?.images?.length ??
+                            (draft.steps?.[item.id]?.image ? 1 : 0)}{" "}
+                          de 5 imagens
+                        </strong>
+                      </div>
+                    )}
                     <div className="flex flex-col gap-3">
                       <div
                         className={`relative w-full overflow-hidden rounded-2xl border ${
@@ -2142,13 +2155,18 @@ export function ContentSection({
                             ) : (
                               <ImageIcon className="h-3 w-3" />
                             )}
-                            {item.id === "sales_vsl_video"
-                              ? "Subir Vídeo"
-                              : item.id === "audio"
-                                ? "Subir Imagem"
-                                : item.id === "sales_testimonial"
+                            {item.id === "niche"
+                              ? (draft.steps?.[item.id]?.images?.length ??
+                                  (draft.steps?.[item.id]?.image ? 1 : 0)) >= 5
+                                ? "Limite de 5 imagens"
+                                : "Adicionar outra imagem"
+                              : item.id === "sales_vsl_video"
+                                ? "Subir Vídeo"
+                                : item.id === "audio"
                                   ? "Subir Imagem"
-                                  : "Alterar Upload"}
+                                  : item.id === "sales_testimonial"
+                                    ? "Subir Imagem"
+                                    : "Alterar Upload"}
                             <input
                               type="file"
                               accept={
@@ -2159,7 +2177,12 @@ export function ContentSection({
                                     : "image/*"
                               }
                               className="hidden"
-                              disabled={Boolean(uploadingMediaKey)}
+                              disabled={
+                                Boolean(uploadingMediaKey) ||
+                                (item.id === "niche" &&
+                                  (draft.steps?.[item.id]?.images?.length ??
+                                    (draft.steps?.[item.id]?.image ? 1 : 0)) >= 5)
+                              }
                               onChange={(e) => {
                                 void handleUpload(item.id, e.target.files?.[0], "image");
                                 e.currentTarget.value = "";
