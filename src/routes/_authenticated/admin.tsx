@@ -1438,6 +1438,17 @@ export function ContentSection({
       ...draft,
       steps: { ...(draft.steps || {}), [id]: { ...step, options } },
     };
+
+    // Sincronizar campos específicos de oferta se for o passo sales_offer
+    if (id === "sales_offer") {
+      next.sales = {
+        ...next.sales,
+        ...(index === 0 ? { promoPrice: value } : {}),
+        ...(index === 1 ? { fullPrice: value } : {}),
+        ...(index === 2 ? { checkoutUrl: value } : {}),
+      };
+    }
+
     setDraft(next);
     writeDraft(next);
   };

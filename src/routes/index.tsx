@@ -158,12 +158,15 @@ function Index() {
         <SalesPage
           draft={{
             ...draft.sales,
-            ...(draft.steps["sales"]?.title ? { videoHeadline: draft.steps["sales"].title } : {}),
-            ...(draft.steps["sales"]?.image
-              ? /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(draft.steps["sales"].image)
-                ? { vslUrl: draft.steps["sales"].image }
-                : { videoThumb: draft.steps["sales"].image }
+            ...(draft.steps["sales_vsl"]?.title ? { videoHeadline: draft.steps["sales_vsl"].title } : {}),
+            ...(draft.steps["sales_vsl_video"]?.image
+              ? /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(draft.steps["sales_vsl_video"].image)
+                ? { vslUrl: draft.steps["sales_vsl_video"].image }
+                : { videoThumb: draft.steps["sales_vsl_video"].image }
               : {}),
+            ...(draft.steps["sales_offer"]?.options?.[0] ? { promoPrice: draft.steps["sales_offer"].options[0] } : {}),
+            ...(draft.steps["sales_offer"]?.options?.[1] ? { fullPrice: draft.steps["sales_offer"].options[1] } : {}),
+            ...(draft.steps["sales_offer"]?.options?.[2] ? { checkoutUrl: draft.steps["sales_offer"].options[2] } : {}),
           }}
           tracking={draft.tracking}
           steps={draft.steps}
