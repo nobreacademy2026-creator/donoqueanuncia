@@ -1372,7 +1372,7 @@ export function ContentSection({
     { id: "motivacao", title: "Pergunta: Motivação", type: "pergunta" },
     { id: "objecao", title: "Página: Quebra de Objeção", type: "etapa" },
     { id: "beneficios", title: "Página: Checklist de Benefícios", type: "etapa" },
-    { id: "audio", title: "Depoimento do Aluno", type: "etapa" },
+    { id: "audio", title: "Depoimento com Áudio", type: "imagem + áudio" },
     { id: "niche", title: "Depoimento do Instagram", type: "imagem" },
     { id: "sales", title: "Página de Vendas (Final)", type: "página" },
     {
@@ -1634,11 +1634,13 @@ export function ContentSection({
                 >
                   {item.id === "sales"
                     ? "Vídeo da Oferta (VSL)"
-                    : item.id === "sales_testimonial"
-                      ? "Print do depoimento no WhatsApp"
-                      : item.id === "niche"
-                        ? "Print do depoimento no Instagram"
-                        : "Imagem/Background"}
+                    : item.id === "audio"
+                      ? "Imagem do depoimento exibida abaixo do áudio"
+                      : item.id === "sales_testimonial"
+                        ? "Print do depoimento no WhatsApp"
+                        : item.id === "niche"
+                          ? "Print do depoimento no Instagram"
+                          : "Imagem/Background"}
                 </label>
                 <div className="flex flex-col gap-3">
                   <div
@@ -1651,7 +1653,10 @@ export function ContentSection({
                       (item.id === "intro" && !draft.steps?.[item.id]?.image)) && (
                       <button
                         onClick={() => {
-                          updateStep(item.id, { image: "", audio: "" });
+                          updateStep(
+                            item.id,
+                            item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                          );
                           toast.info("Mídia restaurada para o padrão.");
                         }}
                         className="absolute top-2 right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg z-10"
@@ -1668,7 +1673,7 @@ export function ContentSection({
                         item.id === "sales"
                           ? "URL do vídeo/thumb"
                           : item.id === "audio"
-                            ? "URL do áudio (mp3/wav)"
+                            ? "URL da imagem do depoimento"
                             : item.id === "sales_testimonial"
                               ? "URL da imagem do WhatsApp"
                               : item.id === "niche"
@@ -1686,7 +1691,9 @@ export function ContentSection({
                       onChange={(e) => {
                         const val = e.target.value;
                         const isAudio = Boolean(val.match(/\.(mp3|wav|ogg)(?:\?|$)/i));
-                        updateStep(item.id, { [isAudio ? "audio" : "image"]: val });
+                        updateStep(item.id, {
+                          [item.id !== "audio" && isAudio ? "audio" : "image"]: val,
+                        });
                       }}
                       className={`w-full rounded-lg border px-3 py-2 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                         theme === "dark"
@@ -1698,7 +1705,7 @@ export function ContentSection({
                       <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
                         {item.id === "sales" ? (
                           <Video className="h-3 w-3" />
-                        ) : item.id === "audio" || item.id === "sales_testimonial" ? (
+                        ) : item.id === "sales_testimonial" ? (
                           <Music className="h-3 w-3" />
                         ) : (
                           <ImageIcon className="h-3 w-3" />
@@ -1706,7 +1713,7 @@ export function ContentSection({
                         {item.id === "sales"
                           ? "Subir Vídeo"
                           : item.id === "audio"
-                            ? "Subir Áudio"
+                            ? "Subir Imagem"
                             : item.id === "sales_testimonial"
                               ? "Subir Imagem"
                               : "Alterar Upload"}
@@ -1716,13 +1723,12 @@ export function ContentSection({
                             item.id === "sales"
                               ? "video/*,image/*"
                               : item.id === "audio"
-                                ? "audio/*"
+                                ? "image/*"
                                 : "image/*"
                           }
                           className="hidden"
                           onChange={(e) => {
-                            const field = item.id === "audio" ? "audio" : "image";
-                            handleUpload(item.id, e.target.files?.[0], field);
+                            handleUpload(item.id, e.target.files?.[0], "image");
                           }}
                         />
                       </label>
@@ -1745,7 +1751,10 @@ export function ContentSection({
                         (item.id === "intro" && draft.steps?.[item.id]?.image)) && (
                         <button
                           onClick={() => {
-                            updateStep(item.id, { image: "", audio: "" });
+                            updateStep(
+                              item.id,
+                              item.id === "audio" ? { image: "" } : { image: "", audio: "" },
+                            );
                             toast.info("Mídia restaurada para o padrão.");
                           }}
                           className="text-xs font-black text-red-500 hover:underline flex items-center gap-1 uppercase tracking-tighter"

@@ -116,14 +116,16 @@ export function ResultStep({
           </div>
 
           <div className="space-y-6">
-            <img 
-              src={danielInstagramMockup.url} 
-              alt="Daniel Ferreira Resultado" 
+            <img
+              src={testimonialDraft?.image || danielInstagramMockup.url}
+              alt="Depoimento do aluno no Instagram"
               className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl border border-zinc-100"
             />
 
             <div className="rounded-2xl border-2 border-dashed border-green-200 bg-green-50/50 p-6 space-y-4">
-              <p className="text-sm font-bold text-green-700 uppercase tracking-wider">OFERTA ESPECIAL PARA VOCÊ:</p>
+              <p className="text-sm font-bold text-green-700 uppercase tracking-wider">
+                OFERTA ESPECIAL PARA VOCÊ:
+              </p>
               <div className="flex flex-col items-center">
                 <span className="text-zinc-400 line-through text-sm font-bold">De R$ 399,00</span>
                 <span className="text-3xl font-black text-zinc-900">Por apenas R$ 197,00</span>
@@ -158,85 +160,92 @@ export function ResultStep({
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-2xl">
-            {/* Mock Carousel of Instagram Profiles */}
-            <div className="p-4 space-y-4">
-              <div className="rounded-2xl border border-zinc-100 bg-white overflow-hidden shadow-sm">
-                <div className="p-3 flex items-center justify-between border-b border-zinc-50">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
-                      <div className="h-full w-full rounded-full bg-white p-0.5">
-                        <img
-                          src={
-                            nicheDraft?.image ||
-                            "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
-                          }
-                          alt="Gordo Grill"
-                          className="h-full w-full rounded-full object-cover"
-                        />
+          {nicheDraft?.image ? (
+            <img
+              src={nicheDraft.image}
+              alt="Depoimento de aluno no Instagram"
+              className="mx-auto h-auto w-full max-w-md rounded-3xl border border-zinc-200 object-contain shadow-2xl"
+            />
+          ) : (
+            <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-2xl">
+              {/* Mock Carousel of Instagram Profiles */}
+              <div className="p-4 space-y-4">
+                <div className="rounded-2xl border border-zinc-100 bg-white overflow-hidden shadow-sm">
+                  <div className="p-3 flex items-center justify-between border-b border-zinc-50">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5 shrink-0">
+                        <div className="h-full w-full rounded-full bg-white p-0.5">
+                          <img
+                            src={
+                              nicheDraft?.image ||
+                              "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
+                            }
+                            alt="Gordo Grill"
+                            className="h-full w-full rounded-full object-cover"
+                          />
+                        </div>
+                      </div>
+                      <div className="text-left leading-tight">
+                        <p className="font-bold text-sm text-zinc-900">daniel_ferreira</p>
+                        <p className="text-[10px] text-zinc-500">Daniel Ferreira / Empreendedor</p>
                       </div>
                     </div>
-                    <div className="text-left leading-tight">
-                      <p className="font-bold text-sm text-zinc-900">daniel_ferreira</p>
-                      <p className="text-[10px] text-zinc-500">
-                        Daniel Ferreira / Empreendedor
+                    <button className="text-zinc-400">
+                      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                        <circle cx="12" cy="12" r="1.5" />
+                        <circle cx="6" cy="12" r="1.5" />
+                        <circle cx="18" cy="12" r="1.5" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="p-4 text-left">
+                    <div className="flex justify-around mb-4 text-center">
+                      <div>
+                        <p className="font-bold text-sm text-zinc-900">18</p>
+                        <p className="text-[9px] text-zinc-400 uppercase font-semibold">posts</p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-zinc-900">1.584</p>
+                        <p className="text-[9px] text-zinc-400 uppercase font-semibold">
+                          seguidores
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-zinc-900">264</p>
+                        <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-0.5 mb-4">
+                      <p className="text-xs font-bold text-zinc-900">Daniel Ferreira</p>
+                      <p className="text-xs text-zinc-800">
+                        Transformando negócios com anúncios 🚀
                       </p>
+                      <p className="text-xs text-zinc-800">De R$ 10k para R$ 100k em 30 dias! 📈</p>
                     </div>
-                  </div>
-                  <button className="text-zinc-400">
-                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-                      <circle cx="12" cy="12" r="1.5" />
-                      <circle cx="6" cy="12" r="1.5" />
-                      <circle cx="18" cy="12" r="1.5" />
-                    </svg>
-                  </button>
-                </div>
 
-                <div className="p-4 text-left">
-                  <div className="flex justify-around mb-4 text-center">
-                    <div>
-                      <p className="font-bold text-sm text-zinc-900">18</p>
-                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">posts</p>
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm text-zinc-900">1.584</p>
-                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguidores</p>
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm text-zinc-900">264</p>
-                      <p className="text-[9px] text-zinc-400 uppercase font-semibold">seguindo</p>
-                    </div>
+                    <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
+                      Seguir de volta
+                    </button>
                   </div>
 
-                  <div className="space-y-0.5 mb-4">
-                    <p className="text-xs font-bold text-zinc-900">
-                      Daniel Ferreira
-                    </p>
-                    <p className="text-xs text-zinc-800">Transformando negócios com anúncios 🚀</p>
-                    <p className="text-xs text-zinc-800">
-                      De R$ 10k para R$ 100k em 30 dias! 📈
+                  <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
+                    <p className="text-xs leading-relaxed text-zinc-700 italic">
+                      "O método Dono que Anuncia mudou minha vida. Em 1 semana já comecei a ver os
+                      resultados e as vendas não param de chegar!"
                     </p>
                   </div>
-
-                  <button className="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white rounded-lg py-1.5 text-xs font-bold transition-colors">
-                    Seguir de volta
-                  </button>
-                </div>
-
-                <div className="bg-zinc-50/50 p-4 text-left border-t border-zinc-50">
-                  <p className="text-xs leading-relaxed text-zinc-700 italic">
-                    "O método Dono que Anuncia mudou minha vida. Em 1 semana já comecei a ver os resultados e as vendas não param de chegar!"
-                  </p>
                 </div>
               </div>
-            </div>
 
-            <div className="flex justify-center gap-1.5 pb-5">
-              <div className="h-1.5 w-1.5 rounded-full bg-zinc-800"></div>
-              <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
-              <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
+              <div className="flex justify-center gap-1.5 pb-5">
+                <div className="h-1.5 w-1.5 rounded-full bg-zinc-800"></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-zinc-300"></div>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="space-y-6">
             <p className="text-zinc-900 font-bold leading-tight">
