@@ -1,4 +1,5 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
+import danielInstagramMockup from "@/assets/daniel-instagram-mockup.png.asset.json";
 import { useEffect, useState, useRef } from "react";
 import { trackEvent } from "@/lib/tracking";
 
@@ -115,89 +116,11 @@ export function ResultStep({
           </div>
 
           <div className="space-y-6">
-            <p className="text-lg font-bold text-red-600 sm:text-xl leading-snug">
-              De R$ 10 mil para mais de R$ 100 mil por mês, o método{" "}
-              <span className="bg-black text-white px-2 py-0.5 rounded">DONO QUE ANUNCIA</span>{" "}
-              funciona e o próximo pode ser VOCÊ.
-            </p>
-
-            <div className="mx-auto max-w-sm overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl">
-              <div className="p-4 flex items-center gap-3">
-                <div className="h-16 w-16 rounded-full ring-2 ring-pink-500 p-0.5 shrink-0">
-                  <div className="h-full w-full rounded-full bg-zinc-200 overflow-hidden">
-                    <img
-                      src={
-                        "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
-                      }
-                      alt="Profile"
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="text-left leading-tight">
-                  <p className="font-bold text-base text-zinc-900">
-                    {testimonialDraft?.options?.[0] || "daniel_ferreira"}
-                  </p>
-                  <p className="text-sm text-zinc-500">
-                    {testimonialDraft?.options?.[1] || "Daniel Ferreira"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-around py-3 border-y border-zinc-50 text-center">
-                <div>
-                  <p className="font-bold text-sm text-zinc-900">532</p>
-                  <p className="text-[10px] text-zinc-400 uppercase font-medium">posts</p>
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-zinc-900">
-                    {testimonialDraft?.options?.[2] || "12,7 mil"}
-                  </p>
-                  <p className="text-[10px] text-zinc-400 uppercase font-medium">seguidores</p>
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-zinc-900">
-                    {testimonialDraft?.options?.[3] || "727"}
-                  </p>
-                  <p className="text-[10px] text-zinc-400 uppercase font-medium">seguindo</p>
-                </div>
-              </div>
-
-              <div className="p-5 text-left text-xs space-y-2 text-zinc-800">
-                <div className="space-y-1">
-                  <p className="font-bold">{testimonialDraft?.options?.[1] || "Daniel Ferreira"}</p>
-                  <div className="flex flex-col gap-0.5 text-zinc-700">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm leading-none">🚀</span>
-                      <span>Destaque do negócio 01</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm leading-none">📈</span>
-                      <span>Informação relevante 02</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm leading-none">🤝</span>
-                      <span>Benefício do cliente 03</span>
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-zinc-500">
-                  ... <span className="font-bold text-zinc-400">mais</span>
-                </p>
-
-                <div className="pt-1 space-y-1.5">
-                  <p className="text-[#00376b] font-medium">
-                    Rua Exemplo Aleatório, 123 - Bairro Fictício, São Paulo
-                  </p>
-                  <p className="text-[#00376b] flex items-center gap-1.5 font-medium">
-                    <span className="inline-block scale-x-[-1] text-zinc-400 text-sm">🔗</span>
-                    <span>wa.me/message/6CHAELMQMCH...</span>
-                    <span className="text-zinc-400">e outros 2 links</span>
-                  </p>
-                </div>
-              </div>
-            </div>
+            <img 
+              src={danielInstagramMockup.url} 
+              alt="Daniel Ferreira Resultado" 
+              className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl border border-zinc-100"
+            />
 
             <div className="rounded-2xl border-2 border-dashed border-green-200 bg-green-50/50 p-6 space-y-4">
               <p className="text-sm font-bold text-green-700 uppercase tracking-wider">OFERTA ESPECIAL PARA VOCÊ:</p>
