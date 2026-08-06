@@ -28,33 +28,11 @@ async function getVerifiedAdmin(
   return authenticatedAdmin;
 }
 
-async function ensurePublicMediaBucket(admin: Awaited<ReturnType<typeof getVerifiedAdmin>>) {
-  const { data: bucket, error: bucketError } = await admin.storage.getBucket("funnel-media");
-
-  if (!bucket) {
-    const { error: createError } = await admin.storage.createBucket("funnel-media", {
-      public: true,
-      fileSizeLimit: 500 * 1024 * 1024,
-      allowedMimeTypes: ["image/*", "audio/*", "video/*"],
-    });
-    if (createError) {
-      throw new Error(
-        `Falha ao preparar armazenamento: ${createError.message || bucketError?.message}`,
-      );
-    }
-    return;
-  }
-
-  if (bucket.file_size_limit !== 500 * 1024 * 1024 || !bucket.public) {
-    const { error: updateError } = await admin.storage.updateBucket("funnel-media", {
-      public: true,
-      fileSizeLimit: 500 * 1024 * 1024,
-      allowedMimeTypes: ["image/*", "audio/*", "video/*"],
-    });
-    if (updateError) {
-      throw new Error(`Falha ao liberar a mídia publicada: ${updateError.message}`);
-    }
-  }
+// Storage admin operations require the service role; the user-scoped client is
+// blocked by RLS on storage.buckets. The bucket already exists and is public.
+async function getStorage() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin.storage;
 }
 
 export const loadAdminAnalytics = createServerFn({ method: "GET" })
@@ -108,15 +86,15 @@ export const createAdminMediaUpload = createServerFn({ method: "POST" })
     return input;
   })
   .handler(async ({ context, data }) => {
-    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
-    await ensurePublicMediaBucket(admin);
-    const { data: signed, error } = await admin.storage
+    await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const storage = await getStorage();
+    const { data: signed, error } = await storage
       .from("funnel-media")
       .createSignedUploadUrl(data.path);
     if (error || !signed?.token) {
       throw new Error(`Falha ao autorizar upload: ${error?.message ?? "token não gerado"}`);
     }
-    const publicUrl = admin.storage.from("funnel-media").getPublicUrl(signed.path).data.publicUrl;
+    const publicUrl = storage.from("funnel-media").getPublicUrl(signed.path).data.publicUrl;
     return { path: signed.path, token: signed.token, publicUrl };
   });
 
@@ -124,13 +102,13 @@ export const confirmAdminMediaUpload = createServerFn({ method: "POST" })
   .middleware([serverSessionMiddleware])
   .validator((input: UploadRequest) => input)
   .handler(async ({ context, data }) => {
-    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
-    await ensurePublicMediaBucket(admin);
-    const { data: exists, error } = await admin.storage.from("funnel-media").exists(data.path);
+    await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const storage = await getStorage();
+    const { data: exists, error } = await storage.from("funnel-media").exists(data.path);
     if (error || !exists) {
       throw new Error(`O arquivo não foi encontrado após o upload: ${error?.message ?? data.path}`);
     }
-    return admin.storage.from("funnel-media").getPublicUrl(data.path).data.publicUrl;
+    return storage.from("funnel-media").getPublicUrl(data.path).data.publicUrl;
   });
 
 export const saveAdminDraft = createServerFn({ method: "POST" })
