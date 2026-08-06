@@ -1427,6 +1427,7 @@ export function ContentSection({
     ],
     audio: ["Nome do Aluno (ex: @alan_dalila)", "Descrição curta", "Seguidores", "Seguindo"],
     sales_testimonial: ["Nome do Aluno", "Segmento / descrição"],
+    sales_offer: ["Preço Oferta (Ex: R$ 197,00)", "Preço Cheio (Ex: R$ 399,00)", "Link Checkout"],
   };
 
   const updateOption = (id: string, index: number, value: string) => {
@@ -1451,12 +1452,9 @@ export function ContentSection({
 
     // Sincronizar campo de vendas se o ID for relacionado a sales
     if (id === "sales_vsl") {
-      next.sales = { ...next.sales, videoHeadline: patch.title };
+      next.sales = { ...next.sales, videoHeadline: patch.title || "" };
     } else if (id === "sales_vsl_video") {
-      next.sales = { ...next.sales, vslUrl: patch.image, videoThumb: patch.image };
-    } else if (id === "sales_offer") {
-      // O título pode ser usado para o promoPrice se quisermos, mas melhor manter separado
-      // por enquanto vamos focar nos campos explícitos do ConfigSection
+      next.sales = { ...next.sales, vslUrl: patch.image || "", videoThumb: patch.image || "" };
     }
 
     // Se for o passo 'intro', garantir que o rascunho de vendas não seja afetado por engano
@@ -1485,14 +1483,14 @@ export function ContentSection({
       return;
     }
 
-    if (field === "image" && id !== "sales" && !isImage) {
+    if (field === "image" && id !== "sales_vsl_video" && !isImage) {
       toast.error(
         `Tipo de arquivo inválido. Você tentou enviar um "${file.type}", mas este campo aceita apenas imagens (JPG, PNG, WEBP).`,
       );
       return;
     }
 
-    if (id === "sales" && field === "image" && !isImage && !isVideo) {
+    if (id === "sales_vsl_video" && field === "image" && !isImage && !isVideo) {
       toast.error(
         `Tipo de arquivo inválido ("${file.type}"). Para o vídeo de vendas, envie um arquivo de vídeo ou uma imagem de capa.`,
       );
@@ -1525,7 +1523,7 @@ export function ContentSection({
       ...draft,
       steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
     };
-    if (id === "sales" && field === "image") {
+    if (id === "sales_vsl_video" && field === "image") {
       next.sales = isVideo
         ? { ...next.sales, vslUrl: result, videoThumb: result }
         : { ...next.sales, videoThumb: result };
@@ -1581,7 +1579,7 @@ export function ContentSection({
                 >
                   {item.id === "audio" || item.id === "sales_testimonial" ? (
                     <Music className="h-5 w-5" />
-                  ) : item.id === "sales" ? (
+                  ) : item.id === "sales_vsl_video" ? (
                     <Video className="h-5 w-5" />
                   ) : (
                     <ImageIcon className="h-5 w-5" />
@@ -1635,7 +1633,7 @@ export function ContentSection({
                 <label
                   className={`text-[10px] font-black uppercase tracking-widest ${theme === "dark" ? "text-zinc-500" : "text-zinc-400"}`}
                 >
-                  {item.id === "sales"
+                  {item.id === "sales_vsl_video"
                     ? "Vídeo da Oferta (VSL)"
                     : item.id === "audio"
                       ? "Imagem do depoimento exibida abaixo do áudio"
@@ -1673,7 +1671,7 @@ export function ContentSection({
                     <input
                       type="text"
                       placeholder={
-                        item.id === "sales"
+                        item.id === "sales_vsl_video"
                           ? "URL do vídeo/thumb"
                           : item.id === "audio"
                             ? "URL da imagem do depoimento"
@@ -1706,14 +1704,14 @@ export function ContentSection({
                     />
                     <div className="flex items-center gap-4">
                       <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                        {item.id === "sales" ? (
+                        {item.id === "sales_vsl_video" ? (
                           <Video className="h-3 w-3" />
                         ) : item.id === "sales_testimonial" ? (
                           <Music className="h-3 w-3" />
                         ) : (
                           <ImageIcon className="h-3 w-3" />
                         )}
-                        {item.id === "sales"
+                        {item.id === "sales_vsl_video"
                           ? "Subir Vídeo"
                           : item.id === "audio"
                             ? "Subir Imagem"
@@ -1723,7 +1721,7 @@ export function ContentSection({
                         <input
                           type="file"
                           accept={
-                            item.id === "sales"
+                            item.id === "sales_vsl_video"
                               ? "video/*,image/*"
                               : item.id === "audio"
                                 ? "image/*"
