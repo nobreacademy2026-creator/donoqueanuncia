@@ -94,10 +94,10 @@ export function ResultStep({
               <div className="h-10 w-10 rounded-full bg-zinc-300 overflow-hidden border-2 border-white shadow-sm">
                 <img
                   src={
-                    testimonialDraft?.image ||
-                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+                    "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
                   }
                   alt="Student"
+                  className="h-full w-full object-cover"
                 />
               </div>
             </div>
@@ -127,8 +127,7 @@ export function ResultStep({
                   <div className="h-full w-full rounded-full bg-zinc-200 overflow-hidden">
                     <img
                       src={
-                        testimonialDraft?.image ||
-                        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+                        "https://id-preview--cf182c25-70e3-47b3-a4bc-f0183382b65a.lovable.app/lovable-uploads/29ed9a43-05ef-450e-a991-b1e7f6074ca6.png"
                       }
                       alt="Profile"
                       className="h-full w-full object-cover"
@@ -137,10 +136,10 @@ export function ResultStep({
                 </div>
                 <div className="text-left leading-tight">
                   <p className="font-bold text-base text-zinc-900">
-                    {testimonialDraft?.options?.[0] || "taju.intima"}
+                    {testimonialDraft?.options?.[0] || "daniel_ferreira"}
                   </p>
                   <p className="text-sm text-zinc-500">
-                    {testimonialDraft?.options?.[1] || "Taju Íntima"}
+                    {testimonialDraft?.options?.[1] || "Daniel Ferreira"}
                   </p>
                 </div>
               </div>
@@ -166,7 +165,7 @@ export function ResultStep({
 
               <div className="p-5 text-left text-xs space-y-2 text-zinc-800">
                 <div className="space-y-1">
-                  <p className="font-bold">{testimonialDraft?.options?.[1] || "Taju Íntima"}</p>
+                  <p className="font-bold">{testimonialDraft?.options?.[1] || "Daniel Ferreira"}</p>
                   <div className="flex flex-col gap-0.5 text-zinc-700">
                     <div className="flex items-center gap-1.5">
                       <span className="text-sm leading-none">🚀</span>
