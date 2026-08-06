@@ -1520,6 +1520,8 @@ export function ContentSection({
 
   // Removido useEffect interno redundante. O AdminDashboard já gerencia a inicialização do draft.
 
+  const [selectedTemplateId, setSelectedTemplateId] = useState(FUNNEL_TEMPLATES[0]?.id ?? "");
+
   const handleSaveContent = async () => {
     setSaving(true);
     try {
