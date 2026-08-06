@@ -402,7 +402,7 @@ export function SalesPage({
             <p className="text-lg font-medium leading-relaxed text-zinc-600 sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
-              <span className="font-black text-zinc-950">usando apenas o seu celular.</span>
+              <span className="font-black text-zinc-950">com essa oferta exclusiva.</span>
             </p>
 
             <div className="flex flex-col items-center gap-6">
