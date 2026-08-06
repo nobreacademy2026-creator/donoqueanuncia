@@ -258,6 +258,7 @@ export function SalesPage({
   tracking?: any;
   steps?: Record<string, FunnelStep>;
 }) {
+  const [started, setStarted] = React.useState(false);
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
     draft.videoThumb !== undefined
@@ -328,15 +329,48 @@ export function SalesPage({
               onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
-                <video
-                  src={vslUrl}
-                  className="h-full w-full bg-black object-contain"
-                  controls
-                  playsInline
-                  preload="metadata"
-                >
-                  Seu navegador não suporta reprodução de vídeo.
-                </video>
+                <div className="relative h-full w-full">
+                  <video
+                    id="vsl-video-player"
+                    src={vslUrl}
+                    className="h-full w-full bg-black object-contain"
+                    controls
+                    playsInline
+                    preload="metadata"
+                  >
+                    Seu navegador não suporta reprodução de vídeo.
+                  </video>
+                  {!started && (
+                    <button
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        void trackEvent("clique_video", { origem: "pagina_vendas", tipo: "upload" });
+                        const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
+                        if (video) video.play();
+                        setStarted(true);
+                      }}
+                      className="absolute inset-0 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
+                      aria-label="Reproduzir vídeo"
+                    >
+                      <div className="flex flex-col items-center gap-6">
+                        <div className="relative">
+                          <div className="absolute inset-0 animate-ping rounded-full bg-red-600/40" />
+                          <span className="relative grid h-24 w-24 place-items-center rounded-full bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.5)] transition-transform group-hover:scale-110">
+                            <Play className="ml-1 h-10 w-10 fill-current" />
+                          </span>
+                        </div>
+                        
+                        <div className="flex flex-col items-center gap-2 animate-bounce">
+                          <div className="flex items-center gap-3 rounded-full bg-zinc-950/80 px-6 py-3 backdrop-blur-md border border-white/20 shadow-2xl">
+                            <Megaphone className="h-6 w-6 text-red-500 fill-red-500" />
+                            <span className="text-lg font-black uppercase tracking-wider">Aumenta o Volume!</span>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  )}
+                </div>
               ) : vslUrl ? (
                 <EmbeddedVideo url={vslUrl} />
               ) : (
@@ -344,9 +378,6 @@ export function SalesPage({
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
                   onClick={() => {
                     void trackEvent("clique_video", { origem: "pagina_vendas" });
-                    // Since there is no state here in the fallback branch, 
-                    // this logic assumes the parent would handle the 'vslUrl' being present.
-                    // But in this 'else' branch, vslUrl is null.
                   }}
                 >
                   <div className="flex flex-col items-center gap-6">
