@@ -146,7 +146,7 @@ function CTAButton({
         // but tracking should happen. The 'target="_blank"' handles the new tab.
         void trackCheckoutClick({ origem: "pagina_vendas" });
       }}
-      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-[1.01] sm:text-base shadow-lg shadow-green-600/10 ${className}`}
+      className={`bg-[#22c55e] hover:bg-[#16a34a] inline-flex items-center justify-center rounded-xl px-8 py-4 text-center text-sm font-bold tracking-wide text-white transition-all duration-200 hover:scale-105 sm:text-base shadow-lg shadow-green-600/20 animate-pulse-subtle ${className}`}
     >
       {label}
     </a>
