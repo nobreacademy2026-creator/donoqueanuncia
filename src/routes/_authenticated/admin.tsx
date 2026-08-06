@@ -1173,7 +1173,11 @@ export function ConfigSection({
             }`}
           />
           <label className="admin-button-secondary mt-2 cursor-pointer">
-            <Video className="h-4 w-4" />
+            {uploadingVideo ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Video className="h-4 w-4" />
+            )}
             {uploadingVideo ? "Enviando vídeo..." : "Upload de vídeo"}
             <input
               type="file"
@@ -1186,6 +1190,12 @@ export function ConfigSection({
               }}
             />
           </label>
+          {uploadingVideo && (
+            <div className="mt-2 flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/10 px-4 py-3 text-xs font-bold text-primary">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Carregando o vídeo. Não feche esta página.
+            </div>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -1733,6 +1743,8 @@ export function ContentSection({
     writeDraft(next);
   };
 
+  const [uploadingMediaKey, setUploadingMediaKey] = useState<string | null>(null);
+
   const handleUpload = async (
     id: string,
     file: File | undefined,
@@ -1779,27 +1791,29 @@ export function ContentSection({
       return;
     }
 
-    let result: string;
+    const uploadKey = `${id}:${field}`;
+    setUploadingMediaKey(uploadKey);
     try {
-      result = await uploadAdminMedia(file);
+      const result = await uploadAdminMedia(file);
+
+      const next: FunnelDraft = {
+        ...draft,
+        steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
+      };
+      if (id === "sales_vsl_video" && field === "image") {
+        next.sales = isVideo
+          ? { ...next.sales, vslUrl: result, videoThumb: result }
+          : { ...next.sales, videoThumb: result };
+      }
+      setDraft(next);
+      writeDraft(next);
+      toast.success("Arquivo enviado. Clique em Publicar para salvar o conteúdo.");
     } catch (uploadError) {
       console.error("Erro no upload do Storage:", uploadError);
       toast.error(`Não foi possível enviar o arquivo: ${getErrorMessage(uploadError)}`);
-      return;
+    } finally {
+      setUploadingMediaKey(null);
     }
-
-    const next: FunnelDraft = {
-      ...draft,
-      steps: { ...(draft.steps || {}), [id]: { ...(draft.steps?.[id] || {}), [field]: result } },
-    };
-    if (id === "sales_vsl_video" && field === "image") {
-      next.sales = isVideo
-        ? { ...next.sales, vslUrl: result, videoThumb: result }
-        : { ...next.sales, videoThumb: result };
-    }
-    setDraft(next);
-    writeDraft(next);
-    toast.success("Arquivo enviado. Clique em Publicar para salvar o conteúdo.");
   };
 
   return (
@@ -1981,6 +1995,17 @@ export function ContentSection({
                         } ${theme === "dark" ? "bg-zinc-900 border-white/5" : "bg-zinc-50 border-zinc-200 shadow-inner"}`}
                       >
                         <MediaPreview item={item} draft={draft} />
+                        {uploadingMediaKey === `${item.id}:image` && (
+                          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-black/75 text-white backdrop-blur-sm">
+                            <Loader2 className="h-9 w-9 animate-spin text-primary" />
+                            <span className="text-xs font-black uppercase tracking-widest">
+                              Enviando mídia...
+                            </span>
+                            <span className="text-[11px] text-zinc-300">
+                              Aguarde o carregamento terminar
+                            </span>
+                          </div>
+                        )}
 
                         {(draft.steps?.[item.id]?.image ||
                           draft.steps?.[item.id]?.audio ||
@@ -2038,8 +2063,16 @@ export function ContentSection({
                           }`}
                         />
                         <div className="flex items-center gap-4">
-                          <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                            {item.id === "sales_vsl_video" ? (
+                          <label
+                            className={`flex items-center gap-1 text-xs font-black uppercase tracking-tighter ${
+                              uploadingMediaKey
+                                ? "cursor-wait text-zinc-500"
+                                : "cursor-pointer text-primary hover:underline"
+                            }`}
+                          >
+                            {uploadingMediaKey === `${item.id}:image` ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : item.id === "sales_vsl_video" ? (
                               <Video className="h-3 w-3" />
                             ) : item.id === "sales_testimonial" ? (
                               <Music className="h-3 w-3" />
@@ -2063,8 +2096,10 @@ export function ContentSection({
                                     : "image/*"
                               }
                               className="hidden"
+                              disabled={Boolean(uploadingMediaKey)}
                               onChange={(e) => {
-                                handleUpload(item.id, e.target.files?.[0], "image");
+                                void handleUpload(item.id, e.target.files?.[0], "image");
+                                e.currentTarget.value = "";
                               }}
                             />
                           </label>
@@ -2157,7 +2192,13 @@ export function ContentSection({
                     >
                       Arquivo de Áudio (MP3)
                     </label>
-                    <div className="flex items-center gap-3">
+                    <div className="relative flex items-center gap-3">
+                      {uploadingMediaKey === `${item.id}:audio` && (
+                        <div className="absolute inset-x-4 z-20 flex items-center justify-center gap-2 rounded-xl border border-primary/20 bg-zinc-950/95 px-4 py-3 text-xs font-bold text-primary shadow-xl">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Enviando áudio... aguarde.
+                        </div>
+                      )}
                       <div
                         className={`flex-1 rounded-lg px-3 py-2 text-[10px] font-mono border overflow-hidden truncate ${
                           theme === "dark"
@@ -2173,14 +2214,28 @@ export function ContentSection({
                           "Nenhum áudio selecionado"
                         )}
                       </div>
-                      <label className="cursor-pointer text-xs font-black text-primary hover:underline flex items-center gap-1 uppercase tracking-tighter">
-                        <Music className="h-3 w-3" />
+                      <label
+                        className={`flex items-center gap-1 text-xs font-black uppercase tracking-tighter ${
+                          uploadingMediaKey
+                            ? "cursor-wait text-zinc-500"
+                            : "cursor-pointer text-primary hover:underline"
+                        }`}
+                      >
+                        {uploadingMediaKey === `${item.id}:audio` ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <Music className="h-3 w-3" />
+                        )}
                         {draft.steps?.[item.id]?.audio ? "Alterar Áudio" : "Subir Novo"}
                         <input
                           type="file"
                           accept="audio/*"
                           className="hidden"
-                          onChange={(e) => handleUpload(item.id, e.target.files?.[0], "audio")}
+                          disabled={Boolean(uploadingMediaKey)}
+                          onChange={(e) => {
+                            void handleUpload(item.id, e.target.files?.[0], "audio");
+                            e.currentTarget.value = "";
+                          }}
                         />
                       </label>
                       {draft.steps?.[item.id]?.audio && (
