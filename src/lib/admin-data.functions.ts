@@ -38,13 +38,6 @@ async function getVerifiedAdmin(
   return authenticatedAdmin;
 }
 
-// Storage admin operations require the service role; the user-scoped client is
-// blocked by RLS on storage.buckets. The bucket already exists and is public.
-async function getStorage() {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  return supabaseAdmin.storage;
-}
-
 export const loadAdminAnalytics = createServerFn({ method: "GET" })
   .middleware([serverSessionMiddleware])
   .handler(async ({ context }) => {
@@ -100,8 +93,10 @@ export const createAdminMediaUpload = createServerFn({ method: "POST" })
     return input;
   })
   .handler(async ({ context, data }) => {
-    await getVerifiedAdmin(context?.userId, context?.accessToken);
-    const storage = await getStorage();
+    // Use the authenticated admin session so this works on Vercel without
+    // exposing or requiring a service-role key. Storage RLS validates the role.
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const storage = admin.storage;
     const { data: signed, error } = await storage
       .from("funnel-media")
       .createSignedUploadUrl(data.path);
@@ -116,8 +111,8 @@ export const confirmAdminMediaUpload = createServerFn({ method: "POST" })
   .middleware([serverSessionMiddleware])
   .validator((input: UploadRequest) => input)
   .handler(async ({ context, data }) => {
-    await getVerifiedAdmin(context?.userId, context?.accessToken);
-    const storage = await getStorage();
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const storage = admin.storage;
     const { data: exists, error } = await storage.from("funnel-media").exists(data.path);
     if (error || !exists) {
       throw new Error(`O arquivo não foi encontrado após o upload: ${error?.message ?? data.path}`);
