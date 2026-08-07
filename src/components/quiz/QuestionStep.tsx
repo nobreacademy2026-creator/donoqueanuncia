@@ -35,7 +35,9 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
             src={question.image}
             alt={question.title}
             className="h-full w-full object-cover"
-            loading="lazy"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
           />
         </div>
       ) : null}
@@ -49,18 +51,18 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
               onClick={() => onSelect(option.value)}
               className={`group relative flex items-center gap-4 rounded-2xl px-6 py-4 text-left transition-all duration-300 ${
                 active
-                  ? "bg-red-600 text-white shadow-xl shadow-red-600/20 translate-y-[-1px] border-red-600"
-                  : "bg-white text-zinc-950 hover:bg-zinc-50 border border-zinc-200 shadow-sm"
+                  ? "bg-zinc-950 text-white shadow-xl shadow-zinc-950/20 translate-y-[-1px] border border-zinc-950"
+                  : "bg-zinc-900 text-white hover:bg-zinc-950 border border-zinc-900 shadow-sm"
               }`}
             >
               <div
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
                   active
                     ? "bg-white border-white scale-110"
-                    : "border-zinc-200 group-hover:border-zinc-300"
+                    : "border-white/40 group-hover:border-white/70"
                 }`}
               >
-                {active ? <Check className="h-3 w-3 text-red-600" /> : null}
+                {active ? <Check className="h-3 w-3 text-zinc-950" /> : null}
               </div>
               <span className="min-w-0 text-base font-bold uppercase tracking-tight">
                 {option.label}
@@ -68,8 +70,8 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
 
               {!active && (
                 <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="h-6 w-6 rounded-full bg-zinc-50 flex items-center justify-center">
-                    <Check className="h-3 w-3 text-zinc-300" />
+                  <div className="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center">
+                    <Check className="h-3 w-3 text-white/60" />
                   </div>
                 </div>
               )}

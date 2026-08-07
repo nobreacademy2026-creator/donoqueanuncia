@@ -15,6 +15,9 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
         <img
           src={draft?.image || logo}
           alt="Dono que Anuncia"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
           className="h-32 w-auto object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.05)] sm:h-44 transition-transform duration-500"
         />
       </div>
