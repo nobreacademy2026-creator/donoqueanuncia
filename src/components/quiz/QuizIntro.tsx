@@ -1,5 +1,6 @@
 import { ArrowRight, ShieldCheck, BarChart3, Target } from "lucide-react";
-import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
+import logoAsset from "@/assets/logo-dono-que-anuncia.webp.asset.json";
+import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimization";
 
 export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any }) {
   const title = draft?.title || "DESCUBRA POR QUE SEUS ANÚNCIOS NÃO TRAZEM CLIENTES.";
@@ -13,7 +14,9 @@ export function QuizIntro({ onStart, draft }: { onStart: () => void; draft?: any
       {/* Logo Section */}
       <div className="mb-6 flex flex-col items-center">
         <img
-          src={draft?.image || logo}
+          src={optimizedImageUrl(draft?.image || logo, 640)}
+          srcSet={optimizedImageSrcSet(draft?.image || logo)}
+          sizes="(max-width: 640px) 320px, 440px"
           alt="Dono que Anuncia"
           loading="eager"
           decoding="async"
