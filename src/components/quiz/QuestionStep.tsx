@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, CheckCircle2 } from "lucide-react";
 import type { Question } from "@/lib/quiz-data";
+import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimization";
 
 type Props = {
   question: Question;
@@ -32,7 +33,9 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
         <div className="mt-8 aspect-video w-full overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50 shadow-xl shadow-zinc-950/5">
           <img
             key={question.image}
-            src={question.image}
+            src={optimizedImageUrl(question.image, 960)}
+            srcSet={optimizedImageSrcSet(question.image)}
+            sizes="(max-width: 672px) 100vw, 672px"
             alt={question.title}
             className="h-full w-full object-cover"
             loading="eager"

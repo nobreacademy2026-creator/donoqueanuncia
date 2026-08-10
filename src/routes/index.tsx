@@ -8,7 +8,7 @@ import { QuestionStep } from "@/components/quiz/QuestionStep";
 import { AnalyzingStep } from "@/components/quiz/AnalyzingStep";
 import { ResultStep } from "@/components/quiz/ResultStep";
 import { SalesPage } from "@/components/sales/SalesPage";
-import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
+import logoAsset from "@/assets/logo-dono-que-anuncia.webp.asset.json";
 
 const TITLE = "Dono que Anuncia — Diagnóstico gratuito de anúncios";
 const DESCRIPTION =
