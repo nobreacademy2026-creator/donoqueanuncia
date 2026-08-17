@@ -17,6 +17,52 @@ export const WHATSAPP_NUMBER = import.meta.env["VITE_WHATSAPP_NUMBER"] ?? "55359
 
 type Payload = Record<string, unknown>;
 
+type MetaPixelFunction = ((...args: unknown[]) => void) & {
+  callMethod?: (...args: unknown[]) => void;
+  queue: unknown[][];
+  loaded: boolean;
+  version: string;
+  push: (...args: unknown[]) => void;
+};
+
+function readCookie(name: string) {
+  const prefix = `${name}=`;
+  return document.cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(prefix))
+    ?.slice(prefix.length);
+}
+
+async function trackMetaConversion(
+  eventName: "PageView" | "Lead" | "InitiateCheckout",
+  payload: Payload = {},
+) {
+  const eventId = crypto.randomUUID();
+  window.fbq?.("track", eventName, payload, { eventID: eventId });
+
+  try {
+    const { sendMetaConversion } = await import("@/lib/meta-conversions.functions");
+    await sendMetaConversion({
+      data: {
+        eventName,
+        eventId,
+        eventSourceUrl: window.location.href,
+        fbp: readCookie("_fbp"),
+        fbc: readCookie("_fbc"),
+        sessionId: getSessionId(),
+        customData: Object.fromEntries(
+          Object.entries(payload).filter(([, value]) =>
+            ["string", "number", "boolean"].includes(typeof value),
+          ),
+        ) as Record<string, string | number | boolean>,
+      },
+    });
+  } catch (error) {
+    console.error("[Meta CAPI] Falha ao enviar evento", { eventName, error });
+  }
+}
+
 function getSessionId() {
   const key = "dqa_session_id";
   let id = window.sessionStorage.getItem(key);
@@ -35,16 +81,40 @@ export async function initPublishedTracking() {
   const ga4Id = config?.ga4Id || TRACKING_CONFIG.ga4Id;
   const gtmId = config?.gtmId || TRACKING_CONFIG.gtmId;
 
-  if (metaPixelId && !document.querySelector('script[data-dqa="meta"]')) {
-    const script = document.createElement("script");
-    script.setAttribute("data-dqa", "meta");
-    script.src = "https://connect.facebook.net/en_US/fbevents.js";
-    script.async = true;
-    script.onload = () => {
-      window.fbq?.("init", metaPixelId);
-      window.fbq?.("track", "PageView");
-    };
-    document.head.appendChild(script);
+  if (metaPixelId) {
+    if (!window.fbq) {
+      const fbq = function (...args: unknown[]) {
+        if (fbq.callMethod) {
+          fbq.callMethod(...args);
+        } else {
+          fbq.queue.push(args);
+        }
+      } as MetaPixelFunction;
+
+      fbq.queue = [];
+      fbq.loaded = true;
+      fbq.version = "2.0";
+      fbq.push = fbq;
+      window.fbq = fbq;
+    }
+
+    let script = document.querySelector<HTMLScriptElement>('script[data-dqa="meta"]');
+    const initializedPixelId = script?.dataset.metaPixelId;
+
+    if (initializedPixelId !== metaPixelId) {
+      window.fbq("init", metaPixelId);
+      void trackMetaConversion("PageView");
+    }
+
+    if (!script) {
+      script = document.createElement("script");
+      script.setAttribute("data-dqa", "meta");
+      script.src = "https://connect.facebook.net/en_US/fbevents.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    script.dataset.metaPixelId = metaPixelId;
   }
   if (ga4Id && !document.querySelector('script[data-dqa="ga4"]')) {
     window.dataLayer = window.dataLayer || [];
@@ -68,9 +138,15 @@ export async function initPublishedTracking() {
   }
 }
 
+export function isMetaPixelConnected(pixelId: string) {
+  if (typeof window === "undefined" || !pixelId) return false;
+  const script = document.querySelector<HTMLScriptElement>('script[data-dqa="meta"]');
+  return script?.dataset.metaPixelId === pixelId && typeof window.fbq?.callMethod === "function";
+}
+
 declare global {
   interface Window {
-    fbq?: (...args: unknown[]) => void;
+    fbq?: MetaPixelFunction;
     gtag?: (...args: unknown[]) => void;
     dataLayer?: Payload[];
   }
@@ -106,13 +182,13 @@ export async function trackEvent(event: string, payload: Payload = {}): Promise<
 
 export function trackLead(payload: Payload = {}) {
   if (typeof window === "undefined") return;
-  window.fbq?.("track", "Lead", payload);
+  void trackMetaConversion("Lead", payload);
   trackEvent("lead_capturado", payload);
 }
 
 export async function trackCheckoutClick(payload: Payload = {}) {
   if (typeof window === "undefined") return false;
-  window.fbq?.("track", "InitiateCheckout", payload);
+  void trackMetaConversion("InitiateCheckout", payload);
   return trackEvent("checkout_iniciado", payload);
 }
 

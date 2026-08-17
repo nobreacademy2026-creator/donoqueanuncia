@@ -49,6 +49,7 @@ import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { uploadAdminMedia } from "@/lib/admin-media-upload";
 import { applyFunnelTemplate, FUNNEL_TEMPLATES } from "@/lib/funnel-templates";
+import { initPublishedTracking, isMetaPixelConnected } from "@/lib/tracking";
 import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -1324,12 +1325,23 @@ export function TrackingSection({
   const [ga4Id, setGa4Id] = useState(draft.tracking?.ga4Id ?? "");
   const [gtmId, setGtmId] = useState(draft.tracking?.gtmId ?? "");
   const [saving, setSaving] = useState(false);
+  const [metaConnected, setMetaConnected] = useState(false);
 
   useEffect(() => {
     setMetaPixelId(draft.tracking?.metaPixelId ?? "");
     setGa4Id(draft.tracking?.ga4Id ?? "");
     setGtmId(draft.tracking?.gtmId ?? "");
   }, [draft.tracking]);
+
+  useEffect(() => {
+    const checkConnection = () => {
+      setMetaConnected(isMetaPixelConnected(draft.tracking?.metaPixelId ?? ""));
+    };
+
+    checkConnection();
+    const interval = window.setInterval(checkConnection, 1000);
+    return () => window.clearInterval(interval);
+  }, [draft.tracking?.metaPixelId]);
 
   const saveTracking = async () => {
     const meta = metaPixelId.trim();
@@ -1355,6 +1367,7 @@ export function TrackingSection({
       setDraft(next);
       writeDraft(next);
       await publishDraft(next);
+      await initPublishedTracking();
       toast.success("Configuração de tracking publicada.");
     } catch (error: any) {
       toast.error(`Erro ao publicar tracking: ${error?.message ?? "tente novamente"}`);
@@ -1388,6 +1401,24 @@ export function TrackingSection({
               : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
           }`}
         />
+        <div
+          className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold ${
+            metaConnected
+              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-500"
+              : metaPixelId.trim()
+                ? "border-amber-500/30 bg-amber-500/10 text-amber-500"
+                : theme === "dark"
+                  ? "border-white/10 bg-white/5 text-zinc-400"
+                  : "border-zinc-200 bg-zinc-50 text-zinc-500"
+          }`}
+        >
+          <Activity className="h-4 w-4" />
+          {metaConnected
+            ? `Meta Pixel ${draft.tracking?.metaPixelId} conectado`
+            : metaPixelId.trim()
+              ? "Aguardando publicação ou conexão com a Meta"
+              : "Meta Pixel não configurado"}
+        </div>
       </div>
 
       <div className="space-y-2">
