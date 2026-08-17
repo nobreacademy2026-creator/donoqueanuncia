@@ -61,12 +61,18 @@ export function AnalyzingStep({ onDone }: { onDone: () => void }) {
             >
               <div
                 className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors duration-500 ${
-                  active ? "bg-red-600 text-white" : completed ? "bg-green-500 text-white" : "bg-zinc-100 text-zinc-400"
+                  active
+                    ? "bg-red-600 text-white"
+                    : completed
+                      ? "bg-green-500 text-white"
+                      : "bg-zinc-100 text-zinc-400"
                 }`}
               >
                 {completed ? <Check className="h-5 w-5" /> : <step.icon className="h-5 w-5" />}
               </div>
-              <span className={`text-base font-bold uppercase tracking-tight ${active ? "text-zinc-900" : "text-zinc-500"}`}>
+              <span
+                className={`text-base font-bold uppercase tracking-tight ${active ? "text-zinc-900" : "text-zinc-500"}`}
+              >
                 {step.text}
               </span>
               {active && (

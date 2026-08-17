@@ -70,11 +70,7 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
       .select("value,updated_at")
       .eq("key", "funnel_content")
       .single();
-    if (
-      verifyError ||
-      !published ||
-      stableStringify(published.value) !== stableStringify(draft)
-    ) {
+    if (verifyError || !published || stableStringify(published.value) !== stableStringify(draft)) {
       throw new Error(
         `A publicação não pôde ser confirmada no banco: ${verifyError?.message ?? "conteúdo divergente"}`,
       );

@@ -11,7 +11,5 @@ export function optimizedImageUrl(source: string | undefined, width: number) {
 export function optimizedImageSrcSet(source: string | undefined) {
   if (!source?.includes(PUBLIC_STORAGE_PATH)) return undefined;
 
-  return [480, 672, 960]
-    .map((width) => `${optimizedImageUrl(source, width)} ${width}w`)
-    .join(", ");
+  return [480, 672, 960].map((width) => `${optimizedImageUrl(source, width)} ${width}w`).join(", ");
 }
