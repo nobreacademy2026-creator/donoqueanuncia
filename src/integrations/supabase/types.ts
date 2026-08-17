@@ -16,28 +16,100 @@ export type Database = {
     Tables: {
       analytics_events: {
         Row: {
+          ad: string | null
+          ad_set: string | null
+          campaign: string | null
+          client_name: string | null
           created_at: string | null
+          currency: string | null
+          event_id: string | null
           event_name: string
+          fbc: string | null
+          fbclid: string | null
+          fbp: string | null
           id: string
+          is_test: boolean
+          lead_status: string | null
+          meta_api_status: string | null
+          meta_error: string | null
+          meta_pixel_status: string | null
+          page_title: string | null
+          page_url: string | null
           payload: Json | null
+          referrer: string | null
           session_id: string | null
+          source: string | null
           user_id: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          value: number | null
         }
         Insert: {
+          ad?: string | null
+          ad_set?: string | null
+          campaign?: string | null
+          client_name?: string | null
           created_at?: string | null
+          currency?: string | null
+          event_id?: string | null
           event_name: string
+          fbc?: string | null
+          fbclid?: string | null
+          fbp?: string | null
           id?: string
+          is_test?: boolean
+          lead_status?: string | null
+          meta_api_status?: string | null
+          meta_error?: string | null
+          meta_pixel_status?: string | null
+          page_title?: string | null
+          page_url?: string | null
           payload?: Json | null
+          referrer?: string | null
           session_id?: string | null
+          source?: string | null
           user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          value?: number | null
         }
         Update: {
+          ad?: string | null
+          ad_set?: string | null
+          campaign?: string | null
+          client_name?: string | null
           created_at?: string | null
+          currency?: string | null
+          event_id?: string | null
           event_name?: string
+          fbc?: string | null
+          fbclid?: string | null
+          fbp?: string | null
           id?: string
+          is_test?: boolean
+          lead_status?: string | null
+          meta_api_status?: string | null
+          meta_error?: string | null
+          meta_pixel_status?: string | null
+          page_title?: string | null
+          page_url?: string | null
           payload?: Json | null
+          referrer?: string | null
           session_id?: string | null
+          source?: string | null
           user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          value?: number | null
         }
         Relationships: []
       }
@@ -85,7 +157,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      record_tracking_event: { Args: { p_event: Json }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "user"
