@@ -78,6 +78,46 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
     return { success: true, updatedAt };
   });
 
+export const resetAdminAnalytics = createServerFn({ method: "POST" })
+  .middleware([serverSessionMiddleware])
+  .handler(async ({ context }) => {
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const { error } = await admin
+      .from("analytics_events")
+      .delete()
+      .not("id", "is", null);
+    if (error) throw new Error(`Falha ao zerar métricas: ${error.message}`);
+    return { success: true, resetAt: new Date().toISOString() };
+  });
+
+const legacyPublishAdminFunnel = createServerFn({ method: "POST" })
+  .middleware([serverSessionMiddleware])
+  .validator((draft: FunnelDraft) => draft)
+  .handler(async ({ context, data: draft }) => {
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const updatedAt = new Date().toISOString();
+    const { error } = await admin.from("quiz_config").upsert(
+      [
+        { key: "funnel_content", value: draft as never, updated_at: updatedAt },
+        { key: "funnel_draft", value: draft as never, updated_at: updatedAt },
+      ],
+      { onConflict: "key" },
+    );
+    if (error) throw new Error(`Falha ao publicar conteúdo: ${error.message}`);
+
+    const { data: published, error: verifyError } = await admin
+      .from("quiz_config")
+      .select("value,updated_at")
+      .eq("key", "funnel_content")
+      .single();
+    if (verifyError || !published || stableStringify(published.value) !== stableStringify(draft)) {
+      throw new Error(
+        `A publicação não pôde ser confirmada no banco: ${verifyError?.message ?? "conteúdo divergente"}`,
+      );
+    }
+    return { success: true, updatedAt };
+  });
+
 type UploadRequest = { path: string };
 
 export const createAdminMediaUpload = createServerFn({ method: "POST" })
