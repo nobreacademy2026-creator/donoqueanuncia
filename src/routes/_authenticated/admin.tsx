@@ -1543,12 +1543,13 @@ function FunnelTemplatesSection({
   onEdit: () => void;
 }) {
   const [selectedTemplateId, setSelectedTemplateId] = useState(FUNNEL_TEMPLATES[0]?.id ?? "");
+  const selectedTemplate = FUNNEL_TEMPLATES.find((item) => item.id === selectedTemplateId);
 
   const handleApplyTemplate = () => {
-    const selected = FUNNEL_TEMPLATES.find((item) => item.id === selectedTemplateId);
+    const selected = selectedTemplate;
     if (!selected) return;
     const confirmed = window.confirm(
-      `Aplicar o modelo "${selected.name}" ao rascunho? Os textos e respostas serão substituídos. Suas mídias, checkout, WhatsApp e pixels serão preservados.`,
+      `Aplicar o modelo "${selected.name}" ao rascunho? Textos e imagens serão substituídos pelos padrões do modelo. Checkout, WhatsApp e pixels serão preservados.`,
     );
     if (!confirmed) return;
 
@@ -1572,8 +1573,8 @@ function FunnelTemplatesSection({
               Escolha um funil de quiz pronto
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-400">
-              Selecione um segmento e aplique ao rascunho. Depois, abra o módulo Conteúdo do Funil
-              para editar cada etapa antes de publicar.
+              Clique em qualquer modelo para ver a prévia. Todos incluem textos, respostas, oferta e
+              imagens genéricas prontas para editar.
             </p>
           </div>
           <span className="shrink-0 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
@@ -1589,13 +1590,26 @@ function FunnelTemplatesSection({
                 key={item.id}
                 type="button"
                 onClick={() => setSelectedTemplateId(item.id)}
-                className={`rounded-2xl border p-4 text-left transition-all ${
+                className={`group overflow-hidden rounded-2xl border text-left transition-all ${
                   selected
                     ? "border-primary bg-primary/10 shadow-[0_0_0_1px_rgba(239,68,68,.15)]"
                     : "border-white/[0.07] bg-black/20 hover:border-white/20 hover:bg-white/[0.04]"
                 }`}
               >
-                <span className="flex items-start gap-3">
+                <span className="relative block aspect-[16/9] overflow-hidden bg-zinc-900">
+                  <img
+                    src={item.coverImage}
+                    alt={`Prévia do modelo ${item.name}`}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  {selected ? (
+                    <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white">
+                      <Eye className="h-3 w-3" /> Prévia ativa
+                    </span>
+                  ) : null}
+                </span>
+                <span className="flex items-start gap-3 p-4 pb-0">
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-xl">
                     {item.icon}
                   </span>
@@ -1606,7 +1620,7 @@ function FunnelTemplatesSection({
                     </small>
                   </span>
                 </span>
-                <span className="mt-3 block text-xs leading-relaxed text-zinc-500">
+                <span className="block p-4 pt-3 text-xs leading-relaxed text-zinc-500">
                   {item.description}
                 </span>
               </button>
@@ -1614,9 +1628,69 @@ function FunnelTemplatesSection({
           })}
         </div>
 
+        {selectedTemplate ? (
+          <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3">
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-red-500" />
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+                Prévia do funil — {selectedTemplate.name}
+              </span>
+            </div>
+            <div className="grid lg:grid-cols-[1.05fr_.95fr]">
+              <div className="relative min-h-64 overflow-hidden">
+                <img
+                  src={selectedTemplate.coverImage}
+                  alt={`Capa do funil ${selectedTemplate.name}`}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6">
+                  <span className="rounded-full bg-primary/90 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white">
+                    {selectedTemplate.category}
+                  </span>
+                  <h3 className="mt-3 max-w-xl text-2xl font-black leading-tight text-white">
+                    {selectedTemplate.draft.steps["intro"]?.title}
+                  </h3>
+                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-200">
+                    {selectedTemplate.draft.steps["intro"]?.description}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center p-6">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+                  Exemplo de pergunta
+                </p>
+                <h4 className="mt-2 text-lg font-black text-white">
+                  {selectedTemplate.draft.steps["dor"]?.title}
+                </h4>
+                <div className="mt-4 space-y-2">
+                  {selectedTemplate.draft.steps["dor"]?.options?.map((option, index) => (
+                    <div
+                      key={option}
+                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-xs font-semibold text-zinc-300"
+                    >
+                      <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/15 text-[10px] font-black text-primary">
+                        {index + 1}
+                      </span>
+                      {option}
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-4 text-[11px] leading-relaxed text-zinc-500">
+                  Inclui quiz, resultado, prova social, oferta, imagem de VSL e página de vendas.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-white/[0.07] bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-zinc-400">
-            Aplicar um modelo altera apenas o rascunho e preserva mídias e integrações.
+            Aplicar substitui textos e imagens do rascunho, preservando checkout, WhatsApp e pixels.
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <button

@@ -5,6 +5,7 @@ export type FunnelTemplate = {
   name: string;
   category: string;
   icon: string;
+  coverImage: string;
   description: string;
   draft: Pick<FunnelDraft, "steps" | "sales">;
 };
@@ -27,34 +28,45 @@ function template(
     prices: [string, string];
   },
 ): FunnelTemplate {
+  const coverImage = `/templates/${id}.png`;
+
   return {
     id,
     name,
     category,
     icon,
+    coverImage,
     description,
     draft: {
       steps: {
-        intro: { title: content.intro[0], description: content.intro[1] },
-        dor: { title: content.pain[0], options: content.pain[1] },
-        motivacao: { title: content.motivation[0], options: content.motivation[1] },
-        objecao: { title: content.objection },
-        beneficios: { title: content.benefits },
+        intro: { title: content.intro[0], description: content.intro[1], image: coverImage },
+        dor: { title: content.pain[0], options: content.pain[1], image: coverImage },
+        motivacao: {
+          title: content.motivation[0],
+          options: content.motivation[1],
+          image: coverImage,
+        },
+        objecao: { title: content.objection, image: coverImage },
+        beneficios: { title: content.benefits, image: coverImage },
         audio: {
           title: content.audio,
+          image: coverImage,
           options: ["Nome do cliente", "Resultado alcançado", "Antes", "Depois"],
         },
-        niche: { title: content.niche },
+        niche: { title: content.niche, image: coverImage, images: [coverImage] },
         sales_vsl: { title: content.video },
+        sales_vsl_video: { image: coverImage },
         sales_offer: { options: [content.prices[0], content.prices[1], ""] },
         sales_testimonial: {
+          image: coverImage,
           title: "Veja o que aconteceu com quem decidiu começar",
           options: ["Nome do cliente", "Segmento / resultado"],
         },
-        sales_instagram: { title: "Veja mais um resultado real" },
+        sales_instagram: { title: "Veja mais um resultado real", image: coverImage },
       },
       sales: {
         videoHeadline: content.video,
+        videoThumb: coverImage,
         promoPrice: content.prices[0],
         fullPrice: content.prices[1],
       },
@@ -263,12 +275,8 @@ export function applyFunnelTemplate(current: FunnelDraft, selected: FunnelTempla
   const steps = { ...current.steps };
 
   for (const [id, templateStep] of Object.entries(selected.draft.steps)) {
-    const currentStep = current.steps[id] ?? {};
     steps[id] = {
-      ...currentStep,
       ...templateStep,
-      ...(currentStep.image ? { image: currentStep.image } : {}),
-      ...(currentStep.audio ? { audio: currentStep.audio } : {}),
     };
   }
 
@@ -287,7 +295,6 @@ export function applyFunnelTemplate(current: FunnelDraft, selected: FunnelTempla
     whatsappNumber: current.sales.whatsappNumber,
     whatsappMessage: current.sales.whatsappMessage,
     vslUrl: current.sales.vslUrl,
-    videoThumb: current.sales.videoThumb,
   };
 
   return {
