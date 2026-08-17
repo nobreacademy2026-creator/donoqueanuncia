@@ -49,7 +49,12 @@ import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { uploadAdminMedia } from "@/lib/admin-media-upload";
 import { applyFunnelTemplate, FUNNEL_TEMPLATES } from "@/lib/funnel-templates";
-import { initPublishedTracking, isMetaPixelConnected } from "@/lib/tracking";
+import {
+  initPublishedTracking,
+  isGoogleAnalyticsConnected,
+  isGoogleTagManagerConnected,
+  isMetaPixelConnected,
+} from "@/lib/tracking";
 import logoAsset from "@/assets/logo-dono-que-anuncia.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -1326,6 +1331,8 @@ export function TrackingSection({
   const [gtmId, setGtmId] = useState(draft.tracking?.gtmId ?? "");
   const [saving, setSaving] = useState(false);
   const [metaConnected, setMetaConnected] = useState(false);
+  const [ga4Connected, setGa4Connected] = useState(false);
+  const [gtmConnected, setGtmConnected] = useState(false);
 
   useEffect(() => {
     setMetaPixelId(draft.tracking?.metaPixelId ?? "");
@@ -1336,12 +1343,14 @@ export function TrackingSection({
   useEffect(() => {
     const checkConnection = () => {
       setMetaConnected(isMetaPixelConnected(draft.tracking?.metaPixelId ?? ""));
+      setGa4Connected(isGoogleAnalyticsConnected(draft.tracking?.ga4Id ?? ""));
+      setGtmConnected(isGoogleTagManagerConnected(draft.tracking?.gtmId ?? ""));
     };
 
     checkConnection();
     const interval = window.setInterval(checkConnection, 1000);
     return () => window.clearInterval(interval);
-  }, [draft.tracking?.metaPixelId]);
+  }, [draft.tracking?.metaPixelId, draft.tracking?.ga4Id, draft.tracking?.gtmId]);
 
   const saveTracking = async () => {
     const meta = metaPixelId.trim();
@@ -1367,7 +1376,7 @@ export function TrackingSection({
       setDraft(next);
       writeDraft(next);
       await publishDraft(next);
-      await initPublishedTracking();
+      await initPublishedTracking({ force: true });
       toast.success("Configuração de tracking publicada.");
     } catch (error: any) {
       toast.error(`Erro ao publicar tracking: ${error?.message ?? "tente novamente"}`);
@@ -1438,6 +1447,14 @@ export function TrackingSection({
               : "border-zinc-200 bg-zinc-50 text-zinc-900 shadow-inner"
           }`}
         />
+        <TrackingConnectionStatus
+          connected={ga4Connected}
+          configured={Boolean(ga4Id.trim())}
+          connectedLabel={`Google Analytics ${draft.tracking?.ga4Id} conectado`}
+          waitingLabel="Aguardando publicação ou conexão com o Google Analytics"
+          emptyLabel="Google Analytics não configurado"
+          theme={theme}
+        />
       </div>
 
       <div className="space-y-2">
@@ -1457,6 +1474,14 @@ export function TrackingSection({
           }`}
           placeholder="Ex: GTM-ABC123"
         />
+        <TrackingConnectionStatus
+          connected={gtmConnected}
+          configured={Boolean(gtmId.trim())}
+          connectedLabel={`Google Tag Manager ${draft.tracking?.gtmId} conectado`}
+          waitingLabel="Aguardando publicação ou conexão com o Tag Manager"
+          emptyLabel="Google Tag Manager não configurado"
+          theme={theme}
+        />
       </div>
 
       <p className="text-xs text-zinc-500">
@@ -1470,6 +1495,39 @@ export function TrackingSection({
         <Save className="h-4 w-4" />
         {saving ? "Publicando..." : "Publicar Tracking"}
       </button>
+    </div>
+  );
+}
+
+function TrackingConnectionStatus({
+  connected,
+  configured,
+  connectedLabel,
+  waitingLabel,
+  emptyLabel,
+  theme,
+}: {
+  connected: boolean;
+  configured: boolean;
+  connectedLabel: string;
+  waitingLabel: string;
+  emptyLabel: string;
+  theme: "dark" | "light";
+}) {
+  return (
+    <div
+      className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold ${
+        connected
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-500"
+          : configured
+            ? "border-amber-500/30 bg-amber-500/10 text-amber-500"
+            : theme === "dark"
+              ? "border-white/10 bg-white/5 text-zinc-400"
+              : "border-zinc-200 bg-zinc-50 text-zinc-500"
+      }`}
+    >
+      <Activity className="h-4 w-4" />
+      {connected ? connectedLabel : configured ? waitingLabel : emptyLabel}
     </div>
   );
 }
