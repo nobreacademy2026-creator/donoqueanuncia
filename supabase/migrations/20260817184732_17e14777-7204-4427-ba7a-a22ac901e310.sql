@@ -1,0 +1,2 @@
+GRANT DELETE ON public.analytics_events TO authenticated;
+CREATE POLICY "Admins can delete events" ON public.analytics_events FOR DELETE TO authenticated USING (private.has_role(auth.uid(), 'admin'::app_role));
