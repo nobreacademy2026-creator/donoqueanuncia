@@ -13,13 +13,21 @@ import {
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
+  Radar,
   Settings,
   ShoppingBag,
   X,
 } from "lucide-react";
 
 export type AdminTab =
-  "overview" | "analytics" | "templates" | "content" | "sales" | "tracking" | "settings";
+  | "overview"
+  | "analytics"
+  | "templates"
+  | "content"
+  | "sales"
+  | "attribution"
+  | "tracking"
+  | "settings";
 
 type ShellProps = {
   activeTab: AdminTab;
@@ -31,6 +39,7 @@ type ShellProps = {
 type CheckoutNotification = {
   id: string;
   created_at: string | null;
+  event_name: string;
   session_id: string | null;
   payload: Record<string, unknown> | null;
 };
@@ -41,6 +50,7 @@ const NAV_ITEMS = [
   { id: "templates" as const, label: "Modelos de Funil", icon: LibraryBig },
   { id: "content" as const, label: "Conteúdo do Funil", icon: LayoutTemplate },
   { id: "sales" as const, label: "Página de Vendas", icon: ShoppingBag },
+  { id: "attribution" as const, label: "Rastreamento", icon: Radar },
   { id: "tracking" as const, label: "Pixels e Tracking", icon: Code2 },
   { id: "settings" as const, label: "Configurações", icon: Settings },
 ];
@@ -65,6 +75,10 @@ const PAGE_COPY: Record<AdminTab, { title: string; description: string }> = {
   sales: {
     title: "Página de Vendas",
     description: "Gerencie sua oferta, preços, vídeo e destino de checkout.",
+  },
+  attribution: {
+    title: "Rastreamento",
+    description: "Acompanhe eventos, leads, conversões, atribuição e integrações Meta.",
   },
   tracking: {
     title: "Pixels e Tracking",
@@ -96,8 +110,8 @@ export function AdminShell({ activeTab, onTabChange, onLogout, children }: Shell
 
     void supabase
       .from("analytics_events")
-      .select("id,created_at,session_id,payload")
-      .eq("event_name", "checkout_iniciado")
+      .select("id,created_at,event_name,session_id,payload")
+      .in("event_name", ["checkout_iniciado", "InitiateCheckout"])
       .order("created_at", { ascending: false })
       .limit(10)
       .then(({ data, error }) => {
@@ -117,11 +131,10 @@ export function AdminShell({ activeTab, onTabChange, onLogout, children }: Shell
           event: "INSERT",
           schema: "public",
           table: "analytics_events",
-          filter: "event_name=eq.checkout_iniciado",
         },
         ({ new: inserted }) => {
-          const notification = inserted as CheckoutNotification & { event_name?: string };
-          if (notification.event_name !== "checkout_iniciado") return;
+          const notification = inserted as CheckoutNotification;
+          if (!["checkout_iniciado", "InitiateCheckout"].includes(notification.event_name)) return;
           setNotifications((current) => [notification, ...current].slice(0, 10));
           setUnreadNotifications((current) => current + 1);
           toast.success("Novo clique no checkout", {

@@ -54,7 +54,7 @@ function Index() {
   const draft = useFunnelDraft();
 
   useEffect(() => {
-    void trackEvent("quiz_iniciado");
+    void trackEvent("PageView", { etapa: "quiz" });
   }, []);
 
   const questions = useMemo(

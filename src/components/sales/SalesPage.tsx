@@ -15,7 +15,13 @@ import {
   Wallet,
   Zap,
 } from "lucide-react";
-import { CHECKOUT_URL, trackCheckoutClick, trackEvent, whatsappLink } from "@/lib/tracking";
+import {
+  CHECKOUT_URL,
+  trackCheckoutClick,
+  trackContact,
+  trackEvent,
+  whatsappLink,
+} from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
@@ -680,6 +686,7 @@ export function SalesPage({
           href={whatsappLink(whatsappMessage, whatsappNumber)}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackContact({ origem: "pagina_vendas", canal: "whatsapp" })}
           className="inline-flex items-center gap-3 rounded-2xl bg-zinc-100 border border-zinc-200 px-8 py-4 font-bold uppercase text-zinc-950 shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-200 active:translate-y-0"
         >
           <div className="bg-[#25D366] p-2 rounded-full">

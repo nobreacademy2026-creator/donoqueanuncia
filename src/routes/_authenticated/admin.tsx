@@ -47,6 +47,7 @@ import {
 } from "@/lib/funnel-content";
 import { AdminShell, type AdminTab } from "@/components/admin/AdminShell";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
+import { TrackingDashboard } from "@/components/admin/TrackingDashboard";
 import { uploadAdminMedia } from "@/lib/admin-media-upload";
 import { applyFunnelTemplate, FUNNEL_TEMPLATES } from "@/lib/funnel-templates";
 import {
@@ -169,6 +170,7 @@ function AdminDashboard() {
           <ConfigSection theme="dark" draft={draft} setDraft={setDraft} />
         </div>
       )}
+      {activeTab === "attribution" && <TrackingDashboard tracking={draft.tracking} />}
       {activeTab === "tracking" && (
         <div className="admin-panel p-5 sm:p-7">
           <TrackingSection theme="dark" draft={draft} setDraft={setDraft} />
