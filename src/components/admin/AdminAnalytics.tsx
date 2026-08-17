@@ -17,6 +17,7 @@ import {
   Search,
   ShoppingBag,
   Target,
+  Trash2,
   Users,
   Video,
 } from "lucide-react";
@@ -32,7 +33,17 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { loadAdminAnalytics } from "@/lib/admin-data.functions";
+import { loadAdminAnalytics, resetAdminAnalytics } from "@/lib/admin-data.functions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import type { AdminTab } from "./AdminShell";
 
 type EventPayload = { stage?: string; source?: string; pergunta?: string } & Record<
@@ -111,6 +122,22 @@ export function AdminAnalytics({
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
   const [search, setSearch] = useState("");
+  const [resetOpen, setResetOpen] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  async function handleReset() {
+    setResetting(true);
+    try {
+      await resetAdminAnalytics();
+      setResetOpen(false);
+      setRefreshKey((value) => value + 1);
+      toast.success("Métricas zeradas. A contagem recomeça a partir de agora.");
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setResetting(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -391,6 +418,13 @@ export function AdminAnalytics({
             <Download /> Exportar relatório
           </button>
           <button
+            className="admin-button-secondary text-red-400"
+            onClick={() => setResetOpen(true)}
+            disabled={loading || resetting}
+          >
+            <Trash2 /> Zerar métricas
+          </button>
+          <button
             className="admin-button-primary"
             onClick={() => setRefreshKey((value) => value + 1)}
             disabled={loading}
@@ -399,6 +433,30 @@ export function AdminAnalytics({
           </button>
         </div>
       </section>
+
+      <AlertDialog open={resetOpen} onOpenChange={setResetOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Zerar todas as métricas?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Todos os eventos registrados serão apagados permanentemente e a contagem recomeça a
+              partir de agora. Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={resetting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(event) => {
+                event.preventDefault();
+                void handleReset();
+              }}
+              disabled={resetting}
+            >
+              {resetting ? "Zerando..." : "Sim, zerar tudo"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {period === "custom" && (
         <div className="admin-panel flex flex-wrap gap-3 p-4">

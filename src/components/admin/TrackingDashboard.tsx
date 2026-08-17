@@ -141,7 +141,7 @@ function masked(value: string | null) {
   return value.length <= 8 ? "••••" : `${value.slice(0, 4)}••••${value.slice(-4)}`;
 }
 
-function MetaStatusBadge({ status }: { status: string }) {
+function MetaStatusBadge({ status }: { status: string | null }) {
   const style =
     status === "sent"
       ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
