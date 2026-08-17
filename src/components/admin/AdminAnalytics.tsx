@@ -418,6 +418,13 @@ export function AdminAnalytics({
             <Download /> Exportar relatório
           </button>
           <button
+            className="admin-button-secondary text-red-400"
+            onClick={() => setResetOpen(true)}
+            disabled={loading || resetting}
+          >
+            <Trash2 /> Zerar métricas
+          </button>
+          <button
             className="admin-button-primary"
             onClick={() => setRefreshKey((value) => value + 1)}
             disabled={loading}
@@ -426,6 +433,30 @@ export function AdminAnalytics({
           </button>
         </div>
       </section>
+
+      <AlertDialog open={resetOpen} onOpenChange={setResetOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Zerar todas as métricas?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Todos os eventos registrados serão apagados permanentemente e a contagem recomeça a
+              partir de agora. Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={resetting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(event) => {
+                event.preventDefault();
+                void handleReset();
+              }}
+              disabled={resetting}
+            >
+              {resetting ? "Zerando..." : "Sim, zerar tudo"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {period === "custom" && (
         <div className="admin-panel flex flex-wrap gap-3 p-4">
