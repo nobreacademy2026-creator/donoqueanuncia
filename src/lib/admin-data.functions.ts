@@ -78,6 +78,18 @@ export const publishAdminFunnel = createServerFn({ method: "POST" })
     return { success: true, updatedAt };
   });
 
+export const resetAdminAnalytics = createServerFn({ method: "POST" })
+  .middleware([serverSessionMiddleware])
+  .handler(async ({ context }) => {
+    const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
+    const { error } = await admin
+      .from("analytics_events")
+      .delete()
+      .not("id", "is", null);
+    if (error) throw new Error(`Falha ao zerar métricas: ${error.message}`);
+    return { success: true, resetAt: new Date().toISOString() };
+  });
+
 type UploadRequest = { path: string };
 
 export const createAdminMediaUpload = createServerFn({ method: "POST" })
