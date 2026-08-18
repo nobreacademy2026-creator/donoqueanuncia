@@ -19,7 +19,7 @@ import {
   CHECKOUT_URL,
   trackCheckoutClick,
   trackContact,
-  trackEvent,
+  trackFunnelEvent,
   whatsappLink,
 } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
@@ -178,7 +178,7 @@ function EmbeddedVideo({ url }: { url: string }) {
           type="button"
           onClick={(event) => {
             event.stopPropagation();
-            void trackEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
+            void trackFunnelEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
             setStarted(true);
           }}
           className="absolute inset-0 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
@@ -332,7 +332,7 @@ export function SalesPage({
           <div className="mx-auto max-w-4xl relative">
             <div
               className="group relative mb-12 aspect-video w-full overflow-hidden rounded-2xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:rounded-[2rem]"
-              onClick={() => trackEvent("clique_video", { origem: "pagina_vendas" })}
+              onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
                 <div className="relative h-full w-full">
@@ -351,7 +351,7 @@ export function SalesPage({
                       type="button"
                       onClick={(event) => {
                         event.stopPropagation();
-                        void trackEvent("clique_video", {
+                        void trackFunnelEvent("clique_video", {
                           origem: "pagina_vendas",
                           tipo: "upload",
                         });
@@ -390,7 +390,7 @@ export function SalesPage({
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
                   onClick={() => {
-                    void trackEvent("clique_video", { origem: "pagina_vendas" });
+                    void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
                   }}
                 >
                   <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">

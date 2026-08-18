@@ -60,6 +60,16 @@ const TEST_EVENTS: StandardEventName[] = [
   "Purchase",
 ];
 
+const STANDARD_EVENT_NAMES = new Set<string>([
+  "PageView",
+  "ViewContent",
+  "Lead",
+  "Contact",
+  "AddToCart",
+  "InitiateCheckout",
+  "Purchase",
+]);
+
 function startOfDay(date: Date) {
   const value = new Date(date);
   value.setHours(0, 0, 0, 0);
@@ -252,15 +262,18 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
   }, []);
 
   const productionEvents = useMemo(() => events.filter((event) => !event.is_test), [events]);
+  const metaEvents = useMemo(
+    () => productionEvents.filter((event) => STANDARD_EVENT_NAMES.has(event.event_name)),
+    [productionEvents],
+  );
   const metrics = useMemo(() => {
-    const names = productionEvents.map(canonicalName);
-    const visitors = new Set(productionEvents.map((event) => event.session_id).filter(Boolean))
-      .size;
+    const names = metaEvents.map(canonicalName);
+    const visitors = new Set(metaEvents.map((event) => event.session_id).filter(Boolean)).size;
     const views = names.filter((name) => name === "PageView" || name === "ViewContent").length;
     const leads = names.filter((name) => name === "Lead").length;
     const contacts = names.filter((name) => name === "Contact").length;
     const checkouts = names.filter((name) => name === "InitiateCheckout").length;
-    const purchases = productionEvents.filter((event) => canonicalName(event) === "Purchase");
+    const purchases = metaEvents.filter((event) => canonicalName(event) === "Purchase");
     const revenue = purchases.reduce((sum, event) => sum + eventValue(event), 0);
     return {
       visitors,
@@ -272,18 +285,18 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
       conversion: visitors ? (leads / visitors) * 100 : 0,
       revenue,
     };
-  }, [productionEvents]);
+  }, [metaEvents]);
 
   const sources = useMemo(
-    () => Array.from(new Set(productionEvents.map(eventSource))).sort(),
-    [productionEvents],
+    () => Array.from(new Set(metaEvents.map(eventSource))).sort(),
+    [metaEvents],
   );
-  const leads = productionEvents.filter(
+  const leads = metaEvents.filter(
     (event) =>
       canonicalName(event) === "Lead" &&
       (sourceFilter === "all" || eventSource(event) === sourceFilter),
   );
-  const conversions = productionEvents.filter((event) =>
+  const conversions = metaEvents.filter((event) =>
     ["InitiateCheckout", "Purchase"].includes(canonicalName(event)),
   );
   const logs = events.filter(
@@ -303,7 +316,7 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
         revenue: number;
       }
     >();
-    for (const event of productionEvents) {
+    for (const event of metaEvents) {
       const campaign = eventCampaign(event);
       const adSet = event.ad_set ?? "Origem não identificada";
       const ad = event.ad ?? "Origem não identificada";
@@ -319,7 +332,7 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
     return Array.from(grouped.values())
       .filter((item) => item.leads || item.purchases)
       .sort((a, b) => b.revenue - a.revenue || b.leads - a.leads);
-  }, [productionEvents]);
+  }, [metaEvents]);
 
   const runTest = async () => {
     setTesting(true);

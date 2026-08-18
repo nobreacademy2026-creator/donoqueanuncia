@@ -44,7 +44,7 @@ export const loadAdminAnalytics = createServerFn({ method: "GET" })
     const admin = await getVerifiedAdmin(context?.userId, context?.accessToken);
     const { data, error } = await admin
       .from("analytics_events")
-      .select("id,event_name,payload,session_id,created_at")
+      .select("id,event_name,payload,session_id,created_at,is_test")
       .order("created_at", { ascending: false });
     if (error) throw new Error(`Falha ao carregar métricas: ${error.message}`);
     return data ?? [];

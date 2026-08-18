@@ -45,6 +45,7 @@ type AnalyticsEvent = {
   payload: EventPayload | null;
   session_id: string | null;
   created_at: string | null;
+  is_test: boolean;
 };
 type Period = "1" | "7" | "30" | "custom";
 
@@ -179,6 +180,7 @@ export function AdminAnalytics({
   const filteredEvents = useMemo(
     () =>
       events.filter((event) => {
+        if (event.is_test) return false;
         const createdAt = event.created_at ? new Date(event.created_at) : null;
         return createdAt && createdAt >= range.start && createdAt <= range.end;
       }),

@@ -383,6 +383,15 @@ export async function trackEvent(event: string, payload: Payload = {}): Promise<
   return recordEvent(event, payload);
 }
 
+/**
+ * Records product/funnel analytics only. These events feed the internal dashboard
+ * and intentionally do not reach Meta Pixel, Conversions API, GA4 or GTM.
+ */
+export function trackFunnelEvent(event: string, payload: Payload = {}) {
+  if (typeof window === "undefined") return Promise.resolve(false);
+  return recordEvent(event, payload);
+}
+
 export function trackLead(payload: Payload = {}) {
   if (typeof window === "undefined") return;
   void dispatchStandardEvent("Lead", payload);
@@ -395,7 +404,11 @@ export function trackContact(payload: Payload = {}) {
 
 export async function trackCheckoutClick(payload: Payload = {}) {
   if (typeof window === "undefined") return false;
-  return Boolean(await dispatchStandardEvent("InitiateCheckout", payload));
+  const [metaResult, funnelResult] = await Promise.all([
+    dispatchStandardEvent("InitiateCheckout", payload),
+    trackFunnelEvent("checkout_iniciado", payload),
+  ]);
+  return Boolean(metaResult || funnelResult);
 }
 
 export function trackPurchase(value: number, currency = "BRL", payload: Payload = {}) {

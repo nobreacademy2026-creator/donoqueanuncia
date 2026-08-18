@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { QUESTIONS, calculatePillars, calculateScore, type Answers } from "@/lib/quiz-data";
-import { trackEvent } from "@/lib/tracking";
+import { trackEvent, trackFunnelEvent } from "@/lib/tracking";
 import { useFunnelDraft } from "@/lib/funnel-content";
 import { QuizProgress } from "@/components/quiz/QuizProgress";
 import { QuestionStep } from "@/components/quiz/QuestionStep";
@@ -55,6 +55,7 @@ function Index() {
 
   useEffect(() => {
     void trackEvent("PageView", { etapa: "quiz" });
+    void trackFunnelEvent("quiz_iniciado", { etapa: "quiz" });
   }, []);
 
   const questions = useMemo(
@@ -97,11 +98,11 @@ function Index() {
   function handleSelect(value: string) {
     const question = questions[step]!;
     setAnswers((prev) => ({ ...prev, [question.id]: value }));
-    trackEvent("quiz_resposta", { pergunta: question.id, resposta: value });
+    void trackFunnelEvent("quiz_resposta", { pergunta: question.id, resposta: value });
     setTimeout(() => {
       if (step + 1 >= questions.length) {
         setStage("analyzing");
-        trackEvent("quiz_concluido");
+        void trackFunnelEvent("quiz_concluido");
       } else {
         setStep(step + 1);
       }
@@ -170,7 +171,7 @@ function Index() {
             <ResultStep
               steps={draft.steps}
               onNext={() => {
-                trackEvent("pagina_vendas_visualizada");
+                void trackFunnelEvent("pagina_vendas_visualizada");
                 setStage("sales");
                 window.scrollTo({ top: 0 });
               }}
