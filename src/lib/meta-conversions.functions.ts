@@ -155,6 +155,19 @@ async function deliverMetaConversion(
   }
 }
 
+function assertSameOriginSource(eventSourceUrl: string) {
+  const request = getRequest();
+  const browserOrigin = request.headers.get("origin");
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const requestHost = forwardedHost ?? request.headers.get("host");
+  if (!browserOrigin || !requestHost) throw new Error("Origem da conversão não identificada.");
+  const source = new URL(eventSourceUrl);
+  const origin = new URL(browserOrigin);
+  if (source.host !== requestHost || source.origin !== origin.origin) {
+    throw new Error("Origem da conversão não permitida.");
+  }
+}
+
 async function assertAdmin(userId: string | null, accessToken: string | null) {
   if (!userId || !accessToken) throw new Error("Não autenticado.");
   const url = process.env["SUPABASE_URL"];
@@ -176,7 +189,10 @@ async function assertAdmin(userId: string | null, accessToken: string | null) {
 
 export const sendMetaConversion = createServerFn({ method: "POST" })
   .validator(validateMetaInput)
-  .handler(async ({ data }) => deliverMetaConversion(data, { test: false }));
+  .handler(async ({ data }) => {
+    assertSameOriginSource(data.eventSourceUrl);
+    return deliverMetaConversion(data, { test: false });
+  });
 
 export const testMetaEvent = createServerFn({ method: "POST" })
   .middleware([serverSessionMiddleware])

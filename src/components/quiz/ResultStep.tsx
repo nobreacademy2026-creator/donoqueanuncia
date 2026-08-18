@@ -2,6 +2,7 @@ import { CheckCircle2, Play, Pause } from "lucide-react";
 import danielInstagramMockup from "@/assets/daniel-instagram-mockup.png.asset.json";
 import { useEffect, useState, useRef } from "react";
 import { trackFunnelEvent } from "@/lib/tracking";
+import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimization";
 
 export function ResultStep({
   onNext,
@@ -123,8 +124,12 @@ export function ResultStep({
 
           <div className="space-y-6">
             <img
-              src={testimonialDraft?.image || danielInstagramMockup.url}
+              src={optimizedImageUrl(testimonialDraft?.image || danielInstagramMockup.url, 672)}
+              srcSet={optimizedImageSrcSet(testimonialDraft?.image || danielInstagramMockup.url)}
+              sizes="(max-width: 448px) 100vw, 384px"
               alt="Depoimento do aluno no Instagram"
+              loading="lazy"
+              decoding="async"
               className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl border border-zinc-100"
             />
 
@@ -160,8 +165,12 @@ export function ResultStep({
           {nicheImages.length > 0 ? (
             nicheImages.length === 1 ? (
               <img
-                src={nicheImages[0]}
+                src={optimizedImageUrl(nicheImages[0], 672)}
+                srcSet={optimizedImageSrcSet(nicheImages[0])}
+                sizes="(max-width: 512px) 100vw, 448px"
                 alt="Depoimento de aluno no Instagram"
+                loading="lazy"
+                decoding="async"
                 className="mx-auto h-auto w-full max-w-md rounded-3xl border border-zinc-200 object-contain shadow-2xl"
               />
             ) : (
@@ -169,8 +178,12 @@ export function ResultStep({
                 {nicheImages.map((image, index) => (
                   <img
                     key={`${image}-${index}`}
-                    src={image}
+                    src={optimizedImageUrl(image, 672)}
+                    srcSet={optimizedImageSrcSet(image)}
+                    sizes="(max-width: 512px) 100vw, 448px"
                     alt={`Depoimento ${index + 1}`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full shrink-0 snap-center rounded-3xl border border-zinc-200 object-contain shadow-xl"
                   />
                 ))}

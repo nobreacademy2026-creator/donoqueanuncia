@@ -30,7 +30,10 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
       init?.method ||
       (typeof Request !== "undefined" && input instanceof Request ? input.method : "GET")
     ).toUpperCase();
-    const keepalive = method === "POST" && url.includes("/rest/v1/analytics_events");
+    const keepalive =
+      method === "POST" &&
+      (url.includes("/rest/v1/analytics_events") ||
+        url.includes("/rest/v1/rpc/record_tracking_event"));
     return fetch(input, { ...init, headers, ...(keepalive ? { keepalive: true } : {}) });
   };
 }

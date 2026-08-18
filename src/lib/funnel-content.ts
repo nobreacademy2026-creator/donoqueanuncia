@@ -209,7 +209,7 @@ export function useFunnelDraft(): FunnelDraft {
       if (active && published) setDraft(published);
     };
     const refreshTimer = !isPreview
-      ? window.setInterval(() => void refreshPublished(), 10_000)
+      ? window.setInterval(() => void refreshPublished(), 60_000)
       : null;
     const onVisibilityChange = () => {
       if (document.visibilityState === "visible") void refreshPublished();

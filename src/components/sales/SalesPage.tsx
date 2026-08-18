@@ -23,6 +23,7 @@ import {
   whatsappLink,
 } from "@/lib/tracking";
 import professorImg from "@/assets/rogerio-nobre.jpg";
+import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimization";
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
 
@@ -538,10 +539,13 @@ export function SalesPage({
         </p>
         <div className="mx-auto max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-2xl">
           <img
-            src={salesInstagram?.image || instagramPrintAsset.url}
+            src={optimizedImageUrl(salesInstagram?.image || instagramPrintAsset.url, 672)}
+            srcSet={optimizedImageSrcSet(salesInstagram?.image || instagramPrintAsset.url)}
+            sizes="(max-width: 448px) 100vw, 448px"
             alt="Depoimento de cliente no Instagram"
             className="h-auto w-full object-contain"
             loading="lazy"
+            decoding="async"
           />
         </div>
         <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-zinc-200/70 bg-white p-8 text-center shadow-sm sm:p-10">
@@ -634,6 +638,8 @@ export function SalesPage({
                       src="https://logopng.com.br/logos/pix-106.png"
                       className="h-6 object-contain"
                       alt="Pix"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <span className="text-sm font-black uppercase tracking-widest">
                       Pagamento Único
