@@ -19,6 +19,8 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.checkout_status || 
             body.status_name ||
             body.data?.transaction?.status ||
+            body.data?.event_name ||
+            body.data?.transaction_status ||
             "unknown"
           ).toString().toLowerCase();
 
@@ -29,8 +31,8 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.buyer?.email || 
             body.cus_email || 
             body.data?.buyer?.email ||
-            body.data?.customer?.email ||
-            body.client?.email;
+            body.client?.email ||
+            body.data?.email;
 
           const value = 
             body.amount || 
@@ -43,6 +45,7 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.amount_paid || 
             body.data?.total_price || 
             body.full_price ||
+            body.data?.value ||
             body.data?.transaction?.total_value;
 
           const eventId = 
@@ -91,7 +94,7 @@ export const Route = createFileRoute("/api/public/webhook")({
           else if (rawStatus.includes("pix")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("gerado")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("aguardando")) friendlyStatus = "waiting_payment";
-          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("sucesso") || rawStatus.includes("integral") || rawStatus.includes("confirmado")) friendlyStatus = "approved";
+          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("sucesso") || rawStatus.includes("integral") || rawStatus.includes("confirmado") || rawStatus.includes("concluído")) friendlyStatus = "approved";
           else if (rawStatus.includes("abandon") || rawStatus.includes("abandonado")) friendlyStatus = "abandoned_checkout";
           else if (rawStatus.includes("refund") || rawStatus.includes("reembolso")) friendlyStatus = "refunded";
           else if (rawStatus.includes("chargeback")) friendlyStatus = "chargeback";
@@ -115,7 +118,7 @@ export const Route = createFileRoute("/api/public/webhook")({
                 raw_status: rawStatus,
                 status_amigavel: friendlyStatus
               },
-              client_name: body.name || body.customer?.name || body.data?.customer?.name || body.buyer?.name || email || "Cliente Externo",
+              client_name: body.name || body.customer?.name || body.data?.customer?.name || body.buyer?.name || body.data?.name || email || "Cliente Externo",
               value: typeof value === "number" ? value : parseFloat(value) || null,
               currency: body.currency || "BRL",
               source: "webhook_externo",
