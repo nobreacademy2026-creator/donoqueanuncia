@@ -2584,8 +2584,9 @@ export function ContentSection({
                     )}
                   </div>
                 )}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
             </div>
           </Fragment>
         ))}
