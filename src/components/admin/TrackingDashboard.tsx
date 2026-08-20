@@ -28,7 +28,7 @@ import { testTrackingEvent, type StandardEventName } from "@/lib/tracking";
 
 type TrackingEvent = Tables<"analytics_events">;
 type Section =
-  "overview" | "events" | "leads" | "conversions" | "origin" | "test" | "logs" | "settings";
+  "overview" | "events" | "leads" | "conversions" | "origin" | "test" | "logs" | "pixel" | "settings";
 type Period = "today" | "yesterday" | "7d" | "30d" | "month" | "custom";
 type IntegrationStatus = Awaited<ReturnType<typeof getMetaIntegrationStatus>>;
 
@@ -723,6 +723,71 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
                 Nenhum erro de rastreamento no período.
               </p>
             ) : null}
+          </div>
+        </section>
+      ) : null}
+
+      {!loading && section === "pixel" ? (
+        <section className="admin-panel p-5 sm:p-6">
+          <div className="admin-section-heading">
+            <p className="admin-eyebrow">Integração Externa</p>
+            <h2>Seu Webhook da Plataforma</h2>
+            <p>Use este link nas suas plataformas externas (Hotmart, Kiwify, Cacto) para receber notificações de venda.</p>
+          </div>
+          
+          <div className="mt-6 space-y-6">
+            <div className="rounded-xl border border-white/10 bg-black/40 p-4">
+              <label className="mb-2 block text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                URL do Webhook
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={`${window.location.origin}/api/public/webhook`}
+                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 font-mono text-xs text-zinc-300"
+                />
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/api/public/webhook`);
+                    toast.success("URL copiada!");
+                  }}
+                  className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:opacity-90"
+                >
+                  Copiar
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-white uppercase tracking-tight">Instruções de Configuração</h3>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {[
+                  { title: "1. Copie a URL", desc: "Copie o link acima e acesse a sua plataforma de vendas." },
+                  { title: "2. Crie o Webhook", desc: "Vá em Configurações > Webhooks e adicione uma nova URL." },
+                  { title: "3. Selecione Eventos", desc: "Marque 'Compra Aprovada' ou 'Venda Realizada' para notificar." }
+                ].map((step, i) => (
+                  <div key={i} className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                    <strong className="mb-1 block text-xs text-primary">{step.title}</strong>
+                    <p className="text-[11px] leading-relaxed text-zinc-500">{step.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-4">
+              <div className="flex gap-3">
+                <Activity className="h-5 w-5 shrink-0 text-blue-400" />
+                <div>
+                  <h4 className="text-xs font-bold text-blue-300 uppercase">Como funciona?</h4>
+                  <p className="mt-1 text-[11px] leading-relaxed text-blue-200/70">
+                    Quando uma venda for feita na plataforma externa, ela enviará os dados para este link. 
+                    Nossa plataforma registrará automaticamente como um evento de "Purchase" no seu Analytics, 
+                    permitindo que você veja o faturamento real aqui no painel.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       ) : null}
