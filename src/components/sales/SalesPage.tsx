@@ -313,13 +313,13 @@ export function SalesPage({
       </div>
 
       {/* Hero / Video Section */}
-      <section className="relative bg-white px-5 pb-10 pt-16 text-center text-zinc-950 sm:pb-28 sm:pt-32 min-h-[calc(100vh-52px)] flex flex-col justify-center">
+      <section className="relative bg-white px-5 pb-10 pt-8 text-center text-zinc-950 sm:pb-28 sm:pt-20 min-h-[calc(100vh-52px)] flex flex-col justify-start">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.05),transparent_45%)]" />
         <div className="relative mx-auto max-w-6xl w-full">
-          <div className="mb-2 inline-flex rounded-full border border-red-100 bg-red-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-6 sm:px-4 sm:py-2 sm:text-[11px]">
+          <div className="mb-5 inline-flex rounded-full border border-red-100 bg-red-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-10 sm:px-4 sm:py-2 sm:text-[11px]">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-3 max-w-4xl text-[28px] font-black uppercase leading-[0.9] tracking-[-0.055em] text-zinc-950 sm:mb-10 sm:text-7xl">
+          <h2 className="mx-auto mb-3 max-w-4xl text-[28px] font-black uppercase leading-[0.9] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
             {headline.split(" ").map((word, i) => {
               const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
               return (
