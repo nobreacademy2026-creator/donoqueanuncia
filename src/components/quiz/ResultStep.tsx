@@ -487,5 +487,3 @@ export function ResultStep({
     </div>
   );
 }
-  );
-}
