@@ -101,7 +101,7 @@ function Index() {
     void trackFunnelEvent("quiz_resposta", { pergunta: question.id, resposta: value });
     setTimeout(() => {
       if (step + 1 >= questions.length) {
-        setStage("analyzing");
+        setStage("result");
         void trackFunnelEvent("quiz_concluido");
       } else {
         setStep(step + 1);
@@ -182,7 +182,7 @@ function Index() {
           />
         ) : null}
 
-        {stage === "analyzing" ? <AnalyzingStep onDone={() => setStage("result")} /> : null}
+        
 
         {stage === "result" ? (
           <div className="w-full">
