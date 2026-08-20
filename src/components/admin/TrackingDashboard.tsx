@@ -310,13 +310,14 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
     [productionEvents],
   );
   const metrics = useMemo(() => {
-    const names = metaEvents.map(canonicalName);
     const visitors = new Set(metaEvents.map((event) => event.session_id).filter(Boolean)).size;
-    const views = names.filter((name) => name === "PageView" || name === "ViewContent").length;
-    const leads = names.filter((name) => name === "Lead").length;
-    const contacts = names.filter((name) => name === "Contact").length;
-    const checkouts = names.filter((name) => name === "InitiateCheckout").length;
-    const purchases = metaEvents.filter((event) => canonicalName(event) === "Purchase");
+    const views = metaEvents.filter(
+      (event) => event.event_name === "PageView" || event.event_name === "ViewContent",
+    ).length;
+    const leads = metaEvents.filter((event) => event.event_name === "Lead").length;
+    const contacts = metaEvents.filter((event) => event.event_name === "Contact").length;
+    const checkouts = metaEvents.filter((event) => event.event_name === "InitiateCheckout").length;
+    const purchases = metaEvents.filter((event) => event.event_name === "Purchase");
     const revenue = purchases.reduce((sum, event) => sum + eventValue(event), 0);
     return {
       visitors,

@@ -236,7 +236,7 @@ export function AdminAnalytics({
       access: countUniqueEvents(filteredEvents, "quiz_iniciado"),
       completion: countUniqueEvents(filteredEvents, "quiz_concluido"),
       video: countUniqueEvents(filteredEvents, "clique_video"),
-      checkout: countUniqueEvents(filteredEvents, "checkout_iniciado"),
+      checkout: countUniqueEvents(filteredEvents, "checkout_iniciado") + countUniqueEvents(filteredEvents, "InitiateCheckout"),
     }),
     [filteredEvents],
   );
@@ -246,7 +246,7 @@ export function AdminAnalytics({
       access: countUniqueEvents(previousEvents, "quiz_iniciado"),
       completion: countUniqueEvents(previousEvents, "quiz_concluido"),
       video: countUniqueEvents(previousEvents, "clique_video"),
-      checkout: countUniqueEvents(previousEvents, "checkout_iniciado"),
+      checkout: countUniqueEvents(previousEvents, "checkout_iniciado") + countUniqueEvents(previousEvents, "InitiateCheckout"),
     }),
     [previousEvents],
   );
@@ -266,7 +266,7 @@ export function AdminAnalytics({
         date: day.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }).replace(".", ""),
         acessos: countUniqueEvents(dayEvents, "quiz_iniciado"),
         finalizacoes: countUniqueEvents(dayEvents, "quiz_concluido"),
-        checkouts: countUniqueEvents(dayEvents, "checkout_iniciado"),
+        checkouts: countUniqueEvents(dayEvents, "checkout_iniciado") + countUniqueEvents(dayEvents, "InitiateCheckout"),
       };
     });
   }, [filteredEvents, range]);
