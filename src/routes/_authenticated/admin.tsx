@@ -1919,6 +1919,7 @@ export function ContentSection({
       image?: string;
       images?: string[];
       audio?: string;
+      hidden?: boolean;
     },
   ) => {
     // Usar o estado 'draft' mais atualizado do componente em vez de ler do localStorage
