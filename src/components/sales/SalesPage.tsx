@@ -375,10 +375,19 @@ export function SalesPage({
                           segundos: currentMilestone,
                           porcentagem: Math.round(progress),
                           origem: "pagina_vendas",
+                          duracao_total: video.duration
                         });
                       }
                     }}
-                    onPlay={() => setStarted(true)}
+                    onPlay={(e) => {
+                      setStarted(true);
+                      // Registrar a duração real do vídeo no primeiro play
+                      const video = e.currentTarget;
+                      void trackFunnelEvent("video_info", {
+                        duracao: video.duration,
+                        origem: "pagina_vendas"
+                      });
+                    }}
                   >
                     Seu navegador não suporta reprodução de vídeo.
                   </video>
