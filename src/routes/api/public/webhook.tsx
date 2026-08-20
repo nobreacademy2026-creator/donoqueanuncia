@@ -8,11 +8,50 @@ export const Route = createFileRoute("/api/public/webhook")({
         try {
           const body = await request.json();
           
-          // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto/Braip/Eduzz)
-          const rawStatus = (body.status || body.event || body.event_name || body.transaction_status || body.transaction?.status || body.data?.status || body.checkout_status || "unknown").toString().toLowerCase();
-          const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email || body.cus_email || body.data?.buyer?.email;
-          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price || body.total_price || body.trans_value || body.amount_paid || body.data?.total_price || body.full_price;
-          const eventId = body.id || body.transaction_id || body.event_id || body.data?.id || `webhook_${Date.now()}_${crypto.randomUUID()}`;
+          // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto/Braip/Eduzz/Appmax)
+          const rawStatus = (
+            body.status || 
+            body.event || 
+            body.event_name || 
+            body.transaction_status || 
+            body.transaction?.status || 
+            body.data?.status || 
+            body.checkout_status || 
+            body.status_name ||
+            body.data?.transaction?.status ||
+            "unknown"
+          ).toString().toLowerCase();
+
+          const email = 
+            body.email || 
+            body.customer?.email || 
+            body.data?.customer?.email || 
+            body.buyer?.email || 
+            body.cus_email || 
+            body.data?.buyer?.email ||
+            body.data?.customer?.email ||
+            body.client?.email;
+
+          const value = 
+            body.amount || 
+            body.value || 
+            body.data?.amount || 
+            body.price || 
+            body.purchase?.price || 
+            body.total_price || 
+            body.trans_value || 
+            body.amount_paid || 
+            body.data?.total_price || 
+            body.full_price ||
+            body.data?.transaction?.total_value;
+
+          const eventId = 
+            body.id || 
+            body.transaction_id || 
+            body.event_id || 
+            body.data?.id || 
+            body.data?.transaction?.id ||
+            `webhook_${Date.now()}_${crypto.randomUUID()}`;
           
           // Mapeamento dinâmico do nome do evento
           let eventName = "Purchase";
@@ -25,7 +64,21 @@ export const Route = createFileRoute("/api/public/webhook")({
             eventName = "Lead";
           } else if (rawStatus.includes("refund") || rawStatus.includes("chargeback") || rawStatus.includes("reembolso") || rawStatus.includes("estorno")) {
             eventName = "Other";
-          } else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("processamento") || rawStatus.includes("analise") || rawStatus.includes("pending") || rawStatus.includes("aguardando") || rawStatus.includes("pix") || rawStatus.includes("boleto")) {
+          } else if (
+            rawStatus.includes("aprovada") || 
+            rawStatus.includes("pago") || 
+            rawStatus.includes("paid") || 
+            rawStatus.includes("approved") || 
+            rawStatus.includes("complete") || 
+            rawStatus.includes("processamento") || 
+            rawStatus.includes("analise") || 
+            rawStatus.includes("pending") || 
+            rawStatus.includes("aguardando") || 
+            rawStatus.includes("pix") || 
+            rawStatus.includes("boleto") ||
+            rawStatus.includes("integral") ||
+            rawStatus.includes("confirmado")
+          ) {
             // Eventos de compra ou intenção de compra forte
             eventName = "Purchase";
           } else {
@@ -38,7 +91,7 @@ export const Route = createFileRoute("/api/public/webhook")({
           else if (rawStatus.includes("pix")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("gerado")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("aguardando")) friendlyStatus = "waiting_payment";
-          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("sucesso")) friendlyStatus = "approved";
+          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("sucesso") || rawStatus.includes("integral") || rawStatus.includes("confirmado")) friendlyStatus = "approved";
           else if (rawStatus.includes("abandon") || rawStatus.includes("abandonado")) friendlyStatus = "abandoned_checkout";
           else if (rawStatus.includes("refund") || rawStatus.includes("reembolso")) friendlyStatus = "refunded";
           else if (rawStatus.includes("chargeback")) friendlyStatus = "chargeback";

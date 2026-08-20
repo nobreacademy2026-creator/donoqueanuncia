@@ -115,6 +115,7 @@ function canonicalName(event: TrackingEvent) {
     InitiateCheckout: "Checkout",
     Purchase: "Venda",
     purchase: "Venda",
+    "Compra Aprovada": "Venda",
     lead_capturado: "Lead",
     checkout_iniciado: "Checkout",
     pagina_vendas_visualizada: "Visualização",
@@ -318,7 +319,12 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
     const leads = metaEvents.filter((event) => event.event_name === "Lead").length;
     const contacts = metaEvents.filter((event) => event.event_name === "Contact").length;
     const checkouts = metaEvents.filter((event) => event.event_name === "InitiateCheckout").length;
-    const purchases = metaEvents.filter((event) => event.event_name === "Purchase");
+    const purchases = metaEvents.filter(
+      (event) => 
+        event.event_name.toLowerCase() === "purchase" || 
+        canonicalName(event) === "Venda" ||
+        canonicalName(event) === "Compra Aprovada"
+    );
     const revenue = purchases.reduce((sum, event) => sum + eventValue(event), 0);
     return {
       visitors,
