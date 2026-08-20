@@ -22,20 +22,50 @@ export function ResultStep({
     }
   >;
 }) {
-  const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(
-    "objection",
-  );
+  const subStages = useMemo(() => {
+    const stages: ("objection" | "solution" | "testimonial" | "niche")[] = [];
+    if (!steps["objecao"]?.hidden) stages.push("objection");
+    if (!steps["beneficios"]?.hidden) stages.push("solution");
+    if (!steps["audio"]?.hidden) stages.push("testimonial");
+    if (!steps["niche"]?.hidden) stages.push("niche");
+    return stages;
+  }, [steps]);
+
+  const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(() => {
+    return subStages[0] || "objection";
+  });
+
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectionDraft = steps["objecao"];
   const solutionDraft = steps["beneficios"];
   const testimonialDraft = steps["audio"];
   const nicheDraft = steps["niche"];
+
   const nicheImages = nicheDraft?.images?.length
     ? nicheDraft.images.slice(0, 5)
     : nicheDraft?.image
       ? [nicheDraft.image]
       : [];
+
+  useEffect(() => {
+    // Se o subStage atual ficar oculto, reseta para o primeiro disponível
+    if (steps[subStage === "solution" ? "beneficios" : subStage === "objection" ? "objecao" : subStage]?.hidden) {
+      if (subStages.length > 0) {
+        setSubStage(subStages[0]);
+      }
+    }
+  }, [subStages, steps, subStage]);
+
+  const handleNextSubStage = (current: typeof subStage) => {
+    const currentIndex = subStages.indexOf(current);
+    if (currentIndex >= 0 && currentIndex < subStages.length - 1) {
+      setSubStage(subStages[currentIndex + 1]);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      onNext();
+    }
+  };
 
   useEffect(() => {
     void trackFunnelEvent("etapa_visualizada", { etapa: subStage });
