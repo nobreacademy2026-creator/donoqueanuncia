@@ -434,8 +434,8 @@ export function SalesPage({
             </div>
           </div>
 
-          <div className="mx-auto max-w-3xl space-y-4 sm:space-y-7">
-            <h3 className="text-lg font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
+          <div className="mx-auto max-w-3xl space-y-3 sm:space-y-7">
+            <h3 className="text-xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
             <p className="hidden text-base font-medium leading-relaxed text-zinc-600 sm:block sm:text-xl">
