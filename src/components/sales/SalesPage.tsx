@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import {
   CHECKOUT_URL,
+  appendAttributionParams,
   trackCheckoutClick,
   trackContact,
   trackFunnelEvent,
@@ -124,7 +125,7 @@ function CTAButton({
   className?: string;
   href?: string;
 }) {
-  const destination = href || CHECKOUT_URL;
+  const destination = appendAttributionParams(href || CHECKOUT_URL);
   return (
     <a
       href={destination}

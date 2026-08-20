@@ -81,15 +81,20 @@ function getSessionId() {
 
 function captureAttribution(): Attribution {
   if (typeof window === "undefined") return {};
-  let previous: Attribution = {};
+  
+  // 1. Tenta recuperar o que já está salvo no sessionStorage (preservação durante a sessão)
+  let stored: Attribution = {};
   try {
-    previous = JSON.parse(window.sessionStorage.getItem(ATTRIBUTION_KEY) ?? "{}") as Attribution;
+    stored = JSON.parse(window.sessionStorage.getItem(ATTRIBUTION_KEY) ?? "{}") as Attribution;
   } catch {
-    previous = {};
+    stored = {};
   }
 
+  // 2. Captura os parâmetros atuais da URL (prioridade para novos dados se existirem)
   const params = new URLSearchParams(window.location.search);
-  const current: Attribution = {
+  
+  // Mapeamento de parâmetros da URL para o objeto de atribuição
+  const urlAttribution: Attribution = {
     utmSource: cleanText(params.get("utm_source"), 255),
     utmMedium: cleanText(params.get("utm_medium"), 255),
     utmCampaign: cleanText(params.get("utm_campaign"), 255),
@@ -107,9 +112,27 @@ function captureAttribution(): Attribution {
     ad: cleanText(params.get("ad_name") ?? params.get("ad") ?? params.get("ad_id"), 255),
     fbp: cleanText(readCookie("_fbp"), 255),
     fbc: cleanText(readCookie("_fbc"), 255),
-    landingPage: previous.landingPage ?? window.location.href.slice(0, 2048),
-    referrer: previous.referrer ?? cleanText(document.referrer, 2048),
   };
+
+  // 3. Mescla os dados: novos parâmetros da URL sobrescrevem os antigos, 
+  // mas parâmetros antigos que não estão na URL agora são mantidos.
+  const merged = { ...stored };
+  
+  Object.entries(urlAttribution).forEach(([key, value]) => {
+    if (value !== undefined) {
+      (merged as any)[key] = value;
+    }
+  });
+
+  // Landing page e Referrer são capturados apenas uma vez por sessão
+  if (!merged.landingPage) {
+    merged.landingPage = window.location.href.slice(0, 2048);
+  }
+  if (!merged.referrer) {
+    merged.referrer = cleanText(document.referrer, 2048);
+  }
+
+  // Lógica de Source (Origem)
   let referrerSource: string | undefined;
   try {
     referrerSource = document.referrer
@@ -118,22 +141,57 @@ function captureAttribution(): Attribution {
   } catch {
     referrerSource = undefined;
   }
-  current.source =
-    current.utmSource ??
-    (current.fbclid ? "facebook" : undefined) ??
-    previous.source ??
+
+  merged.source =
+    merged.utmSource ??
+    (merged.fbclid ? "facebook" : undefined) ??
+    merged.source ??
     referrerSource ??
     "direct";
 
-  const merged = Object.fromEntries(
-    Object.entries({ ...previous, ...current }).filter(([, value]) => value !== undefined),
-  ) as Attribution;
+  // 4. Salva de volta no sessionStorage
   try {
     window.sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(merged));
   } catch {
-    // Tracking must never interrupt the visitor journey.
+    // Silently fail
   }
+
   return merged;
+}
+
+/**
+ * Anexa os parâmetros de atribuição preservados a uma URL de destino.
+ */
+export function appendAttributionParams(targetUrl: string): string {
+  try {
+    const attribution = captureAttribution();
+    const url = new URL(targetUrl.startsWith("http") ? targetUrl : `https://${targetUrl}`);
+    
+    // Mapeamento inverso: do objeto Attribution para parâmetros de URL
+    const mapping: Record<string, string> = {
+      utmSource: "utm_source",
+      utmMedium: "utm_medium",
+      utmCampaign: "utm_campaign",
+      utmContent: "utm_content",
+      utmTerm: "utm_term",
+      fbclid: "fbclid",
+      campaign: "campaign_name",
+      adSet: "adset_name",
+      ad: "ad_name",
+    };
+
+    Object.entries(mapping).forEach(([attrKey, paramKey]) => {
+      const value = (attribution as any)[attrKey];
+      if (value && !url.searchParams.has(paramKey)) {
+        url.searchParams.set(paramKey, value);
+      }
+    });
+
+    return url.toString();
+  } catch (err) {
+    console.error("[Tracking] Erro ao anexar parâmetros", err);
+    return targetUrl;
+  }
 }
 
 function normalizeTrackingId(value: string | undefined, pattern: RegExp) {
