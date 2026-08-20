@@ -86,7 +86,7 @@ export const Route = createFileRoute("/api/public/webhook")({
             await sendMetaConversion({
               data: {
                 eventName,
-                eventId,
+                eventId: finalEventId,
                 eventSourceUrl: request.url,
                 customData: {
                   value: typeof value === "number" ? value : parseFloat(value) || 0,
@@ -99,7 +99,7 @@ export const Route = createFileRoute("/api/public/webhook")({
             console.error("[Webhook] Erro ao enviar para Meta CAPI:", metaError);
           }
 
-          return new Response(JSON.stringify({ status: "ok", eventId }), {
+          return new Response(JSON.stringify({ status: "ok", eventId: finalEventId }), {
             status: 200,
             headers: { "Content-Type": "application/json" }
           });
