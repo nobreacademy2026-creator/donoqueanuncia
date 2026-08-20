@@ -341,7 +341,7 @@ export function SalesPage({
                     id="vsl-video-player"
                     src={vslUrl}
                     className="h-full w-full bg-black object-contain"
-                    controlsList="nodownload noplaybackrate"
+                    
                     playsInline
                     autoPlay
                     preload="auto"
