@@ -90,17 +90,17 @@ export function ResultStep({
 
   if (subStage === "testimonial") {
     return (
-      <div className="animate-rise-in mx-auto w-full max-w-2xl">
-        <div className="mt-2 space-y-4 text-center bg-white rounded-3xl p-3 sm:space-y-8 sm:p-8">
-          <h3 className="text-xl font-extrabold text-red-600 sm:text-3xl">
-            {testimonialDraft?.title || "Clique no áudio e escute o que meu aluno disse 😳"}
+      <div className="animate-rise-in mx-auto w-full max-w-2xl px-4 sm:px-0">
+        <div className="mt-1 space-y-3 text-center bg-white rounded-2xl p-3 sm:space-y-8 sm:p-8 sm:rounded-3xl">
+          <h3 className="text-lg font-black text-red-600 sm:text-3xl leading-tight uppercase tracking-tight">
+            {testimonialDraft?.title || "Escute o que meu aluno disse 😳"}
           </h3>
 
-          <div className="relative mx-auto max-w-md overflow-hidden rounded-xl border border-zinc-100 bg-[#f0f2f5] p-3 shadow-sm sm:rounded-2xl sm:p-4">
-            <div className="flex items-center gap-3 sm:gap-4">
+          <div className="relative mx-auto max-w-md overflow-hidden rounded-xl border border-zinc-100 bg-[#f0f2f5] p-2 shadow-sm sm:rounded-2xl sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <button
                 type="button"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40 sm:h-12 sm:w-12"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40 sm:h-12 sm:w-12"
                 onClick={toggleAudio}
                 disabled={!testimonialDraft?.audio}
                 aria-label={
@@ -112,13 +112,13 @@ export function ResultStep({
                 }
               >
                 {isPlaying ? (
-                  <Pause className="h-5 w-5 text-zinc-600 fill-zinc-600 sm:h-6 sm:w-6" />
+                  <Pause className="h-4 w-4 text-zinc-600 fill-zinc-600 sm:h-6 sm:w-6" />
                 ) : (
-                  <Play className="h-5 w-5 text-zinc-600 fill-zinc-600 ml-0.5 sm:h-6 sm:w-6 sm:ml-1" />
+                  <Play className="h-4 w-4 text-zinc-600 fill-zinc-600 ml-0.5 sm:h-6 sm:w-6 sm:ml-1" />
                 )}
               </button>
               <div className="flex-1 space-y-1">
-                <div className="h-6 w-full bg-zinc-200 rounded-sm relative overflow-hidden sm:h-8">
+                <div className="h-5 w-full bg-zinc-200 rounded-sm relative overflow-hidden sm:h-8">
                   <div className="absolute inset-0 flex items-center justify-around px-1 sm:px-2">
                     {[...Array(15)].map((_, i) => (
                       <div
@@ -158,8 +158,8 @@ export function ResultStep({
             )}
           </div>
 
-          <div className="space-y-4 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[280px] sm:max-w-sm">
+          <div className="space-y-3 sm:space-y-6">
+            <div className="relative mx-auto w-full max-w-[240px] sm:max-w-sm">
               <img
                 src={optimizedImageUrl(testimonialDraft?.image || danielInstagramMockup.url, 672)}
                 srcSet={optimizedImageSrcSet(testimonialDraft?.image || danielInstagramMockup.url)}
@@ -176,7 +176,7 @@ export function ResultStep({
                 void trackFunnelEvent("clique_quero_isso_tambem");
                 handleNextSubStage("testimonial");
               }}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-xs font-black text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
             >
               Eu quero isso também
             </button>
