@@ -165,6 +165,34 @@ function normalizeEmbedUrl(url: string, autoplay = false) {
 
 function EmbeddedVideo({ url }: { url: string }) {
   const [started, setStarted] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!started) return;
+    
+    // Milestones to track for YouTube/Vimeo
+    const milestones = [10, 30, 60, 120, 300, 600];
+    const trackedMilestones = new Set();
+    
+    const interval = setInterval(() => {
+      // Note: We can't easily get exact currentTime from cross-origin iframes 
+      // without their specific SDKs, but for embedded videos we track the 
+      // "Engagement Time" as a proxy for retention.
+      const elapsed = Math.floor((Date.now() - (window as any)._videoStartTime) / 1000);
+      
+      const currentMilestone = milestones.find(m => elapsed >= m && !trackedMilestones.has(m));
+      if (currentMilestone) {
+        trackedMilestones.add(currentMilestone);
+        void trackFunnelEvent("video_retencao", {
+          segundos: currentMilestone,
+          origem: "pagina_vendas",
+          tipo: "embed"
+        });
+      }
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [started]);
+
   return (
     <div className="relative h-full w-full">
       <iframe
@@ -179,6 +207,7 @@ function EmbeddedVideo({ url }: { url: string }) {
           type="button"
           onClick={(event) => {
             event.stopPropagation();
+            (window as any)._videoStartTime = Date.now();
             void trackFunnelEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
             setStarted(true);
           }}
@@ -351,6 +380,21 @@ export function SalesPage({
                       const progress = (video.currentTime / video.duration) * 100;
                       const progressBar = document.getElementById("video-progress-bar");
                       if (progressBar) progressBar.style.width = `${progress}%`;
+
+                      // Track retention milestones
+                      const time = Math.floor(video.currentTime);
+                      const milestones = [10, 30, 60, 120, 300, 600]; // seconds
+                      const lastMilestone = (video as any)._lastMilestone || 0;
+                      const currentMilestone = milestones.find((m) => time >= m && m > lastMilestone);
+
+                      if (currentMilestone) {
+                        (video as any)._lastMilestone = currentMilestone;
+                        void trackFunnelEvent("video_retencao", {
+                          segundos: currentMilestone,
+                          porcentagem: Math.round(progress),
+                          origem: "pagina_vendas",
+                        });
+                      }
                     }}
                     onPlay={() => setStarted(true)}
                   >
@@ -411,6 +455,7 @@ export function SalesPage({
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
                   onClick={() => {
+                    (window as any)._videoStartTime = Date.now();
                     void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
                   }}
                 >

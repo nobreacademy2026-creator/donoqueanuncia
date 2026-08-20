@@ -613,6 +613,32 @@ export function AdminAnalytics({
         </div>
       )}
 
+      <section className="admin-panel p-5 sm:p-6">
+        <PanelHeading
+          title="Retenção do vídeo"
+          description="Acompanhe quanto tempo as pessoas assistem ao vídeo de vendas"
+        />
+        <div className="mt-6 space-y-4">
+          {[10, 30, 60, 120, 300, 600].map((sec) => {
+            const count = countUniqueEvents(
+              filteredEvents,
+              "video_retencao",
+              (payload) => (payload?.["segundos"] as number) >= sec,
+            );
+            const label =
+              sec < 60 ? `${sec} segundos` : `${Math.floor(sec / 60)} minuto${sec >= 120 ? "s" : ""}`;
+            return (
+              <ConversionBar
+                key={sec}
+                label={`Assistiram pelo menos ${label}`}
+                value={percent(count, stats.video)}
+                tone="blue"
+              />
+            );
+          })}
+        </div>
+      </section>
+
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,.65fr)]">
         <section className="admin-panel p-5 sm:p-6">
           <PanelHeading
