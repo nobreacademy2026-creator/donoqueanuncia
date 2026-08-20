@@ -476,7 +476,7 @@ export function ResultStep({
 
           <div className="mt-12 flex justify-center">
             <button
-              onClick={() => setSubStage("solution")}
+              onClick={() => handleNextSubStage("objection")}
               className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
               Vou dominar isso agora
