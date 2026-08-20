@@ -55,7 +55,7 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
             <button
               key={option.value}
               onClick={() => onSelect(option.value)}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-left transition-all duration-300 ${
+              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-2.5 sm:py-4 text-left transition-all duration-300 ${
                 active
                   ? "bg-zinc-950 text-white shadow-xl shadow-zinc-950/20 translate-y-[-1px] border border-zinc-950"
                   : "bg-zinc-900 text-white hover:bg-zinc-950 border border-zinc-900 shadow-sm"
