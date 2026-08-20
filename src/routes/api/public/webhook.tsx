@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const Route = createFileRoute("/api/public/webhook")({
   server: {
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/api/public/webhook")({
           const eventId = `webhook_${Date.now()}_${crypto.randomUUID()}`;
 
           // Registrar no banco de dados local via RPC
-          const { error } = await supabase.rpc("record_tracking_event", {
+          const { error } = await supabaseAdmin.rpc("record_tracking_event", {
             p_event: {
               event_name: eventName,
               payload: {
