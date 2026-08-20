@@ -1141,6 +1141,37 @@ export function ConfigSection({
         </p>
       </div>
 
+      <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-white/10 dark:bg-black/40">
+        <div className="flex-1">
+          <h4
+            className={`text-sm font-bold uppercase tracking-wider ${theme === "dark" ? "text-white" : "text-zinc-900"}`}
+          >
+            Exibir Página de Vendas
+          </h4>
+          <p
+            className={`text-xs ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}
+          >
+            Se desativado, o funil terminará na tela de resultado.
+          </p>
+        </div>
+        <button
+          onClick={() => {
+            const next = !showSalesPage;
+            setShowSalesPage(next);
+            publish({ showSalesPage: next });
+          }}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+            showSalesPage ? "bg-primary" : "bg-zinc-300 dark:bg-zinc-700"
+          }`}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+              showSalesPage ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
+
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <label
