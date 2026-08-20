@@ -15,7 +15,7 @@ export type StandardEventName =
   "PageView" | "ViewContent" | "Lead" | "Contact" | "AddToCart" | "InitiateCheckout" | "Purchase";
 
 type Payload = Record<string, unknown>;
-type MetaStatus = "sent" | "pending" | "error" | "not_sent";
+type MetaStatus = "sent" | "pending" | "error" | "not_sent" | "skipped";
 type Attribution = {
   source?: string | undefined;
   campaign?: string | undefined;
