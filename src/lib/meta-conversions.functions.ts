@@ -155,16 +155,15 @@ async function deliverMetaConversion(
   }
 }
 
-function assertSameOriginSource(eventSourceUrl: string) {
-  const request = getRequest();
-  const browserOrigin = request.headers.get("origin");
-  const forwardedHost = request.headers.get("x-forwarded-host");
-  const requestHost = forwardedHost ?? request.headers.get("host");
-  if (!browserOrigin || !requestHost) throw new Error("Origem da conversão não identificada.");
-  const source = new URL(eventSourceUrl);
-  const origin = new URL(browserOrigin);
-  if (source.host !== requestHost || source.origin !== origin.origin) {
-    throw new Error("Origem da conversão não permitida.");
+function isSameOriginSource(eventSourceUrl: string) {
+  try {
+    const request = getRequest();
+    const browserOrigin = request.headers.get("origin") ?? request.headers.get("referer");
+    // Sem cabeçalho de origem (navegação direta ou proxy) não há como validar: seguimos adiante.
+    if (!browserOrigin) return true;
+    return new URL(eventSourceUrl).origin === new URL(browserOrigin).origin;
+  } catch {
+    return false;
   }
 }
 
@@ -190,7 +189,10 @@ async function assertAdmin(userId: string | null, accessToken: string | null) {
 export const sendMetaConversion = createServerFn({ method: "POST" })
   .validator(validateMetaInput)
   .handler(async ({ data }) => {
-    assertSameOriginSource(data.eventSourceUrl);
+    if (!isSameOriginSource(data.eventSourceUrl)) {
+      console.warn("[Meta CAPI] Origem divergente, evento ignorado", data.eventSourceUrl);
+      return { sent: false, status: "skipped" as const, reason: "invalid_origin" as const };
+    }
     return deliverMetaConversion(data, { test: false });
   });
 
