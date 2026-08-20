@@ -1109,6 +1109,7 @@ export function ConfigSection({
           videoThumb: vslUrl,
           whatsappNumber: whatsappNumber.replace(/\D/g, ""),
           whatsappMessage,
+          showSalesPage,
         },
       };
 
