@@ -285,7 +285,7 @@ export function SalesPage({
   tracking?: any;
   steps?: Record<string, FunnelStep>;
 }) {
-  const [started, setStarted] = React.useState(false);
+  const [started, setStarted] = React.useState(true);
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
     draft.videoThumb !== undefined
