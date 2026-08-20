@@ -237,7 +237,7 @@ export function AdminAnalytics({
       completion: countUniqueEvents(filteredEvents, "quiz_concluido"),
       video: countUniqueEvents(filteredEvents, "clique_video"),
       checkout: countUniqueEvents(filteredEvents, "checkout_iniciado") + countUniqueEvents(filteredEvents, "InitiateCheckout") + countUniqueEvents(filteredEvents, "Purchase"),
-      purchases: countUniqueEvents(filteredEvents, "Purchase", (p) => Boolean(p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada"))),
+      purchases: countUniqueEvents(filteredEvents, "Purchase", (p) => Boolean(p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada") || p?.["raw_status"]?.toString().toLowerCase().includes("integral") || p?.["raw_status"]?.toString().toLowerCase().includes("pago"))),
     }),
     [filteredEvents],
   );
@@ -248,7 +248,7 @@ export function AdminAnalytics({
       completion: countUniqueEvents(previousEvents, "quiz_concluido"),
       video: countUniqueEvents(previousEvents, "clique_video"),
       checkout: countUniqueEvents(previousEvents, "checkout_iniciado") + countUniqueEvents(previousEvents, "InitiateCheckout") + countUniqueEvents(previousEvents, "Purchase"),
-      purchases: countUniqueEvents(previousEvents, "Purchase", (p) => Boolean(p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada"))),
+      purchases: countUniqueEvents(previousEvents, "Purchase", (p) => Boolean(p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada") || p?.["raw_status"]?.toString().toLowerCase().includes("integral") || p?.["raw_status"]?.toString().toLowerCase().includes("pago"))),
     }),
     [previousEvents],
   );
