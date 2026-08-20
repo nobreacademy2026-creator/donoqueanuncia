@@ -43,47 +43,6 @@ export function AnalyzingStep({ onDone }: { onDone: () => void }) {
         </p>
       </div>
 
-      <div className="space-y-4">
-        {STEPS.map((step, i) => {
-          const active = i === current;
-          const completed = i < current;
-
-          return (
-            <div
-              key={i}
-              className={`flex items-center gap-4 rounded-2xl border p-5 transition-all duration-500 ${
-                active
-                  ? "border-red-100 bg-red-50 scale-[1.02] shadow-xl shadow-red-900/5"
-                  : completed
-                    ? "border-zinc-100 bg-white opacity-60"
-                    : "border-zinc-50 bg-zinc-50/50 opacity-30"
-              }`}
-            >
-              <div
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors duration-500 ${
-                  active
-                    ? "bg-red-600 text-white"
-                    : completed
-                      ? "bg-green-500 text-white"
-                      : "bg-zinc-100 text-zinc-400"
-                }`}
-              >
-                {completed ? <Check className="h-5 w-5" /> : <step.icon className="h-5 w-5" />}
-              </div>
-              <span
-                className={`text-base font-bold uppercase tracking-tight ${active ? "text-zinc-900" : "text-zinc-500"}`}
-              >
-                {step.text}
-              </span>
-              {active && (
-                <div className="ml-auto">
-                  <Loader2 className="h-4 w-4 text-red-600 animate-spin" />
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
 
       <div className="mt-12 text-center">
         <div className="inline-flex items-center gap-2 rounded-full bg-zinc-50 px-4 py-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest border border-zinc-100">
