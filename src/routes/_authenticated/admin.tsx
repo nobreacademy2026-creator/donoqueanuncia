@@ -1090,6 +1090,7 @@ export function ConfigSection({
       setWhatsappMessage(
         merged.sales.whatsappMessage ?? "Olá! Tenho dúvidas sobre o Dono que Anuncia.",
       );
+      setShowSalesPage(merged.sales.showSalesPage !== false);
     });
   }, []);
 
