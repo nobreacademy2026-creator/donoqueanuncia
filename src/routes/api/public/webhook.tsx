@@ -9,11 +9,19 @@ export const Route = createFileRoute("/api/public/webhook")({
           const body = await request.json();
           
           // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto)
-          const status = body.status || body.event || body.event_name || "unknown";
+          let status = body.status || body.event || body.event_name || body.transaction_status || "unknown";
           const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email;
-          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price;
+          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price || body.total_price;
           
-          const eventName = "Purchase";
+          // Mapeamento dinâmico do nome do evento
+          let eventName = "Purchase";
+          const rawEvent = (body.event || body.event_name || "").toLowerCase();
+          
+          if (rawEvent.includes("lead") || rawEvent.includes("contact")) eventName = "Lead";
+          if (rawEvent.includes("checkout") || rawEvent.includes("cart")) eventName = "InitiateCheckout";
+          if (rawEvent.includes("upsell")) eventName = "AddToCart";
+          if (rawEvent.includes("refund") || rawEvent.includes("chargeback")) eventName = "Other";
+
           const eventId = `webhook_${Date.now()}_${crypto.randomUUID()}`;
 
           // Registrar no banco de dados local via RPC
