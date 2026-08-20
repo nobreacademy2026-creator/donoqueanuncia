@@ -164,7 +164,7 @@ function normalizeEmbedUrl(url: string, autoplay = false) {
 }
 
 function EmbeddedVideo({ url }: { url: string }) {
-  const [started, setStarted] = React.useState(false);
+  const [started, setStarted] = React.useState(true);
 
   React.useEffect(() => {
     if (!started) return;
@@ -202,35 +202,6 @@ function EmbeddedVideo({ url }: { url: string }) {
         allowFullScreen
         title="Vídeo de Vendas"
       />
-      {!started && (
-        <button
-          type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            (window as any)._videoStartTime = Date.now();
-            void trackFunnelEvent("clique_video", { origem: "pagina_vendas", tipo: "embed" });
-            setStarted(true);
-          }}
-          className="absolute inset-0 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
-          aria-label="Reproduzir vídeo"
-        >
-          <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">
-            <span className="text-xs font-bold uppercase tracking-widest text-white">
-              Clique aqui
-            </span>
-            <div className="relative">
-              <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
-              <div className="relative grid h-12 w-12 place-items-center rounded-full bg-white text-red-600 shadow-lg">
-                <div className="relative">
-                  <Play className="ml-0.5 h-6 w-6 fill-current" />
-                  <div className="absolute -top-0.5 -right-0.5 h-7 w-0.5 border-t-2 border-red-600 rotate-45 origin-center" />
-                </div>
-              </div>
-            </div>
-            <span className="text-[10px] font-medium text-white/90">para ativar o som</span>
-          </div>
-        </button>
-      )}
     </div>
   );
 }
@@ -285,7 +256,7 @@ export function SalesPage({
   tracking?: any;
   steps?: Record<string, FunnelStep>;
 }) {
-  const [started, setStarted] = React.useState(false);
+  const [started, setStarted] = React.useState(true);
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
     draft.videoThumb !== undefined
@@ -373,7 +344,6 @@ export function SalesPage({
                     controls
                     playsInline
                     autoPlay
-                    muted
                     preload="auto"
                     onTimeUpdate={(e) => {
                       const video = e.currentTarget;
@@ -400,46 +370,6 @@ export function SalesPage({
                   >
                     Seu navegador não suporta reprodução de vídeo.
                   </video>
-                  {!started && (
-                    <button
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        void trackFunnelEvent("clique_video", {
-                          origem: "pagina_vendas",
-                          tipo: "upload",
-                        });
-                        const video = document.getElementById(
-                          "vsl-video-player",
-                        ) as HTMLVideoElement;
-                        if (video) {
-                          video.muted = false;
-                          video.play();
-                        }
-                        setStarted(true);
-                      }}
-                      className="absolute inset-0 z-20 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
-                      aria-label="Ativar som"
-                    >
-                      <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">
-                        <span className="text-xs font-bold uppercase tracking-widest text-white">
-                          Clique aqui
-                        </span>
-                        <div className="relative">
-                          <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
-                          <div className="relative grid h-12 w-12 place-items-center rounded-full bg-white text-red-600 shadow-lg">
-                            <div className="relative">
-                              <Play className="ml-0.5 h-6 w-6 fill-current" />
-                              <div className="absolute -top-0.5 -right-0.5 h-7 w-0.5 border-t-2 border-red-600 rotate-45 origin-center" />
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-medium text-white/90">
-                          para ativar o som
-                        </span>
-                      </div>
-                    </button>
-                  )}
                   {/* Fake Progress Bar to simulate "ending soon" or just show progress */}
                   <div className="absolute bottom-0 left-0 h-1.5 w-full bg-white/20 z-10">
                     <div
