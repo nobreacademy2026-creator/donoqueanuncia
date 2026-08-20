@@ -159,9 +159,22 @@ function isSameOriginSource(eventSourceUrl: string) {
   try {
     const request = getRequest();
     const browserOrigin = request.headers.get("origin") ?? request.headers.get("referer");
-    // Sem cabeçalho de origem (navegação direta ou proxy) não há como validar: seguimos adiante.
+    
+    // Se não houver cabeçalho de origem (direto ou proxy), ou se for o próprio servidor/webhook
+    // permitimos para não bloquear webhooks legítimos ou navegações diretas.
     if (!browserOrigin) return true;
-    return new URL(eventSourceUrl).origin === new URL(browserOrigin).origin;
+
+    const sourceOrigin = new URL(eventSourceUrl).origin;
+    const requestOrigin = new URL(browserOrigin).origin;
+    
+    // Se a origem da URL do evento for a mesma do request, é seguro.
+    if (sourceOrigin === requestOrigin) return true;
+
+    // Permitir se o evento vier da URL do próprio projeto (importante para webhooks e redirecionamentos)
+    const projectUrl = process.env["VITE_PROJECT_URL"] || request.headers.get("host");
+    if (projectUrl && sourceOrigin.includes(projectUrl)) return true;
+
+    return false;
   } catch {
     return false;
   }
