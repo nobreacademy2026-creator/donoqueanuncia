@@ -2175,6 +2175,7 @@ export function ContentSection({
                 </div>
               </div>
 
+              {!draft.steps?.[item.id]?.hidden && (
                 <div
                   className={`mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2 ${theme === "dark" ? "border-white/5" : "border-zinc-100"}`}
                 >
