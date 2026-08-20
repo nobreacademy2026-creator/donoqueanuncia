@@ -143,7 +143,10 @@ function canonicalName(event: TrackingEvent) {
 
   // Se o nome do evento for um padrão (como Purchase), mas tivermos um status no payload
   const status = fallback(event, "status_amigavel") || fallback(event, "raw_status");
-  if (status && map[status.toLowerCase()]) return map[status.toLowerCase()];
+  if (status) {
+    const key = String(status).toLowerCase();
+    if (map[key]) return map[key];
+  }
 
   return map[event.event_name] ?? event.event_name;
 }
