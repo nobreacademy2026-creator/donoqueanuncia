@@ -30,6 +30,7 @@ import {
   Smartphone,
   RefreshCw,
   Eye,
+  EyeOff,
   Download,
   FileText,
   Activity,
