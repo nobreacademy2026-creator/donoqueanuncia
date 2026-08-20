@@ -373,7 +373,6 @@ export function SalesPage({
                     controls
                     playsInline
                     autoPlay
-                    muted
                     preload="auto"
                     onTimeUpdate={(e) => {
                       const video = e.currentTarget;
