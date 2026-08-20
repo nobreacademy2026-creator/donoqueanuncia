@@ -124,7 +124,30 @@ function canonicalName(event: TrackingEvent) {
     Subscribe: "Assinatura",
     StartTrial: "Teste Grátis",
     SubmitApplication: "Aplicação",
+    // Status específicos de Webhooks (Cacto/Hotmart/Kiwify)
+    abandoned_checkout: "Abandono de Checkout",
+    checkout_abandoned: "Abandono de Checkout",
+    waiting_payment: "Aguardando Pagamento",
+    boleto_printed: "Boleto Gerado",
+    pix_generated: "Pix Gerado",
+    picpay_generated: "PicPay Gerado",
+    approved: "Compra Aprovada",
+    completed: "Compra Aprovada",
+    paid: "Compra Aprovada",
+    refused: "Compra Recusada",
+    canceled: "Cancelada",
+    refunded: "Reembolso",
+    chargeback: "Chargeback",
+    subscription_canceled: "Assinatura Cancelada",
   };
+
+  // Se o nome do evento for um padrão (como Purchase), mas tivermos um status no payload
+  const status = fallback(event, "status_amigavel") || fallback(event, "raw_status");
+  if (status) {
+    const key = String(status).toLowerCase();
+    if (map[key]) return map[key];
+  }
+
   return map[event.event_name] ?? event.event_name;
 }
 
