@@ -455,6 +455,7 @@ export function SalesPage({
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
                   onClick={() => {
+                    (window as any)._videoStartTime = Date.now();
                     void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
                   }}
                 >
