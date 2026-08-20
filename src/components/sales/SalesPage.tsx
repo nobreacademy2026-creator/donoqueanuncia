@@ -348,8 +348,20 @@ export function SalesPage({
                     onTimeUpdate={(e) => {
                       const video = e.currentTarget;
                       const progress = (video.currentTime / video.duration) * 100;
+                      
+                      // Custom non-linear progress bar logic
+                      // Start fast, then slow down
+                      let visualProgress = 0;
+                      if (progress < 20) {
+                        // First 20% of video fills 50% of the bar
+                        visualProgress = (progress / 20) * 50;
+                      } else {
+                        // Remaining 80% of video fills remaining 50% of the bar
+                        visualProgress = 50 + ((progress - 20) / 80) * 50;
+                      }
+
                       const progressBar = document.getElementById("video-progress-bar");
-                      if (progressBar) progressBar.style.width = `${progress}%`;
+                      if (progressBar) progressBar.style.width = `${visualProgress}%`;
 
                       // Track retention milestones
                       const time = Math.floor(video.currentTime);
@@ -370,11 +382,11 @@ export function SalesPage({
                   >
                     Seu navegador não suporta reprodução de vídeo.
                   </video>
-                  {/* Fake Progress Bar to simulate "ending soon" or just show progress */}
-                  <div className="absolute bottom-0 left-0 h-1.5 w-full bg-white/20 z-10">
+                  {/* Enhanced Progress Bar */}
+                  <div className="absolute bottom-0 left-0 h-3 w-full bg-white/20 z-10">
                     <div
                       id="video-progress-bar"
-                      className="h-full bg-red-600 transition-all duration-300 ease-out"
+                      className="h-full bg-red-600 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(220,38,38,0.5)]"
                       style={{ width: "0%" }}
                     />
                   </div>
