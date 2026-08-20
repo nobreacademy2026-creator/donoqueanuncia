@@ -1,6 +1,6 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
 import danielInstagramMockup from "@/assets/daniel-instagram-mockup.png.asset.json";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { trackFunnelEvent } from "@/lib/tracking";
 import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimization";
 
