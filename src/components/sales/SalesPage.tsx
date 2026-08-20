@@ -332,7 +332,7 @@ export function SalesPage({
 
           <div className="mx-auto max-w-4xl relative">
             <div
-              className="group relative mb-12 aspect-video w-full overflow-hidden rounded-2xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:rounded-[2rem]"
+              className="group relative mb-6 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem]"
               onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
