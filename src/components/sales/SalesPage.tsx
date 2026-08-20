@@ -705,7 +705,7 @@ export function SalesPage({
           AINDA ESTÁ COM DÚVIDAS?
         </h3>
         <a
-          href={whatsappLink(whatsappMessage, whatsappNumber)}
+          href={appendAttributionParams(whatsappLink(whatsappMessage, whatsappNumber))}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackContact({ origem: "pagina_vendas", canal: "whatsapp" })}
