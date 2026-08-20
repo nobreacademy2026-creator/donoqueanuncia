@@ -32,7 +32,7 @@ export function ResultStep({
   }, [steps]);
 
   const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(() => {
-    return subStages[0] || "objection";
+    return subStages[0] || "solution";
   });
 
   const [isPlaying, setIsPlaying] = useState(false);
