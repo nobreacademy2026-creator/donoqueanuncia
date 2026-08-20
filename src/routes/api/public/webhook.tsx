@@ -11,9 +11,10 @@ export const Route = createFileRoute("/api/public/webhook")({
           // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto)
           // Hotmart: status 'approved'
           // Kiwify: status 'paid'
-          const status = body.status || body.event || "unknown";
-          const email = body.email || body.customer?.email || body.data?.customer?.email;
-          const value = body.amount || body.value || body.data?.amount;
+          // Cacto: status 'paid'
+          const status = body.status || body.event || body.event_name || "unknown";
+          const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email;
+          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price;
           
           // Registrar como uma compra (Purchase) na nossa plataforma
           const { error } = await supabase.rpc("record_tracking_event", {
