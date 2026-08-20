@@ -118,7 +118,7 @@ export const Route = createFileRoute("/api/public/webhook")({
                 raw_status: rawStatus,
                 status_amigavel: friendlyStatus
               },
-              client_name: body.name || body.customer?.name || body.data?.customer?.name || body.buyer?.name || email || "Cliente Externo",
+              client_name: body.name || body.customer?.name || body.data?.customer?.name || body.buyer?.name || body.data?.name || email || "Cliente Externo",
               value: typeof value === "number" ? value : parseFloat(value) || null,
               currency: body.currency || "BRL",
               source: "webhook_externo",
