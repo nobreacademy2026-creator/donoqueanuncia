@@ -340,7 +340,7 @@ export function SalesPage({
                   <video
                     id="vsl-video-player"
                     src={vslUrl}
-                    className="h-full w-full bg-black object-contain"
+                    className="h-full w-full bg-black object-contain pointer-events-none"
                     
                     playsInline
                     autoPlay
