@@ -623,7 +623,7 @@ export function AdminAnalytics({
             const count = countUniqueEvents(
               filteredEvents,
               "video_retencao",
-              (payload) => (payload?.segundos as number) >= sec,
+              (payload) => (payload?.["segundos"] as number) >= sec,
             );
             const label =
               sec < 60 ? `${sec} segundos` : `${Math.floor(sec / 60)} minuto${sec >= 120 ? "s" : ""}`;
