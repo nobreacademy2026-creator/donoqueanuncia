@@ -79,7 +79,7 @@ async function deliverMetaConversion(
   data: ReturnType<typeof validateMetaInput>,
   options: { test: boolean },
 ) {
-  const pixelId = process.env["META_PIXEL_ID"] ?? process.env["VITE_META_PIXEL_ID"];
+  const pixelId = process.env["META_PIXEL_ID"] || process.env["VITE_META_PIXEL_ID"] || "";
   const accessToken = process.env["META_CONVERSIONS_ACCESS_TOKEN"];
   const apiVersion = process.env["META_GRAPH_API_VERSION"] ?? "v25.0";
   const testEventCode = process.env["META_TEST_EVENT_CODE"];
@@ -202,9 +202,9 @@ async function assertAdmin(userId: string | null, accessToken: string | null) {
 export const sendMetaConversion = createServerFn({ method: "POST" })
   .validator(validateMetaInput)
   .handler(async ({ data }) => {
-    // Se o evento vier de um webhook externo (referência de request vazia ou host diferente)
-    // nós permitimos o envio, já que a validação de origem é para eventos do navegador.
-    const isWebhook = !getRequest().headers.get("origin") && !getRequest().headers.get("referer");
+    // Webhooks de plataformas (Cacto, etc) e chamadas diretas do servidor não possuem headers de navegador.
+    const request = getRequest();
+    const isWebhook = !request.headers.get("origin") && !request.headers.get("referer");
     
     if (!isWebhook && !isSameOriginSource(data.eventSourceUrl)) {
       console.warn("[Meta CAPI] Origem divergente, evento ignorado", data.eventSourceUrl);
