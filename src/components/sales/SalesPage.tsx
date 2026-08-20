@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import {
   CHECKOUT_URL,
+  appendAttributionParams,
   trackCheckoutClick,
   trackContact,
   trackFunnelEvent,
@@ -124,7 +125,7 @@ function CTAButton({
   className?: string;
   href?: string;
 }) {
-  const destination = href || CHECKOUT_URL;
+  const destination = appendAttributionParams(href || CHECKOUT_URL);
   return (
     <a
       href={destination}
@@ -704,7 +705,7 @@ export function SalesPage({
           AINDA ESTÁ COM DÚVIDAS?
         </h3>
         <a
-          href={whatsappLink(whatsappMessage, whatsappNumber)}
+          href={appendAttributionParams(whatsappLink(whatsappMessage, whatsappNumber))}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackContact({ origem: "pagina_vendas", canal: "whatsapp" })}
