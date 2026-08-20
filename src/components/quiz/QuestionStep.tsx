@@ -13,24 +13,27 @@ type Props = {
 
 export function QuestionStep({ question, index, total, selected, onSelect, onBack }: Props) {
   return (
-    <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl">
-      {index > 0 && (
-        <div className="flex items-center justify-end gap-4">
+    <div key={question.id} className="animate-rise-in mx-auto w-full max-w-2xl px-4 sm:px-0">
+      <div className="flex items-center justify-between gap-4 mt-2 sm:mt-0">
+        <div className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">
+          Questão {index + 1}/{total}
+        </div>
+        {index > 0 && (
           <button
             onClick={onBack}
             className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-100 border border-zinc-100 shadow-sm"
           >
             <ArrowLeft className="h-3 w-3" /> Voltar
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
-      <h2 className="mt-8 text-3xl font-black tracking-tight sm:text-4xl text-center text-zinc-950 uppercase leading-tight">
+      <h2 className="mt-4 sm:mt-8 text-2xl font-black tracking-tight sm:text-4xl text-center text-zinc-950 uppercase leading-tight">
         {question.title}
       </h2>
 
       {question.image ? (
-        <div className="mt-8 aspect-video w-full overflow-hidden rounded-3xl border border-zinc-100 bg-zinc-50 shadow-xl shadow-zinc-950/5">
+        <div className="mt-4 sm:mt-8 aspect-video w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-zinc-100 bg-zinc-50 shadow-lg sm:shadow-xl shadow-zinc-950/5">
           <img
             key={question.image}
             src={optimizedImageUrl(question.image, 960)}
@@ -45,14 +48,14 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
         </div>
       ) : null}
 
-      <div className="mt-10 grid gap-4">
+      <div className="mt-6 sm:mt-10 grid gap-3 sm:gap-4">
         {question.options.map((option) => {
           const active = selected === option.value;
           return (
             <button
               key={option.value}
               onClick={() => onSelect(option.value)}
-              className={`group relative flex items-center gap-4 rounded-2xl px-6 py-4 text-left transition-all duration-300 ${
+              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-left transition-all duration-300 ${
                 active
                   ? "bg-zinc-950 text-white shadow-xl shadow-zinc-950/20 translate-y-[-1px] border border-zinc-950"
                   : "bg-zinc-900 text-white hover:bg-zinc-950 border border-zinc-900 shadow-sm"
