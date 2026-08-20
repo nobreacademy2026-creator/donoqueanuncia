@@ -434,11 +434,11 @@ export function SalesPage({
             </div>
           </div>
 
-          <div className="mx-auto max-w-3xl space-y-7">
-            <h3 className="text-3xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
+          <div className="mx-auto max-w-3xl space-y-5 sm:space-y-7">
+            <h3 className="text-xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
-            <p className="text-lg font-medium leading-relaxed text-zinc-600 sm:text-xl">
+            <p className="text-base font-medium leading-relaxed text-zinc-600 sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
               <span className="font-black text-zinc-950">com essa oferta exclusiva.</span>
