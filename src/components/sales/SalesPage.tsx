@@ -164,7 +164,7 @@ function normalizeEmbedUrl(url: string, autoplay = false) {
 }
 
 function EmbeddedVideo({ url }: { url: string }) {
-  const [started, setStarted] = React.useState(false);
+  const [started, setStarted] = React.useState(true);
 
   React.useEffect(() => {
     if (!started) return;
