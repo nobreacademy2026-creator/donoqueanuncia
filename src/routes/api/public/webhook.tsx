@@ -9,9 +9,10 @@ export const Route = createFileRoute("/api/public/webhook")({
           const body = await request.json();
           
           // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto/Braip/Eduzz)
-          const rawStatus = (body.status || body.event || body.event_name || body.transaction_status || body.transaction?.status || "unknown").toString().toLowerCase();
-          const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email || body.cus_email;
-          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price || body.total_price || body.trans_value || body.amount_paid;
+          const rawStatus = (body.status || body.event || body.event_name || body.transaction_status || body.transaction?.status || body.data?.status || body.checkout_status || "unknown").toString().toLowerCase();
+          const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email || body.cus_email || body.data?.buyer?.email;
+          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price || body.total_price || body.trans_value || body.amount_paid || body.data?.total_price || body.full_price;
+          const eventId = body.id || body.transaction_id || body.event_id || body.data?.id || `webhook_${Date.now()}_${crypto.randomUUID()}`;
           
           // Mapeamento dinâmico do nome do evento
           let eventName = "Purchase";
@@ -43,7 +44,8 @@ export const Route = createFileRoute("/api/public/webhook")({
           else if (rawStatus.includes("chargeback")) friendlyStatus = "chargeback";
           else if (rawStatus.includes("cancel")) friendlyStatus = "subscription_canceled";
 
-          const eventId = `webhook_${Date.now()}_${crypto.randomUUID()}`;
+          const sanitizedEventId = eventId.toString().replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 120);
+          const finalEventId = sanitizedEventId.length >= 8 ? sanitizedEventId : `wb_${sanitizedEventId}_${Date.now()}`.slice(0, 120);
 
           // Extrair UTMs se presentes no payload (comum em Kiwify/Hotmart)
           const utm_source = body.utm_source || body.src || body.data?.utm_source;
@@ -68,7 +70,7 @@ export const Route = createFileRoute("/api/public/webhook")({
               utm_medium,
               utm_campaign,
               page_url: request.url,
-              event_id: eventId,
+              event_id: finalEventId,
               meta_pixel_status: "not_sent",
               meta_api_status: "pending"
             }
