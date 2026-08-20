@@ -202,7 +202,11 @@ async function assertAdmin(userId: string | null, accessToken: string | null) {
 export const sendMetaConversion = createServerFn({ method: "POST" })
   .validator(validateMetaInput)
   .handler(async ({ data }) => {
-    if (!isSameOriginSource(data.eventSourceUrl)) {
+    // Se o evento vier de um webhook externo (referência de request vazia ou host diferente)
+    // nós permitimos o envio, já que a validação de origem é para eventos do navegador.
+    const isWebhook = !getRequest().headers.get("origin") && !getRequest().headers.get("referer");
+    
+    if (!isWebhook && !isSameOriginSource(data.eventSourceUrl)) {
       console.warn("[Meta CAPI] Origem divergente, evento ignorado", data.eventSourceUrl);
       return { sent: false, status: "skipped" as const, reason: "invalid_origin" as const };
     }
