@@ -107,11 +107,17 @@ function payloadOf(event: TrackingEvent) {
 }
 
 function canonicalName(event: TrackingEvent) {
-  const map: Record<string, StandardEventName> = {
+  const map: Record<string, string> = {
+    PageView: "Visita",
+    ViewContent: "Visualização",
+    Lead: "Novo Lead",
+    Contact: "Contato",
+    InitiateCheckout: "Checkout",
+    Purchase: "Venda",
     lead_capturado: "Lead",
-    checkout_iniciado: "InitiateCheckout",
-    pagina_vendas_visualizada: "ViewContent",
-    quiz_iniciado: "PageView",
+    checkout_iniciado: "Checkout",
+    pagina_vendas_visualizada: "Visualização",
+    quiz_iniciado: "Início",
   };
   return map[event.event_name] ?? event.event_name;
 }
@@ -128,11 +134,18 @@ function eventValue(event: TrackingEvent) {
 }
 
 function eventSource(event: TrackingEvent) {
-  return event.source ?? event.utm_source ?? fallback(event, "origem") ?? "Origem não identificada";
+  const source = event.source ?? event.utm_source ?? fallback(event, "origem");
+  if (!source || source === "direct") return "Acesso Direto";
+  if (source === "webhook_externo") return "Plataforma Externa";
+  if (source === "ig") return "Instagram";
+  if (source === "fb") return "Facebook";
+  return source;
 }
 
 function eventCampaign(event: TrackingEvent) {
-  return event.campaign ?? event.utm_campaign ?? "Origem não identificada";
+  const campaign = event.campaign ?? event.utm_campaign;
+  if (!campaign) return "Sem campanha";
+  return campaign;
 }
 
 function formatDate(value: string | null) {
@@ -319,8 +332,8 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
     >();
     for (const event of metaEvents) {
       const campaign = eventCampaign(event);
-      const adSet = event.ad_set ?? "Origem não identificada";
-      const ad = event.ad ?? "Origem não identificada";
+      const adSet = event.ad_set ?? "Sem conjunto";
+      const ad = event.ad ?? "Sem anúncio";
       const key = `${campaign}\u0000${adSet}\u0000${ad}`;
       const item = grouped.get(key) ?? { campaign, adSet, ad, leads: 0, purchases: 0, revenue: 0 };
       if (canonicalName(event) === "Lead") item.leads += 1;
@@ -368,9 +381,9 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
       <table className="admin-table">
         <thead>
           <tr>
-            <th>Data</th>
+            <th>Horário</th>
             <th>{kind === "leads" ? "Nome" : "Evento"}</th>
-            <th>Origem</th>
+            <th>Canal</th>
             <th>Campanha</th>
             <th>{kind === "conversions" ? "Valor" : "Página"}</th>
             <th>Status Meta</th>
@@ -872,8 +885,8 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
                 ["Página", selectedEvent.page_url ?? "—"],
                 ["Origem", eventSource(selectedEvent)],
                 ["Campanha", eventCampaign(selectedEvent)],
-                ["Conjunto", selectedEvent.ad_set ?? "Origem não identificada"],
-                ["Anúncio", selectedEvent.ad ?? "Origem não identificada"],
+                ["Conjunto", selectedEvent.ad_set ?? "Sem conjunto"],
+                ["Anúncio", selectedEvent.ad ?? "Sem anúncio"],
                 ["UTM Source", selectedEvent.utm_source ?? "—"],
                 ["UTM Medium", selectedEvent.utm_medium ?? "—"],
                 ["UTM Content", selectedEvent.utm_content ?? "—"],
