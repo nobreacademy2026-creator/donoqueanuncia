@@ -314,13 +314,13 @@ export function SalesPage({
       </div>
 
       {/* Hero / Video Section */}
-      <section className="relative bg-white px-5 pb-8 pt-4 text-center text-zinc-950 sm:pb-28 sm:pt-20 min-h-[95vh] sm:min-h-[calc(100vh-52px)] flex flex-col justify-center">
+      <section className="relative bg-white px-5 pb-8 pt-4 text-center text-zinc-950 sm:pb-28 sm:pt-20 min-h-[85vh] sm:min-h-[calc(100vh-52px)] flex flex-col justify-center">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.05),transparent_45%)]" />
         <div className="relative mx-auto max-w-6xl w-full flex flex-col items-center">
           <div className="mb-2 inline-flex rounded-full border border-red-100 bg-red-50 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-10 sm:px-4 sm:py-2 sm:text-[11px]">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-2 max-w-4xl text-[22px] font-black uppercase leading-[0.9] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
+          <h2 className="mx-auto mb-1 max-w-4xl text-[18px] font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
             {headline.split(" ").map((word, i) => {
               const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
               return (
@@ -333,7 +333,7 @@ export function SalesPage({
 
           <div className="mx-auto max-w-4xl w-full relative">
             <div
-              className="group relative mb-3 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem]"
+              className="group relative mb-2 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem]"
               onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
@@ -436,12 +436,12 @@ export function SalesPage({
               Parabéns! Você deu o primeiro passo.
             </h3>
             
-            <div className="flex flex-col items-center gap-2 sm:gap-6">
+            <div className="flex flex-col items-center gap-1.5 sm:gap-6">
               <div className="flex flex-row items-baseline justify-center gap-2 sm:flex-col sm:items-center sm:gap-0">
                 <span className="text-[10px] font-bold text-zinc-400 line-through sm:text-lg">
                   De {fullPrice}
                 </span>
-                <span className="text-xl font-black text-red-600 sm:text-6xl">
+                <span className="text-lg font-black text-red-600 sm:text-6xl">
                   Por {promoPrice}
                 </span>
               </div>
