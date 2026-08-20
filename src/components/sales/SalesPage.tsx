@@ -395,7 +395,7 @@ export function SalesPage({
                   <div className="absolute bottom-0 left-0 h-3 w-full bg-white/20 z-10">
                     <div
                       id="video-progress-bar"
-                      className="h-full bg-red-600 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                      className="h-full bg-green-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(34,197,94,0.5)]"
                       style={{ width: "0%" }}
                     />
                   </div>
