@@ -329,27 +329,26 @@ export function ResultStep({
   if (subStage === "solution") {
     return (
       <div className="animate-rise-in mx-auto w-full max-w-2xl">
-        <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
+        <div className="mt-2 space-y-4 text-center bg-white rounded-3xl p-3 sm:space-y-8 sm:p-8">
           {solutionDraft?.title && (
-            <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl">
+            <h3 className="text-xl font-extrabold text-red-600 sm:text-3xl">
               {solutionDraft.title}
             </h3>
           )}
-          <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
+          <div className="mx-auto aspect-[1.8/1] w-full max-w-[280px] overflow-hidden rounded-xl bg-zinc-100 border border-zinc-200 shadow-sm sm:max-w-none sm:rounded-2xl">
             <img
               key="result-solution"
               src={
                 solutionDraft?.image ||
                 "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
               }
-
-              alt="Fictitious strategy"
+              alt="Estratégia"
               className="h-full w-full object-cover"
             />
           </div>
 
           <div className="space-y-4">
-            <div className="grid gap-4 text-left max-w-lg mx-auto bg-green-50/50 p-6 rounded-2xl border border-green-100">
+            <div className="grid gap-3 text-left max-w-lg mx-auto bg-green-50/50 p-4 rounded-xl border border-green-100 sm:gap-4 sm:p-6 sm:rounded-2xl">
               {[
                 {
                   text: "Passo a passo para criar anúncios no gerenciador e no turbinar do jeito certo.",
@@ -377,10 +376,10 @@ export function ResultStep({
               ].map((item, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-3 text-sm sm:text-base font-medium text-zinc-900 list-none"
+                  className="flex items-start gap-2.5 text-xs font-medium text-zinc-900 list-none sm:gap-3 sm:text-base"
                 >
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-green-100">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-green-100 sm:h-6 sm:w-6">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-green-600 sm:h-4 sm:w-4" />
                   </div>
                   <span>
                     {item.bold.length > 0
@@ -393,19 +392,19 @@ export function ResultStep({
                   </span>
                 </li>
               ))}
-              <p className="mt-4 text-zinc-700 font-medium">
+              <p className="mt-2 text-xs text-zinc-700 font-medium sm:mt-4 sm:text-sm">
                 Tudo pensado para você <strong>impulsionar as vendas</strong> do seu negócio usando
                 a Internet.
               </p>
             </div>
 
-            <div className="mt-8 flex justify-center">
-            <button
+            <div className="mt-4 flex justify-center sm:mt-8">
+              <button
                 onClick={() => {
                   void trackFunnelEvent("clique_solucao_preciso");
                   handleNextSubStage("solution");
                 }}
-                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
+                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
               >
                 É disso que eu preciso
               </button>
@@ -418,22 +417,21 @@ export function ResultStep({
 
   return (
     <div className="animate-rise-in mx-auto w-full max-w-2xl">
-      <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
-        <div className="mx-auto aspect-[1.8/1] w-full overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200 shadow-sm">
+      <div className="mt-2 space-y-4 text-center bg-white rounded-3xl p-3 sm:mt-4 sm:space-y-8 sm:p-8">
+        <div className="mx-auto aspect-[1.8/1] w-full max-w-[280px] overflow-hidden rounded-xl bg-zinc-100 border border-zinc-200 shadow-sm sm:max-w-none sm:rounded-2xl">
           <img
             key="result-objection"
             src={
               objectionDraft?.image ||
               "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&q=80&w=800"
             }
-
-            alt="Fictitious representative"
+            alt="Objeção"
             className="h-full w-full object-cover"
           />
         </div>
 
-        <div className="space-y-4">
-          <h3 className="text-xl sm:text-2xl font-bold leading-tight text-zinc-900">
+        <div className="space-y-3 sm:space-y-4">
+          <h3 className="text-lg font-bold leading-tight text-zinc-900 sm:text-2xl">
             {objectionDraft?.title || (
               <>
                 Vão te oferecer milhares de “fórmulas mágicas”, mas o que realmente vai{" "}
@@ -442,7 +440,7 @@ export function ResultStep({
             )}
           </h3>
 
-          <ul className="grid gap-4 text-left max-w-lg mx-auto mt-8">
+          <ul className="grid gap-3 text-left max-w-lg mx-auto mt-4 sm:gap-4 sm:mt-8">
             {[
               {
                 text: "Fazer anúncios do jeito certo (mesmo começando do zero)",
@@ -458,10 +456,10 @@ export function ResultStep({
             ].map((item, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 text-sm sm:text-base font-medium text-zinc-900"
+                className="flex items-start gap-2.5 text-xs font-medium text-zinc-900 sm:gap-3 sm:text-base"
               >
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-green-100">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-green-100 sm:h-6 sm:w-6">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-green-600 sm:h-4 sm:w-4" />
                 </div>
                 <span>
                   {item.bold.length > 0
@@ -476,10 +474,10 @@ export function ResultStep({
             ))}
           </ul>
 
-          <div className="mt-12 flex justify-center">
+          <div className="mt-6 flex justify-center sm:mt-12">
             <button
               onClick={() => handleNextSubStage("objection")}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
             >
               Vou dominar isso agora
             </button>
@@ -487,5 +485,7 @@ export function ResultStep({
         </div>
       </div>
     </div>
+  );
+}
   );
 }
