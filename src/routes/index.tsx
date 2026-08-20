@@ -60,7 +60,7 @@ function Index() {
 
   const questions = useMemo(
     () =>
-      QUESTIONS.map((q) => {
+      QUESTIONS.filter((q) => !draft.steps[q.id]?.hidden).map((q) => {
         const override = draft.steps[q.id];
         const base = {
           ...q,

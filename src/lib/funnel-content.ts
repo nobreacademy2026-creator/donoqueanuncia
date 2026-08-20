@@ -11,6 +11,7 @@ export type FunnelDraft = {
       images?: string[];
       audio?: string;
       options?: string[];
+      hidden?: boolean;
     }
   >;
   sales: {

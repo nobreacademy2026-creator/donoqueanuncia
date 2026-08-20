@@ -1,6 +1,6 @@
 import { CheckCircle2, Play, Pause } from "lucide-react";
 import danielInstagramMockup from "@/assets/daniel-instagram-mockup.png.asset.json";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { trackFunnelEvent } from "@/lib/tracking";
 import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimization";
 
@@ -18,23 +18,59 @@ export function ResultStep({
       images?: string[];
       audio?: string;
       options?: string[];
+      hidden?: boolean;
     }
   >;
 }) {
-  const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(
-    "objection",
-  );
+  const subStages = useMemo(() => {
+    const stages: ("objection" | "solution" | "testimonial" | "niche")[] = [];
+    if (!steps["objecao"]?.hidden) stages.push("objection");
+    if (!steps["beneficios"]?.hidden) stages.push("solution");
+    if (!steps["audio"]?.hidden) stages.push("testimonial");
+    if (!steps["niche"]?.hidden) stages.push("niche");
+    return stages;
+  }, [steps]);
+
+  const [subStage, setSubStage] = useState<"objection" | "solution" | "testimonial" | "niche">(() => {
+    return subStages[0] || "objection";
+  });
+
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectionDraft = steps["objecao"];
   const solutionDraft = steps["beneficios"];
   const testimonialDraft = steps["audio"];
   const nicheDraft = steps["niche"];
+
   const nicheImages = nicheDraft?.images?.length
     ? nicheDraft.images.slice(0, 5)
     : nicheDraft?.image
       ? [nicheDraft.image]
       : [];
+
+  useEffect(() => {
+    // Se o subStage atual ficar oculto, reseta para o primeiro disponível
+    const isCurrentHidden = steps[subStage === "solution" ? "beneficios" : subStage === "objection" ? "objecao" : subStage]?.hidden;
+    if (isCurrentHidden) {
+      const firstAvailable = subStages[0];
+      if (firstAvailable) {
+        setSubStage(firstAvailable);
+      }
+    }
+  }, [subStages, steps, subStage]);
+
+  const handleNextSubStage = (current: typeof subStage) => {
+    const currentIndex = subStages.indexOf(current);
+    if (currentIndex >= 0 && currentIndex < subStages.length - 1) {
+      const nextStage = subStages[currentIndex + 1];
+      if (nextStage) {
+        setSubStage(nextStage);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      onNext();
+    }
+  };
 
   useEffect(() => {
     void trackFunnelEvent("etapa_visualizada", { etapa: subStage });
@@ -136,7 +172,7 @@ export function ResultStep({
             <button
               onClick={() => {
                 void trackFunnelEvent("clique_quero_isso_tambem");
-                setSubStage("niche");
+                handleNextSubStage("testimonial");
               }}
               className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
@@ -277,7 +313,7 @@ export function ResultStep({
             </p>
 
             <button
-              onClick={onNext}
+              onClick={() => handleNextSubStage("niche")}
               className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
               Quero vender muito 😍
@@ -362,10 +398,10 @@ export function ResultStep({
             </div>
 
             <div className="mt-8 flex justify-center">
-              <button
+            <button
                 onClick={() => {
                   void trackFunnelEvent("clique_solucao_preciso");
-                  setSubStage("testimonial");
+                  handleNextSubStage("solution");
                 }}
                 className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
               >
@@ -440,7 +476,7 @@ export function ResultStep({
 
           <div className="mt-12 flex justify-center">
             <button
-              onClick={() => setSubStage("solution")}
+              onClick={() => handleNextSubStage("objection")}
               className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
             >
               Vou dominar isso agora
