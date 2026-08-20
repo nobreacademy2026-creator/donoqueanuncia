@@ -236,7 +236,7 @@ export function AdminAnalytics({
       access: countUniqueEvents(filteredEvents, "quiz_iniciado"),
       completion: countUniqueEvents(filteredEvents, "quiz_concluido"),
       video: countUniqueEvents(filteredEvents, "clique_video"),
-      checkout: countUniqueEvents(filteredEvents, "checkout_iniciado"),
+      checkout: countUniqueEvents(filteredEvents, "checkout_iniciado") + countUniqueEvents(filteredEvents, "InitiateCheckout"),
     }),
     [filteredEvents],
   );
