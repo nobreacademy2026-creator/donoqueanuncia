@@ -114,6 +114,24 @@ function Index() {
   }
 
   if (stage === "sales") {
+    // If the sales page is explicitly hidden in the draft, stay on result or restart
+    if (draft.sales.showSalesPage === false) {
+      return (
+        <div className="min-h-screen bg-white text-zinc-900 selection:bg-primary selection:text-white overflow-x-hidden flex flex-col items-center justify-center p-10 text-center">
+          <h2 className="text-2xl font-bold mb-4">Obrigado por participar!</h2>
+          <p className="text-zinc-600 mb-8">
+            Seu diagnóstico foi concluído. Em breve entraremos em contato.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-zinc-900 text-white px-8 py-3 rounded-full font-bold hover:bg-zinc-800 transition-all"
+          >
+            Refazer Diagnóstico
+          </button>
+        </div>
+      );
+    }
+
     return (
       <>
         <SalesPage

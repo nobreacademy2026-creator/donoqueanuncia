@@ -22,6 +22,7 @@ export type FunnelDraft = {
     checkoutUrl?: string;
     whatsappNumber?: string;
     whatsappMessage?: string;
+    showSalesPage?: boolean;
   };
   tracking?: {
     metaPixelId?: string;
