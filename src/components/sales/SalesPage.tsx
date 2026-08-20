@@ -351,6 +351,21 @@ export function SalesPage({
                       const progress = (video.currentTime / video.duration) * 100;
                       const progressBar = document.getElementById("video-progress-bar");
                       if (progressBar) progressBar.style.width = `${progress}%`;
+
+                      // Track retention milestones
+                      const time = Math.floor(video.currentTime);
+                      const milestones = [10, 30, 60, 120, 300, 600]; // seconds
+                      const lastMilestone = (video as any)._lastMilestone || 0;
+                      const currentMilestone = milestones.find((m) => time >= m && m > lastMilestone);
+
+                      if (currentMilestone) {
+                        (video as any)._lastMilestone = currentMilestone;
+                        void trackFunnelEvent("video_retencao", {
+                          segundos: currentMilestone,
+                          porcentagem: Math.round(progress),
+                          origem: "pagina_vendas",
+                        });
+                      }
                     }}
                     onPlay={() => setStarted(true)}
                   >
