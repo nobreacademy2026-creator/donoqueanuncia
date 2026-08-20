@@ -266,7 +266,7 @@ export function AdminAnalytics({
         date: day.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }).replace(".", ""),
         acessos: countUniqueEvents(dayEvents, "quiz_iniciado"),
         finalizacoes: countUniqueEvents(dayEvents, "quiz_concluido"),
-        checkouts: countUniqueEvents(dayEvents, "checkout_iniciado"),
+        checkouts: countUniqueEvents(dayEvents, "checkout_iniciado") + countUniqueEvents(dayEvents, "InitiateCheckout"),
       };
     });
   }, [filteredEvents, range]);
