@@ -434,30 +434,33 @@ export function SalesPage({
             </div>
           </div>
 
-          <div className="mx-auto max-w-3xl space-y-5 sm:space-y-7">
-            <h3 className="text-xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
+          <div className="mx-auto max-w-3xl space-y-4 sm:space-y-7">
+            <h3 className="text-lg font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
-            <p className="text-base font-medium leading-relaxed text-zinc-600 sm:text-xl">
+            <p className="hidden text-base font-medium leading-relaxed text-zinc-600 sm:block sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
               <span className="font-black text-zinc-950">com essa oferta exclusiva.</span>
             </p>
 
-            <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center gap-4 sm:gap-6">
               <div className="flex flex-col items-center">
-                <span className="text-zinc-400 line-through text-lg font-bold">De {fullPrice}</span>
-                <span className="text-4xl font-black text-red-600 sm:text-6xl">
+                <span className="text-sm font-bold text-zinc-400 line-through sm:text-lg">
+                  De {fullPrice}
+                </span>
+                <span className="text-2xl font-black text-red-600 sm:text-6xl">
                   Por apenas {promoPrice}
                 </span>
               </div>
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
-                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg animate-pulse-subtle"
+                className="w-full rounded-xl bg-green-500 py-4 text-xs font-black uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:rounded-2xl sm:px-8 sm:py-5 sm:text-lg animate-pulse-subtle"
               />
-              <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
-                <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
+              <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest sm:text-xs">
+                <ShieldCheck className="h-3.5 w-3.5 text-green-500 sm:h-4 sm:w-4" /> Pagamento 100%
+                Seguro
               </div>
             </div>
           </div>
