@@ -2100,7 +2100,11 @@ export function ContentSection({
                 <div className="flex items-center gap-4">
                   <div
                     className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${
-                      theme === "dark" ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500"
+                      draft.steps?.[item.id]?.hidden
+                        ? "bg-zinc-800 text-zinc-600 opacity-50"
+                        : theme === "dark"
+                          ? "bg-zinc-800 text-zinc-400"
+                          : "bg-zinc-100 text-zinc-500"
                     }`}
                   >
                     {item.id === "audio" || item.id === "sales_testimonial" ? (
@@ -2111,11 +2115,16 @@ export function ContentSection({
                       <ImageIcon className="h-5 w-5" />
                     )}
                   </div>
-                  <div>
+                  <div className={draft.steps?.[item.id]?.hidden ? "opacity-40" : ""}>
                     <h4
-                      className={`text-sm font-black uppercase ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}
+                      className={`text-sm font-black uppercase flex items-center gap-2 ${theme === "dark" ? "text-zinc-200" : "text-zinc-800"}`}
                     >
                       {item.title}
+                      {draft.steps?.[item.id]?.hidden && (
+                        <span className="text-[9px] bg-zinc-800 px-2 py-0.5 rounded text-zinc-500">
+                          OCULTO
+                        </span>
+                      )}
                     </h4>
                     <p
                       className={`mt-1 max-w-2xl text-xs leading-relaxed ${theme === "dark" ? "text-zinc-400" : "text-zinc-500"}`}
@@ -2129,11 +2138,38 @@ export function ContentSection({
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="p-2 text-zinc-500 hover:text-white">
-                    <Settings className="h-4 w-4" />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() =>
+                      updateStep(item.id, { hidden: !draft.steps?.[item.id]?.hidden })
+                    }
+                    className={`p-2 rounded-lg transition-colors ${
+                      draft.steps?.[item.id]?.hidden
+                        ? "text-amber-500 bg-amber-500/10 hover:bg-amber-500/20"
+                        : "text-zinc-500 hover:text-white hover:bg-white/5"
+                    }`}
+                    title={draft.steps?.[item.id]?.hidden ? "Exibir etapa" : "Ocultar etapa"}
+                  >
+                    {draft.steps?.[item.id]?.hidden ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
-                  <button className="p-2 text-red-500/50 hover:text-red-500">
+                  <button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Deseja realmente excluir esta etapa? Ela não aparecerá mais no funil. Você poderá reexibi-la clicando no botão de olho se mudar de ideia.",
+                        )
+                      ) {
+                        updateStep(item.id, { hidden: true });
+                        toast.info("Etapa ocultada do funil.");
+                      }
+                    }}
+                    className="p-2 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                    title="Excluir etapa"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
