@@ -314,13 +314,13 @@ export function SalesPage({
       </div>
 
       {/* Hero / Video Section */}
-      <section className="relative bg-white px-5 pb-8 pt-4 text-center text-zinc-950 sm:pb-28 sm:pt-20 min-h-[95vh] sm:min-h-[calc(100vh-52px)] flex flex-col justify-center">
+      <section className="relative bg-white px-5 pb-8 pt-4 text-center text-zinc-950 sm:pb-28 sm:pt-20 min-h-[85vh] sm:min-h-[calc(100vh-52px)] flex flex-col justify-center">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.05),transparent_45%)]" />
         <div className="relative mx-auto max-w-6xl w-full flex flex-col items-center">
-          <div className="mb-2 inline-flex rounded-full border border-red-100 bg-red-50 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-10 sm:px-4 sm:py-2 sm:text-[11px]">
+          <div className="mb-1 inline-flex rounded-full border border-red-100 bg-red-50 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-10 sm:px-4 sm:py-2 sm:text-[11px]">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-2 max-w-4xl text-[22px] font-black uppercase leading-[0.9] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
+          <h2 className="mx-auto mb-1 max-w-4xl text-[18px] font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
             {headline.split(" ").map((word, i) => {
               const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
               return (
@@ -331,9 +331,9 @@ export function SalesPage({
             })}
           </h2>
 
-          <div className="mx-auto max-w-4xl w-full relative">
+          <div className="mx-auto max-w-4xl w-full relative -mt-1 sm:mt-0">
             <div
-              className="group relative mb-3 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem]"
+              className="group relative mb-2 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem] max-h-[45vh] sm:max-h-none"
               onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
@@ -431,17 +431,17 @@ export function SalesPage({
             </div>
           </div>
 
-          <div className="mx-auto max-w-3xl space-y-1 sm:space-y-7">
+          <div className="mx-auto max-w-3xl space-y-1 sm:space-y-7 -mt-2 sm:mt-0">
             <h3 className="hidden sm:block text-xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
             
-            <div className="flex flex-col items-center gap-2 sm:gap-6">
+            <div className="flex flex-col items-center gap-1.5 sm:gap-6">
               <div className="flex flex-row items-baseline justify-center gap-2 sm:flex-col sm:items-center sm:gap-0">
                 <span className="text-[10px] font-bold text-zinc-400 line-through sm:text-lg">
                   De {fullPrice}
                 </span>
-                <span className="text-xl font-black text-red-600 sm:text-6xl">
+                <span className="text-2xl font-black text-red-600 sm:text-6xl">
                   Por {promoPrice}
                 </span>
               </div>
@@ -449,10 +449,10 @@ export function SalesPage({
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
-                className="w-full rounded-xl bg-green-500 py-3 text-[10px] font-black uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:rounded-2xl sm:px-8 sm:py-5 sm:text-lg animate-pulse-subtle"
+                className="w-full rounded-xl bg-green-500 py-3 text-[11px] font-black uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:rounded-2xl sm:px-8 sm:py-5 sm:text-lg animate-pulse-subtle"
               />
               
-              <div className="flex items-center gap-2 text-[8px] font-bold text-zinc-400 uppercase tracking-widest sm:text-xs">
+              <div className="flex items-center gap-1.5 text-[7px] font-bold text-zinc-400 uppercase tracking-widest sm:text-xs">
                 <ShieldCheck className="h-2.5 w-2.5 text-green-500 sm:h-4 sm:w-4" /> Pagamento 100% Seguro
               </div>
             </div>
