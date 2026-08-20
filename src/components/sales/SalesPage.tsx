@@ -438,7 +438,7 @@ export function SalesPage({
             <h3 className="text-xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
-            <p className="hidden text-base font-medium leading-relaxed text-zinc-600 sm:block sm:text-xl">
+            <p className="text-sm font-medium leading-relaxed text-zinc-600 sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
               <span className="font-black text-zinc-950">com essa oferta exclusiva.</span>
