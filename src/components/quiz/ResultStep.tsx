@@ -18,6 +18,7 @@ export function ResultStep({
       images?: string[];
       audio?: string;
       options?: string[];
+      hidden?: boolean;
     }
   >;
 }) {
