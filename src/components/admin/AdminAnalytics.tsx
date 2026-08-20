@@ -237,7 +237,7 @@ export function AdminAnalytics({
       completion: countUniqueEvents(filteredEvents, "quiz_concluido"),
       video: countUniqueEvents(filteredEvents, "clique_video"),
       checkout: countUniqueEvents(filteredEvents, "checkout_iniciado") + countUniqueEvents(filteredEvents, "InitiateCheckout") + countUniqueEvents(filteredEvents, "Purchase"),
-      purchases: countUniqueEvents(filteredEvents, "Purchase", (p) => p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada")),
+      purchases: countUniqueEvents(filteredEvents, "Purchase", (p) => Boolean(p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada"))),
     }),
     [filteredEvents],
   );
@@ -248,7 +248,7 @@ export function AdminAnalytics({
       completion: countUniqueEvents(previousEvents, "quiz_concluido"),
       video: countUniqueEvents(previousEvents, "clique_video"),
       checkout: countUniqueEvents(previousEvents, "checkout_iniciado") + countUniqueEvents(previousEvents, "InitiateCheckout") + countUniqueEvents(previousEvents, "Purchase"),
-      purchases: countUniqueEvents(previousEvents, "Purchase", (p) => p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada")),
+      purchases: countUniqueEvents(previousEvents, "Purchase", (p) => Boolean(p?.["status_amigavel"] === "approved" || p?.["raw_status"]?.toString().toLowerCase().includes("aprovada"))),
     }),
     [previousEvents],
   );
@@ -355,12 +355,12 @@ export function AdminAnalytics({
       previous: previousStats.access,
     },
     {
-      label: "Funis finalizados",
-      value: stats.completion,
-      icon: Target,
+      label: "Vendas Aprovadas",
+      value: stats.purchases,
+      icon: ShoppingBag,
       tone: "green",
-      description: "Usuários que concluíram o diagnóstico",
-      previous: previousStats.completion,
+      description: "Compras confirmadas via webhook",
+      previous: previousStats.purchases,
     },
     {
       label: "Cliques no vídeo",
@@ -375,7 +375,7 @@ export function AdminAnalytics({
       value: stats.checkout,
       icon: ShoppingBag,
       tone: "red",
-      description: "Cliques reais nos botões de compra",
+      description: "Cliques no checkout e vendas externas",
       previous: previousStats.checkout,
     },
   ];
@@ -596,9 +596,9 @@ export function AdminAnalytics({
                 tone="red"
               />
               <ConversionBar
-                label="Conclusão do quiz"
-                value={percent(stats.completion, stats.access)}
-                tone="purple"
+                label="Conversão em Venda"
+                value={percent(stats.purchases, stats.access)}
+                tone="green"
               />
               <ConversionBar
                 label="Clique no checkout"
