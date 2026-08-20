@@ -50,9 +50,11 @@ export function ResultStep({
 
   useEffect(() => {
     // Se o subStage atual ficar oculto, reseta para o primeiro disponível
-    if (steps[subStage === "solution" ? "beneficios" : subStage === "objection" ? "objecao" : subStage]?.hidden) {
-      if (subStages.length > 0) {
-        setSubStage(subStages[0]);
+    const isCurrentHidden = steps[subStage === "solution" ? "beneficios" : subStage === "objection" ? "objecao" : subStage]?.hidden;
+    if (isCurrentHidden) {
+      const firstAvailable = subStages[0];
+      if (firstAvailable) {
+        setSubStage(firstAvailable);
       }
     }
   }, [subStages, steps, subStage]);
@@ -60,8 +62,11 @@ export function ResultStep({
   const handleNextSubStage = (current: typeof subStage) => {
     const currentIndex = subStages.indexOf(current);
     if (currentIndex >= 0 && currentIndex < subStages.length - 1) {
-      setSubStage(subStages[currentIndex + 1]);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      const nextStage = subStages[currentIndex + 1];
+      if (nextStage) {
+        setSubStage(nextStage);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } else {
       onNext();
     }
