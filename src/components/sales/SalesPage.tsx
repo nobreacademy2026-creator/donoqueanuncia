@@ -343,7 +343,16 @@ export function SalesPage({
                     className="h-full w-full bg-black object-contain"
                     controls
                     playsInline
-                    preload="metadata"
+                    autoPlay
+                    muted
+                    preload="auto"
+                    onTimeUpdate={(e) => {
+                      const video = e.currentTarget;
+                      const progress = (video.currentTime / video.duration) * 100;
+                      const progressBar = document.getElementById("video-progress-bar");
+                      if (progressBar) progressBar.style.width = `${progress}%`;
+                    }}
+                    onPlay={() => setStarted(true)}
                   >
                     Seu navegador não suporta reprodução de vídeo.
                   </video>
@@ -359,11 +368,14 @@ export function SalesPage({
                         const video = document.getElementById(
                           "vsl-video-player",
                         ) as HTMLVideoElement;
-                        if (video) video.play();
+                        if (video) {
+                          video.muted = false;
+                          video.play();
+                        }
                         setStarted(true);
                       }}
-                      className="absolute inset-0 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
-                      aria-label="Reproduzir vídeo"
+                      className="absolute inset-0 z-20 grid place-items-center bg-black/40 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500 group transition-colors hover:bg-black/20"
+                      aria-label="Ativar som"
                     >
                       <div className="flex flex-col items-center gap-2 bg-red-600 p-4 rounded-xl border border-white/20 backdrop-blur-sm shadow-xl animate-pulse-subtle scale-75 sm:scale-90">
                         <span className="text-xs font-bold uppercase tracking-widest text-white">
@@ -384,6 +396,14 @@ export function SalesPage({
                       </div>
                     </button>
                   )}
+                  {/* Fake Progress Bar to simulate "ending soon" or just show progress */}
+                  <div className="absolute bottom-0 left-0 h-1.5 w-full bg-white/20 z-10">
+                    <div
+                      id="video-progress-bar"
+                      className="h-full bg-red-600 transition-all duration-300 ease-out"
+                      style={{ width: "0%" }}
+                    />
+                  </div>
                 </div>
               ) : vslUrl ? (
                 <EmbeddedVideo url={vslUrl} />
