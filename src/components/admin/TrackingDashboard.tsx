@@ -40,6 +40,7 @@ const SECTIONS: Array<{ id: Section; label: string }> = [
   { id: "origin", label: "Origem" },
   { id: "test", label: "Teste de Eventos" },
   { id: "logs", label: "Logs" },
+  { id: "pixel", label: "Seu Pixel" },
   { id: "settings", label: "Configurações" },
 ];
 
