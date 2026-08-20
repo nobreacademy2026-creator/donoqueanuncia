@@ -247,8 +247,8 @@ export function ResultStep({
                         </div>
                       </div>
                       <div className="text-left leading-tight">
-                        <p className="font-bold text-xs text-zinc-900 sm:text-sm">daniel_ferreira</p>
-                        <p className="text-[9px] text-zinc-500 sm:text-[10px]">Empreendedor</p>
+                        <p className="font-bold text-xs text-zinc-900 sm:text-sm">bruno_mendes</p>
+                        <p className="text-[9px] text-zinc-500 sm:text-[10px]">Bruno Mendes / Empreendedor</p>
                       </div>
                     </div>
                   </div>
