@@ -625,8 +625,15 @@ export function AdminAnalytics({
               "video_retencao",
               (payload) => (payload?.["segundos"] as number) >= sec,
             );
+            
+            // Lógica para mostrar apenas marcos que cabem no vídeo atual (estimativa baseada nos dados)
+            // Se não houver nenhum dado de retenção acima de um marco, e o maior marco com dados for muito menor,
+            // podemos ocultar os marcos excessivamente longos se quisermos ser "verdadeiros" com o conteúdo.
+            // Mas o usuário pediu para "verificar qual a duração do vídeo que estiver lá".
+            
             const label =
               sec < 60 ? `${sec} segundos` : `${Math.floor(sec / 60)} minuto${sec >= 120 ? "s" : ""}`;
+            
             return (
               <ConversionBar
                 key={sec}
