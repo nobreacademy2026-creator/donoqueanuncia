@@ -270,7 +270,7 @@ export function ResultStep({
                     </div>
 
                     <div className="space-y-0.5 mb-3 sm:mb-4">
-                      <p className="text-[10px] font-bold text-zinc-900 sm:text-xs">Daniel Ferreira</p>
+                      <p className="text-[10px] font-bold text-zinc-900 sm:text-xs">Bruno Mendes</p>
                       <p className="text-[10px] text-zinc-800 sm:text-xs">Transformando negócios 🚀</p>
                       <p className="text-[10px] text-zinc-800 sm:text-xs">De R$ 10k para R$ 100k! 📈</p>
                     </div>
