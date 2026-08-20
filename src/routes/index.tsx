@@ -182,7 +182,7 @@ function Index() {
           />
         ) : null}
 
-        {stage === "analyzing" ? <AnalyzingStep onDone={() => setStage("sales")} /> : null}
+        {stage === "analyzing" ? <AnalyzingStep onDone={() => setStage("result")} /> : null}
 
         {stage === "result" ? (
           <div className="w-full">
