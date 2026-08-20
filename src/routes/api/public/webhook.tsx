@@ -8,23 +8,26 @@ export const Route = createFileRoute("/api/public/webhook")({
         try {
           const body = await request.json();
           
-          // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto)
+          // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto/Braip/Eduzz)
           const rawStatus = (body.status || body.event || body.event_name || body.transaction_status || body.transaction?.status || "unknown").toString().toLowerCase();
-          const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email;
-          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price || body.total_price;
+          const email = body.email || body.customer?.email || body.data?.customer?.email || body.buyer?.email || body.cus_email;
+          const value = body.amount || body.value || body.data?.amount || body.price || body.purchase?.price || body.total_price || body.trans_value || body.amount_paid;
           
           // Mapeamento dinâmico do nome do evento
           let eventName = "Purchase";
           
           // Se for abandono ou início de checkout
-          if (rawStatus.includes("abandon") || rawStatus.includes("carrinho_abandonado") || rawStatus.includes("started") || rawStatus.includes("iniciado")) {
+          if (rawStatus.includes("abandon") || rawStatus.includes("carrinho_abandonado") || rawStatus.includes("started") || rawStatus.includes("iniciado") || rawStatus.includes("checkout")) {
+            // Se for explicitamente abandono, é InitiateCheckout
             eventName = "InitiateCheckout";
           } else if (rawStatus.includes("lead") || rawStatus.includes("contact")) {
             eventName = "Lead";
           } else if (rawStatus.includes("refund") || rawStatus.includes("chargeback") || rawStatus.includes("reembolso") || rawStatus.includes("estorno")) {
             eventName = "Other";
+          } else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("processamento") || rawStatus.includes("analise") || rawStatus.includes("pending") || rawStatus.includes("aguardando") || rawStatus.includes("pix") || rawStatus.includes("boleto")) {
+            // Eventos de compra ou intenção de compra forte
+            eventName = "Purchase";
           } else {
-            // Padrão é Purchase para eventos de venda aprovada/pendente
             eventName = "Purchase";
           }
 
@@ -34,7 +37,7 @@ export const Route = createFileRoute("/api/public/webhook")({
           else if (rawStatus.includes("pix")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("gerado")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("aguardando")) friendlyStatus = "waiting_payment";
-          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete")) friendlyStatus = "approved";
+          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("sucesso")) friendlyStatus = "approved";
           else if (rawStatus.includes("abandon") || rawStatus.includes("abandonado")) friendlyStatus = "abandoned_checkout";
           else if (rawStatus.includes("refund") || rawStatus.includes("reembolso")) friendlyStatus = "refunded";
           else if (rawStatus.includes("chargeback")) friendlyStatus = "chargeback";

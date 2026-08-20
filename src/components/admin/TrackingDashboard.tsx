@@ -114,6 +114,7 @@ function canonicalName(event: TrackingEvent) {
     Contact: "Contato",
     InitiateCheckout: "Checkout",
     Purchase: "Venda",
+    purchase: "Venda",
     lead_capturado: "Lead",
     checkout_iniciado: "Checkout",
     pagina_vendas_visualizada: "Visualização",
