@@ -313,13 +313,13 @@ export function SalesPage({
       </div>
 
       {/* Hero / Video Section */}
-      <section className="relative bg-white px-5 pb-16 pt-20 text-center text-zinc-950 sm:pb-28 sm:pt-32">
+      <section className="relative bg-white px-5 pb-10 pt-20 text-center text-zinc-950 sm:pb-28 sm:pt-32 min-h-[calc(100vh-64px)] flex flex-col justify-center">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(220,38,38,0.05),transparent_45%)]" />
-        <div className="relative mx-auto max-w-6xl">
-          <div className="mb-4 inline-flex rounded-full border border-red-100 bg-red-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-6 sm:px-4 sm:py-2 sm:text-[11px]">
+        <div className="relative mx-auto max-w-6xl w-full">
+          <div className="mb-2 inline-flex rounded-full border border-red-100 bg-red-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-6 sm:px-4 sm:py-2 sm:text-[11px]">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-6 max-w-4xl text-3xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:mb-10 sm:text-7xl">
+          <h2 className="mx-auto mb-4 max-w-4xl text-2xl font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:mb-10 sm:text-7xl">
             {headline.split(" ").map((word, i) => {
               const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
               return (
@@ -332,7 +332,7 @@ export function SalesPage({
 
           <div className="mx-auto max-w-4xl relative">
             <div
-              className="group relative mb-12 aspect-video w-full overflow-hidden rounded-2xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:rounded-[2rem]"
+              className="group relative mb-6 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem]"
               onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
@@ -434,30 +434,33 @@ export function SalesPage({
             </div>
           </div>
 
-          <div className="mx-auto max-w-3xl space-y-5 sm:space-y-7">
-            <h3 className="text-xl font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
+          <div className="mx-auto max-w-3xl space-y-4 sm:space-y-7">
+            <h3 className="text-lg font-black leading-tight tracking-tight text-zinc-950 sm:text-5xl">
               Parabéns! Você deu o primeiro passo.
             </h3>
-            <p className="text-base font-medium leading-relaxed text-zinc-600 sm:text-xl">
+            <p className="hidden text-base font-medium leading-relaxed text-zinc-600 sm:block sm:text-xl">
               Em <span className="text-red-600 font-black">menos de 24hrs</span>, você já pode estar
               atraindo novos clientes e vendendo muito mais{" "}
               <span className="font-black text-zinc-950">com essa oferta exclusiva.</span>
             </p>
 
-            <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center gap-4 sm:gap-6">
               <div className="flex flex-col items-center">
-                <span className="text-zinc-400 line-through text-lg font-bold">De {fullPrice}</span>
-                <span className="text-4xl font-black text-red-600 sm:text-6xl">
+                <span className="text-sm font-bold text-zinc-400 line-through sm:text-lg">
+                  De {fullPrice}
+                </span>
+                <span className="text-2xl font-black text-red-600 sm:text-6xl">
                   Por apenas {promoPrice}
                 </span>
               </div>
               <CTAButton
                 href={checkoutUrl}
                 label="Quero Garantir Minha Vaga com Desconto"
-                className="w-full rounded-2xl bg-green-500 px-8 py-5 text-base uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:text-lg animate-pulse-subtle"
+                className="w-full rounded-xl bg-green-500 py-4 text-xs font-black uppercase tracking-tight shadow-[0_20px_50px_-10px_rgba(34,197,94,0.3)] hover:bg-green-600 sm:w-auto sm:rounded-2xl sm:px-8 sm:py-5 sm:text-lg animate-pulse-subtle"
               />
-              <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
-                <ShieldCheck className="h-4 w-4 text-green-500" /> Pagamento 100% Seguro
+              <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest sm:text-xs">
+                <ShieldCheck className="h-3.5 w-3.5 text-green-500 sm:h-4 sm:w-4" /> Pagamento 100%
+                Seguro
               </div>
             </div>
           </div>
