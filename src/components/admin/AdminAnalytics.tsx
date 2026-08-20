@@ -619,30 +619,40 @@ export function AdminAnalytics({
           description="Acompanhe quanto tempo as pessoas assistem ao vídeo de vendas"
         />
         <div className="mt-6 space-y-4">
-          {[10, 30, 60, 120, 300, 600].map((sec) => {
-            const count = countUniqueEvents(
-              filteredEvents,
-              "video_retencao",
-              (payload) => (payload?.["segundos"] as number) >= sec,
-            );
-            
-            // Lógica para mostrar apenas marcos que cabem no vídeo atual (estimativa baseada nos dados)
-            // Se não houver nenhum dado de retenção acima de um marco, e o maior marco com dados for muito menor,
-            // podemos ocultar os marcos excessivamente longos se quisermos ser "verdadeiros" com o conteúdo.
-            // Mas o usuário pediu para "verificar qual a duração do vídeo que estiver lá".
-            
-            const label =
-              sec < 60 ? `${sec} segundos` : `${Math.floor(sec / 60)} minuto${sec >= 120 ? "s" : ""}`;
-            
-            return (
-              <ConversionBar
-                key={sec}
-                label={`Assistiram pelo menos ${label}`}
-                value={percent(count, stats.video)}
-                tone="blue"
-              />
-            );
-          })}
+          {(() => {
+            // Tentar descobrir a duração máxima do vídeo a partir dos eventos
+            const videoInfoEvents = filteredEvents.filter(e => e.event_name === "video_info" || e.event_name === "video_retencao");
+            let maxDuration = 0;
+            videoInfoEvents.forEach(e => {
+              const d = (e.payload as any)?.duracao || (e.payload as any)?.duracao_total || 0;
+              if (d > maxDuration) maxDuration = d;
+            });
+
+            // Se não tivermos a duração capturada, usamos 600s como fallback
+            const limit = maxDuration > 0 ? maxDuration : 600;
+
+            return [10, 30, 60, 120, 300, 600, 900, 1200]
+              .filter(sec => sec <= limit || (sec === 10 && limit === 0)) // Sempre mostra pelo menos o de 10s se não soubermos a duração
+              .map((sec) => {
+                const count = countUniqueEvents(
+                  filteredEvents,
+                  "video_retencao",
+                  (payload) => (payload?.["segundos"] as number) >= sec,
+                );
+                
+                const label =
+                  sec < 60 ? `${sec} segundos` : `${Math.floor(sec / 60)} minuto${sec >= 120 ? "s" : ""}`;
+                
+                return (
+                  <ConversionBar
+                    key={sec}
+                    label={`Assistiram pelo menos ${label}`}
+                    value={percent(count, stats.video)}
+                    tone="blue"
+                  />
+                );
+              });
+          })()}
         </div>
       </section>
 
