@@ -91,16 +91,16 @@ export function ResultStep({
   if (subStage === "testimonial") {
     return (
       <div className="animate-rise-in mx-auto w-full max-w-2xl">
-        <div className="mt-4 space-y-8 text-center bg-white rounded-3xl p-4 sm:p-8">
-          <h3 className="text-2xl font-extrabold text-red-600 sm:text-3xl">
-            {testimonialDraft?.title || "Clique no áudio e escute o que meu aluno disse 😲"}
+        <div className="mt-2 space-y-4 text-center bg-white rounded-3xl p-3 sm:space-y-8 sm:p-8">
+          <h3 className="text-xl font-extrabold text-red-600 sm:text-3xl">
+            {testimonialDraft?.title || "Clique no áudio e escute o que meu aluno disse 😳"}
           </h3>
 
-          <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-zinc-100 bg-[#f0f2f5] p-4 shadow-sm">
-            <div className="flex items-center gap-4">
+          <div className="relative mx-auto max-w-md overflow-hidden rounded-xl border border-zinc-100 bg-[#f0f2f5] p-3 shadow-sm sm:rounded-2xl sm:p-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <button
                 type="button"
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40 sm:h-12 sm:w-12"
                 onClick={toggleAudio}
                 disabled={!testimonialDraft?.audio}
                 aria-label={
@@ -112,18 +112,18 @@ export function ResultStep({
                 }
               >
                 {isPlaying ? (
-                  <Pause className="h-6 w-6 text-zinc-600 fill-zinc-600" />
+                  <Pause className="h-5 w-5 text-zinc-600 fill-zinc-600 sm:h-6 sm:w-6" />
                 ) : (
-                  <Play className="h-6 w-6 text-zinc-600 fill-zinc-600 ml-1" />
+                  <Play className="h-5 w-5 text-zinc-600 fill-zinc-600 ml-0.5 sm:h-6 sm:w-6 sm:ml-1" />
                 )}
               </button>
               <div className="flex-1 space-y-1">
-                <div className="h-8 w-full bg-zinc-200 rounded-sm relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-around px-2">
-                    {[...Array(20)].map((_, i) => (
+                <div className="h-6 w-full bg-zinc-200 rounded-sm relative overflow-hidden sm:h-8">
+                  <div className="absolute inset-0 flex items-center justify-around px-1 sm:px-2">
+                    {[...Array(15)].map((_, i) => (
                       <div
                         key={i}
-                        className="w-1 bg-zinc-400 rounded-full"
+                        className="w-0.5 bg-zinc-400 rounded-full sm:w-1"
                         style={{ height: `${24 + ((i * 37) % 56)}%` }}
                       ></div>
                     ))}
@@ -135,11 +135,11 @@ export function ResultStep({
                     ></div>
                   )}
                 </div>
-                <div className="flex justify-between text-[10px] text-zinc-500 font-medium px-1">
+                <div className="flex justify-between text-[9px] text-zinc-500 font-medium px-0.5 sm:text-[10px]">
                   <span>00:00</span>
                   <div className="flex items-center gap-1">
-                    <div className="h-3 w-3 bg-blue-400 rounded-full flex items-center justify-center">
-                      <div className="h-1.5 w-1.5 bg-white rounded-full"></div>
+                    <div className="h-2.5 w-2.5 bg-blue-400 rounded-full flex items-center justify-center sm:h-3 sm:w-3">
+                      <div className="h-1 w-1 bg-white rounded-full sm:h-1.5 sm:w-1.5"></div>
                     </div>
                   </div>
                 </div>
@@ -152,29 +152,31 @@ export function ResultStep({
               className="hidden"
             />
             {!testimonialDraft?.audio && (
-              <p className="mt-3 text-xs font-medium text-zinc-500">
+              <p className="mt-2 text-[10px] font-medium text-zinc-500 sm:mt-3 sm:text-xs">
                 Nenhum depoimento em áudio foi publicado.
               </p>
             )}
           </div>
 
-          <div className="space-y-6">
-            <img
-              src={optimizedImageUrl(testimonialDraft?.image || danielInstagramMockup.url, 672)}
-              srcSet={optimizedImageSrcSet(testimonialDraft?.image || danielInstagramMockup.url)}
-              sizes="(max-width: 448px) 100vw, 384px"
-              alt="Depoimento do aluno no Instagram"
-              loading="lazy"
-              decoding="async"
-              className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl border border-zinc-100"
-            />
+          <div className="space-y-4 sm:space-y-6">
+            <div className="relative mx-auto w-full max-w-[280px] sm:max-w-sm">
+              <img
+                src={optimizedImageUrl(testimonialDraft?.image || danielInstagramMockup.url, 672)}
+                srcSet={optimizedImageSrcSet(testimonialDraft?.image || danielInstagramMockup.url)}
+                sizes="(max-width: 448px) 100vw, 384px"
+                alt="Depoimento do aluno"
+                loading="lazy"
+                decoding="async"
+                className="w-full rounded-2xl shadow-xl border border-zinc-100 sm:rounded-3xl sm:shadow-2xl"
+              />
+            </div>
 
             <button
               onClick={() => {
                 void trackFunnelEvent("clique_quero_isso_tambem");
                 handleNextSubStage("testimonial");
               }}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
             >
               Eu quero isso também
             </button>
