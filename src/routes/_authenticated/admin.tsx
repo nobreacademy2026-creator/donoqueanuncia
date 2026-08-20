@@ -1031,6 +1031,7 @@ export function ConfigSection({
   const [whatsappMessage, setWhatsappMessage] = useState(
     initial.sales.whatsappMessage ?? "Olá! Tenho dúvidas sobre o Dono que Anuncia.",
   );
+  const [showSalesPage, setShowSalesPage] = useState(initial.sales.showSalesPage !== false);
 
   const publish = (patch: Partial<FunnelDraft["sales"]>) => {
     // Aqui não temos acesso ao 'draft' do AdminDashboard diretamente a menos que passemos como prop
