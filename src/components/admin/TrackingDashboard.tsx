@@ -118,6 +118,12 @@ function canonicalName(event: TrackingEvent) {
     checkout_iniciado: "Checkout",
     pagina_vendas_visualizada: "Visualização",
     quiz_iniciado: "Início",
+    AddToCart: "Carrinho",
+    Search: "Pesquisa",
+    Donate: "Doação",
+    Subscribe: "Assinatura",
+    StartTrial: "Teste Grátis",
+    SubmitApplication: "Aplicação",
   };
   return map[event.event_name] ?? event.event_name;
 }
