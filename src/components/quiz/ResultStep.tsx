@@ -160,7 +160,7 @@ export function ResultStep({
           </div>
 
           <div className="space-y-4 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[150px] sm:max-w-sm">
+            <div className="relative mx-auto w-full max-w-[280px] sm:max-w-sm">
               <img
                 src={optimizedImageUrl(testimonialDraft?.image || whatsappMockupAsset.url, 672)}
                 srcSet={optimizedImageSrcSet(testimonialDraft?.image || whatsappMockupAsset.url)}
@@ -168,7 +168,7 @@ export function ResultStep({
                 alt="Depoimento do aluno"
                 loading="lazy"
                 decoding="async"
-                className="w-full rounded-2xl shadow-xl border border-zinc-100 sm:rounded-3xl sm:shadow-2xl"
+                className="w-full h-auto rounded-2xl shadow-xl border border-zinc-100 sm:rounded-3xl sm:shadow-2xl"
               />
             </div>
 
