@@ -380,7 +380,7 @@ export function ResultStep({
                   void trackFunnelEvent("clique_solucao_preciso");
                   handleNextSubStage("solution");
                 }}
-                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
+                className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase animate-pulse-subtle sm:px-8 sm:py-4 sm:text-base"
               >
                 É disso que eu preciso
               </button>
