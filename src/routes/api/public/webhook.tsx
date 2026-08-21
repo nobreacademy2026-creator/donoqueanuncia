@@ -58,6 +58,36 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.client?.email ||
             body.data?.email ||
             body.data?.client?.email;
+          
+          const phone = 
+            body.phone || 
+            body.customer?.phone || 
+            body.data?.customer?.phone || 
+            body.buyer?.phone || 
+            body.cus_phone || 
+            body.data?.buyer?.phone ||
+            body.client?.phone ||
+            body.data?.phone ||
+            body.data?.client?.phone ||
+            body.cellphone ||
+            body.data?.cellphone;
+
+          const fullName = 
+            body.name || 
+            body.customer?.name || 
+            body.data?.customer?.name || 
+            body.buyer?.name || 
+            body.data?.name || 
+            body.client?.name ||
+            body.data?.client?.name;
+            
+          let firstName = "";
+          let lastName = "";
+          if (fullName && typeof fullName === "string") {
+            const parts = fullName.trim().split(/\s+/);
+            firstName = parts[0];
+            lastName = parts.slice(1).join(" ");
+          }
 
           const value = 
             body.amount || 
