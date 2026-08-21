@@ -320,7 +320,7 @@ export function SalesPage({
           <div className="mb-1 inline-flex rounded-full border border-red-100 bg-red-50 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-10 sm:px-4 sm:py-2 sm:text-[11px]">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-1 max-w-4xl text-[18px] font-black uppercase leading-[0.95] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
+          <h2 className="mx-auto mb-1 max-w-4xl text-[17px] font-black uppercase leading-[1] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
             {headline.split(" ").map((word, i) => {
               const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
               return (
@@ -333,7 +333,7 @@ export function SalesPage({
 
           <div className="mx-auto max-w-4xl w-full relative -mt-1 sm:mt-0">
             <div
-              className="group relative mb-2 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem] max-h-[45vh] sm:max-h-none"
+              className="group relative mb-1.5 aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-black shadow-[0_32px_100px_rgba(0,0,0,0.15)] sm:mb-12 sm:rounded-[2rem] max-h-[35vh] sm:max-h-none"
               onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl && isUploadedVideo ? (
@@ -441,7 +441,7 @@ export function SalesPage({
                 <span className="text-[10px] font-bold text-zinc-400 line-through sm:text-lg">
                   De {fullPrice}
                 </span>
-                <span className="text-2xl font-black text-red-600 sm:text-6xl">
+                <span className="text-xl font-black text-red-600 sm:text-6xl">
                   Por {promoPrice}
                 </span>
               </div>
