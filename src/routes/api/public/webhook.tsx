@@ -17,6 +17,8 @@ export const Route = createFileRoute("/api/public/webhook")({
       POST: async ({ request }) => {
         const corsHeaders = {
           "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
           "Content-Type": "application/json",
         };
 
