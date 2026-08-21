@@ -527,6 +527,7 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
             </button>
           </div>
         </div>
+      </section>
         {period === "custom" ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="admin-date-field">
