@@ -85,7 +85,7 @@ export const Route = createFileRoute("/api/public/webhook")({
           let lastName = "";
           if (fullName && typeof fullName === "string") {
             const parts = fullName.trim().split(/\s+/);
-            firstName = parts[0];
+            firstName = parts[0] || "";
             lastName = parts.slice(1).join(" ");
           }
 
