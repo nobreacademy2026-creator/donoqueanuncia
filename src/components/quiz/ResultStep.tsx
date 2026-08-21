@@ -158,11 +158,11 @@ export function ResultStep({
             )}
           </div>
 
-          <div className="space-y-2 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[180px] sm:max-w-sm">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="relative mx-auto w-full max-w-[280px] sm:max-w-sm">
               <img
-                src={optimizedImageUrl(testimonialDraft?.image || danielInstagramMockup.url, 672)}
-                srcSet={optimizedImageSrcSet(testimonialDraft?.image || danielInstagramMockup.url)}
+                src={optimizedImageUrl(testimonialDraft?.image || whatsappMockupAsset.url, 672)}
+                srcSet={optimizedImageSrcSet(testimonialDraft?.image || whatsappMockupAsset.url)}
                 sizes="(max-width: 448px) 100vw, 384px"
                 alt="Depoimento do aluno"
                 loading="lazy"
