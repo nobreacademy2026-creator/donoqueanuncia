@@ -23,9 +23,21 @@ export const Route = createFileRoute("/api/public/webhook")({
         };
 
         try {
-          const body = await request.json();
+          const contentType = request.headers.get("content-type") || "";
+          let body: any;
+
+          if (contentType.includes("application/x-www-form-urlencoded")) {
+            const formData = await request.formData();
+            body = {};
+            formData.forEach((value, key) => {
+              body[key] = value;
+            });
+          } else {
+            body = await request.json();
+          }
           
           if (!body || typeof body !== "object") {
+            console.error("[Webhook] Corpo inválido ou vazio:", contentType);
             return new Response(JSON.stringify({ error: "Empty or invalid body" }), { 
               status: 400, 
               headers: corsHeaders 
