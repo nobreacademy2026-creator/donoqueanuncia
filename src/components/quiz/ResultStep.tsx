@@ -160,7 +160,7 @@ export function ResultStep({
           </div>
 
           <div className="space-y-3 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[170px] sm:max-w-sm">
+            <div className="relative mx-auto w-full max-w-[195px] sm:max-w-sm">
               <img
                 src={optimizedImageUrl(testimonialDraft?.image || whatsappMockupAsset.url, 672)}
                 srcSet={optimizedImageSrcSet(testimonialDraft?.image || whatsappMockupAsset.url)}
