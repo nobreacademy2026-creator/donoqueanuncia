@@ -18,16 +18,16 @@ type MetaConversionInput = {
   eventName: string;
   eventId: string;
   eventSourceUrl: string;
-  fbp?: string;
-  fbc?: string;
-  sessionId?: string;
-  email?: string;
-  phone?: string;
-  firstName?: string;
-  lastName?: string;
-  clientIpAddress?: string;
-  clientUserAgent?: string;
-  customData?: Record<string, string | number | boolean>;
+  fbp?: string | undefined;
+  fbc?: string | undefined;
+  sessionId?: string | undefined;
+  email?: string | undefined;
+  phone?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  clientIpAddress?: string | undefined;
+  clientUserAgent?: string | undefined;
+  customData?: Record<string, string | number | boolean> | undefined;
 };
 
 function cleanOptional(value: unknown, maxLength = 500) {
