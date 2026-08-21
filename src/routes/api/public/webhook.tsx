@@ -81,6 +81,19 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.client?.name ||
             body.data?.client?.name;
             
+          const customerIp = 
+            body.customer_ip || 
+            body.ip || 
+            body.data?.ip || 
+            body.client_ip ||
+            body.data?.client_ip ||
+            body.data?.customer_ip;
+
+          const customerUserAgent = 
+            body.user_agent || 
+            body.data?.user_agent || 
+            body.customer?.user_agent;
+            
           let firstName = "";
           let lastName = "";
           if (fullName && typeof fullName === "string") {
