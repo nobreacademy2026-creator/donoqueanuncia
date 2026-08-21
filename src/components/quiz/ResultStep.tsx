@@ -93,7 +93,7 @@ export function ResultStep({
     return (
       <div className="animate-rise-in mx-auto w-full max-w-2xl px-4 sm:px-0 flex flex-col min-h-[calc(100dvh-20px)] justify-center">
         <div className="mt-1 space-y-2 text-center bg-white rounded-2xl p-2.5 sm:space-y-8 sm:p-8 sm:rounded-3xl">
-          <h3 className="text-sm font-black text-red-600 sm:text-3xl leading-tight uppercase tracking-tight">
+          <h3 className="text-sm font-black text-red-600 sm:text-3xl leading-tight uppercase tracking-tight bg-red-50 py-1 px-2 rounded-lg inline-block mx-auto border border-red-100 mb-2">
             {testimonialDraft?.title || "Escute o que meu aluno disse 😳"}
           </h3>
 
