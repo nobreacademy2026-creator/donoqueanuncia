@@ -4,10 +4,32 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 export const Route = createFileRoute("/api/public/webhook")({
   server: {
     handlers: {
+      OPTIONS: async () => {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          },
+        });
+      },
       POST: async ({ request }) => {
+        const corsHeaders = {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        };
+
         try {
           const body = await request.json();
           
+          if (!body || typeof body !== "object") {
+            return new Response(JSON.stringify({ error: "Empty or invalid body" }), { 
+              status: 400, 
+              headers: corsHeaders 
+            });
+          }
+
           // Mapeamento básico para eventos de compra (Hotmart/Kiwify/Cacto/Braip/Eduzz/Appmax)
           const rawStatus = (
             body.status || 
@@ -32,7 +54,8 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.cus_email || 
             body.data?.buyer?.email ||
             body.client?.email ||
-            body.data?.email;
+            body.data?.email ||
+            body.data?.client?.email;
 
           const value = 
             body.amount || 
@@ -46,22 +69,35 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.data?.total_price || 
             body.full_price ||
             body.data?.value ||
-            body.data?.transaction?.total_value;
+            body.data?.transaction?.total_value ||
+            body.data?.total_value;
 
-          const eventId = 
+          const eventIdInput = 
             body.id || 
             body.transaction_id || 
             body.event_id || 
             body.data?.id || 
             body.data?.transaction?.id ||
-            `webhook_${Date.now()}_${crypto.randomUUID()}`;
+            body.data?.transaction_id;
+
+          // Garantir que o eventId atende ao regex da Meta: ^[a-zA-Z0-9_-]{8,120}$
+          let finalEventId = "";
+          if (eventIdInput) {
+            const sanitized = eventIdInput.toString().replace(/[^a-zA-Z0-9_-]/g, "_");
+            if (sanitized.length >= 8) {
+              finalEventId = sanitized.slice(0, 120);
+            }
+          }
+          
+          if (!finalEventId) {
+            finalEventId = `wb_${Date.now()}_${crypto.randomUUID().replace(/-/g, "").slice(0, 12)}`;
+          }
           
           // Mapeamento dinâmico do nome do evento
           let eventName = "Purchase";
           
           // Se for abandono ou início de checkout
           if (rawStatus.includes("abandon") || rawStatus.includes("carrinho_abandonado") || rawStatus.includes("started") || rawStatus.includes("iniciado") || rawStatus.includes("checkout")) {
-            // Se for explicitamente abandono, é InitiateCheckout
             eventName = "InitiateCheckout";
           } else if (rawStatus.includes("lead") || rawStatus.includes("contact")) {
             eventName = "Lead";
@@ -80,31 +116,36 @@ export const Route = createFileRoute("/api/public/webhook")({
             rawStatus.includes("pix") || 
             rawStatus.includes("boleto") ||
             rawStatus.includes("integral") ||
-            rawStatus.includes("confirmado")
+            rawStatus.includes("confirmado") ||
+            rawStatus.includes("concluído") ||
+            rawStatus.includes("sucesso")
           ) {
-            // Eventos de compra ou intenção de compra forte
-            eventName = "Purchase";
-          } else {
             eventName = "Purchase";
           }
 
           // Mapeamento de status amigável para o dashboard
           let friendlyStatus = rawStatus;
           if (rawStatus.includes("printed") || rawStatus.includes("boleto")) friendlyStatus = "boleto_printed";
-          else if (rawStatus.includes("pix")) friendlyStatus = "pix_generated";
-          else if (rawStatus.includes("gerado")) friendlyStatus = "pix_generated";
+          else if (rawStatus.includes("pix") || rawStatus.includes("gerado")) friendlyStatus = "pix_generated";
           else if (rawStatus.includes("aguardando")) friendlyStatus = "waiting_payment";
-          else if (rawStatus.includes("aprovada") || rawStatus.includes("pago") || rawStatus.includes("paid") || rawStatus.includes("approved") || rawStatus.includes("complete") || rawStatus.includes("sucesso") || rawStatus.includes("integral") || rawStatus.includes("confirmado") || rawStatus.includes("concluído")) friendlyStatus = "approved";
+          else if (
+            rawStatus.includes("aprovada") || 
+            rawStatus.includes("pago") || 
+            rawStatus.includes("paid") || 
+            rawStatus.includes("approved") || 
+            rawStatus.includes("complete") || 
+            rawStatus.includes("sucesso") || 
+            rawStatus.includes("integral") || 
+            rawStatus.includes("confirmado") || 
+            rawStatus.includes("concluído")
+          ) friendlyStatus = "approved";
           else if (rawStatus.includes("abandon") || rawStatus.includes("abandonado")) friendlyStatus = "abandoned_checkout";
           else if (rawStatus.includes("refund") || rawStatus.includes("reembolso")) friendlyStatus = "refunded";
           else if (rawStatus.includes("chargeback")) friendlyStatus = "chargeback";
           else if (rawStatus.includes("cancel")) friendlyStatus = "subscription_canceled";
 
-          const sanitizedEventId = eventId.toString().replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 120);
-          const finalEventId = sanitizedEventId.length >= 8 ? sanitizedEventId : `wb_${sanitizedEventId}_${Date.now()}`.slice(0, 120);
-
-          // Extrair UTMs se presentes no payload (comum em Kiwify/Hotmart)
-          const utm_source = body.utm_source || body.src || body.data?.utm_source;
+          // Extrair UTMs
+          const utm_source = body.utm_source || body.src || body.data?.utm_source || body.data?.src;
           const utm_medium = body.utm_medium || body.data?.utm_medium;
           const utm_campaign = body.utm_campaign || body.data?.utm_campaign;
 
@@ -116,11 +157,12 @@ export const Route = createFileRoute("/api/public/webhook")({
                 ...body,
                 origem_externa: request.headers.get("user-agent") || "webhook",
                 raw_status: rawStatus,
-                status_amigavel: friendlyStatus
+                status_amigavel: friendlyStatus,
+                webhook_provider: "externo"
               },
-              client_name: body.name || body.customer?.name || body.data?.customer?.name || body.buyer?.name || body.data?.name || email || "Cliente Externo",
-              value: typeof value === "number" ? value : parseFloat(value) || null,
-              currency: body.currency || "BRL",
+              client_name: body.name || body.customer?.name || body.data?.customer?.name || body.buyer?.name || body.data?.name || body.data?.client?.name || email || "Cliente Externo",
+              value: typeof value === "number" ? value : parseFloat(String(value || "")) || null,
+              currency: body.currency || body.data?.currency || "BRL",
               source: "webhook_externo",
               utm_source,
               utm_medium,
@@ -136,7 +178,7 @@ export const Route = createFileRoute("/api/public/webhook")({
             console.error("[Webhook] Erro ao registrar evento no Supabase:", error);
           }
 
-          // Enviar para a Meta via Conversions API se configurado
+          // Enviar para a Meta via Conversions API
           try {
             const { sendMetaConversion } = await import("@/lib/meta-conversions.functions");
             await sendMetaConversion({
@@ -145,9 +187,10 @@ export const Route = createFileRoute("/api/public/webhook")({
                 eventId: finalEventId,
                 eventSourceUrl: request.url,
                 customData: {
-                  value: typeof value === "number" ? value : parseFloat(value) || 0,
-                  currency: body.currency || "BRL",
-                  email: email || ""
+                  value: typeof value === "number" ? value : parseFloat(String(value || "")) || 0,
+                  currency: body.currency || body.data?.currency || "BRL",
+                  email: email || "",
+                  webhook: true
                 }
               }
             });
@@ -157,13 +200,16 @@ export const Route = createFileRoute("/api/public/webhook")({
 
           return new Response(JSON.stringify({ status: "ok", eventId: finalEventId }), {
             status: 200,
-            headers: { "Content-Type": "application/json" }
+            headers: corsHeaders
           });
         } catch (err) {
           console.error("[Webhook] Erro ao processar payload:", err);
-          return new Response(JSON.stringify({ error: "Invalid payload" }), { 
+          return new Response(JSON.stringify({ 
+            error: "Invalid payload", 
+            detail: err instanceof Error ? err.message : String(err) 
+          }), { 
             status: 400,
-            headers: { "Content-Type": "application/json" }
+            headers: corsHeaders
           });
         }
       }

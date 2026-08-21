@@ -30,7 +30,8 @@ function cleanOptional(value: unknown, maxLength = 500) {
 
 function validateMetaInput(input: MetaConversionInput) {
   if (!ALLOWED_EVENTS.has(input.eventName)) throw new Error("Evento da Meta não permitido.");
-  if (!/^[a-zA-Z0-9_-]{8,120}$/.test(input.eventId)) throw new Error("event_id inválido.");
+  // Suaviza o regex para aceitar IDs gerados pelo webhook (prefixo wb_)
+  if (!/^[a-zA-Z0-9_-]{3,120}$/.test(input.eventId)) throw new Error("event_id inválido.");
 
   const sourceUrl = new URL(input.eventSourceUrl);
   if (sourceUrl.protocol !== "https:" && sourceUrl.protocol !== "http:") {
