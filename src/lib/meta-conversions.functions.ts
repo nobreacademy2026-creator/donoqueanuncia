@@ -65,6 +65,8 @@ function validateMetaInput(input: MetaConversionInput) {
     phone: cleanOptional(input.phone, 50),
     firstName: cleanOptional(input.firstName, 100),
     lastName: cleanOptional(input.lastName, 100),
+    clientIpAddress: cleanOptional(input.clientIpAddress, 100),
+    clientUserAgent: cleanOptional(input.clientUserAgent, 500),
     customData,
   };
 }
