@@ -159,8 +159,8 @@ export function ResultStep({
             )}
           </div>
 
-          <div className="space-y-4 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[280px] sm:max-w-sm">
+          <div className="space-y-3 sm:space-y-6">
+            <div className="relative mx-auto w-full max-w-[150px] sm:max-w-sm">
               <img
                 src={optimizedImageUrl(testimonialDraft?.image || whatsappMockupAsset.url, 672)}
                 srcSet={optimizedImageSrcSet(testimonialDraft?.image || whatsappMockupAsset.url)}
@@ -168,7 +168,7 @@ export function ResultStep({
                 alt="Depoimento do aluno"
                 loading="lazy"
                 decoding="async"
-                className="w-full h-auto rounded-2xl shadow-xl border border-zinc-100 sm:rounded-3xl sm:shadow-2xl"
+                className="w-full h-auto rounded-2xl shadow-xl border border-zinc-100 animate-pulse-subtle sm:rounded-3xl sm:shadow-2xl"
               />
             </div>
 
@@ -177,7 +177,7 @@ export function ResultStep({
                 void trackFunnelEvent("clique_quero_isso_tambem");
                 handleNextSubStage("testimonial");
               }}
-              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase sm:px-8 sm:py-4 sm:text-base"
+              className="bg-[#22c55e] hover:bg-[#16a34a] inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black text-white transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-green-600/10 uppercase animate-pulse-subtle sm:px-8 sm:py-4 sm:text-base"
             >
               Eu quero isso também
             </button>
