@@ -218,10 +218,13 @@ export const Route = createFileRoute("/api/public/webhook")({
                 eventName,
                 eventId: finalEventId,
                 eventSourceUrl: request.url,
+                email: String(email || ""),
+                phone: String(phone || ""),
+                firstName,
+                lastName,
                 customData: {
                   value: typeof value === "number" ? value : parseFloat(String(value || "")) || 0,
                   currency: body.currency || body.data?.currency || "BRL",
-                  email: email || "",
                   webhook: true
                 }
               }
