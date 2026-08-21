@@ -103,17 +103,25 @@ async function deliverMetaConversion(
   const request = getRequest();
   const clientIpAddress = getRequestIP({ xForwardedFor: true });
   const clientUserAgent = request.headers.get("user-agent") ?? undefined;
+  
   const externalId = data.sessionId
-    ? createHash("sha256").update(data.sessionId).digest("hex")
+    ? createHash("sha256").update(data.sessionId.toLowerCase().trim()).digest("hex")
     : undefined;
+
+  const hash = (val?: string) => 
+    val ? createHash("sha256").update(val.toLowerCase().trim()).digest("hex") : undefined;
 
   const userData = Object.fromEntries(
     Object.entries({
-      client_ip_address: clientIpAddress,
-      client_user_agent: clientUserAgent,
+      client_ip_address: clientIpAddress || undefined,
+      client_user_agent: clientUserAgent || undefined,
       fbp: data.fbp,
       fbc: data.fbc,
-      external_id: externalId ? [externalId] : undefined,
+      em: hash(data.email),
+      ph: hash(data.phone),
+      fn: hash(data.firstName),
+      ln: hash(data.lastName),
+      external_id: externalId,
     }).filter(([, value]) => value !== undefined),
   );
 
