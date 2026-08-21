@@ -4,6 +4,15 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 export const Route = createFileRoute("/api/public/webhook")({
   server: {
     handlers: {
+      GET: async () => {
+        return new Response(JSON.stringify({ status: "active", message: "Webhook endpoint is ready for POST requests" }), {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        });
+      },
       OPTIONS: async () => {
         return new Response(null, {
           status: 204,
