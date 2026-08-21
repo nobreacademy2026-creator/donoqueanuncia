@@ -91,7 +91,7 @@ export function ResultStep({
 
   if (subStage === "testimonial") {
     return (
-      <div className="animate-rise-in mx-auto w-full max-w-2xl px-4 sm:px-0">
+      <div className="animate-rise-in mx-auto w-full max-w-2xl px-4 sm:px-0 flex flex-col min-h-[calc(100dvh-20px)] justify-center">
         <div className="mt-1 space-y-2 text-center bg-white rounded-2xl p-2.5 sm:space-y-8 sm:p-8 sm:rounded-3xl">
           <h3 className="text-sm font-black text-red-600 sm:text-3xl leading-tight uppercase tracking-tight">
             {testimonialDraft?.title || "Escute o que meu aluno disse 😳"}
@@ -160,7 +160,7 @@ export function ResultStep({
           </div>
 
           <div className="space-y-4 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[150px] sm:max-w-sm">
+            <div className="relative mx-auto w-full max-w-[280px] sm:max-w-sm">
               <img
                 src={optimizedImageUrl(testimonialDraft?.image || whatsappMockupAsset.url, 672)}
                 srcSet={optimizedImageSrcSet(testimonialDraft?.image || whatsappMockupAsset.url)}
@@ -168,7 +168,7 @@ export function ResultStep({
                 alt="Depoimento do aluno"
                 loading="lazy"
                 decoding="async"
-                className="w-full rounded-2xl shadow-xl border border-zinc-100 sm:rounded-3xl sm:shadow-2xl"
+                className="w-full h-auto rounded-2xl shadow-xl border border-zinc-100 sm:rounded-3xl sm:shadow-2xl"
               />
             </div>
 
