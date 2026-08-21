@@ -526,7 +526,6 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Atualizar
             </button>
           </div>
-          </div>
         </div>
       </section>
 
