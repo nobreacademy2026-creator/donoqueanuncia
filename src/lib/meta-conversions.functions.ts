@@ -106,7 +106,7 @@ async function deliverMetaConversion(
 
   const request = getRequest();
   const clientIpAddress = data.clientIpAddress || getRequestIP({ xForwardedFor: true });
-  const clientUserAgent = data.clientUserAgent || request.headers.get("user-agent") ?? undefined;
+  const clientUserAgent = data.clientUserAgent || request.headers.get("user-agent") || undefined;
   
   const externalId = data.sessionId
     ? createHash("sha256").update(data.sessionId.toLowerCase().trim()).digest("hex")
