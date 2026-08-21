@@ -92,10 +92,32 @@ async function deliverMetaConversion(
   data: ReturnType<typeof validateMetaInput>,
   options: { test: boolean },
 ) {
-  const pixelId = process.env["META_PIXEL_ID"] || process.env["VITE_META_PIXEL_ID"] || "";
-  const accessToken = process.env["META_CONVERSIONS_ACCESS_TOKEN"];
+  let pixelId = process.env["META_PIXEL_ID"] || process.env["VITE_META_PIXEL_ID"] || "";
+  let accessToken = process.env["META_CONVERSIONS_ACCESS_TOKEN"];
   const apiVersion = process.env["META_GRAPH_API_VERSION"] ?? "v25.0";
   const testEventCode = process.env["META_TEST_EVENT_CODE"];
+
+  // Tenta carregar do banco de dados se as envs não estiverem definidas
+  if (!pixelId || !accessToken) {
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: configData } = await supabaseAdmin
+        .from("quiz_config")
+        .select("value")
+        .eq("key", "funnel_content")
+        .maybeSingle();
+      
+      if (configData?.value && typeof configData.value === "object") {
+        const tracking = (configData.value as any).tracking;
+        if (tracking) {
+          if (!pixelId) pixelId = tracking.metaPixelId || "";
+          if (!accessToken) accessToken = tracking.metaAccessToken || "";
+        }
+      }
+    } catch (err) {
+      console.error("[Meta CAPI] Falha ao ler config do banco:", err);
+    }
+  }
 
   if (!pixelId || !accessToken) {
     return { sent: false, status: "not_sent" as const, reason: "not_configured" as const };
