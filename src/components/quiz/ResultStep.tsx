@@ -91,13 +91,13 @@ export function ResultStep({
   if (subStage === "testimonial") {
     return (
       <div className="animate-rise-in mx-auto w-full max-w-2xl px-4 sm:px-0">
-        <div className="mt-1 space-y-3 text-center bg-white rounded-2xl p-3 sm:space-y-8 sm:p-8 sm:rounded-3xl">
-          <h3 className="text-lg font-black text-red-600 sm:text-3xl leading-tight uppercase tracking-tight">
+        <div className="mt-1 space-y-2 text-center bg-white rounded-2xl p-2.5 sm:space-y-8 sm:p-8 sm:rounded-3xl">
+          <h3 className="text-sm font-black text-red-600 sm:text-3xl leading-tight uppercase tracking-tight">
             {testimonialDraft?.title || "Escute o que meu aluno disse 😳"}
           </h3>
 
-          <div className="relative mx-auto max-w-md overflow-hidden rounded-xl border border-zinc-100 bg-[#f0f2f5] p-2 shadow-sm sm:rounded-2xl sm:p-4">
-            <div className="flex items-center gap-2 sm:gap-4">
+          <div className="relative mx-auto max-w-md overflow-hidden rounded-xl border border-zinc-100 bg-[#f0f2f5] p-1.5 shadow-sm sm:rounded-2xl sm:p-4">
+            <div className="flex items-center gap-1.5 sm:gap-4">
               <button
                 type="button"
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm disabled:cursor-not-allowed disabled:opacity-40 sm:h-12 sm:w-12"
@@ -158,8 +158,8 @@ export function ResultStep({
             )}
           </div>
 
-          <div className="space-y-3 sm:space-y-6">
-            <div className="relative mx-auto w-full max-w-[240px] sm:max-w-sm">
+          <div className="space-y-2 sm:space-y-6">
+            <div className="relative mx-auto w-full max-w-[180px] sm:max-w-sm">
               <img
                 src={optimizedImageUrl(testimonialDraft?.image || danielInstagramMockup.url, 672)}
                 srcSet={optimizedImageSrcSet(testimonialDraft?.image || danielInstagramMockup.url)}

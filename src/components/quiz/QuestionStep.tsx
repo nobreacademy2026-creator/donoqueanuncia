@@ -28,12 +28,12 @@ export function QuestionStep({ question, index, total, selected, onSelect, onBac
         )}
       </div>
 
-      <h2 className="mt-3 sm:mt-8 text-xl font-black tracking-tight sm:text-4xl text-center text-zinc-950 uppercase leading-tight">
+      <h2 className="mt-2 sm:mt-8 text-lg font-black tracking-tight sm:text-4xl text-center text-zinc-950 uppercase leading-[1.1]">
         {question.title}
       </h2>
 
       {question.image ? (
-        <div className="mt-3 sm:mt-8 aspect-video w-full overflow-hidden rounded-xl sm:rounded-3xl border border-zinc-100 bg-zinc-50 shadow-lg sm:shadow-xl shadow-zinc-950/5">
+        <div className="mt-2 sm:mt-8 aspect-video w-full max-h-[160px] sm:max-h-none overflow-hidden rounded-xl sm:rounded-3xl border border-zinc-100 bg-zinc-50 shadow-lg sm:shadow-xl shadow-zinc-950/5">
           <img
             key={question.image}
             src={optimizedImageUrl(question.image, 960)}
