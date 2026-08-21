@@ -320,7 +320,7 @@ export function SalesPage({
           <div className="mb-1 inline-flex rounded-full border border-red-100 bg-red-50 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.2em] text-red-600 sm:mb-10 sm:px-4 sm:py-2 sm:text-[11px]">
             Acesso Liberado com Desconto
           </div>
-          <h2 className="mx-auto mb-1 max-w-4xl text-[17px] font-black uppercase leading-[1] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
+          <h2 className="mx-auto mb-1 max-w-4xl text-[17px] font-black uppercase leading-[1.1] tracking-[-0.055em] text-zinc-950 sm:mb-12 sm:text-7xl">
             {headline.split(" ").map((word, i) => {
               const cleanWord = word.replace(/[^\w]/g, "").toUpperCase();
               return (
