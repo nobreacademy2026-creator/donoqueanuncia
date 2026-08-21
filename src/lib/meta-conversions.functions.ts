@@ -25,6 +25,8 @@ type MetaConversionInput = {
   phone?: string;
   firstName?: string;
   lastName?: string;
+  clientIpAddress?: string;
+  clientUserAgent?: string;
   customData?: Record<string, string | number | boolean>;
 };
 
