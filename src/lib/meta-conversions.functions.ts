@@ -21,6 +21,10 @@ type MetaConversionInput = {
   fbp?: string;
   fbc?: string;
   sessionId?: string;
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
   customData?: Record<string, string | number | boolean>;
 };
 
