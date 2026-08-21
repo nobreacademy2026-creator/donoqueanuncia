@@ -499,13 +499,13 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
         </div>
         <div className="admin-panel p-4 sm:p-5">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <div>
-            <p className="admin-eyebrow">Rastreamento e conversões</p>
-            <h2 className="text-xl font-semibold text-white">Jornada, atribuição e Meta</h2>
-            <p className="mt-1 text-sm text-zinc-500">
-              Dados reais recebidos pela plataforma, sem atribuição presumida.
-            </p>
-          </div>
+            <div>
+              <p className="admin-eyebrow">Rastreamento e conversões</p>
+              <h2 className="text-xl font-semibold text-white">Jornada, atribuição e Meta</h2>
+              <p className="mt-1 text-sm text-zinc-500">
+                Dados reais recebidos pela plataforma, sem atribuição presumida.
+              </p>
+            </div>
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={period}
@@ -526,8 +526,11 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Atualizar
             </button>
           </div>
+          </div>
         </div>
       </section>
+
+      <section className="admin-panel p-4 sm:p-5">
         {period === "custom" ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="admin-date-field">
