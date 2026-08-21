@@ -4,28 +4,49 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 export const Route = createFileRoute("/api/public/webhook")({
   server: {
     handlers: {
+      GET: async () => {
+        return new Response(JSON.stringify({ status: "active", message: "Webhook endpoint is ready for POST requests" }), {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        });
+      },
       OPTIONS: async () => {
         return new Response(null, {
           status: 204,
           headers: {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept, Origin",
           },
         });
       },
       POST: async ({ request }) => {
         const corsHeaders = {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept, Origin",
           "Content-Type": "application/json",
         };
 
         try {
-          const body = await request.json();
+          const contentType = request.headers.get("content-type") || "";
+          let body: any;
+
+          if (contentType.includes("application/x-www-form-urlencoded")) {
+            const formData = await request.formData();
+            body = {};
+            formData.forEach((value, key) => {
+              body[key] = value;
+            });
+          } else {
+            body = await request.json();
+          }
           
           if (!body || typeof body !== "object") {
+            console.error("[Webhook] Corpo inválido ou vazio:", contentType);
             return new Response(JSON.stringify({ error: "Empty or invalid body" }), { 
               status: 400, 
               headers: corsHeaders 
@@ -195,7 +216,7 @@ export const Route = createFileRoute("/api/public/webhook")({
           const utm_campaign = body.utm_campaign || body.data?.utm_campaign;
 
           // Registrar no banco de dados local via RPC
-          const { error } = await supabaseAdmin.rpc("record_tracking_event", {
+          const { error: dbError } = await supabaseAdmin.rpc("record_tracking_event", {
             p_event: {
               event_name: eventName,
               payload: {
@@ -219,14 +240,17 @@ export const Route = createFileRoute("/api/public/webhook")({
             }
           });
 
-          if (error) {
-            console.error("[Webhook] Erro ao registrar evento no Supabase:", error);
+          if (dbError) {
+            console.error("[Webhook] Erro ao registrar evento no Supabase:", dbError);
           }
 
           // Enviar para a Meta via Conversions API
+          let metaApiStatus = "pending";
+          let metaErrorText = "";
+
           try {
             const { sendMetaConversion } = await import("@/lib/meta-conversions.functions");
-            await sendMetaConversion({
+            const result = await sendMetaConversion({
               data: {
                 eventName,
                 eventId: finalEventId,
@@ -244,11 +268,46 @@ export const Route = createFileRoute("/api/public/webhook")({
                 }
               }
             });
+            
+            metaApiStatus = result.status;
+            if ("error" in result) {
+              metaErrorText = result.error || "";
+            }
+
+            // Atualizar o status da Meta no banco de dados
+            await supabaseAdmin
+              .from("analytics_events")
+              .update({ 
+                meta_api_status: metaApiStatus,
+                meta_error: metaErrorText || null
+              })
+              .eq("event_id", finalEventId)
+              .eq("event_name", eventName)
+              .order("created_at", { ascending: false })
+              .limit(1);
+
           } catch (metaError) {
             console.error("[Webhook] Erro ao enviar para Meta CAPI:", metaError);
+            // Tenta marcar o erro no banco
+            await supabaseAdmin
+              .from("analytics_events")
+              .update({ 
+                meta_api_status: "error",
+                meta_error: metaError instanceof Error ? metaError.message : String(metaError)
+              })
+              .eq("event_id", finalEventId)
+              .eq("event_name", eventName)
+              .order("created_at", { ascending: false })
+              .limit(1);
           }
 
-          return new Response(JSON.stringify({ status: "ok", eventId: finalEventId }), {
+          return new Response(JSON.stringify({ 
+            status: "ok", 
+            success: true, 
+            message: "Event processed successfully", 
+            eventId: finalEventId,
+            metaStatus: metaApiStatus
+          }), {
             status: 200,
             headers: corsHeaders
           });
