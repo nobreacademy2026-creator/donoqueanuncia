@@ -59,6 +59,10 @@ function validateMetaInput(input: MetaConversionInput) {
     fbp: cleanOptional(input.fbp, 255),
     fbc: cleanOptional(input.fbc, 255),
     sessionId: cleanOptional(input.sessionId, 100),
+    email: cleanOptional(input.email, 255),
+    phone: cleanOptional(input.phone, 50),
+    firstName: cleanOptional(input.firstName, 100),
+    lastName: cleanOptional(input.lastName, 100),
     customData,
   };
 }
