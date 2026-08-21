@@ -135,10 +135,12 @@ function canonicalName(event: TrackingEvent) {
     picpay_generated: "PicPay Gerado",
     approved: "Compra Aprovada",
     completed: "Compra Aprovada",
+    pago: "Compra Aprovada",
     paid: "Compra Aprovada",
     integral: "Compra Aprovada",
     confirmado: "Compra Aprovada",
     "concluído": "Compra Aprovada",
+    "sucesso": "Compra Aprovada",
     refused: "Compra Recusada",
     canceled: "Cancelada",
     refunded: "Reembolso",
@@ -473,8 +475,30 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
 
   return (
     <div className="space-y-6">
-      <section className="admin-panel p-4 sm:p-5">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+      <section className="grid gap-4 md:grid-cols-2">
+        <div className="admin-panel p-4 sm:p-5">
+          <p className="admin-eyebrow">Status da Integração</p>
+          <div className="mt-2 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-zinc-400">URL do Webhook:</span>
+              <button 
+                onClick={() => {
+                  const url = `${window.location.origin}/api/public/webhook`;
+                  navigator.clipboard.writeText(url);
+                  toast.success("URL copiada!");
+                }}
+                className="text-xs font-bold text-red-400 hover:underline"
+              >
+                Copiar URL
+              </button>
+            </div>
+            <p className="text-[10px] text-zinc-500 leading-tight">
+              Cole esta URL nas configurações de Webhook da sua plataforma (Cakto, Hotmart, etc.) para rastrear vendas em tempo real.
+            </p>
+          </div>
+        </div>
+        <div className="admin-panel p-4 sm:p-5">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div>
             <p className="admin-eyebrow">Rastreamento e conversões</p>
             <h2 className="text-xl font-semibold text-white">Jornada, atribuição e Meta</h2>
@@ -840,9 +864,9 @@ export function TrackingDashboard({ tracking }: { tracking?: FunnelDraft["tracki
                   </p>
                 </div>
               </div>
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
       ) : null}
 
       {!loading && section === "settings" ? (
