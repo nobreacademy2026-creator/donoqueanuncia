@@ -18,10 +18,16 @@ type MetaConversionInput = {
   eventName: string;
   eventId: string;
   eventSourceUrl: string;
-  fbp?: string;
-  fbc?: string;
-  sessionId?: string;
-  customData?: Record<string, string | number | boolean>;
+  fbp?: string | undefined;
+  fbc?: string | undefined;
+  sessionId?: string | undefined;
+  email?: string | undefined;
+  phone?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  clientIpAddress?: string | undefined;
+  clientUserAgent?: string | undefined;
+  customData?: Record<string, string | number | boolean> | undefined;
 };
 
 function cleanOptional(value: unknown, maxLength = 500) {
@@ -55,6 +61,12 @@ function validateMetaInput(input: MetaConversionInput) {
     fbp: cleanOptional(input.fbp, 255),
     fbc: cleanOptional(input.fbc, 255),
     sessionId: cleanOptional(input.sessionId, 100),
+    email: cleanOptional(input.email, 255),
+    phone: cleanOptional(input.phone, 50),
+    firstName: cleanOptional(input.firstName, 100),
+    lastName: cleanOptional(input.lastName, 100),
+    clientIpAddress: cleanOptional(input.clientIpAddress, 100),
+    clientUserAgent: cleanOptional(input.clientUserAgent, 500),
     customData,
   };
 }
@@ -93,19 +105,27 @@ async function deliverMetaConversion(
   }
 
   const request = getRequest();
-  const clientIpAddress = getRequestIP({ xForwardedFor: true });
-  const clientUserAgent = request.headers.get("user-agent") ?? undefined;
+  const clientIpAddress = data.clientIpAddress || getRequestIP({ xForwardedFor: true });
+  const clientUserAgent = data.clientUserAgent || request.headers.get("user-agent") || undefined;
+  
   const externalId = data.sessionId
-    ? createHash("sha256").update(data.sessionId).digest("hex")
+    ? createHash("sha256").update(data.sessionId.toLowerCase().trim()).digest("hex")
     : undefined;
+
+  const hash = (val?: string) => 
+    val ? createHash("sha256").update(val.toLowerCase().trim()).digest("hex") : undefined;
 
   const userData = Object.fromEntries(
     Object.entries({
-      client_ip_address: clientIpAddress,
-      client_user_agent: clientUserAgent,
+      client_ip_address: clientIpAddress || undefined,
+      client_user_agent: clientUserAgent || undefined,
       fbp: data.fbp,
       fbc: data.fbc,
-      external_id: externalId ? [externalId] : undefined,
+      em: hash(data.email),
+      ph: hash(data.phone),
+      fn: hash(data.firstName),
+      ln: hash(data.lastName),
+      external_id: externalId,
     }).filter(([, value]) => value !== undefined),
   );
 

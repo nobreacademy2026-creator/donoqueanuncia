@@ -58,6 +58,49 @@ export const Route = createFileRoute("/api/public/webhook")({
             body.client?.email ||
             body.data?.email ||
             body.data?.client?.email;
+          
+          const phone = 
+            body.phone || 
+            body.customer?.phone || 
+            body.data?.customer?.phone || 
+            body.buyer?.phone || 
+            body.cus_phone || 
+            body.data?.buyer?.phone ||
+            body.client?.phone ||
+            body.data?.phone ||
+            body.data?.client?.phone ||
+            body.cellphone ||
+            body.data?.cellphone;
+
+          const fullName = 
+            body.name || 
+            body.customer?.name || 
+            body.data?.customer?.name || 
+            body.buyer?.name || 
+            body.data?.name || 
+            body.client?.name ||
+            body.data?.client?.name;
+            
+          const customerIp = 
+            body.customer_ip || 
+            body.ip || 
+            body.data?.ip || 
+            body.client_ip ||
+            body.data?.client_ip ||
+            body.data?.customer_ip;
+
+          const customerUserAgent = 
+            body.user_agent || 
+            body.data?.user_agent || 
+            body.customer?.user_agent;
+            
+          let firstName = "";
+          let lastName = "";
+          if (fullName && typeof fullName === "string") {
+            const parts = fullName.trim().split(/\s+/);
+            firstName = parts[0] || "";
+            lastName = parts.slice(1).join(" ");
+          }
 
           const value = 
             body.amount || 
@@ -188,10 +231,15 @@ export const Route = createFileRoute("/api/public/webhook")({
                 eventName,
                 eventId: finalEventId,
                 eventSourceUrl: request.url,
+                email: String(email || ""),
+                phone: String(phone || ""),
+                firstName,
+                lastName,
+                clientIpAddress: customerIp ? String(customerIp) : undefined,
+                clientUserAgent: customerUserAgent ? String(customerUserAgent) : undefined,
                 customData: {
                   value: typeof value === "number" ? value : parseFloat(String(value || "")) || 0,
                   currency: body.currency || body.data?.currency || "BRL",
-                  email: email || "",
                   webhook: true
                 }
               }
