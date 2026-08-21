@@ -260,7 +260,12 @@ export const Route = createFileRoute("/api/public/webhook")({
             console.error("[Webhook] Erro ao enviar para Meta CAPI:", metaError);
           }
 
-          return new Response(JSON.stringify({ status: "ok", eventId: finalEventId }), {
+          return new Response(JSON.stringify({ 
+            status: "ok", 
+            success: true, 
+            message: "Event processed successfully", 
+            eventId: finalEventId 
+          }), {
             status: 200,
             headers: corsHeaders
           });
