@@ -235,6 +235,8 @@ export const Route = createFileRoute("/api/public/webhook")({
                 phone: String(phone || ""),
                 firstName,
                 lastName,
+                clientIpAddress: customerIp ? String(customerIp) : undefined,
+                clientUserAgent: customerUserAgent ? String(customerUserAgent) : undefined,
                 customData: {
                   value: typeof value === "number" ? value : parseFloat(String(value || "")) || 0,
                   currency: body.currency || body.data?.currency || "BRL",
