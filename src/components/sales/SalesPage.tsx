@@ -28,7 +28,7 @@ import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimizatio
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
 
-const vslOverlayUrl = "user-uploads://image-79.png";
+import vslOverlayAsset from "@/assets/vsl-overlay.png.asset.json";
 
 const BENEFITS = [
   {
