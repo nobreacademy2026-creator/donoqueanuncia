@@ -391,8 +391,7 @@ export function SalesPage({
 
                   {!started && (
                     <div 
-                      className="absolute inset-0 z-50 cursor-pointer group bg-black border-4 border-red-500"
-
+                      className="absolute inset-0 z-20 cursor-pointer group bg-black"
                       onClick={() => {
                         const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                         if (video) {
@@ -404,13 +403,13 @@ export function SalesPage({
                       }}
                     >
                       <img 
-                        src={vslOverlayUrl} 
+                        src={vslOverlayAsset.url} 
                         alt="Ative o som para assistir o vídeo e clique" 
-
                         className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   )}
+
 
                   {/* Enhanced Progress Bar */}
                   <div className="absolute bottom-0 left-0 h-2 w-full bg-white/20 z-10 pointer-events-none">
