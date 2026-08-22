@@ -405,14 +405,6 @@ export function SalesPage({
                         alt="Ative o som para assistir o vídeo e clique" 
                         className="w-full h-full object-contain sm:object-cover scale-100 sm:scale-105 transition-transform duration-700 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="relative">
-                          <div className="absolute inset-0 animate-ping rounded-full bg-red-600/20" />
-                          <div className="relative grid h-20 w-20 place-items-center rounded-full bg-white text-red-600 shadow-2xl transition-transform group-hover:scale-110">
-                            <Play className="ml-1 h-10 w-10 fill-current" />
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   )}
 
