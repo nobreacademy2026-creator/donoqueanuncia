@@ -389,8 +389,9 @@ export function SalesPage({
 
                     {!started && (
                       <div 
-                        className="absolute inset-0 z-20 cursor-pointer group bg-black flex items-center justify-center"
-                        onClick={() => {
+                        className="absolute inset-0 z-20 cursor-pointer group bg-black/40 flex items-center justify-center transition-all duration-500"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                           if (video) {
                             video.muted = false;
@@ -402,11 +403,18 @@ export function SalesPage({
                           }
                         }}
                       >
-                        <img 
-                          src={vslOverlayAsset.url || "/assets/vsl-overlay-final.png"} 
-                          alt="Ative o som para assistir o vídeo e clique" 
-                          className="max-h-[80%] max-w-[80%] m-auto transition-transform duration-700 group-hover:scale-105"
-                        />
+                        <div className="relative h-full w-full flex items-center justify-center">
+                          <img 
+                            src={vslOverlayAsset.url} 
+                            alt="Ative o som para assistir o vídeo e clique" 
+                            className="max-h-[70%] max-w-[70%] object-contain transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+                            onError={(e) => {
+                              // Fallback if asset fails to load
+                              console.error("Asset failed to load, trying fallback");
+                              (e.currentTarget as HTMLImageElement).src = "/assets/vsl-overlay-v2.png";
+                            }}
+                          />
+                        </div>
                       </div>
                     )}
 
