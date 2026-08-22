@@ -267,6 +267,8 @@ export function SalesPage({
       : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
   const vslUrl = draft.vslUrl;
   const isUploadedVideo = Boolean(vslUrl && /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(vslUrl));
+  console.log("VSL Debug:", { vslUrl, isUploadedVideo, started });
+
   const fullPrice = draft.fullPrice || "R$ 399,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
