@@ -341,95 +341,87 @@ export function SalesPage({
               onClick={() => trackFunnelEvent("clique_video", { origem: "pagina_vendas" })}
             >
               {vslUrl ? (
-                <div className="relative h-full w-full">
-                  <video
-                    id="vsl-video-player"
-                    src={vslUrl || ""}
-
-                    className="h-full w-full bg-black object-contain"
-                    playsInline
-                    autoPlay
-                    muted
-                    preload="auto"
-
-                    onTimeUpdate={(e) => {
-                      const video = e.currentTarget;
-                      const progress = (video.currentTime / video.duration) * 100;
-                      
-                      let visualProgress = 0;
-                      if (progress < 20) {
-                        visualProgress = (progress / 20) * 50;
-                      } else {
-                        visualProgress = 50 + ((progress - 20) / 80) * 50;
-                      }
-
-                      const progressBar = document.getElementById("video-progress-bar");
-                      if (progressBar) progressBar.style.width = `${visualProgress}%`;
-
-                      const time = Math.floor(video.currentTime);
-                      const milestones = [10, 30, 60, 120, 300, 600];
-                      const lastMilestone = (video as any)._lastMilestone || 0;
-                      const currentMilestone = milestones.find((m) => time >= m && m > lastMilestone);
-
-                      if (currentMilestone) {
-                        (video as any)._lastMilestone = currentMilestone;
-                        void trackFunnelEvent("video_retencao", {
-                          segundos: currentMilestone,
-                          porcentagem: Math.round(progress),
-                          origem: "pagina_vendas",
-                          duracao_total: video.duration
-                        });
-                      }
-                    }}
-                    onPlay={(e) => {
-                      setStarted(true);
-                      const video = e.currentTarget;
-                      void trackFunnelEvent("video_info", {
-                        duracao: video.duration,
-                        origem: "pagina_vendas"
-                      });
-                    }}
-                  >
-                    Seu navegador não suporta reprodução de vídeo.
-                  </video>
-
-                  {!started && (
-                    <div 
-                      className="absolute inset-0 z-20 cursor-pointer group bg-black flex items-center justify-center"
-
-                      onClick={() => {
-                        const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
-                        if (video) {
-                          video.muted = false;
-                          video.currentTime = 0;
-                          video.play().catch(console.error);
-                          setStarted(true);
-                          (window as any)._videoStartTime = Date.now();
-                          void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
+                isUploadedVideo ? (
+                  <div className="relative h-full w-full">
+                    <video
+                      id="vsl-video-player"
+                      src={vslUrl || ""}
+                      className="h-full w-full bg-black object-contain"
+                      playsInline
+                      autoPlay
+                      muted
+                      preload="auto"
+                      onTimeUpdate={(e) => {
+                        const video = e.currentTarget;
+                        const progress = (video.currentTime / video.duration) * 100;
+                        let visualProgress = 0;
+                        if (progress < 20) {
+                          visualProgress = (progress / 20) * 50;
+                        } else {
+                          visualProgress = 50 + ((progress - 20) / 80) * 50;
+                        }
+                        const progressBar = document.getElementById("video-progress-bar");
+                        if (progressBar) progressBar.style.width = `${visualProgress}%`;
+                        const time = Math.floor(video.currentTime);
+                        const milestones = [10, 30, 60, 120, 300, 600];
+                        const lastMilestone = (video as any)._lastMilestone || 0;
+                        const currentMilestone = milestones.find((m) => time >= m && m > lastMilestone);
+                        if (currentMilestone) {
+                          (video as any)._lastMilestone = currentMilestone;
+                          void trackFunnelEvent("video_retencao", {
+                            segundos: currentMilestone,
+                            porcentagem: Math.round(progress),
+                            origem: "pagina_vendas",
+                            duracao_total: video.duration
+                          });
                         }
                       }}
-
+                      onPlay={(e) => {
+                        setStarted(true);
+                        const video = e.currentTarget;
+                        void trackFunnelEvent("video_info", {
+                          duracao: video.duration,
+                          origem: "pagina_vendas"
+                        });
+                      }}
                     >
-                      <img 
-                        src={vslOverlayAsset.url || "/assets/vsl-overlay-v2.png"} 
-                        alt="Ative o som para assistir o vídeo e clique" 
-                        className="max-h-[80%] max-w-[80%] m-auto transition-transform duration-700 group-hover:scale-105"
+                      Seu navegador não suporta reprodução de vídeo.
+                    </video>
+
+                    {!started && (
+                      <div 
+                        className="absolute inset-0 z-20 cursor-pointer group bg-black flex items-center justify-center"
+                        onClick={() => {
+                          const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
+                          if (video) {
+                            video.muted = false;
+                            video.currentTime = 0;
+                            video.play().catch(console.error);
+                            setStarted(true);
+                            (window as any)._videoStartTime = Date.now();
+                            void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
+                          }
+                        }}
+                      >
+                        <img 
+                          src={vslOverlayAsset.url || "/assets/vsl-overlay-v2.png"} 
+                          alt="Ative o som para assistir o vídeo e clique" 
+                          className="max-h-[80%] max-w-[80%] m-auto transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+
+                    <div className="absolute bottom-0 left-0 h-2 w-full bg-white/20 z-10 pointer-events-none">
+                      <div
+                        id="video-progress-bar"
+                        className="h-full bg-green-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(34,197,94,0.5)]"
+                        style={{ width: "0%" }}
                       />
                     </div>
-                  )}
-
-
-                  {/* Enhanced Progress Bar */}
-                  <div className="absolute bottom-0 left-0 h-2 w-full bg-white/20 z-10 pointer-events-none">
-                    <div
-                      id="video-progress-bar"
-                      className="h-full bg-green-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(34,197,94,0.5)]"
-                      style={{ width: "0%" }}
-                    />
                   </div>
-                </div>
-              ) : (
-                <EmbeddedVideo url={vslUrl} />
+                ) : (
+                  <EmbeddedVideo url={vslUrl} />
+                )
               ) : (
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center text-white cursor-pointer group/overlay bg-black/40 hover:bg-black/20 transition-colors"
@@ -455,6 +447,7 @@ export function SalesPage({
                   </div>
                 </div>
               )}
+
             </div>
           </div>
 
