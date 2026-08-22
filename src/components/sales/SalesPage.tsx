@@ -395,9 +395,20 @@ export function SalesPage({
                           const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                           if (video) {
                             video.muted = false;
+                            video.volume = 1.0;
                             video.currentTime = 0;
-                            video.play().catch(console.error);
-                            setStarted(true);
+                            const playPromise = video.play();
+                            if (playPromise !== undefined) {
+                              playPromise.then(() => {
+                                setStarted(true);
+                              }).catch(error => {
+                                console.error("Play error:", error);
+                                // Retry unmuting if play was already active
+                                video.muted = false;
+                                setStarted(true);
+                              });
+                            }
+
                             (window as any)._videoStartTime = Date.now();
                             void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
                           }
