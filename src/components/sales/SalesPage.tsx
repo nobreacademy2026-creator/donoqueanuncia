@@ -377,7 +377,6 @@ export function SalesPage({
                         }
                       }}
                       onPlay={(e) => {
-                        setStarted(true);
                         const video = e.currentTarget;
                         void trackFunnelEvent("video_info", {
                           duracao: video.duration,
