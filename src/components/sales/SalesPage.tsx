@@ -406,7 +406,7 @@ export function SalesPage({
                       <img 
                         src={vslOverlayAsset.url} 
                         alt="Ative o som para assistir o vídeo e clique" 
-                        className="max-h-full max-w-full m-auto transition-transform duration-700 group-hover:scale-105"
+                        className="max-h-[80%] max-w-[80%] m-auto transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   )}
