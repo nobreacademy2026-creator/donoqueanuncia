@@ -28,7 +28,7 @@ import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimizatio
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
 
-import vslOverlayAsset from "@/assets/vsl-overlay-v2.png.asset.json";
+import vslOverlayAsset from "@/assets/vsl-overlay-final.png.asset.json";
 
 const BENEFITS = [
   {
@@ -404,7 +404,7 @@ export function SalesPage({
                         }}
                       >
                         <img 
-                          src={vslOverlayAsset.url || "/assets/vsl-overlay-v2.png"} 
+                          src={vslOverlayAsset.url || "/assets/vsl-overlay-final.png"} 
                           alt="Ative o som para assistir o vídeo e clique" 
                           className="max-h-[80%] max-w-[80%] m-auto transition-transform duration-700 group-hover:scale-105"
                         />
