@@ -399,12 +399,15 @@ export function SalesPage({
                       onClick={() => {
                         const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                         if (video) {
-                          video.play();
+                          video.muted = false;
+                          video.currentTime = 0;
+                          video.play().catch(console.error);
                           setStarted(true);
                           (window as any)._videoStartTime = Date.now();
                           void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
                         }
                       }}
+
                     >
                       <img 
                         src={vslOverlayAsset.url || "/assets/vsl-overlay-v2.png"} 
