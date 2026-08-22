@@ -48,7 +48,7 @@ export const Route = createFileRoute("/")({
 type Stage = "quiz" | "analyzing" | "result" | "sales";
 
 function Index() {
-  const [stage, setStage] = useState<Stage>("sales");
+  const [stage, setStage] = useState<Stage>("quiz");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const draft = useFunnelDraft();
