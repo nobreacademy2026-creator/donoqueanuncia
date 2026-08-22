@@ -389,7 +389,8 @@ export function SalesPage({
 
                   {!started && (
                     <div 
-                      className="absolute inset-0 z-20 cursor-pointer group bg-black"
+                      className="absolute inset-0 z-50 cursor-pointer group bg-black border-4 border-red-500"
+
                       onClick={() => {
                         const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                         if (video) {
