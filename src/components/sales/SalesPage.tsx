@@ -389,7 +389,7 @@ export function SalesPage({
 
                   {!started && (
                     <div 
-                      className="absolute inset-0 z-20 cursor-pointer flex items-center justify-center bg-black/60 transition-all hover:bg-black/40 group"
+                      className="absolute inset-0 z-20 cursor-pointer group"
                       onClick={() => {
                         const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                         if (video) {
@@ -403,7 +403,7 @@ export function SalesPage({
                       <img 
                         src={vslOverlayAsset.url} 
                         alt="Ative o som para assistir o vídeo e clique" 
-                        className="w-full h-full object-contain sm:object-cover scale-100 sm:scale-105 transition-transform duration-700 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   )}
