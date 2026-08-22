@@ -428,7 +428,7 @@ export function SalesPage({
                     />
                   </div>
                 </div>
-              ) : vslUrl ? (
+              ) : (
                 <EmbeddedVideo url={vslUrl} />
               ) : (
                 <div
