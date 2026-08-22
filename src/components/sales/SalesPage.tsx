@@ -347,7 +347,10 @@ export function SalesPage({
                     src={vslUrl}
                     className="h-full w-full bg-black object-contain"
                     playsInline
+                    autoPlay
+                    muted
                     preload="auto"
+
                     onTimeUpdate={(e) => {
                       const video = e.currentTarget;
                       const progress = (video.currentTime / video.duration) * 100;
