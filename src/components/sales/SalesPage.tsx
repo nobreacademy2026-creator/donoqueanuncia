@@ -267,6 +267,8 @@ export function SalesPage({
       : "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&q=80&w=1200";
   const vslUrl = draft.vslUrl;
   const isUploadedVideo = Boolean(vslUrl && /\.(mp4|webm|ogg|mov)(?:\?|$)/i.test(vslUrl));
+
+
   const fullPrice = draft.fullPrice || "R$ 399,00";
   const promoPrice = draft.promoPrice || "R$ 197,00";
   const checkoutUrl = draft.checkoutUrl || CHECKOUT_URL;
@@ -389,7 +391,7 @@ export function SalesPage({
 
                   {!started && (
                     <div 
-                      className="absolute inset-0 z-20 cursor-pointer flex items-center justify-center bg-black/60 transition-all hover:bg-black/40 group"
+                      className="absolute inset-0 z-20 cursor-pointer group bg-black"
                       onClick={() => {
                         const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
                         if (video) {
@@ -403,10 +405,11 @@ export function SalesPage({
                       <img 
                         src={vslOverlayAsset.url} 
                         alt="Ative o som para assistir o vídeo e clique" 
-                        className="w-full h-full object-contain sm:object-cover scale-100 sm:scale-105 transition-transform duration-700 group-hover:scale-110"
+                        className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   )}
+
 
                   {/* Enhanced Progress Bar */}
                   <div className="absolute bottom-0 left-0 h-2 w-full bg-white/20 z-10 pointer-events-none">
