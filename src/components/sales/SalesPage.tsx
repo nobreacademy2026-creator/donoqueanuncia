@@ -28,6 +28,8 @@ import { optimizedImageSrcSet, optimizedImageUrl } from "@/lib/image-optimizatio
 import anniversaryAsset from "@/assets/anniversary.png.asset.json";
 import instagramPrintAsset from "@/assets/daniel-instagram-mockup.png.asset.json";
 
+import vslOverlayAsset from "@/assets/vsl-overlay.png.asset.json";
+
 const BENEFITS = [
   {
     icon: Megaphone,
@@ -257,7 +259,7 @@ export function SalesPage({
   tracking?: any;
   steps?: Record<string, FunnelStep>;
 }) {
-  const [started, setStarted] = React.useState(true);
+  const [started, setStarted] = React.useState(false);
   const headline = draft.videoHeadline || "ASSISTE ESSE VÍDEO AQUI PRA VOCÊ ENTENDER:";
   const videoThumb =
     draft.videoThumb !== undefined
@@ -341,32 +343,25 @@ export function SalesPage({
                   <video
                     id="vsl-video-player"
                     src={vslUrl}
-                    className="h-full w-full bg-black object-contain pointer-events-none"
-                    
+                    className="h-full w-full bg-black object-contain"
                     playsInline
-                    autoPlay
                     preload="auto"
                     onTimeUpdate={(e) => {
                       const video = e.currentTarget;
                       const progress = (video.currentTime / video.duration) * 100;
                       
-                      // Custom non-linear progress bar logic
-                      // Start fast, then slow down
                       let visualProgress = 0;
                       if (progress < 20) {
-                        // First 20% of video fills 50% of the bar
                         visualProgress = (progress / 20) * 50;
                       } else {
-                        // Remaining 80% of video fills remaining 50% of the bar
                         visualProgress = 50 + ((progress - 20) / 80) * 50;
                       }
 
                       const progressBar = document.getElementById("video-progress-bar");
                       if (progressBar) progressBar.style.width = `${visualProgress}%`;
 
-                      // Track retention milestones
                       const time = Math.floor(video.currentTime);
-                      const milestones = [10, 30, 60, 120, 300, 600]; // seconds
+                      const milestones = [10, 30, 60, 120, 300, 600];
                       const lastMilestone = (video as any)._lastMilestone || 0;
                       const currentMilestone = milestones.find((m) => time >= m && m > lastMilestone);
 
@@ -382,7 +377,6 @@ export function SalesPage({
                     }}
                     onPlay={(e) => {
                       setStarted(true);
-                      // Registrar a duração real do vídeo no primeiro play
                       const video = e.currentTarget;
                       void trackFunnelEvent("video_info", {
                         duracao: video.duration,
@@ -392,8 +386,38 @@ export function SalesPage({
                   >
                     Seu navegador não suporta reprodução de vídeo.
                   </video>
+
+                  {!started && (
+                    <div 
+                      className="absolute inset-0 z-20 cursor-pointer flex items-center justify-center bg-black/60 transition-all hover:bg-black/40 group"
+                      onClick={() => {
+                        const video = document.getElementById("vsl-video-player") as HTMLVideoElement;
+                        if (video) {
+                          video.play();
+                          setStarted(true);
+                          (window as any)._videoStartTime = Date.now();
+                          void trackFunnelEvent("clique_video", { origem: "pagina_vendas" });
+                        }
+                      }}
+                    >
+                      <img 
+                        src={vslOverlayAsset.url} 
+                        alt="Ative o som para assistir o vídeo e clique" 
+                        className="w-full h-full object-contain sm:object-cover scale-100 sm:scale-105 transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="relative">
+                          <div className="absolute inset-0 animate-ping rounded-full bg-red-600/20" />
+                          <div className="relative grid h-20 w-20 place-items-center rounded-full bg-white text-red-600 shadow-2xl transition-transform group-hover:scale-110">
+                            <Play className="ml-1 h-10 w-10 fill-current" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Enhanced Progress Bar */}
-                  <div className="absolute bottom-0 left-0 h-3 w-full bg-white/20 z-10">
+                  <div className="absolute bottom-0 left-0 h-2 w-full bg-white/20 z-10 pointer-events-none">
                     <div
                       id="video-progress-bar"
                       className="h-full bg-green-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(34,197,94,0.5)]"
